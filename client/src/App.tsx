@@ -637,6 +637,7 @@ const OrderBook = lazy(() => import('./pages/OrderBook'));
 const OrderConfirmation = lazy(() => import('./pages/OrderConfirmation'));
 const OrderHistory = lazy(() => import('./pages/OrderHistory'));
 const OrderPlacement = lazy(() => import('./pages/OrderPlacement'));
+const OrderSummary = lazy(() => import('./pages/OrderSummary'));
 const OrderTracking = lazy(() => import('./pages/OrderTracking'));
 const OrderTypes = lazy(() => import('./pages/OrderTypes'));
 const OrganizationSettings = lazy(() => import('./pages/OrganizationSettings'));
@@ -743,6 +744,7 @@ const RateLimitError = lazy(() => import('./pages/RateLimitError'));
 const RateLimiting = lazy(() => import('./pages/RateLimiting'));
 const RatingSystem = lazy(() => import('./pages/RatingSystem'));
 const ReadReceipts = lazy(() => import('./pages/ReadReceipts'));
+const RealTimeAnalytics = lazy(() => import('./pages/RealTimeAnalytics'));
 const RealTimeGameEngine = lazy(() => import('./pages/RealTimeGameEngine'));
 const RealTimeMonitoring = lazy(() => import('./pages/RealTimeMonitoring'));
 const RealTimeStreaming = lazy(() => import('./pages/RealTimeStreaming'));
@@ -1700,6 +1702,7 @@ function Router() {
         <Route path="/order-confirmation" component={OrderConfirmation} />
         <Route path="/order-history" component={OrderHistory} />
         <Route path="/order-placement" component={OrderPlacement} />
+        <Route path="/order-summary" component={OrderSummary} />
         <Route path="/order-tracking" component={OrderTracking} />
         <Route path="/order-types" component={OrderTypes} />
         <Route path="/organization-settings" component={OrganizationSettings} />
@@ -1806,6 +1809,7 @@ function Router() {
         <Route path="/rate-limiting" component={RateLimiting} />
         <Route path="/rating-system" component={RatingSystem} />
         <Route path="/read-receipts" component={ReadReceipts} />
+        <Route path="/real-time-analytics" component={RealTimeAnalytics} />
         <Route path="/real-time-game-engine" component={RealTimeGameEngine} />
         <Route path="/real-time-monitoring" component={RealTimeMonitoring} />
         <Route path="/real-time-streaming" component={RealTimeStreaming} />
