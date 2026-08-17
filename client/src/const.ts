@@ -6,6 +6,7 @@ export { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 export const getLoginUrl = () => {
   const oauthPortalUrl = import.meta.env.VITE_OAUTH_PORTAL_URL;
   const appId = import.meta.env.VITE_APP_ID;
+  if (!oauthPortalUrl || !appId) return "";
   const redirectUri = `${window.location.origin}/api/oauth/callback`;
 
   const nonce = crypto.randomUUID();
@@ -33,6 +34,10 @@ export const getLoginUrl = () => {
 export const startLogin = () => {
   const oauthPortalUrl = import.meta.env.VITE_OAUTH_PORTAL_URL;
   const appId = import.meta.env.VITE_APP_ID;
+  if (!oauthPortalUrl || !appId) {
+    console.warn("Authentication is unavailable because OAuth is not configured.");
+    return;
+  }
   const redirectUri = `${window.location.origin}/api/oauth/callback`;
 
   const nonce = crypto.randomUUID();

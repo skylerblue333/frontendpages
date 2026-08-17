@@ -113,7 +113,7 @@ export default function Dashboard() {
             <Zap className="h-10 w-10 text-white" />
           </div>
           <h1 className="text-3xl font-black text-white mb-3">Welcome to SkyCoin4444</h1>
-          <p className="text-slate-400 mb-8">The world's most advanced Web3 social ecosystem. AI · DeFi · Gaming · Creator Economy.</p>
+          <p className="text-slate-400 mb-8">A connected workspace for AI, digital assets, community, education, and creator tools. Availability depends on the underlying integration.</p>
           <a href={getLoginUrl()} className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold px-8 py-4 rounded-2xl text-lg hover:opacity-90 transition-opacity">
             <Zap className="h-5 w-5" /> Enter the Ecosystem
           </a>
@@ -122,7 +122,7 @@ export default function Dashboard() {
     );
   }
 
-  const isOwner = user.name === "Skyler blue" || user.openId === user.openId;
+  const isOwner = user.role === "admin";
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white pb-24">
