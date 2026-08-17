@@ -7,11 +7,11 @@
 | Metric | Value |
 |---|---:|
 | Registered screens | 1,059 |
-| Verified modernized screens | 312 |
-| Remaining screens | 747 |
-| Latest screenshot | `quality-screens/312-real-time-analytics.webp` |
-| Next registered route | `/rebalancing-tools` |
-| Next component | `RebalancingTools` |
+| Verified modernized screens | 313 |
+| Remaining screens | 746 |
+| Latest screenshot | `quality-screens/313-rebalancing-tools.webp` |
+| Next registered route | `/receipt-download` |
+| Next component | `ReceiptDownload` |
 
 ## Source-of-truth artifacts
 
@@ -42,6 +42,7 @@ Screens 297–302 were verified in the current continuation:
 | 310 | `/real-time-monitoring` | `quality-screens/310-real-time-monitoring.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 311 | `/real-time-streaming` | `quality-screens/311-real-time-streaming.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 312 | `/real-time-analytics` | `quality-screens/312-real-time-analytics.webp` | TypeScript diagnostics clean for target screen; production build passed; missing route repaired and registered |
+| 313 | `/rebalancing-tools` | `quality-screens/313-rebalancing-tools.webp` | TypeScript diagnostics clean for target screen; production build passed |
 
 ## Cross-chat operating rule
 
@@ -51,4 +52,4 @@ Before changing or reporting a screen, read this manifest and the registered inv
 
 Unverified backend, analytics, financial, blockchain, AI, user, operational, or security claims must remain clearly labeled as unavailable, unconnected, unmeasured, preview, placeholder, blocked, or local-only until engineering evidence exists.
 
-_Last synchronized: 2026-08-17; current verified count: 312 / 1,059._
+_Last synchronized: 2026-08-17; current verified count: 313 / 1,059._
