@@ -769,6 +769,7 @@ const ReportUser = lazy(() => import('./pages/ReportUser'));
 const ReportsDashboard = lazy(() => import('./pages/ReportsDashboard'));
 const Reputation = lazy(() => import('./pages/Reputation'));
 const ReputationSystem = lazy(() => import('./pages/ReputationSystem'));
+const RequestQuote = lazy(() => import('./pages/RequestQuote'));
 const ResourceAllocation = lazy(() => import('./pages/ResourceAllocation'));
 const ResourceLibrary = lazy(() => import('./pages/ResourceLibrary'));
 const ResponseTime = lazy(() => import('./pages/ResponseTime'));
@@ -1837,6 +1838,7 @@ function Router() {
         <Route path="/reports-dashboard" component={ReportsDashboard} />
         <Route path="/reputation" component={Reputation} />
         <Route path="/reputation-system" component={ReputationSystem} />
+        <Route path="/request-quote" component={RequestQuote} />
         <Route path="/resource-allocation" component={ResourceAllocation} />
         <Route path="/resource-library" component={ResourceLibrary} />
         <Route path="/response-time" component={ResponseTime} />
