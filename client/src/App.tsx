@@ -763,6 +763,7 @@ const Referrals = lazy(() => import('./pages/Referrals'));
 const RefundRequests = lazy(() => import('./pages/RefundRequests'));
 const RegionalSettings = lazy(() => import('./pages/RegionalSettings'));
 const Reminders = lazy(() => import('./pages/Reminders'));
+const RemoteAccess = lazy(() => import('./pages/RemoteAccess'));
 const ReportDialog = lazy(() => import('./pages/ReportDialog'));
 const ReportUser = lazy(() => import('./pages/ReportUser'));
 const ReportsDashboard = lazy(() => import('./pages/ReportsDashboard'));
@@ -1830,6 +1831,7 @@ function Router() {
         <Route path="/refund-requests" component={RefundRequests} />
         <Route path="/regional-settings" component={RegionalSettings} />
         <Route path="/reminders" component={Reminders} />
+        <Route path="/remote-access" component={RemoteAccess} />
         <Route path="/report-dialog" component={ReportDialog} />
         <Route path="/report-user" component={ReportUser} />
         <Route path="/reports-dashboard" component={ReportsDashboard} />
