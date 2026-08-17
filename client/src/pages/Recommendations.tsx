@@ -1,89 +1,13 @@
-import { ThumbsUp } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, Filter, Lightbulb, LockKeyhole, RefreshCw, Search, ShieldAlert, SlidersHorizontal, Sparkles, ThumbsUp, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+const ideas = [{ id: 1, name: "Personalized learning path", category: "Education", reason: "Local reason concept: topic affinity would need verified learner events and consent.", state: "Preview only" }, { id: 2, name: "Portfolio education guide", category: "Finance", reason: "Local reason concept: relevance must not become a financial recommendation or suitability claim.", state: "Blocked" }, { id: 3, name: "Community discovery", category: "Community", reason: "Local reason concept: discovery requires privacy, moderation, and exposure-bias review.", state: "Needs evidence" }, { id: 4, name: "Game mode suggestion", category: "Gaming", reason: "Local reason concept: preference and outcome data are not connected.", state: "Unmeasured" }];
 export default function Recommendations() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={ThumbsUp} title="Recommendations" subtitle="Fully functional recommendations page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Recommendations</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <ThumbsUp className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <ThumbsUp className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <ThumbsUp className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
+  const [query, setQuery] = useState(""); const [category, setCategory] = useState("All"); const [selected, setSelected] = useState(1); const [personalization, setPersonalization] = useState("Personalization not configured"); const [feedback, setFeedback] = useState("Feedback not connected"); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false);
+  const categories = ["All", ...Array.from(new Set(ideas.map((item) => item.category)))]; const filtered = useMemo(() => ideas.filter((item) => (category === "All" || item.category === category) && `${item.name} ${item.category} ${item.reason}`.toLowerCase().includes(query.toLowerCase())), [category, query]); const idea = ideas.find((item) => item.id === selected) ?? ideas[0];
+  const reset = () => { setQuery(""); setCategory("All"); setSelected(1); setPersonalization("Personalization not configured"); setFeedback("Feedback not connected"); setSaved(false); setShowGates(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Sparkles} eyebrow="Recommendations · Explainability preview" title="Explain the suggestion before calling it relevant." description="Explore local recommendation concepts with search, categories, reason codes, ranking intent, personalization, feedback, refresh, save, reset, and evidence gates. No live users, behavior, score, prediction, ranking, recommendation outcome, or business claim is connected." badge="Recommendation workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "View saved locally" : "Save view locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review recommendation gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset view</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Ideas", value: `${ideas.length} local`, hint: "No model output", icon: Lightbulb, tone: "cyan" }, { label: "Users", value: "Unavailable", hint: "No identity source", icon: ThumbsUp, tone: "violet" }, { label: "Confidence", value: "Unmeasured", hint: "No model source", icon: SlidersHorizontal, tone: "amber" }, { label: "Outcomes", value: "Unknown", hint: "No feedback source", icon: Sparkles, tone: "slate" }]} /><ScreenPreviewBanner title="Recommendation evidence boundary"><strong>This is a local explainability and discovery preview, not a personalized recommendation engine.</strong> Idea cards, reason codes, category filters, ranking and personalization intent, feedback state, saved state, and evidence gates are browser concepts. No user, behavior, score, confidence, prediction, ranking, suitability, or outcome is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local ideas" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-4 flex flex-wrap gap-2">{categories.map((entry) => <Button key={entry} onClick={() => setCategory(entry)} size="sm" variant="outline" className={category === entry ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100" : "border-white/10 text-slate-400"}><Filter className="mr-1 size-3" />{entry}</Button>)}</div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.reason}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.state}</Badge></div><div className="mt-4"><Badge variant="outline" className="border-white/10 text-slate-500">{item.category}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected idea</p><h2 className="mt-2 text-2xl font-black">{idea.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{idea.reason}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Category", value: idea.category }, { label: "State", value: idea.state }, { label: "Personalization", value: personalization }, { label: "Confidence", value: "Unmeasured" }, { label: "Rank", value: "Not configured" }, { label: "Feedback", value: feedback }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2"><label className="text-sm text-slate-400">Personalization posture<select value={personalization} onChange={(event) => setPersonalization(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Personalization not configured</option><option>Context-only intent</option><option>Opt-in history intent</option><option>Editorial intent</option></select></label><label className="text-sm text-slate-400">Feedback posture<select value={feedback} onChange={(event) => setFeedback(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Feedback not connected</option><option>Helpful intent</option><option>Dismiss intent</option><option>Report intent</option></select></label></div><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><Sparkles className="mx-auto size-7 text-slate-600" /><p className="mt-3 font-semibold">No recommendation output loaded</p><p className="mt-2 text-sm text-slate-500">Connect governed user context, content metadata, model policy, and feedback before displaying a personalized result.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Refresh unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Accept unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Dismiss unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No personalization or suitability claim</p><p className="mt-2 text-sm leading-6 text-slate-400">An idea card does not prove relevance, preference, quality, safety, suitability, or likely outcome.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Recommendation gates</p><h2 className="mt-2 text-2xl font-black">What a real recommendation system must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["User identity, consent, data minimization, sensitive traits, opt-out, deletion, and tenant isolation", "Content metadata, freshness, eligibility, policy, safety, availability, and explanation provenance", "Model version, features, training data, confidence, calibration, drift, fairness, and reproducibility", "Ranking, exploration, exposure bias, feedback loops, cold start, diversity, and suppression rules", "Financial, medical, educational, employment, or other high-impact suitability review and human oversight", "Feedback, appeals, reports, audit, experiments, rollback, incident response, and outcome measurement"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Recommendation surface preserved", description: "Ideas, search, categories, reasons, ranking, personalization, feedback, refresh, save/reset, and explainability gates remain interactive.", icon: Sparkles, status: "Local ideas" }, { title: "No model theater", description: "Users, behavior, scores, confidence, predictions, rankings, suitability, and outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Governance before suggestion", description: "Real recommendations need consent, model evidence, fairness, policy, feedback, oversight, and rollback.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
 }
