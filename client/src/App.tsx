@@ -757,6 +757,7 @@ const Recommendations = lazy(() => import('./pages/Recommendations'));
 const RecommendationsFeed = lazy(() => import('./pages/RecommendationsFeed'));
 const RecommendedMatches = lazy(() => import('./pages/RecommendedMatches'));
 const Reels = lazy(() => import('./pages/Reels'));
+const RecentlyViewed = lazy(() => import('./pages/RecentlyViewed'));
 const RefactoringTools = lazy(() => import('./pages/RefactoringTools'));
 const Referrals = lazy(() => import('./pages/Referrals'));
 const RefundRequests = lazy(() => import('./pages/RefundRequests'));
@@ -1823,6 +1824,7 @@ function Router() {
         <Route path="/recommendations-feed" component={RecommendationsFeed} />
         <Route path="/recommended-matches" component={RecommendedMatches} />
         <Route path="/reels" component={Reels} />
+        <Route path="/recently-viewed" component={RecentlyViewed} />
         <Route path="/refactoring-tools" component={RefactoringTools} />
         <Route path="/referrals" component={Referrals} />
         <Route path="/refund-requests" component={RefundRequests} />
