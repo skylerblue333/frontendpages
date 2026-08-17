@@ -1,0 +1,4241 @@
+{
+  "count": 1059,
+  "routes": [
+    {
+      "route": "/",
+      "component": "Home"
+    },
+    {
+      "route": "/a-b-testing",
+      "component": "ABTesting"
+    },
+    {
+      "route": "/a-b-testing-advanced",
+      "component": "ABTestingAdvanced"
+    },
+    {
+      "route": "/a-i-agent-economy",
+      "component": "AIAgentEconomy"
+    },
+    {
+      "route": "/a-i-agent-market",
+      "component": "AIAgentMarket"
+    },
+    {
+      "route": "/a-i-assistant",
+      "component": "AIAssistant"
+    },
+    {
+      "route": "/a-i-brain",
+      "component": "AIBrain"
+    },
+    {
+      "route": "/a-i-code-studio",
+      "component": "AICodeStudio"
+    },
+    {
+      "route": "/a-i-copy-studio",
+      "component": "AICopyStudio"
+    },
+    {
+      "route": "/a-i-core",
+      "component": "AICore"
+    },
+    {
+      "route": "/a-i-engineer",
+      "component": "AIEngineer"
+    },
+    {
+      "route": "/a-i-governance",
+      "component": "AIGovernance"
+    },
+    {
+      "route": "/a-i-market-agents",
+      "component": "AIMarketAgents"
+    },
+    {
+      "route": "/a-i-matchmaker",
+      "component": "AIMatchmaker"
+    },
+    {
+      "route": "/a-i-moderation-queue",
+      "component": "AIModerationQueue"
+    },
+    {
+      "route": "/a-i-persona-feed",
+      "component": "AIPersonaFeed"
+    },
+    {
+      "route": "/a-i-persona-system",
+      "component": "AIPersonaSystem"
+    },
+    {
+      "route": "/a-i-tools-hub",
+      "component": "AIToolsHub"
+    },
+    {
+      "route": "/a-i-trading",
+      "component": "AITrading"
+    },
+    {
+      "route": "/a-i-training-loops",
+      "component": "AITrainingLoops"
+    },
+    {
+      "route": "/a-p-i-docs",
+      "component": "APIDocs"
+    },
+    {
+      "route": "/a-p-i-documentation",
+      "component": "APIDocumentation"
+    },
+    {
+      "route": "/a-p-i-integration",
+      "component": "APIIntegration"
+    },
+    {
+      "route": "/a-p-i-keys",
+      "component": "APIKeys"
+    },
+    {
+      "route": "/a-p-i-logs",
+      "component": "APILogs"
+    },
+    {
+      "route": "/a-p-i-management",
+      "component": "APIManagement"
+    },
+    {
+      "route": "/a-p-i-monitoring",
+      "component": "APIMonitoring"
+    },
+    {
+      "route": "/a-p-i-status",
+      "component": "APIStatus"
+    },
+    {
+      "route": "/a-p-i-testing",
+      "component": "APITesting"
+    },
+    {
+      "route": "/a-p-i-usage",
+      "component": "APIUsage"
+    },
+    {
+      "route": "/a-p-i-versioning",
+      "component": "APIVersioning"
+    },
+    {
+      "route": "/a-p-y-tracking",
+      "component": "APYTracking"
+    },
+    {
+      "route": "/about",
+      "component": "About"
+    },
+    {
+      "route": "/access-control",
+      "component": "AccessControl"
+    },
+    {
+      "route": "/accessibility-settings",
+      "component": "AccessibilitySettings"
+    },
+    {
+      "route": "/accordion-navigation",
+      "component": "AccordionNavigation"
+    },
+    {
+      "route": "/account-settings",
+      "component": "AccountSettings"
+    },
+    {
+      "route": "/achievement-badges",
+      "component": "AchievementBadges"
+    },
+    {
+      "route": "/achievements",
+      "component": "Achievements"
+    },
+    {
+      "route": "/action-objects",
+      "component": "ActionObjects"
+    },
+    {
+      "route": "/action-panel",
+      "component": "ActionPanel"
+    },
+    {
+      "route": "/activity-feed",
+      "component": "ActivityFeed"
+    },
+    {
+      "route": "/activity-tracking",
+      "component": "ActivityTracking"
+    },
+    {
+      "route": "/adaptive-personalization",
+      "component": "AdaptivePersonalization"
+    },
+    {
+      "route": "/adaptive-roadmap",
+      "component": "AdaptiveRoadmap"
+    },
+    {
+      "route": "/add-bank-account",
+      "component": "AddBankAccount"
+    },
+    {
+      "route": "/add-credit-card",
+      "component": "AddCreditCard"
+    },
+    {
+      "route": "/address-book",
+      "component": "AddressBook"
+    },
+    {
+      "route": "/address-lookup",
+      "component": "AddressLookup"
+    },
+    {
+      "route": "/admin",
+      "component": "Admin"
+    },
+    {
+      "route": "/admin-dashboard",
+      "component": "AdminDashboard"
+    },
+    {
+      "route": "/admin-orders",
+      "component": "AdminOrders"
+    },
+    {
+      "route": "/admin-panel",
+      "component": "AdminPanel"
+    },
+    {
+      "route": "/admin-wallet-manager",
+      "component": "AdminWalletManager"
+    },
+    {
+      "route": "/advanced-admin-panel",
+      "component": "AdvancedAdminPanel"
+    },
+    {
+      "route": "/advanced-analytics",
+      "component": "AdvancedAnalytics"
+    },
+    {
+      "route": "/advanced-orders",
+      "component": "AdvancedOrders"
+    },
+    {
+      "route": "/advanced-search",
+      "component": "AdvancedSearch"
+    },
+    {
+      "route": "/affiliate-dashboard",
+      "component": "AffiliateDashboard"
+    },
+    {
+      "route": "/affiliate-program",
+      "component": "AffiliateProgram"
+    },
+    {
+      "route": "/age-gate",
+      "component": "AgeGate"
+    },
+    {
+      "route": "/age-verification",
+      "component": "AgeVerification"
+    },
+    {
+      "route": "/agent-builder",
+      "component": "AgentBuilder"
+    },
+    {
+      "route": "/agent-city",
+      "component": "AgentCity"
+    },
+    {
+      "route": "/agent-coordination",
+      "component": "AgentCoordination"
+    },
+    {
+      "route": "/agent-coordination-hub",
+      "component": "AgentCoordinationHub"
+    },
+    {
+      "route": "/agent-debate",
+      "component": "AgentDebate"
+    },
+    {
+      "route": "/agent-detail",
+      "component": "AgentDetail"
+    },
+    {
+      "route": "/agent-marketplace",
+      "component": "AgentMarketplace"
+    },
+    {
+      "route": "/agent-performance",
+      "component": "AgentPerformance"
+    },
+    {
+      "route": "/agent-sprint",
+      "component": "AgentSprint"
+    },
+    {
+      "route": "/agents-dashboard",
+      "component": "AgentsDashboard"
+    },
+    {
+      "route": "/alert-configuration",
+      "component": "AlertConfiguration"
+    },
+    {
+      "route": "/alert-dialog",
+      "component": "AlertDialog"
+    },
+    {
+      "route": "/alert-management",
+      "component": "AlertManagement"
+    },
+    {
+      "route": "/ambient-feed",
+      "component": "AmbientFeed"
+    },
+    {
+      "route": "/analytics",
+      "component": "Analytics"
+    },
+    {
+      "route": "/analytics-dashboard",
+      "component": "AnalyticsDashboard"
+    },
+    {
+      "route": "/analytics-products",
+      "component": "AnalyticsProducts"
+    },
+    {
+      "route": "/analytics-reports",
+      "component": "AnalyticsReports"
+    },
+    {
+      "route": "/anomaly-detection",
+      "component": "AnomalyDetection"
+    },
+    {
+      "route": "/anti-surveillance",
+      "component": "AntiSurveillance"
+    },
+    {
+      "route": "/approval-workflows",
+      "component": "ApprovalWorkflows"
+    },
+    {
+      "route": "/arbitrage-bot",
+      "component": "ArbitrageBot"
+    },
+    {
+      "route": "/arcade",
+      "component": "Arcade"
+    },
+    {
+      "route": "/archive-management",
+      "component": "ArchiveManagement"
+    },
+    {
+      "route": "/asset-allocation",
+      "component": "AssetAllocation"
+    },
+    {
+      "route": "/asset-management",
+      "component": "AssetManagement"
+    },
+    {
+      "route": "/asset-tracking",
+      "component": "AssetTracking"
+    },
+    {
+      "route": "/assignment-tracker",
+      "component": "AssignmentTracker"
+    },
+    {
+      "route": "/attribution-modeling",
+      "component": "AttributionModeling"
+    },
+    {
+      "route": "/audience-segmentation",
+      "component": "AudienceSegmentation"
+    },
+    {
+      "route": "/audio-analytics",
+      "component": "AudioAnalytics"
+    },
+    {
+      "route": "/audio-editing",
+      "component": "AudioEditing"
+    },
+    {
+      "route": "/audio-library",
+      "component": "AudioLibrary"
+    },
+    {
+      "route": "/audio-player",
+      "component": "AudioPlayer"
+    },
+    {
+      "route": "/audit-log",
+      "component": "AuditLog"
+    },
+    {
+      "route": "/audit-logs",
+      "component": "AuditLogs"
+    },
+    {
+      "route": "/audit-trail",
+      "component": "AuditTrail"
+    },
+    {
+      "route": "/auto-responder",
+      "component": "AutoResponder"
+    },
+    {
+      "route": "/automation-engine",
+      "component": "AutomationEngine"
+    },
+    {
+      "route": "/automation-rules",
+      "component": "AutomationRules"
+    },
+    {
+      "route": "/automation-workflows",
+      "component": "AutomationWorkflows"
+    },
+    {
+      "route": "/backup-management",
+      "component": "BackupManagement"
+    },
+    {
+      "route": "/badges",
+      "component": "Badges"
+    },
+    {
+      "route": "/ban-suspend-user",
+      "component": "BanSuspendUser"
+    },
+    {
+      "route": "/batch-generation",
+      "component": "BatchGeneration"
+    },
+    {
+      "route": "/battle-pass",
+      "component": "BattlePass"
+    },
+    {
+      "route": "/behavioral-intelligence",
+      "component": "BehavioralIntelligence"
+    },
+    {
+      "route": "/beta",
+      "component": "Beta"
+    },
+    {
+      "route": "/billing-history",
+      "component": "BillingHistory"
+    },
+    {
+      "route": "/block-browser",
+      "component": "BlockBrowser"
+    },
+    {
+      "route": "/block-rewards",
+      "component": "BlockRewards"
+    },
+    {
+      "route": "/block-user",
+      "component": "BlockUser"
+    },
+    {
+      "route": "/blockchain-custody",
+      "component": "BlockchainCustody"
+    },
+    {
+      "route": "/blockchain-monitor",
+      "component": "BlockchainMonitor"
+    },
+    {
+      "route": "/blocked-users",
+      "component": "BlockedUsers"
+    },
+    {
+      "route": "/blog-editor",
+      "component": "BlogEditor"
+    },
+    {
+      "route": "/blog-publisher",
+      "component": "BlogPublisher"
+    },
+    {
+      "route": "/book-page",
+      "component": "BookPage"
+    },
+    {
+      "route": "/bookmarks",
+      "component": "Bookmarks"
+    },
+    {
+      "route": "/bounty-system",
+      "component": "BountySystem"
+    },
+    {
+      "route": "/brand-guidelines",
+      "component": "BrandGuidelines"
+    },
+    {
+      "route": "/breadcrumb-navigation",
+      "component": "BreadcrumbNavigation"
+    },
+    {
+      "route": "/bridge-protocol",
+      "component": "BridgeProtocol"
+    },
+    {
+      "route": "/bridge-transactions",
+      "component": "BridgeTransactions"
+    },
+    {
+      "route": "/browser-extension",
+      "component": "BrowserExtension"
+    },
+    {
+      "route": "/budget-planner",
+      "component": "BudgetPlanner"
+    },
+    {
+      "route": "/bug-reporting",
+      "component": "BugReporting"
+    },
+    {
+      "route": "/build-order",
+      "component": "BuildOrder"
+    },
+    {
+      "route": "/build-roadmap",
+      "component": "BuildRoadmap"
+    },
+    {
+      "route": "/bulk-operations",
+      "component": "BulkOperations"
+    },
+    {
+      "route": "/bulk-ordering",
+      "component": "BulkOrdering"
+    },
+    {
+      "route": "/bulk-upload",
+      "component": "BulkUpload"
+    },
+    {
+      "route": "/c-c-p-a",
+      "component": "CCPA"
+    },
+    {
+      "route": "/c-d-n-management",
+      "component": "CDNManagement"
+    },
+    {
+      "route": "/c-r-m",
+      "component": "CRM"
+    },
+    {
+      "route": "/cache-management",
+      "component": "CacheManagement"
+    },
+    {
+      "route": "/calculator",
+      "component": "Calculator"
+    },
+    {
+      "route": "/calendar",
+      "component": "Calendar"
+    },
+    {
+      "route": "/calendar-view",
+      "component": "CalendarView"
+    },
+    {
+      "route": "/campaign-analytics",
+      "component": "CampaignAnalytics"
+    },
+    {
+      "route": "/campaign-builder",
+      "component": "CampaignBuilder"
+    },
+    {
+      "route": "/campaign-creation",
+      "component": "CampaignCreation"
+    },
+    {
+      "route": "/car-rental",
+      "component": "CarRental"
+    },
+    {
+      "route": "/card-grid-view",
+      "component": "CardGridView"
+    },
+    {
+      "route": "/cash-flow-analysis",
+      "component": "CashFlowAnalysis"
+    },
+    {
+      "route": "/category-management",
+      "component": "CategoryManagement"
+    },
+    {
+      "route": "/certificate-manager",
+      "component": "CertificateManager"
+    },
+    {
+      "route": "/chain-explorer",
+      "component": "ChainExplorer"
+    },
+    {
+      "route": "/change-log",
+      "component": "ChangeLog"
+    },
+    {
+      "route": "/channel-customization",
+      "component": "ChannelCustomization"
+    },
+    {
+      "route": "/charity",
+      "component": "Charity"
+    },
+    {
+      "route": "/charity-leaderboard",
+      "component": "CharityLeaderboard"
+    },
+    {
+      "route": "/chart-analysis",
+      "component": "ChartAnalysis"
+    },
+    {
+      "route": "/chart-dashboard",
+      "component": "ChartDashboard"
+    },
+    {
+      "route": "/chat-bot",
+      "component": "ChatBot"
+    },
+    {
+      "route": "/chat-history",
+      "component": "ChatHistory"
+    },
+    {
+      "route": "/chat-m-v-p",
+      "component": "ChatMVP"
+    },
+    {
+      "route": "/checkbox-group-form",
+      "component": "CheckboxGroupForm"
+    },
+    {
+      "route": "/checkout",
+      "component": "Checkout"
+    },
+    {
+      "route": "/checkout-flow",
+      "component": "CheckoutFlow"
+    },
+    {
+      "route": "/china-edition",
+      "component": "ChinaEdition"
+    },
+    {
+      "route": "/churn-prediction",
+      "component": "ChurnPrediction"
+    },
+    {
+      "route": "/citizen-passport",
+      "component": "CitizenPassport"
+    },
+    {
+      "route": "/civilization-simulator",
+      "component": "CivilizationSimulator"
+    },
+    {
+      "route": "/clan-wars",
+      "component": "ClanWars"
+    },
+    {
+      "route": "/classroom-management",
+      "component": "ClassroomManagement"
+    },
+    {
+      "route": "/client-libraries",
+      "component": "ClientLibraries"
+    },
+    {
+      "route": "/closing-checklist",
+      "component": "ClosingChecklist"
+    },
+    {
+      "route": "/code-completion",
+      "component": "CodeCompletion"
+    },
+    {
+      "route": "/code-formatter",
+      "component": "CodeFormatter"
+    },
+    {
+      "route": "/code-highlighting",
+      "component": "CodeHighlighting"
+    },
+    {
+      "route": "/code-quality",
+      "component": "CodeQuality"
+    },
+    {
+      "route": "/code-quality-dashboard",
+      "component": "CodeQualityDashboard"
+    },
+    {
+      "route": "/code-repository",
+      "component": "CodeRepository"
+    },
+    {
+      "route": "/code-samples",
+      "component": "CodeSamples"
+    },
+    {
+      "route": "/cohort-analysis",
+      "component": "CohortAnalysis"
+    },
+    {
+      "route": "/color-picker-dialog",
+      "component": "ColorPickerDialog"
+    },
+    {
+      "route": "/comment-thread",
+      "component": "CommentThread"
+    },
+    {
+      "route": "/comments",
+      "component": "Comments"
+    },
+    {
+      "route": "/comments-section",
+      "component": "CommentsSection"
+    },
+    {
+      "route": "/commission-management",
+      "component": "CommissionManagement"
+    },
+    {
+      "route": "/community",
+      "component": "Community"
+    },
+    {
+      "route": "/community-create",
+      "component": "CommunityCreate"
+    },
+    {
+      "route": "/community-engagement",
+      "component": "CommunityEngagement"
+    },
+    {
+      "route": "/community-guidelines",
+      "component": "CommunityGuidelines"
+    },
+    {
+      "route": "/community-hub",
+      "component": "CommunityHub"
+    },
+    {
+      "route": "/company-simulator",
+      "component": "CompanySimulator"
+    },
+    {
+      "route": "/competitive-radar",
+      "component": "CompetitiveRadar"
+    },
+    {
+      "route": "/compliance-center",
+      "component": "ComplianceCenter"
+    },
+    {
+      "route": "/compliance-checker",
+      "component": "ComplianceChecker"
+    },
+    {
+      "route": "/compliance-checking",
+      "component": "ComplianceChecking"
+    },
+    {
+      "route": "/compliance-dashboard",
+      "component": "ComplianceDashboard"
+    },
+    {
+      "route": "/compliance-reports",
+      "component": "ComplianceReports"
+    },
+    {
+      "route": "/component-showcase",
+      "component": "ComponentShowcase"
+    },
+    {
+      "route": "/comprehensive-ecosystem-landing",
+      "component": "ComprehensiveEcosystemLanding"
+    },
+    {
+      "route": "/confirmation-dialog",
+      "component": "ConfirmationDialog"
+    },
+    {
+      "route": "/connected-apps",
+      "component": "ConnectedApps"
+    },
+    {
+      "route": "/connection-error",
+      "component": "ConnectionError"
+    },
+    {
+      "route": "/connection-requests",
+      "component": "ConnectionRequests"
+    },
+    {
+      "route": "/connector-intelligence",
+      "component": "ConnectorIntelligence"
+    },
+    {
+      "route": "/contact-management",
+      "component": "ContactManagement"
+    },
+    {
+      "route": "/contact-us-form",
+      "component": "ContactUsForm"
+    },
+    {
+      "route": "/content-analytics",
+      "component": "ContentAnalytics"
+    },
+    {
+      "route": "/content-calendar",
+      "component": "ContentCalendar"
+    },
+    {
+      "route": "/content-collaboration",
+      "component": "ContentCollaboration"
+    },
+    {
+      "route": "/content-flagging",
+      "component": "ContentFlagging"
+    },
+    {
+      "route": "/content-library",
+      "component": "ContentLibrary"
+    },
+    {
+      "route": "/content-moderation",
+      "component": "ContentModeration"
+    },
+    {
+      "route": "/content-scheduler",
+      "component": "ContentScheduler"
+    },
+    {
+      "route": "/content-scheduling",
+      "component": "ContentScheduling"
+    },
+    {
+      "route": "/content-upload",
+      "component": "ContentUpload"
+    },
+    {
+      "route": "/content-vault",
+      "component": "ContentVault"
+    },
+    {
+      "route": "/context-menu",
+      "component": "ContextMenu"
+    },
+    {
+      "route": "/contract-a-b-i",
+      "component": "ContractABI"
+    },
+    {
+      "route": "/contract-management",
+      "component": "ContractManagement"
+    },
+    {
+      "route": "/contribution-interface",
+      "component": "ContributionInterface"
+    },
+    {
+      "route": "/conversation-archive",
+      "component": "ConversationArchive"
+    },
+    {
+      "route": "/conversation-history",
+      "component": "ConversationHistory"
+    },
+    {
+      "route": "/conversion-funnel",
+      "component": "ConversionFunnel"
+    },
+    {
+      "route": "/conversion-optimization",
+      "component": "ConversionOptimization"
+    },
+    {
+      "route": "/cookie-policy",
+      "component": "CookiePolicy"
+    },
+    {
+      "route": "/copyright-management",
+      "component": "CopyrightManagement"
+    },
+    {
+      "route": "/cost-allocation",
+      "component": "CostAllocation"
+    },
+    {
+      "route": "/cost-basis-calculation",
+      "component": "CostBasisCalculation"
+    },
+    {
+      "route": "/course-builder",
+      "component": "CourseBuilder"
+    },
+    {
+      "route": "/course-catalog",
+      "component": "CourseCatalog"
+    },
+    {
+      "route": "/cover-photo",
+      "component": "CoverPhoto"
+    },
+    {
+      "route": "/create-article",
+      "component": "CreateArticle"
+    },
+    {
+      "route": "/create-audio",
+      "component": "CreateAudio"
+    },
+    {
+      "route": "/create-drop",
+      "component": "CreateDrop"
+    },
+    {
+      "route": "/create-reel",
+      "component": "CreateReel"
+    },
+    {
+      "route": "/creator-analytics",
+      "component": "CreatorAnalytics"
+    },
+    {
+      "route": "/creator-dashboard",
+      "component": "CreatorDashboard"
+    },
+    {
+      "route": "/creator-economy",
+      "component": "CreatorEconomy"
+    },
+    {
+      "route": "/creator-funding",
+      "component": "CreatorFunding"
+    },
+    {
+      "route": "/creator-grants",
+      "component": "CreatorGrants"
+    },
+    {
+      "route": "/creator-intelligence",
+      "component": "CreatorIntelligence"
+    },
+    {
+      "route": "/creator-monetization",
+      "component": "CreatorMonetization"
+    },
+    {
+      "route": "/creator-network",
+      "component": "CreatorNetwork"
+    },
+    {
+      "route": "/creator-onboarding",
+      "component": "CreatorOnboarding"
+    },
+    {
+      "route": "/creator-profile",
+      "component": "CreatorProfile"
+    },
+    {
+      "route": "/creator-spotlight",
+      "component": "CreatorSpotlight"
+    },
+    {
+      "route": "/creator-studio",
+      "component": "CreatorStudio"
+    },
+    {
+      "route": "/cross-chain-interop",
+      "component": "CrossChainInterop"
+    },
+    {
+      "route": "/cross-chain-swap",
+      "component": "CrossChainSwap"
+    },
+    {
+      "route": "/crypto",
+      "component": "Crypto"
+    },
+    {
+      "route": "/crypto-enhancements-page",
+      "component": "CryptoEnhancementsPage"
+    },
+    {
+      "route": "/crypto-exchange",
+      "component": "CryptoExchange"
+    },
+    {
+      "route": "/crypto-hub",
+      "component": "CryptoHub"
+    },
+    {
+      "route": "/crypto-news",
+      "component": "CryptoNews"
+    },
+    {
+      "route": "/crypto-research-hub",
+      "component": "CryptoResearchHub"
+    },
+    {
+      "route": "/custom-dashboard",
+      "component": "CustomDashboard"
+    },
+    {
+      "route": "/custom-reports",
+      "component": "CustomReports"
+    },
+    {
+      "route": "/customer-analytics",
+      "component": "CustomerAnalytics"
+    },
+    {
+      "route": "/customer-disputes",
+      "component": "CustomerDisputes"
+    },
+    {
+      "route": "/d-a-o-governance",
+      "component": "DAOGovernance"
+    },
+    {
+      "route": "/d-a-o-treasury",
+      "component": "DAOTreasury"
+    },
+    {
+      "route": "/d-c-a-calculator",
+      "component": "DCACalculator"
+    },
+    {
+      "route": "/d-e-x-depth-chart",
+      "component": "DEXDepthChart"
+    },
+    {
+      "route": "/d-m-inbox",
+      "component": "DMInbox"
+    },
+    {
+      "route": "/dashboard",
+      "component": "Dashboard"
+    },
+    {
+      "route": "/dashboard-overview",
+      "component": "DashboardOverview"
+    },
+    {
+      "route": "/data-export",
+      "component": "DataExport"
+    },
+    {
+      "route": "/data-grid",
+      "component": "DataGrid"
+    },
+    {
+      "route": "/data-lake",
+      "component": "DataLake"
+    },
+    {
+      "route": "/data-privacy",
+      "component": "DataPrivacy"
+    },
+    {
+      "route": "/data-processing",
+      "component": "DataProcessing"
+    },
+    {
+      "route": "/data-retention",
+      "component": "DataRetention"
+    },
+    {
+      "route": "/data-table",
+      "component": "DataTable"
+    },
+    {
+      "route": "/data-visualization",
+      "component": "DataVisualization"
+    },
+    {
+      "route": "/database-management",
+      "component": "DatabaseManagement"
+    },
+    {
+      "route": "/date-input-form",
+      "component": "DateInputForm"
+    },
+    {
+      "route": "/date-picker-dialog",
+      "component": "DatePickerDialog"
+    },
+    {
+      "route": "/dating-discovery",
+      "component": "DatingDiscovery"
+    },
+    {
+      "route": "/dating-home",
+      "component": "DatingHome"
+    },
+    {
+      "route": "/dating-matches",
+      "component": "DatingMatches"
+    },
+    {
+      "route": "/dating-messages",
+      "component": "DatingMessages"
+    },
+    {
+      "route": "/dating-premium",
+      "component": "DatingPremium"
+    },
+    {
+      "route": "/dating-profile",
+      "component": "DatingProfile"
+    },
+    {
+      "route": "/dating-profile-setup",
+      "component": "DatingProfileSetup"
+    },
+    {
+      "route": "/dating-subscription",
+      "component": "DatingSubscription"
+    },
+    {
+      "route": "/day-trade-room",
+      "component": "DayTradeRoom"
+    },
+    {
+      "route": "/de-fi",
+      "component": "DeFi"
+    },
+    {
+      "route": "/decentralized-identity",
+      "component": "DecentralizedIdentity"
+    },
+    {
+      "route": "/defensibility-moat",
+      "component": "DefensibilityMoat"
+    },
+    {
+      "route": "/delete-account",
+      "component": "DeleteAccount"
+    },
+    {
+      "route": "/delete-content",
+      "component": "DeleteContent"
+    },
+    {
+      "route": "/department-management",
+      "component": "DepartmentManagement"
+    },
+    {
+      "route": "/dependency-graph",
+      "component": "DependencyGraph"
+    },
+    {
+      "route": "/deployment-pipeline",
+      "component": "DeploymentPipeline"
+    },
+    {
+      "route": "/deprecation-policy",
+      "component": "DeprecationPolicy"
+    },
+    {
+      "route": "/derivative-trading",
+      "component": "DerivativeTrading"
+    },
+    {
+      "route": "/derivatives-trading",
+      "component": "DerivativesTrading"
+    },
+    {
+      "route": "/destination-guide",
+      "component": "DestinationGuide"
+    },
+    {
+      "route": "/destiny-engine",
+      "component": "DestinyEngine"
+    },
+    {
+      "route": "/dev-ops",
+      "component": "DevOps"
+    },
+    {
+      "route": "/developer-area",
+      "component": "DeveloperArea"
+    },
+    {
+      "route": "/developer-community",
+      "component": "DeveloperCommunity"
+    },
+    {
+      "route": "/developer-marketplace",
+      "component": "DeveloperMarketplace"
+    },
+    {
+      "route": "/developer-protocol",
+      "component": "DeveloperProtocol"
+    },
+    {
+      "route": "/difficulty-calculator",
+      "component": "DifficultyCalculator"
+    },
+    {
+      "route": "/difficulty-tracking",
+      "component": "DifficultyTracking"
+    },
+    {
+      "route": "/digital-art-store",
+      "component": "DigitalArtStore"
+    },
+    {
+      "route": "/digital-nation-mode",
+      "component": "DigitalNationMode"
+    },
+    {
+      "route": "/digital-twin",
+      "component": "DigitalTwin"
+    },
+    {
+      "route": "/direct-messages",
+      "component": "DirectMessages"
+    },
+    {
+      "route": "/direct-messaging",
+      "component": "DirectMessaging"
+    },
+    {
+      "route": "/disaster-recovery",
+      "component": "DisasterRecovery"
+    },
+    {
+      "route": "/discord-integration",
+      "component": "DiscordIntegration"
+    },
+    {
+      "route": "/discover",
+      "component": "Discover"
+    },
+    {
+      "route": "/discussion-board",
+      "component": "DiscussionBoard"
+    },
+    {
+      "route": "/discussion-forums",
+      "component": "DiscussionForums"
+    },
+    {
+      "route": "/dispute-resolution",
+      "component": "DisputeResolution"
+    },
+    {
+      "route": "/distribution-channels",
+      "component": "DistributionChannels"
+    },
+    {
+      "route": "/document-editor",
+      "component": "DocumentEditor"
+    },
+    {
+      "route": "/document-management",
+      "component": "DocumentManagement"
+    },
+    {
+      "route": "/document-sharing",
+      "component": "DocumentSharing"
+    },
+    {
+      "route": "/document-signing",
+      "component": "DocumentSigning"
+    },
+    {
+      "route": "/documentation",
+      "component": "Documentation"
+    },
+    {
+      "route": "/dogecoin-pool-selection",
+      "component": "DogecoinPoolSelection"
+    },
+    {
+      "route": "/domain-management",
+      "component": "DomainManagement"
+    },
+    {
+      "route": "/donation-processing",
+      "component": "DonationProcessing"
+    },
+    {
+      "route": "/dropdown-menu",
+      "component": "DropdownMenu"
+    },
+    {
+      "route": "/e-n-s-resolver",
+      "component": "ENSResolver"
+    },
+    {
+      "route": "/earnings-tracker",
+      "component": "EarningsTracker"
+    },
+    {
+      "route": "/earnings-tracking",
+      "component": "EarningsTracking"
+    },
+    {
+      "route": "/economic-layer",
+      "component": "EconomicLayer"
+    },
+    {
+      "route": "/economics",
+      "component": "Economics"
+    },
+    {
+      "route": "/economy-control",
+      "component": "EconomyControl"
+    },
+    {
+      "route": "/ecosystem",
+      "component": "Ecosystem"
+    },
+    {
+      "route": "/edit-profile",
+      "component": "EditProfile"
+    },
+    {
+      "route": "/email-campaigns",
+      "component": "EmailCampaigns"
+    },
+    {
+      "route": "/email-configuration",
+      "component": "EmailConfiguration"
+    },
+    {
+      "route": "/email-input-form",
+      "component": "EmailInputForm"
+    },
+    {
+      "route": "/email-integration",
+      "component": "EmailIntegration"
+    },
+    {
+      "route": "/email-notifications",
+      "component": "EmailNotifications"
+    },
+    {
+      "route": "/email-templates",
+      "component": "EmailTemplates"
+    },
+    {
+      "route": "/email-verification",
+      "component": "EmailVerification"
+    },
+    {
+      "route": "/embed-s-d-k",
+      "component": "EmbedSDK"
+    },
+    {
+      "route": "/empty-search-state",
+      "component": "EmptySearchState"
+    },
+    {
+      "route": "/engagement-metrics",
+      "component": "EngagementMetrics"
+    },
+    {
+      "route": "/engagement-stats",
+      "component": "EngagementStats"
+    },
+    {
+      "route": "/engineer",
+      "component": "Engineer"
+    },
+    {
+      "route": "/enterprise",
+      "component": "Enterprise"
+    },
+    {
+      "route": "/enterprise-a-p-i",
+      "component": "EnterpriseAPI"
+    },
+    {
+      "route": "/enterprise-analytics",
+      "component": "EnterpriseAnalytics"
+    },
+    {
+      "route": "/enterprise-billing",
+      "component": "EnterpriseBilling"
+    },
+    {
+      "route": "/entity-profile",
+      "component": "EntityProfile"
+    },
+    {
+      "route": "/environment-management",
+      "component": "EnvironmentManagement"
+    },
+    {
+      "route": "/error403",
+      "component": "Error403"
+    },
+    {
+      "route": "/error404",
+      "component": "Error404"
+    },
+    {
+      "route": "/error500",
+      "component": "Error500"
+    },
+    {
+      "route": "/error503",
+      "component": "Error503"
+    },
+    {
+      "route": "/error-dialog",
+      "component": "ErrorDialog"
+    },
+    {
+      "route": "/error-tracking",
+      "component": "ErrorTracking"
+    },
+    {
+      "route": "/escrow-shop",
+      "component": "EscrowShop"
+    },
+    {
+      "route": "/ethereum-pool-selector",
+      "component": "EthereumPoolSelector"
+    },
+    {
+      "route": "/event-analytics",
+      "component": "EventAnalytics"
+    },
+    {
+      "route": "/event-calendar",
+      "component": "EventCalendar"
+    },
+    {
+      "route": "/event-creation",
+      "component": "EventCreation"
+    },
+    {
+      "route": "/event-planner",
+      "component": "EventPlanner"
+    },
+    {
+      "route": "/event-registration",
+      "component": "EventRegistration"
+    },
+    {
+      "route": "/events",
+      "component": "Events"
+    },
+    {
+      "route": "/execution-history",
+      "component": "ExecutionHistory"
+    },
+    {
+      "route": "/exercise-library",
+      "component": "ExerciseLibrary"
+    },
+    {
+      "route": "/expense-management",
+      "component": "ExpenseManagement"
+    },
+    {
+      "route": "/expense-tracker",
+      "component": "ExpenseTracker"
+    },
+    {
+      "route": "/experiment-factory",
+      "component": "ExperimentFactory"
+    },
+    {
+      "route": "/experiment-tracker",
+      "component": "ExperimentTracker"
+    },
+    {
+      "route": "/explore",
+      "component": "Explore"
+    },
+    {
+      "route": "/export-data",
+      "component": "ExportData"
+    },
+    {
+      "route": "/f-a-q-management",
+      "component": "FAQManagement"
+    },
+    {
+      "route": "/f-a-q-page",
+      "component": "FAQPage"
+    },
+    {
+      "route": "/farming",
+      "component": "Farming"
+    },
+    {
+      "route": "/favorites",
+      "component": "Favorites"
+    },
+    {
+      "route": "/feature-requests",
+      "component": "FeatureRequests"
+    },
+    {
+      "route": "/feature-tour",
+      "component": "FeatureTour"
+    },
+    {
+      "route": "/features",
+      "component": "Features"
+    },
+    {
+      "route": "/fee-calculation",
+      "component": "FeeCalculation"
+    },
+    {
+      "route": "/feed-with-posts",
+      "component": "FeedWithPosts"
+    },
+    {
+      "route": "/feedback",
+      "component": "Feedback"
+    },
+    {
+      "route": "/feedback-dialog",
+      "component": "FeedbackDialog"
+    },
+    {
+      "route": "/feedback-form",
+      "component": "FeedbackForm"
+    },
+    {
+      "route": "/feedback-hub",
+      "component": "FeedbackHub"
+    },
+    {
+      "route": "/file-browser",
+      "component": "FileBrowser"
+    },
+    {
+      "route": "/file-converter",
+      "component": "FileConverter"
+    },
+    {
+      "route": "/file-download",
+      "component": "FileDownload"
+    },
+    {
+      "route": "/file-preview",
+      "component": "FilePreview"
+    },
+    {
+      "route": "/file-sharing",
+      "component": "FileSharing"
+    },
+    {
+      "route": "/file-upload-dialog",
+      "component": "FileUploadDialog"
+    },
+    {
+      "route": "/file-upload-form",
+      "component": "FileUploadForm"
+    },
+    {
+      "route": "/file-upload-progress",
+      "component": "FileUploadProgress"
+    },
+    {
+      "route": "/file-versioning",
+      "component": "FileVersioning"
+    },
+    {
+      "route": "/filter-panel",
+      "component": "FilterPanel"
+    },
+    {
+      "route": "/financial-reports",
+      "component": "FinancialReports"
+    },
+    {
+      "route": "/flash-loans",
+      "component": "FlashLoans"
+    },
+    {
+      "route": "/flight-search",
+      "component": "FlightSearch"
+    },
+    {
+      "route": "/follow-list",
+      "component": "FollowList"
+    },
+    {
+      "route": "/follow-requests",
+      "component": "FollowRequests"
+    },
+    {
+      "route": "/follow-system",
+      "component": "FollowSystem"
+    },
+    {
+      "route": "/follow-unfollow",
+      "component": "FollowUnfollow"
+    },
+    {
+      "route": "/follower-list",
+      "component": "FollowerList"
+    },
+    {
+      "route": "/followers-network",
+      "component": "FollowersNetwork"
+    },
+    {
+      "route": "/forecasting-engine",
+      "component": "ForecastingEngine"
+    },
+    {
+      "route": "/forum-categories",
+      "component": "ForumCategories"
+    },
+    {
+      "route": "/framework-templates",
+      "component": "FrameworkTemplates"
+    },
+    {
+      "route": "/free-will-dashboard",
+      "component": "FreeWillDashboard"
+    },
+    {
+      "route": "/fundraiser-tools",
+      "component": "FundraiserTools"
+    },
+    {
+      "route": "/g-d-p-r",
+      "component": "GDPR"
+    },
+    {
+      "route": "/g-t-m-strategy",
+      "component": "GTMStrategy"
+    },
+    {
+      "route": "/gain-loss-tracking",
+      "component": "GainLossTracking"
+    },
+    {
+      "route": "/game-blackjack",
+      "component": "GameBlackjack"
+    },
+    {
+      "route": "/game-block-builder",
+      "component": "GameBlockBuilder"
+    },
+    {
+      "route": "/game-chat",
+      "component": "GameChat"
+    },
+    {
+      "route": "/game-crash",
+      "component": "GameCrash"
+    },
+    {
+      "route": "/game-crypto-quiz",
+      "component": "GameCryptoQuiz"
+    },
+    {
+      "route": "/game-fi-quest-board",
+      "component": "GameFiQuestBoard"
+    },
+    {
+      "route": "/game-lobby",
+      "component": "GameLobby"
+    },
+    {
+      "route": "/game-room",
+      "component": "GameRoom"
+    },
+    {
+      "route": "/game-settings",
+      "component": "GameSettings"
+    },
+    {
+      "route": "/game-slots",
+      "component": "GameSlots"
+    },
+    {
+      "route": "/game-token-tap",
+      "component": "GameTokenTap"
+    },
+    {
+      "route": "/gaming",
+      "component": "Gaming"
+    },
+    {
+      "route": "/gaming-for-charity",
+      "component": "GamingForCharity"
+    },
+    {
+      "route": "/gantt-chart",
+      "component": "GanttChart"
+    },
+    {
+      "route": "/gas-fee-estimator",
+      "component": "GasFeeEstimator"
+    },
+    {
+      "route": "/gas-price-monitor",
+      "component": "GasPriceMonitor"
+    },
+    {
+      "route": "/gas-tracker",
+      "component": "GasTracker"
+    },
+    {
+      "route": "/general-settings",
+      "component": "GeneralSettings"
+    },
+    {
+      "route": "/generated-api-explorer",
+      "component": "GeneratedApiExplorer"
+    },
+    {
+      "route": "/generated-gallery",
+      "component": "GeneratedGallery"
+    },
+    {
+      "route": "/getting-started-guide",
+      "component": "GettingStartedGuide"
+    },
+    {
+      "route": "/ghost-mode",
+      "component": "GhostMode"
+    },
+    {
+      "route": "/global-operations-center",
+      "component": "GlobalOperationsCenter"
+    },
+    {
+      "route": "/global-search",
+      "component": "GlobalSearch"
+    },
+    {
+      "route": "/governance",
+      "component": "Governance"
+    },
+    {
+      "route": "/governance-voting",
+      "component": "GovernanceVoting"
+    },
+    {
+      "route": "/governance-wizard",
+      "component": "GovernanceWizard"
+    },
+    {
+      "route": "/grade-book",
+      "component": "GradeBook"
+    },
+    {
+      "route": "/group-chat",
+      "component": "GroupChat"
+    },
+    {
+      "route": "/group-chats",
+      "component": "GroupChats"
+    },
+    {
+      "route": "/group-directory",
+      "component": "GroupDirectory"
+    },
+    {
+      "route": "/group-events",
+      "component": "GroupEvents"
+    },
+    {
+      "route": "/group-management",
+      "component": "GroupManagement"
+    },
+    {
+      "route": "/growth",
+      "component": "Growth"
+    },
+    {
+      "route": "/guilds",
+      "component": "Guilds"
+    },
+    {
+      "route": "/h-i-p-a-a",
+      "component": "HIPAA"
+    },
+    {
+      "route": "/h-o-p-e-a-i-control",
+      "component": "HOPEAIControl"
+    },
+    {
+      "route": "/hash-rate-monitor",
+      "component": "HashRateMonitor"
+    },
+    {
+      "route": "/hashtag-explorer",
+      "component": "HashtagExplorer"
+    },
+    {
+      "route": "/hashtag-search",
+      "component": "HashtagSearch"
+    },
+    {
+      "route": "/hashtags",
+      "component": "Hashtags"
+    },
+    {
+      "route": "/health-articles",
+      "component": "HealthArticles"
+    },
+    {
+      "route": "/health-dashboard",
+      "component": "HealthDashboard"
+    },
+    {
+      "route": "/health-goals",
+      "component": "HealthGoals"
+    },
+    {
+      "route": "/help-center",
+      "component": "HelpCenter"
+    },
+    {
+      "route": "/home",
+      "component": "Home"
+    },
+    {
+      "route": "/hope-a-i",
+      "component": "HopeAI"
+    },
+    {
+      "route": "/hope-a-i-advanced",
+      "component": "HopeAIAdvanced"
+    },
+    {
+      "route": "/hope-a-i-meta",
+      "component": "HopeAIMeta"
+    },
+    {
+      "route": "/hope-a-i-page",
+      "component": "HopeAIPage"
+    },
+    {
+      "route": "/hope-a-i-upgrades",
+      "component": "HopeAIUpgrades"
+    },
+    {
+      "route": "/hotel-search",
+      "component": "HotelSearch"
+    },
+    {
+      "route": "/hub-spot-integration",
+      "component": "HubSpotIntegration"
+    },
+    {
+      "route": "/i-c-o-launchpad",
+      "component": "ICOLaunchpad"
+    },
+    {
+      "route": "/i-f-t-t-t",
+      "component": "IFTTT"
+    },
+    {
+      "route": "/i-i-t-r",
+      "component": "IITR"
+    },
+    {
+      "route": "/i-t-services-landing",
+      "component": "ITServicesLanding"
+    },
+    {
+      "route": "/i-t-services-portal",
+      "component": "ITServicesPortal"
+    },
+    {
+      "route": "/image-editor",
+      "component": "ImageEditor"
+    },
+    {
+      "route": "/image-gallery",
+      "component": "ImageGallery"
+    },
+    {
+      "route": "/image-tools",
+      "component": "ImageTools"
+    },
+    {
+      "route": "/image-viewer",
+      "component": "ImageViewer"
+    },
+    {
+      "route": "/impact-map",
+      "component": "ImpactMap"
+    },
+    {
+      "route": "/impact-metrics",
+      "component": "ImpactMetrics"
+    },
+    {
+      "route": "/in-app-notifications",
+      "component": "InAppNotifications"
+    },
+    {
+      "route": "/in-game-currency",
+      "component": "InGameCurrency"
+    },
+    {
+      "route": "/incident-management",
+      "component": "IncidentManagement"
+    },
+    {
+      "route": "/input-dialog",
+      "component": "InputDialog"
+    },
+    {
+      "route": "/instructor-dashboard",
+      "component": "InstructorDashboard"
+    },
+    {
+      "route": "/integration-setup",
+      "component": "IntegrationSetup"
+    },
+    {
+      "route": "/integrations",
+      "component": "Integrations"
+    },
+    {
+      "route": "/inventory-management",
+      "component": "InventoryManagement"
+    },
+    {
+      "route": "/investment-goals",
+      "component": "InvestmentGoals"
+    },
+    {
+      "route": "/investor-metrics",
+      "component": "InvestorMetrics"
+    },
+    {
+      "route": "/investor-pitch",
+      "component": "InvestorPitch"
+    },
+    {
+      "route": "/investor-portal",
+      "component": "InvestorPortal"
+    },
+    {
+      "route": "/investor-room",
+      "component": "InvestorRoom"
+    },
+    {
+      "route": "/invoice-details",
+      "component": "InvoiceDetails"
+    },
+    {
+      "route": "/invoice-management",
+      "component": "InvoiceManagement"
+    },
+    {
+      "route": "/k-y-c-verification",
+      "component": "KYCVerification"
+    },
+    {
+      "route": "/knowledge-base",
+      "component": "KnowledgeBase"
+    },
+    {
+      "route": "/l-d-a-p-integration",
+      "component": "LDAPIntegration"
+    },
+    {
+      "route": "/l-t-v-analysis",
+      "component": "LTVAnalysis"
+    },
+    {
+      "route": "/landing-page",
+      "component": "LandingPage"
+    },
+    {
+      "route": "/language-exchange-admin",
+      "component": "LanguageExchangeAdmin"
+    },
+    {
+      "route": "/language-partner-discovery",
+      "component": "LanguagePartnerDiscovery"
+    },
+    {
+      "route": "/language-selector",
+      "component": "LanguageSelector"
+    },
+    {
+      "route": "/language-settings",
+      "component": "LanguageSettings"
+    },
+    {
+      "route": "/lead-scoring",
+      "component": "LeadScoring"
+    },
+    {
+      "route": "/leaderboard",
+      "component": "Leaderboard"
+    },
+    {
+      "route": "/leaderboards",
+      "component": "Leaderboards"
+    },
+    {
+      "route": "/learning",
+      "component": "Learning"
+    },
+    {
+      "route": "/learning-path",
+      "component": "LearningPath"
+    },
+    {
+      "route": "/legal-documents",
+      "component": "LegalDocuments"
+    },
+    {
+      "route": "/legendary-status",
+      "component": "LegendaryStatus"
+    },
+    {
+      "route": "/lending-borrow",
+      "component": "LendingBorrow"
+    },
+    {
+      "route": "/lending-borrowing",
+      "component": "LendingBorrowing"
+    },
+    {
+      "route": "/lesson-editor",
+      "component": "LessonEditor"
+    },
+    {
+      "route": "/life-command",
+      "component": "LifeCommand"
+    },
+    {
+      "route": "/lightbox",
+      "component": "Lightbox"
+    },
+    {
+      "route": "/like-reaction-system",
+      "component": "LikeReactionSystem"
+    },
+    {
+      "route": "/likes",
+      "component": "Likes"
+    },
+    {
+      "route": "/liquid-staking",
+      "component": "LiquidStaking"
+    },
+    {
+      "route": "/liquidity-pools",
+      "component": "LiquidityPools"
+    },
+    {
+      "route": "/list-view",
+      "component": "ListView"
+    },
+    {
+      "route": "/live",
+      "component": "Live"
+    },
+    {
+      "route": "/live-chat",
+      "component": "LiveChat"
+    },
+    {
+      "route": "/live-gifting",
+      "component": "LiveGifting"
+    },
+    {
+      "route": "/live-reactions",
+      "component": "LiveReactions"
+    },
+    {
+      "route": "/live-stream-setup",
+      "component": "LiveStreamSetup"
+    },
+    {
+      "route": "/live-streaming",
+      "component": "LiveStreaming"
+    },
+    {
+      "route": "/livestream-dashboard",
+      "component": "LivestreamDashboard"
+    },
+    {
+      "route": "/load-balancing",
+      "component": "LoadBalancing"
+    },
+    {
+      "route": "/loading-dialog",
+      "component": "LoadingDialog"
+    },
+    {
+      "route": "/log-viewer",
+      "component": "LogViewer"
+    },
+    {
+      "route": "/login",
+      "component": "Login"
+    },
+    {
+      "route": "/logistics-optimizer",
+      "component": "LogisticsOptimizer"
+    },
+    {
+      "route": "/m-l-insights",
+      "component": "MLInsights"
+    },
+    {
+      "route": "/m-l-models",
+      "component": "MLModels"
+    },
+    {
+      "route": "/mailing-lists",
+      "component": "MailingLists"
+    },
+    {
+      "route": "/main-dashboard",
+      "component": "MainDashboard"
+    },
+    {
+      "route": "/maintenance-mode",
+      "component": "MaintenanceMode"
+    },
+    {
+      "route": "/map-view",
+      "component": "MapView"
+    },
+    {
+      "route": "/margin-trading",
+      "component": "MarginTrading"
+    },
+    {
+      "route": "/markdown-rendering",
+      "component": "MarkdownRendering"
+    },
+    {
+      "route": "/market-sentiment",
+      "component": "MarketSentiment"
+    },
+    {
+      "route": "/marketing-r-o-i",
+      "component": "MarketingROI"
+    },
+    {
+      "route": "/marketplace",
+      "component": "Marketplace"
+    },
+    {
+      "route": "/marketplace-analytics",
+      "component": "MarketplaceAnalytics"
+    },
+    {
+      "route": "/master-architecture",
+      "component": "MasterArchitecture"
+    },
+    {
+      "route": "/match-chat",
+      "component": "MatchChat"
+    },
+    {
+      "route": "/match-feed",
+      "component": "MatchFeed"
+    },
+    {
+      "route": "/match-space",
+      "component": "MatchSpace"
+    },
+    {
+      "route": "/matching-algorithm",
+      "component": "MatchingAlgorithm"
+    },
+    {
+      "route": "/matchmaking",
+      "component": "Matchmaking"
+    },
+    {
+      "route": "/meal-plans",
+      "component": "MealPlans"
+    },
+    {
+      "route": "/media-carousel",
+      "component": "MediaCarousel"
+    },
+    {
+      "route": "/media-gallery",
+      "component": "MediaGallery"
+    },
+    {
+      "route": "/medication-reminder",
+      "component": "MedicationReminder"
+    },
+    {
+      "route": "/mega-marketplace",
+      "component": "MegaMarketplace"
+    },
+    {
+      "route": "/membership-tiers",
+      "component": "MembershipTiers"
+    },
+    {
+      "route": "/memory-constellation",
+      "component": "MemoryConstellation"
+    },
+    {
+      "route": "/memory-graph-visualizer",
+      "component": "MemoryGraphVisualizer"
+    },
+    {
+      "route": "/memory-system",
+      "component": "MemorySystem"
+    },
+    {
+      "route": "/mentions",
+      "component": "Mentions"
+    },
+    {
+      "route": "/message-encryption",
+      "component": "MessageEncryption"
+    },
+    {
+      "route": "/message-search",
+      "component": "MessageSearch"
+    },
+    {
+      "route": "/messages",
+      "component": "Messages"
+    },
+    {
+      "route": "/metaverse-portal",
+      "component": "MetaversePortal"
+    },
+    {
+      "route": "/milestone-tracking",
+      "component": "MilestoneTracking"
+    },
+    {
+      "route": "/miner-dashboard",
+      "component": "MinerDashboard"
+    },
+    {
+      "route": "/mining-calculator",
+      "component": "MiningCalculator"
+    },
+    {
+      "route": "/mining-dashboard",
+      "component": "MiningDashboard"
+    },
+    {
+      "route": "/mining-pool-selector",
+      "component": "MiningPoolSelector"
+    },
+    {
+      "route": "/mission-control",
+      "component": "MissionControl"
+    },
+    {
+      "route": "/mobile",
+      "component": "Mobile"
+    },
+    {
+      "route": "/mobile-app",
+      "component": "MobileApp"
+    },
+    {
+      "route": "/mobile-gaming",
+      "component": "MobileGaming"
+    },
+    {
+      "route": "/mobile-home",
+      "component": "MobileHome"
+    },
+    {
+      "route": "/mobile-menu",
+      "component": "MobileMenu"
+    },
+    {
+      "route": "/mobile-messages",
+      "component": "MobileMessages"
+    },
+    {
+      "route": "/mobile-notifications",
+      "component": "MobileNotifications"
+    },
+    {
+      "route": "/mobile-profile",
+      "component": "MobileProfile"
+    },
+    {
+      "route": "/mobile-search",
+      "component": "MobileSearch"
+    },
+    {
+      "route": "/mobile-settings",
+      "component": "MobileSettings"
+    },
+    {
+      "route": "/mobile-shop",
+      "component": "MobileShop"
+    },
+    {
+      "route": "/mobile-streaming",
+      "component": "MobileStreaming"
+    },
+    {
+      "route": "/mobile-trading",
+      "component": "MobileTrading"
+    },
+    {
+      "route": "/mobile-wallet",
+      "component": "MobileWallet"
+    },
+    {
+      "route": "/moderation-dashboard",
+      "component": "ModerationDashboard"
+    },
+    {
+      "route": "/monetization",
+      "component": "Monetization"
+    },
+    {
+      "route": "/mood-tracker",
+      "component": "MoodTracker"
+    },
+    {
+      "route": "/mortgage-calculator",
+      "component": "MortgageCalculator"
+    },
+    {
+      "route": "/movie-catalog",
+      "component": "MovieCatalog"
+    },
+    {
+      "route": "/movie-detail",
+      "component": "MovieDetail"
+    },
+    {
+      "route": "/multi-model-selector",
+      "component": "MultiModelSelector"
+    },
+    {
+      "route": "/multi-select-form",
+      "component": "MultiSelectForm"
+    },
+    {
+      "route": "/multiplayer-lobby",
+      "component": "MultiplayerLobby"
+    },
+    {
+      "route": "/multivariate-testing",
+      "component": "MultivariateTesting"
+    },
+    {
+      "route": "/music-generation",
+      "component": "MusicGeneration"
+    },
+    {
+      "route": "/mutual-connections",
+      "component": "MutualConnections"
+    },
+    {
+      "route": "/mutual-friends",
+      "component": "MutualFriends"
+    },
+    {
+      "route": "/my-learning",
+      "component": "MyLearning"
+    },
+    {
+      "route": "/my-trips",
+      "component": "MyTrips"
+    },
+    {
+      "route": "/n-f-t-gallery",
+      "component": "NFTGallery"
+    },
+    {
+      "route": "/n-f-t-minting",
+      "component": "NFTMinting"
+    },
+    {
+      "route": "/n-f-t-wallet",
+      "component": "NFTWallet"
+    },
+    {
+      "route": "/n-l-p-tools",
+      "component": "NLPTools"
+    },
+    {
+      "route": "/n-s-f-w-feed",
+      "component": "NSFWFeed"
+    },
+    {
+      "route": "/n-s-f-w-platform",
+      "component": "NSFWPlatform"
+    },
+    {
+      "route": "/narrative-engine",
+      "component": "NarrativeEngine"
+    },
+    {
+      "route": "/net-worth-tracker",
+      "component": "NetWorthTracker"
+    },
+    {
+      "route": "/network-graph",
+      "component": "NetworkGraph"
+    },
+    {
+      "route": "/network-health",
+      "component": "NetworkHealth"
+    },
+    {
+      "route": "/network-statistics",
+      "component": "NetworkStatistics"
+    },
+    {
+      "route": "/not-found",
+      "component": "NotFound"
+    },
+    {
+      "route": "/notes-app",
+      "component": "NotesApp"
+    },
+    {
+      "route": "/notification-center",
+      "component": "NotificationCenter"
+    },
+    {
+      "route": "/notification-history",
+      "component": "NotificationHistory"
+    },
+    {
+      "route": "/notification-intelligence",
+      "component": "NotificationIntelligence"
+    },
+    {
+      "route": "/notification-preferences",
+      "component": "NotificationPreferences"
+    },
+    {
+      "route": "/notification-settings",
+      "component": "NotificationSettings"
+    },
+    {
+      "route": "/notifications",
+      "component": "Notifications"
+    },
+    {
+      "route": "/notifications-center",
+      "component": "NotificationsCenter"
+    },
+    {
+      "route": "/notifications-hub",
+      "component": "NotificationsHub"
+    },
+    {
+      "route": "/number-input-form",
+      "component": "NumberInputForm"
+    },
+    {
+      "route": "/nutrition-tracker",
+      "component": "NutritionTracker"
+    },
+    {
+      "route": "/o-auth-providers",
+      "component": "OAuthProviders"
+    },
+    {
+      "route": "/offer-management",
+      "component": "OfferManagement"
+    },
+    {
+      "route": "/onboarding",
+      "component": "Onboarding"
+    },
+    {
+      "route": "/onboarding-tutorial",
+      "component": "OnboardingTutorial"
+    },
+    {
+      "route": "/options-trading",
+      "component": "OptionsTrading"
+    },
+    {
+      "route": "/oracle-network",
+      "component": "OracleNetwork"
+    },
+    {
+      "route": "/order-book",
+      "component": "OrderBook"
+    },
+    {
+      "route": "/order-confirmation",
+      "component": "OrderConfirmation"
+    },
+    {
+      "route": "/order-history",
+      "component": "OrderHistory"
+    },
+    {
+      "route": "/order-placement",
+      "component": "OrderPlacement"
+    },
+    {
+      "route": "/order-tracking",
+      "component": "OrderTracking"
+    },
+    {
+      "route": "/order-types",
+      "component": "OrderTypes"
+    },
+    {
+      "route": "/organization-settings",
+      "component": "OrganizationSettings"
+    },
+    {
+      "route": "/p2-e-shop",
+      "component": "P2EShop"
+    },
+    {
+      "route": "/pagination",
+      "component": "Pagination"
+    },
+    {
+      "route": "/password-input-form",
+      "component": "PasswordInputForm"
+    },
+    {
+      "route": "/password-reset",
+      "component": "PasswordReset"
+    },
+    {
+      "route": "/pay-pal-integration",
+      "component": "PayPalIntegration"
+    },
+    {
+      "route": "/payment-confirmation",
+      "component": "PaymentConfirmation"
+    },
+    {
+      "route": "/payment-infra",
+      "component": "PaymentInfra"
+    },
+    {
+      "route": "/payment-methods",
+      "component": "PaymentMethods"
+    },
+    {
+      "route": "/payment-setup",
+      "component": "PaymentSetup"
+    },
+    {
+      "route": "/payments",
+      "component": "Payments"
+    },
+    {
+      "route": "/payout-dashboard",
+      "component": "PayoutDashboard"
+    },
+    {
+      "route": "/payout-management",
+      "component": "PayoutManagement"
+    },
+    {
+      "route": "/performance-metrics",
+      "component": "PerformanceMetrics"
+    },
+    {
+      "route": "/performance-tuning",
+      "component": "PerformanceTuning"
+    },
+    {
+      "route": "/permission-management",
+      "component": "PermissionManagement"
+    },
+    {
+      "route": "/perpetual-futures",
+      "component": "PerpetualFutures"
+    },
+    {
+      "route": "/persona-builder",
+      "component": "PersonaBuilder"
+    },
+    {
+      "route": "/phase1-dashboard",
+      "component": "Phase1Dashboard"
+    },
+    {
+      "route": "/phase2to4-dashboard",
+      "component": "Phase2to4Dashboard"
+    },
+    {
+      "route": "/phone-verification",
+      "component": "PhoneVerification"
+    },
+    {
+      "route": "/platform-map",
+      "component": "PlatformMap"
+    },
+    {
+      "route": "/platform-status",
+      "component": "PlatformStatus"
+    },
+    {
+      "route": "/playlist-management",
+      "component": "PlaylistManagement"
+    },
+    {
+      "route": "/playlist-manager",
+      "component": "PlaylistManager"
+    },
+    {
+      "route": "/podcast-studio",
+      "component": "PodcastStudio"
+    },
+    {
+      "route": "/policy-management",
+      "component": "PolicyManagement"
+    },
+    {
+      "route": "/pool-performance",
+      "component": "PoolPerformance"
+    },
+    {
+      "route": "/portfolio",
+      "component": "Portfolio"
+    },
+    {
+      "route": "/portfolio-comparison",
+      "component": "PortfolioComparison"
+    },
+    {
+      "route": "/portfolio-optimization",
+      "component": "PortfolioOptimization"
+    },
+    {
+      "route": "/portfolio-overview",
+      "component": "PortfolioOverview"
+    },
+    {
+      "route": "/portfolio-rebalance",
+      "component": "PortfolioRebalance"
+    },
+    {
+      "route": "/portfolio-tracker",
+      "component": "PortfolioTracker"
+    },
+    {
+      "route": "/portfolio-tracking",
+      "component": "PortfolioTracking"
+    },
+    {
+      "route": "/position-management",
+      "component": "PositionManagement"
+    },
+    {
+      "route": "/power-user-tools",
+      "component": "PowerUserTools"
+    },
+    {
+      "route": "/practice-sessions",
+      "component": "PracticeSessions"
+    },
+    {
+      "route": "/predictive-analytics",
+      "component": "PredictiveAnalytics"
+    },
+    {
+      "route": "/predictive-models",
+      "component": "PredictiveModels"
+    },
+    {
+      "route": "/predictive-systems",
+      "component": "PredictiveSystems"
+    },
+    {
+      "route": "/preferences-setup",
+      "component": "PreferencesSetup"
+    },
+    {
+      "route": "/premium-features",
+      "component": "PremiumFeatures"
+    },
+    {
+      "route": "/presentation-with-chat",
+      "component": "PresentationWithChat"
+    },
+    {
+      "route": "/price-alerts",
+      "component": "PriceAlerts"
+    },
+    {
+      "route": "/pricing",
+      "component": "Pricing"
+    },
+    {
+      "route": "/pricing-engine",
+      "component": "PricingEngine"
+    },
+    {
+      "route": "/pricing-management",
+      "component": "PricingManagement"
+    },
+    {
+      "route": "/pricing-rules",
+      "component": "PricingRules"
+    },
+    {
+      "route": "/priority-matrix",
+      "component": "PriorityMatrix"
+    },
+    {
+      "route": "/privacy-mixer",
+      "component": "PrivacyMixer"
+    },
+    {
+      "route": "/privacy-policy",
+      "component": "PrivacyPolicy"
+    },
+    {
+      "route": "/privacy-settings",
+      "component": "PrivacySettings"
+    },
+    {
+      "route": "/privacy-vault",
+      "component": "PrivacyVault"
+    },
+    {
+      "route": "/product-approval",
+      "component": "ProductApproval"
+    },
+    {
+      "route": "/product-brain",
+      "component": "ProductBrain"
+    },
+    {
+      "route": "/product-catalog",
+      "component": "ProductCatalog"
+    },
+    {
+      "route": "/product-comparison",
+      "component": "ProductComparison"
+    },
+    {
+      "route": "/product-detail",
+      "component": "ProductDetail"
+    },
+    {
+      "route": "/product-listing",
+      "component": "ProductListing"
+    },
+    {
+      "route": "/product-listings",
+      "component": "ProductListings"
+    },
+    {
+      "route": "/product-reviews",
+      "component": "ProductReviews"
+    },
+    {
+      "route": "/production-architecture",
+      "component": "ProductionArchitecture"
+    },
+    {
+      "route": "/profile",
+      "component": "Profile"
+    },
+    {
+      "route": "/profile-completion",
+      "component": "ProfileCompletion"
+    },
+    {
+      "route": "/profile-creation",
+      "component": "ProfileCreation"
+    },
+    {
+      "route": "/profile-customization",
+      "component": "ProfileCustomization"
+    },
+    {
+      "route": "/profile-dashboard",
+      "component": "ProfileDashboard"
+    },
+    {
+      "route": "/profile-edit",
+      "component": "ProfileEdit"
+    },
+    {
+      "route": "/profile-picture",
+      "component": "ProfilePicture"
+    },
+    {
+      "route": "/profile-preview",
+      "component": "ProfilePreview"
+    },
+    {
+      "route": "/profile-view",
+      "component": "ProfileView"
+    },
+    {
+      "route": "/profile-wallet",
+      "component": "ProfileWallet"
+    },
+    {
+      "route": "/profitability",
+      "component": "Profitability"
+    },
+    {
+      "route": "/progress-bar",
+      "component": "ProgressBar"
+    },
+    {
+      "route": "/progress-tracking",
+      "component": "ProgressTracking"
+    },
+    {
+      "route": "/project-board",
+      "component": "ProjectBoard"
+    },
+    {
+      "route": "/project-listing",
+      "component": "ProjectListing"
+    },
+    {
+      "route": "/promotion-engine",
+      "component": "PromotionEngine"
+    },
+    {
+      "route": "/prompt-builder",
+      "component": "PromptBuilder"
+    },
+    {
+      "route": "/proof-vault",
+      "component": "ProofVault"
+    },
+    {
+      "route": "/property-comparison",
+      "component": "PropertyComparison"
+    },
+    {
+      "route": "/property-detail",
+      "component": "PropertyDetail"
+    },
+    {
+      "route": "/property-listing",
+      "component": "PropertyListing"
+    },
+    {
+      "route": "/property-transfer",
+      "component": "PropertyTransfer"
+    },
+    {
+      "route": "/protocol-layer",
+      "component": "ProtocolLayer"
+    },
+    {
+      "route": "/publishing-queue",
+      "component": "PublishingQueue"
+    },
+    {
+      "route": "/publishing-schedule",
+      "component": "PublishingSchedule"
+    },
+    {
+      "route": "/push-notifications",
+      "component": "PushNotifications"
+    },
+    {
+      "route": "/q-r-code-generator",
+      "component": "QRCodeGenerator"
+    },
+    {
+      "route": "/quantum-computing",
+      "component": "QuantumComputing"
+    },
+    {
+      "route": "/quantum-safe",
+      "component": "QuantumSafe"
+    },
+    {
+      "route": "/quick-actions",
+      "component": "QuickActions"
+    },
+    {
+      "route": "/quick-stats",
+      "component": "QuickStats"
+    },
+    {
+      "route": "/quiz-builder",
+      "component": "QuizBuilder"
+    },
+    {
+      "route": "/r-f-m-analysis",
+      "component": "RFMAnalysis"
+    },
+    {
+      "route": "/r-f-q-system",
+      "component": "RFQSystem"
+    },
+    {
+      "route": "/radio-button-form",
+      "component": "RadioButtonForm"
+    },
+    {
+      "route": "/rate-limit-config",
+      "component": "RateLimitConfig"
+    },
+    {
+      "route": "/rate-limit-dashboard",
+      "component": "RateLimitDashboard"
+    },
+    {
+      "route": "/rate-limit-error",
+      "component": "RateLimitError"
+    },
+    {
+      "route": "/rate-limiting",
+      "component": "RateLimiting"
+    },
+    {
+      "route": "/rating-system",
+      "component": "RatingSystem"
+    },
+    {
+      "route": "/read-receipts",
+      "component": "ReadReceipts"
+    },
+    {
+      "route": "/real-time-game-engine",
+      "component": "RealTimeGameEngine"
+    },
+    {
+      "route": "/real-time-monitoring",
+      "component": "RealTimeMonitoring"
+    },
+    {
+      "route": "/real-time-streaming",
+      "component": "RealTimeStreaming"
+    },
+    {
+      "route": "/rebalancing-tools",
+      "component": "RebalancingTools"
+    },
+    {
+      "route": "/receipt-download",
+      "component": "ReceiptDownload"
+    },
+    {
+      "route": "/receive-crypto",
+      "component": "ReceiveCrypto"
+    },
+    {
+      "route": "/recent-activity",
+      "component": "RecentActivity"
+    },
+    {
+      "route": "/recommendations",
+      "component": "Recommendations"
+    },
+    {
+      "route": "/recommendations-feed",
+      "component": "RecommendationsFeed"
+    },
+    {
+      "route": "/recommended-matches",
+      "component": "RecommendedMatches"
+    },
+    {
+      "route": "/reels",
+      "component": "Reels"
+    },
+    {
+      "route": "/refactoring-tools",
+      "component": "RefactoringTools"
+    },
+    {
+      "route": "/referrals",
+      "component": "Referrals"
+    },
+    {
+      "route": "/refund-requests",
+      "component": "RefundRequests"
+    },
+    {
+      "route": "/regional-settings",
+      "component": "RegionalSettings"
+    },
+    {
+      "route": "/reminders",
+      "component": "Reminders"
+    },
+    {
+      "route": "/report-dialog",
+      "component": "ReportDialog"
+    },
+    {
+      "route": "/report-user",
+      "component": "ReportUser"
+    },
+    {
+      "route": "/reports-dashboard",
+      "component": "ReportsDashboard"
+    },
+    {
+      "route": "/reputation",
+      "component": "Reputation"
+    },
+    {
+      "route": "/reputation-system",
+      "component": "ReputationSystem"
+    },
+    {
+      "route": "/resource-allocation",
+      "component": "ResourceAllocation"
+    },
+    {
+      "route": "/resource-library",
+      "component": "ResourceLibrary"
+    },
+    {
+      "route": "/response-time",
+      "component": "ResponseTime"
+    },
+    {
+      "route": "/retention",
+      "component": "Retention"
+    },
+    {
+      "route": "/retention-analytics",
+      "component": "RetentionAnalytics"
+    },
+    {
+      "route": "/retention-engine",
+      "component": "RetentionEngine"
+    },
+    {
+      "route": "/retirement-planner",
+      "component": "RetirementPlanner"
+    },
+    {
+      "route": "/return-management",
+      "component": "ReturnManagement"
+    },
+    {
+      "route": "/returns-refunds",
+      "component": "ReturnsRefunds"
+    },
+    {
+      "route": "/revenue-tracking",
+      "component": "RevenueTracking"
+    },
+    {
+      "route": "/review-moderation",
+      "component": "ReviewModeration"
+    },
+    {
+      "route": "/reviews",
+      "component": "Reviews"
+    },
+    {
+      "route": "/reviews-ratings",
+      "component": "ReviewsRatings"
+    },
+    {
+      "route": "/reward-system",
+      "component": "RewardSystem"
+    },
+    {
+      "route": "/rewards-monitoring",
+      "component": "RewardsMonitoring"
+    },
+    {
+      "route": "/rewards-tracking",
+      "component": "RewardsTracking"
+    },
+    {
+      "route": "/risk-analysis",
+      "component": "RiskAnalysis"
+    },
+    {
+      "route": "/risk-management",
+      "component": "RiskManagement"
+    },
+    {
+      "route": "/roadmap",
+      "component": "Roadmap"
+    },
+    {
+      "route": "/roadmap-view",
+      "component": "RoadmapView"
+    },
+    {
+      "route": "/role-based-access",
+      "component": "RoleBasedAccess"
+    },
+    {
+      "route": "/role-management",
+      "component": "RoleManagement"
+    },
+    {
+      "route": "/s-d-k-download",
+      "component": "SDKDownload"
+    },
+    {
+      "route": "/s-d-k-management",
+      "component": "SDKManagement"
+    },
+    {
+      "route": "/s-e-o-optimizer",
+      "component": "SEOOptimizer"
+    },
+    {
+      "route": "/s-k-y444-central-bank",
+      "component": "SKY444CentralBank"
+    },
+    {
+      "route": "/s-m-s-campaigns",
+      "component": "SMSCampaigns"
+    },
+    {
+      "route": "/s-m-s-integration",
+      "component": "SMSIntegration"
+    },
+    {
+      "route": "/s-m-s-templates",
+      "component": "SMSTemplates"
+    },
+    {
+      "route": "/s-m-t-p-settings",
+      "component": "SMTPSettings"
+    },
+    {
+      "route": "/s-o-c2",
+      "component": "SOC2"
+    },
+    {
+      "route": "/s-s-l-certificates",
+      "component": "SSLCertificates"
+    },
+    {
+      "route": "/s-s-o",
+      "component": "SSO"
+    },
+    {
+      "route": "/sales-analytics",
+      "component": "SalesAnalytics"
+    },
+    {
+      "route": "/salesforce-integration",
+      "component": "SalesforceIntegration"
+    },
+    {
+      "route": "/satisfaction-survey",
+      "component": "SatisfactionSurvey"
+    },
+    {
+      "route": "/saved-properties",
+      "component": "SavedProperties"
+    },
+    {
+      "route": "/saved-searches",
+      "component": "SavedSearches"
+    },
+    {
+      "route": "/savings-goals",
+      "component": "SavingsGoals"
+    },
+    {
+      "route": "/scheduled-jobs",
+      "component": "ScheduledJobs"
+    },
+    {
+      "route": "/scheduled-reports",
+      "component": "ScheduledReports"
+    },
+    {
+      "route": "/school",
+      "component": "School"
+    },
+    {
+      "route": "/school-certificate",
+      "component": "SchoolCertificate"
+    },
+    {
+      "route": "/school-course",
+      "component": "SchoolCourse"
+    },
+    {
+      "route": "/school-dashboard",
+      "component": "SchoolDashboard"
+    },
+    {
+      "route": "/school-lesson",
+      "component": "SchoolLesson"
+    },
+    {
+      "route": "/school-quiz",
+      "component": "SchoolQuiz"
+    },
+    {
+      "route": "/search",
+      "component": "Search"
+    },
+    {
+      "route": "/search-analytics",
+      "component": "SearchAnalytics"
+    },
+    {
+      "route": "/search-history",
+      "component": "SearchHistory"
+    },
+    {
+      "route": "/search-results",
+      "component": "SearchResults"
+    },
+    {
+      "route": "/search-suggestions",
+      "component": "SearchSuggestions"
+    },
+    {
+      "route": "/seasonal-events",
+      "component": "SeasonalEvents"
+    },
+    {
+      "route": "/security",
+      "component": "Security"
+    },
+    {
+      "route": "/security-audit",
+      "component": "SecurityAudit"
+    },
+    {
+      "route": "/security-compliance",
+      "component": "SecurityCompliance"
+    },
+    {
+      "route": "/security-dashboard",
+      "component": "SecurityDashboard"
+    },
+    {
+      "route": "/security-settings",
+      "component": "SecuritySettings"
+    },
+    {
+      "route": "/segmentation-analysis",
+      "component": "SegmentationAnalysis"
+    },
+    {
+      "route": "/select-dropdown-form",
+      "component": "SelectDropdownForm"
+    },
+    {
+      "route": "/self-healing-infra",
+      "component": "SelfHealingInfra"
+    },
+    {
+      "route": "/seller-dashboard",
+      "component": "SellerDashboard"
+    },
+    {
+      "route": "/seller-profile",
+      "component": "SellerProfile"
+    },
+    {
+      "route": "/send-crypto",
+      "component": "SendCrypto"
+    },
+    {
+      "route": "/sentiment-pipeline",
+      "component": "SentimentPipeline"
+    },
+    {
+      "route": "/server-health",
+      "component": "ServerHealth"
+    },
+    {
+      "route": "/server-installer",
+      "component": "ServerInstaller"
+    },
+    {
+      "route": "/server-status",
+      "component": "ServerStatus"
+    },
+    {
+      "route": "/settings",
+      "component": "Settings"
+    },
+    {
+      "route": "/settings-dialog",
+      "component": "SettingsDialog"
+    },
+    {
+      "route": "/setup-wizard",
+      "component": "SetupWizard"
+    },
+    {
+      "route": "/shadow-identity",
+      "component": "ShadowIdentity"
+    },
+    {
+      "route": "/shadow-relay",
+      "component": "ShadowRelay"
+    },
+    {
+      "route": "/share-dialog",
+      "component": "ShareDialog"
+    },
+    {
+      "route": "/shares",
+      "component": "Shares"
+    },
+    {
+      "route": "/sharing",
+      "component": "Sharing"
+    },
+    {
+      "route": "/shipping-management",
+      "component": "ShippingManagement"
+    },
+    {
+      "route": "/shopping-cart",
+      "component": "ShoppingCart"
+    },
+    {
+      "route": "/sidebar-navigation",
+      "component": "SidebarNavigation"
+    },
+    {
+      "route": "/sign-up",
+      "component": "SignUp"
+    },
+    {
+      "route": "/sign-up-flow",
+      "component": "SignUpFlow"
+    },
+    {
+      "route": "/sign-up_old",
+      "component": "SignUp_old"
+    },
+    {
+      "route": "/signin",
+      "component": "Signin"
+    },
+    {
+      "route": "/situation-room",
+      "component": "SituationRoom"
+    },
+    {
+      "route": "/skill-badges",
+      "component": "SkillBadges"
+    },
+    {
+      "route": "/sky-school",
+      "component": "SkySchool"
+    },
+    {
+      "route": "/sky-school-a-i",
+      "component": "SkySchoolAI"
+    },
+    {
+      "route": "/sky-school-quiz",
+      "component": "SkySchoolQuiz"
+    },
+    {
+      "route": "/sky-store",
+      "component": "SkyStore"
+    },
+    {
+      "route": "/slack-integration",
+      "component": "SlackIntegration"
+    },
+    {
+      "route": "/sleep-tracking",
+      "component": "SleepTracking"
+    },
+    {
+      "route": "/slippage-protection",
+      "component": "SlippageProtection"
+    },
+    {
+      "route": "/smart-contract-audit",
+      "component": "SmartContractAudit"
+    },
+    {
+      "route": "/smart-contract-viewer",
+      "component": "SmartContractViewer"
+    },
+    {
+      "route": "/smart-contracts",
+      "component": "SmartContracts"
+    },
+    {
+      "route": "/social-analytics",
+      "component": "SocialAnalytics"
+    },
+    {
+      "route": "/social-events",
+      "component": "SocialEvents"
+    },
+    {
+      "route": "/social-feed",
+      "component": "SocialFeed"
+    },
+    {
+      "route": "/social-feed-v2",
+      "component": "SocialFeedV2"
+    },
+    {
+      "route": "/social-graph",
+      "component": "SocialGraph"
+    },
+    {
+      "route": "/social-media",
+      "component": "SocialMedia"
+    },
+    {
+      "route": "/social-media-campaigns",
+      "component": "SocialMediaCampaigns"
+    },
+    {
+      "route": "/solana-validator-setup",
+      "component": "SolanaValidatorSetup"
+    },
+    {
+      "route": "/sort-options",
+      "component": "SortOptions"
+    },
+    {
+      "route": "/speech-to-text",
+      "component": "SpeechToText"
+    },
+    {
+      "route": "/spin-wheel",
+      "component": "SpinWheel"
+    },
+    {
+      "route": "/sponsorships",
+      "component": "Sponsorships"
+    },
+    {
+      "route": "/stake-delegation",
+      "component": "StakeDelegation"
+    },
+    {
+      "route": "/staking-dashboard",
+      "component": "StakingDashboard"
+    },
+    {
+      "route": "/staking-hub",
+      "component": "StakingHub"
+    },
+    {
+      "route": "/staking-options",
+      "component": "StakingOptions"
+    },
+    {
+      "route": "/staking-portal",
+      "component": "StakingPortal"
+    },
+    {
+      "route": "/statistics-panel",
+      "component": "StatisticsPanel"
+    },
+    {
+      "route": "/status",
+      "component": "Status"
+    },
+    {
+      "route": "/stepper-wizard",
+      "component": "StepperWizard"
+    },
+    {
+      "route": "/stock-chart",
+      "component": "StockChart"
+    },
+    {
+      "route": "/stock-search",
+      "component": "StockSearch"
+    },
+    {
+      "route": "/stories",
+      "component": "Stories"
+    },
+    {
+      "route": "/stream-analytics",
+      "component": "StreamAnalytics"
+    },
+    {
+      "route": "/stream-clip",
+      "component": "StreamClip"
+    },
+    {
+      "route": "/stream-gifting",
+      "component": "StreamGifting"
+    },
+    {
+      "route": "/streaming-dashboard",
+      "component": "StreamingDashboard"
+    },
+    {
+      "route": "/stripe-checkout",
+      "component": "StripeCheckout"
+    },
+    {
+      "route": "/stripe-integration",
+      "component": "StripeIntegration"
+    },
+    {
+      "route": "/student-progress",
+      "component": "StudentProgress"
+    },
+    {
+      "route": "/style-selector",
+      "component": "StyleSelector"
+    },
+    {
+      "route": "/subscriber-management",
+      "component": "SubscriberManagement"
+    },
+    {
+      "route": "/subscription-management",
+      "component": "SubscriptionManagement"
+    },
+    {
+      "route": "/subscription-plans",
+      "component": "SubscriptionPlans"
+    },
+    {
+      "route": "/subscription-setup",
+      "component": "SubscriptionSetup"
+    },
+    {
+      "route": "/subscriptions",
+      "component": "Subscriptions"
+    },
+    {
+      "route": "/success-dialog",
+      "component": "SuccessDialog"
+    },
+    {
+      "route": "/success-screen",
+      "component": "SuccessScreen"
+    },
+    {
+      "route": "/support-metrics",
+      "component": "SupportMetrics"
+    },
+    {
+      "route": "/support-ticket",
+      "component": "SupportTicket"
+    },
+    {
+      "route": "/swap-interface",
+      "component": "SwapInterface"
+    },
+    {
+      "route": "/swipe-interface",
+      "component": "SwipeInterface"
+    },
+    {
+      "route": "/synthetics",
+      "component": "Synthetics"
+    },
+    {
+      "route": "/system-architecture",
+      "component": "SystemArchitecture"
+    },
+    {
+      "route": "/system-logs",
+      "component": "SystemLogs"
+    },
+    {
+      "route": "/system-monitoring",
+      "component": "SystemMonitoring"
+    },
+    {
+      "route": "/system-observability",
+      "component": "SystemObservability"
+    },
+    {
+      "route": "/system-settings",
+      "component": "SystemSettings"
+    },
+    {
+      "route": "/system-status",
+      "component": "SystemStatus"
+    },
+    {
+      "route": "/tabs-navigation",
+      "component": "TabsNavigation"
+    },
+    {
+      "route": "/task-automation",
+      "component": "TaskAutomation"
+    },
+    {
+      "route": "/task-detail",
+      "component": "TaskDetail"
+    },
+    {
+      "route": "/task-list",
+      "component": "TaskList"
+    },
+    {
+      "route": "/tax-documentation",
+      "component": "TaxDocumentation"
+    },
+    {
+      "route": "/tax-planning",
+      "component": "TaxPlanning"
+    },
+    {
+      "route": "/tax-reporting",
+      "component": "TaxReporting"
+    },
+    {
+      "route": "/tax-reports",
+      "component": "TaxReports"
+    },
+    {
+      "route": "/teaching-opportunities",
+      "component": "TeachingOpportunities"
+    },
+    {
+      "route": "/team-management",
+      "component": "TeamManagement"
+    },
+    {
+      "route": "/team-workspace",
+      "component": "TeamWorkspace"
+    },
+    {
+      "route": "/technical-indicators",
+      "component": "TechnicalIndicators"
+    },
+    {
+      "route": "/telegram-integration",
+      "component": "TelegramIntegration"
+    },
+    {
+      "route": "/template-library",
+      "component": "TemplateLibrary"
+    },
+    {
+      "route": "/terms-acceptance",
+      "component": "TermsAcceptance"
+    },
+    {
+      "route": "/terms-of-service",
+      "component": "TermsOfService"
+    },
+    {
+      "route": "/testing-framework",
+      "component": "TestingFramework"
+    },
+    {
+      "route": "/text-input-form",
+      "component": "TextInputForm"
+    },
+    {
+      "route": "/text-to-speech",
+      "component": "TextToSpeech"
+    },
+    {
+      "route": "/text-tools",
+      "component": "TextTools"
+    },
+    {
+      "route": "/theme-settings",
+      "component": "ThemeSettings"
+    },
+    {
+      "route": "/thread-management",
+      "component": "ThreadManagement"
+    },
+    {
+      "route": "/ticket-assignment",
+      "component": "TicketAssignment"
+    },
+    {
+      "route": "/ticket-detail",
+      "component": "TicketDetail"
+    },
+    {
+      "route": "/ticket-queue",
+      "component": "TicketQueue"
+    },
+    {
+      "route": "/tier-comparison",
+      "component": "TierComparison"
+    },
+    {
+      "route": "/time-input-form",
+      "component": "TimeInputForm"
+    },
+    {
+      "route": "/time-picker-dialog",
+      "component": "TimePickerDialog"
+    },
+    {
+      "route": "/time-tracking",
+      "component": "TimeTracking"
+    },
+    {
+      "route": "/timeline-view",
+      "component": "TimelineView"
+    },
+    {
+      "route": "/timeout-error",
+      "component": "TimeoutError"
+    },
+    {
+      "route": "/tip-jar",
+      "component": "TipJar"
+    },
+    {
+      "route": "/toast-notifications",
+      "component": "ToastNotifications"
+    },
+    {
+      "route": "/todo-list",
+      "component": "TodoList"
+    },
+    {
+      "route": "/toggle-switch-form",
+      "component": "ToggleSwitchForm"
+    },
+    {
+      "route": "/token-dashboard",
+      "component": "TokenDashboard"
+    },
+    {
+      "route": "/token-governance",
+      "component": "TokenGovernance"
+    },
+    {
+      "route": "/token-information",
+      "component": "TokenInformation"
+    },
+    {
+      "route": "/token-metrics",
+      "component": "TokenMetrics"
+    },
+    {
+      "route": "/tokenomics-calculator",
+      "component": "TokenomicsCalculator"
+    },
+    {
+      "route": "/tor-bridge",
+      "component": "TorBridge"
+    },
+    {
+      "route": "/tournament-bracket",
+      "component": "TournamentBracket"
+    },
+    {
+      "route": "/tournament-brackets",
+      "component": "TournamentBrackets"
+    },
+    {
+      "route": "/tournaments",
+      "component": "Tournaments"
+    },
+    {
+      "route": "/trade-history",
+      "component": "TradeHistory"
+    },
+    {
+      "route": "/trading",
+      "component": "Trading"
+    },
+    {
+      "route": "/trading-bots",
+      "component": "TradingBots"
+    },
+    {
+      "route": "/trading-history",
+      "component": "TradingHistory"
+    },
+    {
+      "route": "/trading-terminal",
+      "component": "TradingTerminal"
+    },
+    {
+      "route": "/transaction-explorer",
+      "component": "TransactionExplorer"
+    },
+    {
+      "route": "/transaction-history",
+      "component": "TransactionHistory"
+    },
+    {
+      "route": "/transaction-viewer",
+      "component": "TransactionViewer"
+    },
+    {
+      "route": "/transcription-manager",
+      "component": "TranscriptionManager"
+    },
+    {
+      "route": "/translation-enabled-community",
+      "component": "TranslationEnabledCommunity"
+    },
+    {
+      "route": "/translation-enabled-social-feed",
+      "component": "TranslationEnabledSocialFeed"
+    },
+    {
+      "route": "/transparency-reports",
+      "component": "TransparencyReports"
+    },
+    {
+      "route": "/travel-blog",
+      "component": "TravelBlog"
+    },
+    {
+      "route": "/travel-budget",
+      "component": "TravelBudget"
+    },
+    {
+      "route": "/travel-documents",
+      "component": "TravelDocuments"
+    },
+    {
+      "route": "/travel-photos",
+      "component": "TravelPhotos"
+    },
+    {
+      "route": "/travel-reviews",
+      "component": "TravelReviews"
+    },
+    {
+      "route": "/travel-tips",
+      "component": "TravelTips"
+    },
+    {
+      "route": "/treasury-management",
+      "component": "TreasuryManagement"
+    },
+    {
+      "route": "/trend-analysis",
+      "component": "TrendAnalysis"
+    },
+    {
+      "route": "/trending",
+      "component": "Trending"
+    },
+    {
+      "route": "/trending-content",
+      "component": "TrendingContent"
+    },
+    {
+      "route": "/trending-items",
+      "component": "TrendingItems"
+    },
+    {
+      "route": "/trending-topics",
+      "component": "TrendingTopics"
+    },
+    {
+      "route": "/triggers-actions",
+      "component": "TriggersActions"
+    },
+    {
+      "route": "/trip-planner",
+      "component": "TripPlanner"
+    },
+    {
+      "route": "/trump-mining",
+      "component": "TrumpMining"
+    },
+    {
+      "route": "/trust-safety-dashboard",
+      "component": "TrustSafetyDashboard"
+    },
+    {
+      "route": "/trust-system",
+      "component": "TrustSystem"
+    },
+    {
+      "route": "/two-factor-auth",
+      "component": "TwoFactorAuth"
+    },
+    {
+      "route": "/two-factor-setup",
+      "component": "TwoFactorSetup"
+    },
+    {
+      "route": "/typing-indicators",
+      "component": "TypingIndicators"
+    },
+    {
+      "route": "/unhidden-interface",
+      "component": "UnhiddenInterface"
+    },
+    {
+      "route": "/unhidden-mode",
+      "component": "UnhiddenMode"
+    },
+    {
+      "route": "/unified-feed",
+      "component": "UnifiedFeed"
+    },
+    {
+      "route": "/unified-identity",
+      "component": "UnifiedIdentity"
+    },
+    {
+      "route": "/unified-messaging",
+      "component": "UnifiedMessaging"
+    },
+    {
+      "route": "/unified-payment-ledger",
+      "component": "UnifiedPaymentLedger"
+    },
+    {
+      "route": "/unified-platform-dashboard",
+      "component": "UnifiedPlatformDashboard"
+    },
+    {
+      "route": "/unified-wallet",
+      "component": "UnifiedWallet"
+    },
+    {
+      "route": "/universal-search",
+      "component": "UniversalSearch"
+    },
+    {
+      "route": "/updated-landing-page",
+      "component": "UpdatedLandingPage"
+    },
+    {
+      "route": "/upgrade-downgrade-plan",
+      "component": "UpgradeDowngradePlan"
+    },
+    {
+      "route": "/upscaling",
+      "component": "Upscaling"
+    },
+    {
+      "route": "/user-activity",
+      "component": "UserActivity"
+    },
+    {
+      "route": "/user-behavior",
+      "component": "UserBehavior"
+    },
+    {
+      "route": "/user-bio",
+      "component": "UserBio"
+    },
+    {
+      "route": "/user-directory",
+      "component": "UserDirectory"
+    },
+    {
+      "route": "/user-discovery",
+      "component": "UserDiscovery"
+    },
+    {
+      "route": "/user-management",
+      "component": "UserManagement"
+    },
+    {
+      "route": "/user-mentions",
+      "component": "UserMentions"
+    },
+    {
+      "route": "/user-onboarding",
+      "component": "UserOnboarding"
+    },
+    {
+      "route": "/user-permissions",
+      "component": "UserPermissions"
+    },
+    {
+      "route": "/user-profile",
+      "component": "UserProfile"
+    },
+    {
+      "route": "/user-profiles",
+      "component": "UserProfiles"
+    },
+    {
+      "route": "/user-reputation",
+      "component": "UserReputation"
+    },
+    {
+      "route": "/user-search",
+      "component": "UserSearch"
+    },
+    {
+      "route": "/user-stats",
+      "component": "UserStats"
+    },
+    {
+      "route": "/user-suggestions",
+      "component": "UserSuggestions"
+    },
+    {
+      "route": "/user-timeline",
+      "component": "UserTimeline"
+    },
+    {
+      "route": "/v-o-d-archive",
+      "component": "VODArchive"
+    },
+    {
+      "route": "/validator-performance",
+      "component": "ValidatorPerformance"
+    },
+    {
+      "route": "/validator-setup",
+      "component": "ValidatorSetup"
+    },
+    {
+      "route": "/vendor-analytics",
+      "component": "VendorAnalytics"
+    },
+    {
+      "route": "/vendor-directory",
+      "component": "VendorDirectory"
+    },
+    {
+      "route": "/vendor-onboarding",
+      "component": "VendorOnboarding"
+    },
+    {
+      "route": "/vendor-performance",
+      "component": "VendorPerformance"
+    },
+    {
+      "route": "/vendor-verification",
+      "component": "VendorVerification"
+    },
+    {
+      "route": "/venue-management",
+      "component": "VenueManagement"
+    },
+    {
+      "route": "/verification",
+      "component": "Verification"
+    },
+    {
+      "route": "/verification-steps",
+      "component": "VerificationSteps"
+    },
+    {
+      "route": "/verification-system",
+      "component": "VerificationSystem"
+    },
+    {
+      "route": "/version-management",
+      "component": "VersionManagement"
+    },
+    {
+      "route": "/vesting-schedule",
+      "component": "VestingSchedule"
+    },
+    {
+      "route": "/video-area",
+      "component": "VideoArea"
+    },
+    {
+      "route": "/video-call",
+      "component": "VideoCall"
+    },
+    {
+      "route": "/video-chat",
+      "component": "VideoChat"
+    },
+    {
+      "route": "/video-editor",
+      "component": "VideoEditor"
+    },
+    {
+      "route": "/video-player",
+      "component": "VideoPlayer"
+    },
+    {
+      "route": "/video-tools",
+      "component": "VideoTools"
+    },
+    {
+      "route": "/video-tutorials",
+      "component": "VideoTutorials"
+    },
+    {
+      "route": "/video-upload",
+      "component": "VideoUpload"
+    },
+    {
+      "route": "/video-uploader",
+      "component": "VideoUploader"
+    },
+    {
+      "route": "/viewer-metrics",
+      "component": "ViewerMetrics"
+    },
+    {
+      "route": "/virtual-tour",
+      "component": "VirtualTour"
+    },
+    {
+      "route": "/voice-cloning",
+      "component": "VoiceCloning"
+    },
+    {
+      "route": "/voice-commands",
+      "component": "VoiceCommands"
+    },
+    {
+      "route": "/voice-commands-registry",
+      "component": "VoiceCommandsRegistry"
+    },
+    {
+      "route": "/voice-messages",
+      "component": "VoiceMessages"
+    },
+    {
+      "route": "/walkthrough-page",
+      "component": "WalkthroughPage"
+    },
+    {
+      "route": "/wallet",
+      "component": "Wallet"
+    },
+    {
+      "route": "/wallet-connect",
+      "component": "WalletConnect"
+    },
+    {
+      "route": "/wallet-integration",
+      "component": "WalletIntegration"
+    },
+    {
+      "route": "/wallet-overview",
+      "component": "WalletOverview"
+    },
+    {
+      "route": "/warning-dialog",
+      "component": "WarningDialog"
+    },
+    {
+      "route": "/watch-earn",
+      "component": "WatchEarn"
+    },
+    {
+      "route": "/watch-list",
+      "component": "WatchList"
+    },
+    {
+      "route": "/wealth-simulator",
+      "component": "WealthSimulator"
+    },
+    {
+      "route": "/web3-auth",
+      "component": "Web3Auth"
+    },
+    {
+      "route": "/webhook-management",
+      "component": "WebhookManagement"
+    },
+    {
+      "route": "/webhook-manager",
+      "component": "WebhookManager"
+    },
+    {
+      "route": "/webhooks",
+      "component": "Webhooks"
+    },
+    {
+      "route": "/welcome-screen",
+      "component": "WelcomeScreen"
+    },
+    {
+      "route": "/whale-monitor",
+      "component": "WhaleMonitor"
+    },
+    {
+      "route": "/whitelist-management",
+      "component": "WhitelistManagement"
+    },
+    {
+      "route": "/wishlist-management",
+      "component": "WishlistManagement"
+    },
+    {
+      "route": "/workflow-automation",
+      "component": "WorkflowAutomation"
+    },
+    {
+      "route": "/workflow-builder",
+      "component": "WorkflowBuilder"
+    },
+    {
+      "route": "/world-brain",
+      "component": "WorldBrain"
+    },
+    {
+      "route": "/world-simulation-control",
+      "component": "WorldSimulationControl"
+    },
+    {
+      "route": "/yield-farming",
+      "component": "YieldFarming"
+    },
+    {
+      "route": "/zapier-integration",
+      "component": "ZapierIntegration"
+    },
+    {
+      "route": "/zero-knowledge-proof",
+      "component": "ZeroKnowledgeProof"
+    },
+    {
+      "route": "/404",
+      "component": "NotFound"
+    }
+  ]
+}
