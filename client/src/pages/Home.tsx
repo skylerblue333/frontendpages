@@ -21,7 +21,7 @@ export default function Home() {
               The Strategic Digital Ecosystem Where Every Action Matters
             </p>
             <p className="text-lg text-gray-400">
-              Mine. Trade. Create. Earn. All in one platform.
+              Explore. Build. Learn. Connect. All in one workspace.
             </p>
             
             <div className="flex gap-4 justify-center pt-8 flex-wrap">
@@ -38,16 +38,16 @@ export default function Home() {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 pt-12 max-w-3xl mx-auto">
               <Card className="bg-black/50 border-purple-500/30 p-4">
-                <div className="text-3xl font-bold text-pink-500">1,055</div>
-                <div className="text-sm text-gray-400">Working Screens</div>
+                <div className="text-3xl font-bold text-pink-500">1,079</div>
+                <div className="text-sm text-gray-400">Page files inventoried</div>
               </Card>
               <Card className="bg-black/50 border-purple-500/30 p-4">
-                <div className="text-3xl font-bold text-cyan-500">320</div>
-                <div className="text-sm text-gray-400">API Endpoints</div>
+                <div className="text-3xl font-bold text-cyan-500">1,153</div>
+                <div className="text-sm text-gray-400">Frontend source files</div>
               </Card>
               <Card className="bg-black/50 border-purple-500/30 p-4">
-                <div className="text-3xl font-bold text-purple-500">1M+</div>
-                <div className="text-sm text-gray-400">Lines of Code</div>
+                <div className="text-3xl font-bold text-purple-500">AUDIT</div>
+                <div className="text-sm text-gray-400">Integration status</div>
               </Card>
             </div>
           </div>
@@ -58,9 +58,9 @@ export default function Home() {
       <section className="py-20 px-4 bg-gradient-to-b from-black to-purple-900/10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold mb-4">1,055 Fully-Wired Working Screens</h2>
+            <h2 className="text-5xl font-bold mb-4">Frontend Surface Inventory</h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Robust screens across 13 major categories, all connected to real APIs, databases, and blockchain infrastructure
+              The current snapshot spans multiple product areas. Each screen is being verified against its actual implementation, data source, and backend contract.
             </p>
           </div>
 
@@ -76,7 +76,7 @@ export default function Home() {
                 <Brain className="w-8 h-8 text-blue-500" />
               </div>
               <p className="text-gray-400 text-sm mb-4">AI Code Studio, Agent Market, AI Trading, Governance, Persona System, and more</p>
-              <div className="text-xs text-gray-500">✓ Real AI integration ✓ Live automation ✓ Agent coordination</div>
+              <div className="text-xs text-gray-500">Status: integration verification in progress</div>
             </Card>
 
             {/* Trading & Finance */}
@@ -89,7 +89,7 @@ export default function Home() {
                 <TrendingUp className="w-8 h-8 text-green-500" />
               </div>
               <p className="text-gray-400 text-sm mb-4">Portfolio tracking, Cross-chain swaps, Staking, Day trading, Yield farming</p>
-              <div className="text-xs text-gray-500">✓ Real-time pricing ✓ Live trading ✓ Smart contracts</div>
+              <div className="text-xs text-gray-500">Status: external data and transaction paths require verification</div>
             </Card>
 
             {/* Marketplace & Commerce */}
@@ -102,7 +102,7 @@ export default function Home() {
                 <ShoppingCart className="w-8 h-8 text-orange-500" />
               </div>
               <p className="text-gray-400 text-sm mb-4">Product listings, Orders, Escrow, Bulk ordering, Vendor management</p>
-              <div className="text-xs text-gray-500">✓ Live inventory ✓ Payment processing ✓ Fulfillment</div>
+              <div className="text-xs text-gray-500">Status: commerce flows require end-to-end verification</div>
             </Card>
 
             {/* Social & Community */}
@@ -115,7 +115,7 @@ export default function Home() {
                 <Users className="w-8 h-8 text-pink-500" />
               </div>
               <p className="text-gray-400 text-sm mb-4">Posts, Comments, Communities, Follows, Direct messaging, Groups</p>
-              <div className="text-xs text-gray-500">✓ Real-time feeds ✓ Notifications ✓ User interactions</div>
+              <div className="text-xs text-gray-500">Status: community flows require end-to-end verification</div>
             </Card>
 
             {/* Gaming & Entertainment */}
@@ -128,7 +128,7 @@ export default function Home() {
                 <Gamepad2 className="w-8 h-8 text-purple-500" />
               </div>
               <p className="text-gray-400 text-sm mb-4">Game lobbies, Tournaments, Quests, Leaderboards, Crypto games</p>
-              <div className="text-xs text-gray-500">✓ Real rewards ✓ Live tournaments ✓ Blockchain scoring</div>
+              <div className="text-xs text-gray-500">Status: gameplay and reward integrations require verification</div>
             </Card>
 
             {/* Education & Learning */}
@@ -141,7 +141,7 @@ export default function Home() {
                 <Zap className="w-8 h-8 text-yellow-500" />
               </div>
               <p className="text-gray-400 text-sm mb-4">Courses, Lessons, Quizzes, Certificates, Learning paths</p>
-              <div className="text-xs text-gray-500">✓ On-chain certificates ✓ Progress tracking ✓ Live instructors</div>
+              <div className="text-xs text-gray-500">Status: education data and credential paths require verification</div>
             </Card>
 
             {/* Admin & Management */}
@@ -154,7 +154,7 @@ export default function Home() {
                 <Cpu className="w-8 h-8 text-red-500" />
               </div>
               <p className="text-gray-400 text-sm mb-4">Dashboards, User management, Moderation, Settings, Audit logs</p>
-              <div className="text-xs text-gray-500">✓ Real-time monitoring ✓ Role-based access ✓ Analytics</div>
+              <div className="text-xs text-gray-500">Status: admin permissions and monitoring require verification</div>
             </Card>
 
             {/* API & Integration */}
@@ -167,7 +167,7 @@ export default function Home() {
                 <Code2 className="w-8 h-8 text-cyan-500" />
               </div>
               <p className="text-gray-400 text-sm mb-4">API docs, Keys management, Webhooks, Integration testing</p>
-              <div className="text-xs text-gray-500">✓ Live API endpoints ✓ Documentation ✓ Rate limiting</div>
+              <div className="text-xs text-gray-500">Status: API contracts and protections require verification</div>
             </Card>
 
             {/* Analytics & Data */}
@@ -180,7 +180,7 @@ export default function Home() {
                 <BarChart3 className="w-8 h-8 text-violet-500" />
               </div>
               <p className="text-gray-400 text-sm mb-4">Dashboards, Reports, Charts, Metrics, Data visualization</p>
-              <div className="text-xs text-gray-500">✓ Real-time data ✓ Custom reports ✓ Exports</div>
+              <div className="text-xs text-gray-500">Status: analytics sources and exports require verification</div>
             </Card>
 
             {/* User & Profile */}
@@ -193,7 +193,7 @@ export default function Home() {
                 <Users className="w-8 h-8 text-teal-500" />
               </div>
               <p className="text-gray-400 text-sm mb-4">Profiles, Creator economy, Monetization, Followers, Verification</p>
-              <div className="text-xs text-gray-500">✓ Live profiles ✓ Earnings tracking ✓ KYC</div>
+              <div className="text-xs text-gray-500">Status: profile and identity flows require verification</div>
             </Card>
 
             {/* Wallet & Crypto */}
@@ -206,7 +206,7 @@ export default function Home() {
                 <Lock className="w-8 h-8 text-lime-500" />
               </div>
               <p className="text-gray-400 text-sm mb-4">Unified wallet, NFT wallet, Balance tracking, Transactions</p>
-              <div className="text-xs text-gray-500">✓ Multi-chain ✓ Hardware wallet ✓ Security</div>
+              <div className="text-xs text-gray-500">Status: custody, chain, and transaction boundaries require verification</div>
             </Card>
 
             {/* Content & Media */}
@@ -219,7 +219,7 @@ export default function Home() {
                 <Radio className="w-8 h-8 text-fuchsia-500" />
               </div>
               <p className="text-gray-400 text-sm mb-4">Live streaming, Podcasts, Blogs, Media galleries, Video editing</p>
-              <div className="text-xs text-gray-500">✓ Live streaming ✓ Monetization ✓ Analytics</div>
+              <div className="text-xs text-gray-500">Status: media and monetization integrations require verification</div>
             </Card>
 
             {/* Other Features */}
@@ -232,29 +232,29 @@ export default function Home() {
                 <Layers className="w-8 h-8 text-slate-500" />
               </div>
               <p className="text-gray-400 text-sm mb-4">Advanced features, Testing tools, Utilities, Components, And much more</p>
-              <div className="text-xs text-gray-500">✓ Fully functional ✓ Well documented ✓ Production ready</div>
+              <div className="text-xs text-gray-500">Status: under frontend and integration audit</div>
             </Card>
           </div>
 
           {/* Key Stats */}
           <div className="bg-gradient-to-r from-pink-900/20 to-purple-900/20 border border-pink-500/30 rounded-lg p-12 text-center mb-12">
-            <h3 className="text-3xl font-bold mb-8">Platform Capabilities</h3>
+            <h3 className="text-3xl font-bold mb-8">Platform Inventory</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div>
-                <p className="text-4xl font-bold text-pink-500">1,055</p>
-                <p className="text-gray-400 mt-2">Working Screens</p>
+                <p className="text-4xl font-bold text-pink-500">1,079</p>
+                <p className="text-gray-400 mt-2">Page files</p>
               </div>
               <div>
                 <p className="text-4xl font-bold text-purple-500">13</p>
                 <p className="text-gray-400 mt-2">Major Categories</p>
               </div>
               <div>
-                <p className="text-4xl font-bold text-cyan-500">320</p>
-                <p className="text-gray-400 mt-2">API Endpoints</p>
+                <p className="text-4xl font-bold text-cyan-500">1,153</p>
+                <p className="text-gray-400 mt-2">Frontend files</p>
               </div>
               <div>
-                <p className="text-4xl font-bold text-green-500">∞</p>
-                <p className="text-gray-400 mt-2">Possibilities</p>
+                <p className="text-4xl font-bold text-green-500">QA</p>
+                <p className="text-gray-400 mt-2">Release focus</p>
               </div>
             </div>
           </div>
