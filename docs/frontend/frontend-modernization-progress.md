@@ -7,11 +7,11 @@
 | Metric | Value |
 |---|---:|
 | Registered screens | 1,059 |
-| Verified modernized screens | 334 |
-| Remaining screens | 725 |
-| Latest screenshot | `quality-screens/334-request-quote.webp` |
-| Next registered route | `/resource-allocation` |
-| Next component | `ResourceAllocation` |
+| Verified modernized screens | 335 |
+| Remaining screens | 724 |
+| Latest screenshot | `quality-screens/335-resource-allocation.webp` |
+| Next registered route | `/resource-library` |
+| Next component | `ResourceLibrary` |
 
 ## Source-of-truth artifacts
 
@@ -64,6 +64,7 @@ Screens 297–302 were verified in the current continuation:
 | 332 | `/reputation` | `quality-screens/332-reputation.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 333 | `/reputation-system` | `quality-screens/333-reputation-system.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 334 | `/request-quote` | `quality-screens/334-request-quote.webp` | Target screen diagnostics clean; production build passed; missing route repaired and registered; unrelated baseline TypeScript errors remain in SignUpFlow, VoiceCommands, and Quiz |
+| 335 | `/resource-allocation` | `quality-screens/335-resource-allocation.webp` | TypeScript diagnostics clean for target screen; production build passed |
 
 ## Cross-chat operating rule
 
@@ -73,4 +74,4 @@ Before changing or reporting a screen, read this manifest and the registered inv
 
 Unverified backend, analytics, financial, blockchain, AI, user, operational, or security claims must remain clearly labeled as unavailable, unconnected, unmeasured, preview, placeholder, blocked, or local-only until engineering evidence exists.
 
-_Last synchronized: 2026-08-17; current verified count: 334 / 1,059._
+_Last synchronized: 2026-08-17; current verified count: 335 / 1,059._
