@@ -11,8 +11,8 @@ This ledger follows the attached future-proof modernization instructions. A scre
 | 5 | Exchange | `/crypto-exchange` | PARTIAL | Auth-required state; market/order/settlement status cards; trading safety boundary; markets/orders/fills/research capability slots; activity empty state; honest unavailable labels | `/exchange` is not registered; current router has no exchange procedures; authenticated exchange-state review requires real session/backend | Pending commit |
 | 6 | Portfolio | `/portfolio` | PARTIAL | Auth-required state; portfolio status cards; data-boundary messaging; holdings/history tabs; empty states; prepared allocation/performance/alerts/export extension points; responsive layout | Current router has no portfolio procedures; authenticated portfolio-state review requires real session/backend | Pending commit |
 | 7 | Gaming Hub | `/gaming` | PARTIAL | Twenty-game catalog; category filter; search; responsive cards; disabled launch states; live-player/leaderboard/reward status; responsible-play and crypto boundaries; extension-point messaging | Individual game engines, realtime services, scoring, rewards, wallets, and regulated wagering are not connected | Pending commit |
-| 8 | Chess | route pending | QUEUED | Listed in attached gaming priority | Exact route and game-state backend contract pending | — |
-| 9 | Blackjack | route pending | QUEUED | Listed in attached gaming priority | Regulatory, wagering, payout, and demo-mode boundaries pending | — |
+| 8 | Chess | route pending | BLOCKED | Listed in attached gaming priority | No Chess screen or registered Chess route was found in the current application; no implementation was fabricated | — |
+| 9 | Blackjack | `/game-blackjack` | PARTIAL | Local practice game; practice-credit labeling; responsive table; input/button controls; split/double/hit/stand states; explicit no-money/no-transfer boundary | Real wagering, payouts, custody, payments, regulatory, and responsible-play infrastructure are not connected | Pending commit |
 | 10 | Crash | route pending | QUEUED | Listed in attached gaming priority | Chance-game, payout, and demo-mode boundaries pending | — |
 | 11 | HopeAI | route pending | QUEUED | Chat/persona/history/feedback extension points required | Actual AI, attachment, voice, tool, and safety contracts pending | — |
 | 12 | SkySchool | route pending | QUEUED | Courses/progress/certificates extension points required | Education data and credential contracts pending | — |
@@ -51,6 +51,14 @@ The `/portfolio` route renders successfully in the frontend-only preview. With O
 
 The `/gaming` route renders successfully in the frontend-only preview. The screen displays all 20 catalog entries, category filtering, search, integration-required badges, disabled launch controls, and the responsible-play boundary without a runtime error. No live player, leaderboard, reward, jackpot, or completed-match data is presented.
 
+## Chess route audit
+
+No Chess page component or registered Chess route was found in the current application. The Gaming Hub catalog lists Chess as an extension point, but no implementation was fabricated. The backlog records Chess as blocked until a real route and game-state contract are provided.
+
+## Blackjack browser review
+
+The `/game-blackjack` route renders successfully in the frontend-only preview. The screen clearly identifies itself as practice mode, labels the balance as practice credits, exposes working local card-game controls, and states that credits have no monetary value and do not represent a blockchain transaction. No runtime error boundary appears.
+
 ## Current next screen
 
-**Chess — route pending**. Gaming Hub was modernized as a catalog checkpoint; individual game engines and realtime/reward services remain separate integration work.
+**Crash — `/game-crash`**. Blackjack was converted to an explicit local practice mode; no real wagering or payout capability is being claimed.
