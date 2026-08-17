@@ -751,6 +751,7 @@ const RealTimeStreaming = lazy(() => import('./pages/RealTimeStreaming'));
 const RebalancingTools = lazy(() => import('./pages/RebalancingTools'));
 const ReceiptDownload = lazy(() => import('./pages/ReceiptDownload'));
 const ReceiveCrypto = lazy(() => import('./pages/ReceiveCrypto'));
+const ReceiveCryptoError = lazy(() => import('./pages/ReceiveCryptoError'));
 const RecentActivity = lazy(() => import('./pages/RecentActivity'));
 const Recommendations = lazy(() => import('./pages/Recommendations'));
 const RecommendationsFeed = lazy(() => import('./pages/RecommendationsFeed'));
@@ -1816,6 +1817,7 @@ function Router() {
         <Route path="/rebalancing-tools" component={RebalancingTools} />
         <Route path="/receipt-download" component={ReceiptDownload} />
         <Route path="/receive-crypto" component={ReceiveCrypto} />
+        <Route path="/receive-crypto-error" component={ReceiveCryptoError} />
         <Route path="/recent-activity" component={RecentActivity} />
         <Route path="/recommendations" component={Recommendations} />
         <Route path="/recommendations-feed" component={RecommendationsFeed} />
