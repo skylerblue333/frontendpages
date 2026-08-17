@@ -7,11 +7,11 @@
 | Metric | Value |
 |---|---:|
 | Registered screens | 1,059 |
-| Verified modernized screens | 307 |
-| Remaining screens | 752 |
-| Latest screenshot | `quality-screens/307-rating-system.webp` |
-| Next registered route | `/read-receipts` |
-| Next component | `ReadReceipts` |
+| Verified modernized screens | 308 |
+| Remaining screens | 751 |
+| Latest screenshot | `quality-screens/308-read-receipts.webp` |
+| Next registered route | `/real-time-game-engine` |
+| Next component | `RealTimeGameEngine` |
 
 ## Source-of-truth artifacts
 
@@ -37,6 +37,7 @@ Screens 297–302 were verified in the current continuation:
 | 305 | `/rate-limit-error` | `quality-screens/305-rate-limit-error.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 306 | `/rate-limiting` | `quality-screens/306-rate-limiting.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 307 | `/rating-system` | `quality-screens/307-rating-system.webp` | TypeScript diagnostics clean for target screen; production build passed |
+| 308 | `/read-receipts` | `quality-screens/308-read-receipts.webp` | TypeScript diagnostics clean for target screen; production build passed |
 
 ## Cross-chat operating rule
 
@@ -46,4 +47,4 @@ Before changing or reporting a screen, read this manifest and the registered inv
 
 Unverified backend, analytics, financial, blockchain, AI, user, operational, or security claims must remain clearly labeled as unavailable, unconnected, unmeasured, preview, placeholder, blocked, or local-only until engineering evidence exists.
 
-_Last synchronized: 2026-08-17; current verified count: 307 / 1,059._
+_Last synchronized: 2026-08-17; current verified count: 308 / 1,059._
