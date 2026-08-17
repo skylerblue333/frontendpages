@@ -7,11 +7,11 @@
 | Metric | Value |
 |---|---:|
 | Registered screens | 1,059 |
-| Verified modernized screens | 325 |
-| Remaining screens | 734 |
-| Latest screenshot | `quality-screens/325-refund-requests.webp` |
-| Next registered route | `/regional-settings` |
-| Next component | `RegionalSettings` |
+| Verified modernized screens | 326 |
+| Remaining screens | 733 |
+| Latest screenshot | `quality-screens/326-regional-settings.webp` |
+| Next registered route | `/reminders` |
+| Next component | `Reminders` |
 
 ## Source-of-truth artifacts
 
@@ -55,6 +55,7 @@ Screens 297–302 were verified in the current continuation:
 | 323 | `/refactoring-tools` | `quality-screens/323-refactoring-tools.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 324 | `/referrals` | `quality-screens/324-referrals.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 325 | `/refund-requests` | `quality-screens/325-refund-requests.webp` | TypeScript diagnostics clean for target screen; production build passed |
+| 326 | `/regional-settings` | `quality-screens/326-regional-settings.webp` | TypeScript diagnostics clean for target screen; production build passed |
 
 ## Cross-chat operating rule
 
@@ -64,4 +65,4 @@ Before changing or reporting a screen, read this manifest and the registered inv
 
 Unverified backend, analytics, financial, blockchain, AI, user, operational, or security claims must remain clearly labeled as unavailable, unconnected, unmeasured, preview, placeholder, blocked, or local-only until engineering evidence exists.
 
-_Last synchronized: 2026-08-17; current verified count: 325 / 1,059._
+_Last synchronized: 2026-08-17; current verified count: 326 / 1,059._
