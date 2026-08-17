@@ -773,6 +773,7 @@ const RequestQuote = lazy(() => import('./pages/RequestQuote'));
 const ResourceAllocation = lazy(() => import('./pages/ResourceAllocation'));
 const ResourceLibrary = lazy(() => import('./pages/ResourceLibrary'));
 const ResponseTime = lazy(() => import('./pages/ResponseTime'));
+const ResponseTimeError = lazy(() => import('./pages/ResponseTimeError'));
 const Retention = lazy(() => import('./pages/Retention'));
 const RetentionAnalytics = lazy(() => import('./pages/RetentionAnalytics'));
 const RetentionEngine = lazy(() => import('./pages/RetentionEngine'));
@@ -1842,6 +1843,7 @@ function Router() {
         <Route path="/resource-allocation" component={ResourceAllocation} />
         <Route path="/resource-library" component={ResourceLibrary} />
         <Route path="/response-time" component={ResponseTime} />
+        <Route path="/response-time-error" component={ResponseTimeError} />
         <Route path="/retention" component={Retention} />
         <Route path="/retention-analytics" component={RetentionAnalytics} />
         <Route path="/retention-engine" component={RetentionEngine} />

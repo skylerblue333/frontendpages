@@ -7,11 +7,11 @@
 | Metric | Value |
 |---|---:|
 | Registered screens | 1,059 |
-| Verified modernized screens | 337 |
-| Remaining screens | 722 |
-| Latest screenshot | `quality-screens/337-response-time.webp` |
-| Next registered route | `/response-time-error` |
-| Next component | `ResponseTimeError` |
+| Verified modernized screens | 338 |
+| Remaining screens | 721 |
+| Latest screenshot | `quality-screens/338-response-time-error.webp` |
+| Next registered route | `/retention` |
+| Next component | `Retention` |
 
 ## Source-of-truth artifacts
 
@@ -67,6 +67,7 @@ Screens 297–302 were verified in the current continuation:
 | 335 | `/resource-allocation` | `quality-screens/335-resource-allocation.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 336 | `/resource-library` | `quality-screens/336-resource-library.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 337 | `/response-time` | `quality-screens/337-response-time.webp` | TypeScript diagnostics clean for target screen; production build passed |
+| 338 | `/response-time-error` | `quality-screens/338-response-time-error.webp` | Target screen diagnostics clean; production build passed; missing route repaired and registered; unrelated baseline TypeScript errors remain in SignUpFlow, VoiceCommands, and Quiz |
 
 ## Cross-chat operating rule
 
@@ -76,4 +77,4 @@ Before changing or reporting a screen, read this manifest and the registered inv
 
 Unverified backend, analytics, financial, blockchain, AI, user, operational, or security claims must remain clearly labeled as unavailable, unconnected, unmeasured, preview, placeholder, blocked, or local-only until engineering evidence exists.
 
-_Last synchronized: 2026-08-17; current verified count: 337 / 1,059._
+_Last synchronized: 2026-08-17; current verified count: 338 / 1,059._
