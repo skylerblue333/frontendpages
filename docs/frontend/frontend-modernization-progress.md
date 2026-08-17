@@ -7,11 +7,11 @@
 | Metric | Value |
 |---|---:|
 | Registered screens | 1,059 |
-| Verified modernized screens | 316 |
-| Remaining screens | 743 |
-| Latest screenshot | `quality-screens/316-receive-crypto-error.webp` |
-| Next registered route | `/recent-activity` |
-| Next component | `RecentActivity` |
+| Verified modernized screens | 317 |
+| Remaining screens | 742 |
+| Latest screenshot | `quality-screens/317-recent-activity.webp` |
+| Next registered route | `/recommendations` |
+| Next component | `Recommendations` |
 
 ## Source-of-truth artifacts
 
@@ -46,6 +46,7 @@ Screens 297–302 were verified in the current continuation:
 | 314 | `/receipt-download` | `quality-screens/314-receipt-download.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 315 | `/receive-crypto` | `quality-screens/315-receive-crypto.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 316 | `/receive-crypto-error` | `quality-screens/316-receive-crypto-error.webp` | TypeScript diagnostics clean for target screen; production build passed; missing route repaired and registered |
+| 317 | `/recent-activity` | `quality-screens/317-recent-activity.webp` | TypeScript diagnostics clean for target screen; production build passed |
 
 ## Cross-chat operating rule
 
@@ -55,4 +56,4 @@ Before changing or reporting a screen, read this manifest and the registered inv
 
 Unverified backend, analytics, financial, blockchain, AI, user, operational, or security claims must remain clearly labeled as unavailable, unconnected, unmeasured, preview, placeholder, blocked, or local-only until engineering evidence exists.
 
-_Last synchronized: 2026-08-17; current verified count: 316 / 1,059._
+_Last synchronized: 2026-08-17; current verified count: 317 / 1,059._
