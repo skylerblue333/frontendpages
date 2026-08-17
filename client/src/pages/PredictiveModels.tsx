@@ -1,74 +1,24 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Activity, AlertTriangle, BrainCircuit, Check, ClipboardCheck, Database, FileCheck2, LockKeyhole, Play, RefreshCw, Search, Settings2, ShieldAlert, SlidersHorizontal, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
+type Model = { id: string; name: string; purpose: string; family: string; status: string; dataset: string; version: string; state: string };
+const models: Model[] = [
+  { id: "baseline-trend", name: "Baseline trend explorer", purpose: "Conceptual trend comparison on synthetic observations.", family: "Baseline", status: "Draft", dataset: "Synthetic fixture", version: "Local v0", state: "Preview" },
+  { id: "cohort-retention", name: "Cohort retention study", purpose: "A worksheet for defining cohort windows and retention measures.", family: "Cohort", status: "Untrained", dataset: "Synthetic fixture", version: "Not run", state: "Preview" },
+  { id: "production-risk", name: "Production risk model", purpose: "Would require governed financial or operational data and review.", family: "Risk", status: "Blocked", dataset: "No connector", version: "Unknown", state: "Unavailable" },
+];
+const readiness = ["Data contract and ownership", "Feature definitions and leakage review", "Reproducible training run and artifact hash", "Holdout evaluation, calibration, and drift policy", "Human approval, rollback, access control, and audit log"];
 export default function PredictiveModels() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>PredictiveModels</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">PredictiveModels</h1>
-            <p className="text-muted-foreground mt-2">ML predictions</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [query, setQuery] = useState("");
+  const [selectedId, setSelectedId] = useState(models[0].id);
+  const [showSettings, setShowSettings] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const visible = useMemo(() => models.filter((item) => `${item.name} ${item.purpose} ${item.family} ${item.state}`.toLowerCase().includes(query.toLowerCase())), [query]);
+  const selected = models.find((item) => item.id === selectedId) ?? models[0];
+  const reset = () => { setQuery(""); setSelectedId(models[0].id); setShowSettings(false); setSaved(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={BrainCircuit} eyebrow="PredictiveModels · Model registry preview" title="Make model readiness visible before anyone calls it production." description="Compare local model concepts, inspect their evidence state, and save a configuration intent. Training, deployment, accuracy, inference, and automated decisions remain blocked until governed services and evaluation evidence exist." badge="Model registry"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Registry note saved locally" : "Save registry note"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset registry</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Model concepts", value: String(models.length), hint: "Local registry", icon: BrainCircuit, tone: "cyan" }, { label: "Trained", value: "0", hint: "No training run", icon: Activity, tone: "violet" }, { label: "Evaluated", value: "0", hint: "No holdout set", icon: ClipboardCheck, tone: "amber" }, { label: "Deployment", value: "Blocked", hint: "No inference service", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Model evidence boundary"><strong>This is a model registry preview, not a machine-learning service.</strong> Entries are local concepts with honest state labels. No model is trained, scored, deployed, calibrated, benchmarked, monitored, or used to make a financial, product, eligibility, or user decision. Accuracy and performance values are intentionally absent.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Model registry</p><h2 className="mt-2 text-2xl font-black">Inspect model intent</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">{visible.length} listed</Badge></div><div className="relative mt-5"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search model concepts…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="mt-4 space-y-3">{visible.map((item) => <button key={item.id} onClick={() => setSelectedId(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start gap-3"><BrainCircuit className={`mt-1 size-5 ${item.state === "Preview" ? "text-cyan-200" : "text-amber-200"}`} /><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{item.name}</p><Badge variant="outline" className="border-white/10 text-slate-400">{item.state}</Badge></div><p className="mt-2 text-sm leading-5 text-slate-500">{item.purpose}</p><div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-400"><span>{item.family}</span><span>·</span><span>{item.status}</span><span>·</span><span>{item.version}</span></div></div></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Model detail</p><h2 className="mt-2 text-2xl font-black">{selected.name}</h2><p className="mt-2 text-sm text-slate-500">{selected.purpose}</p></div><Button aria-label="Toggle model settings" onClick={() => setShowSettings((value) => !value)} variant="outline" className="border-white/10 text-slate-300"><Settings2 className="size-4" /></Button></div><div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{[{ label: "Family", value: selected.family }, { label: "Dataset", value: selected.dataset }, { label: "Version", value: selected.version }, { label: "Training", value: "Not run" }, { label: "Accuracy", value: "Unmeasured" }, { label: "Deployment", value: "Blocked" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div>{showSettings && <div className="mt-5 rounded-xl border border-violet-300/20 bg-violet-300/[0.06] p-4"><p className="text-sm font-semibold text-violet-100">Configuration intent only</p><p className="mt-2 text-sm leading-6 text-slate-400">Feature windows, labels, split strategy, hyperparameters, and deployment targets cannot be configured here because no governed model service is connected.</p></div>}<div className="mt-6 rounded-2xl border border-amber-300/25 bg-amber-300/[0.06] p-5"><div className="flex items-start gap-3"><LockKeyhole className="mt-0.5 size-5 shrink-0 text-amber-200" /><div><p className="font-semibold text-amber-100">Training and inference are blocked</p><p className="mt-2 text-sm leading-6 text-slate-400">No source contract, training artifact, evaluation run, model registry, endpoint, or approval exists. The UI refuses to show fake metrics or a deploy button that would imply production capability.</p><Button disabled className="mt-4 bg-slate-700 text-slate-400"><Play className="mr-2 size-4" />Run training unavailable</Button></div></div></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Readiness checklist</p><h2 className="mt-2 text-2xl font-black">What must be evidenced</h2><div className="mt-5 space-y-3">{readiness.map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><FileCheck2 className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Registry surface preserved", description: "Model search, selection, detail, state labels, settings intent, reset, and local note saving remain interactive.", icon: SlidersHorizontal, status: "Local registry" }, { title: "Metrics are not fabricated", description: "Accuracy, precision, recall, lift, calibration, drift, latency, and cost are unmeasured because no run exists.", icon: AlertTriangle, status: "Unmeasured" }, { title: "Deployment is protected", description: "No endpoint, production inference, automated decision, or user-facing recommendation can be triggered from this preview.", icon: ShieldAlert, status: "Blocked" }]} /></section></main></div>;
 }

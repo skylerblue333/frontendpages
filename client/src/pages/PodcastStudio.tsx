@@ -1,75 +1,29 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, Clock3, FileAudio, FolderPlus, Headphones, LockKeyhole, Mic2, Pause, Play, RefreshCw, Search, Settings, ShieldCheck, TriangleAlert, Upload, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
+type Stage = "Plan" | "Record" | "Edit" | "Publish";
+type Episode = { id: string; title: string; description: string; stage: Stage; duration: number; status: string };
+const seed: Episode[] = [
+  { id: "ep-001", title: "The future of helpful technology", description: "A local outline for a product conversation.", stage: "Plan", duration: 0, status: "Outline only" },
+  { id: "ep-002", title: "Building trust into interfaces", description: "A local interview concept with evidence prompts.", stage: "Record", duration: 0, status: "Recording unavailable" },
+  { id: "ep-003", title: "Design review notes", description: "A local edit concept for a short-form episode.", stage: "Edit", duration: 0, status: "Audio unavailable" },
+];
+const stages: Stage[] = ["Plan", "Record", "Edit", "Publish"];
 export default function PodcastStudio() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>PodcastStudio</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">PodcastStudio</h1>
-            <p className="text-muted-foreground mt-2">Record and edit podcasts</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [stage, setStage] = useState<Stage>("Plan");
+  const [episodes, setEpisodes] = useState(seed);
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState(seed[0]);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const visible = useMemo(() => episodes.filter((item) => item.stage === stage && (!query || `${item.title} ${item.description} ${item.status}`.toLowerCase().includes(query.toLowerCase()))), [episodes, query, stage]);
+  const createEpisode = () => { const item: Episode = { id: `local-${episodes.length + 1}`, title: "Untitled local episode", description: "Local outline; no recording attached.", stage: "Plan", duration: 0, status: "Outline only" }; setEpisodes((items) => [item, ...items]); setSelected(item); setStage("Plan"); setSaved(false); };
+  const reset = () => { setStage("Plan"); setEpisodes(seed); setQuery(""); setSelected(seed[0]); setSettingsOpen(false); setRecording(false); setSaved(false); setRefreshing(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Headphones} eyebrow="PodcastStudio · Production preview" title="Plan a show without pretending audio was recorded or published." description="Explore episode concepts, production stages, recording intent, editing and publishing boundaries, search, settings, and refresh states. No microphone, audio file, transcript, hosting provider, feed, listener, or analytics source is connected." badge="Podcast studio preview"><div className="flex flex-wrap gap-2"><Button onClick={createEpisode} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><FolderPlus className="mr-2 size-4" />New local episode</Button><Button onClick={() => setSaved(true)} disabled={episodes.length === 0} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Check className="mr-2 size-4" />{saved ? "View saved locally" : "Save studio view"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset studio</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Episodes", value: String(episodes.length), hint: "Local concepts", icon: Headphones, tone: "cyan" }, { label: "Stage", value: stage, hint: "Local workflow", icon: FileAudio, tone: "violet" }, { label: "Audio", value: "Off", hint: "No file source", icon: WifiOff, tone: "amber" }, { label: "Publish", value: "Blocked", hint: "No hosting", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Podcast evidence boundary"><strong>This is not a recording or publishing system.</strong> Episode titles, stages, durations, recording state, edit state, publish state, and save intent are local planning data. No microphone is accessed, no audio is captured or processed, no transcript exists, no feed is published, and no listener or performance claim is verified.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10"><Search className="size-5 text-cyan-200" /></div><div className="relative flex-1"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local episodes…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><Button aria-label="Toggle studio settings" onClick={() => setSettingsOpen(!settingsOpen)} variant="outline" className="border-white/10 text-slate-300 hover:bg-white/10"><Settings className="size-4" /></Button></div>{settingsOpen && <div className="mt-4 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><p className="font-semibold">Local studio settings</p><p className="mt-2 text-sm leading-6 text-slate-400">Microphone, sample rate, storage, privacy, hosting, and distribution settings are preview-only. Nothing is persisted or synchronized.</p></div>}<p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Production stages</p><div className="mt-3 grid gap-2 sm:grid-cols-2">{stages.map((item) => <button key={item} onClick={() => setStage(item)} className={`rounded-xl border p-3 text-left ${stage === item ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-center justify-between"><span className="font-semibold">{item}</span><Badge variant="outline" className="border-white/10 text-amber-200">Local</Badge></div><p className="mt-1 text-xs text-slate-500">{item === "Plan" ? "Outline and evidence prompts" : item === "Record" ? "Microphone and capture gate" : item === "Edit" ? "Audio processing and review" : "Feed and hosting gate"}</p></button>)}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><TriangleAlert className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-300">{stage} is a local workflow stage. It does not imply a file, recording, edit, host, feed, or published episode exists.</p></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">{stage} workspace</p><h2 className="mt-2 text-2xl font-black">Episode concepts</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">{visible.length} visible</Badge></div>{refreshing ? <div className="flex items-center justify-center py-16 text-slate-400"><RefreshCw className="mr-2 size-4 animate-spin" />Local refresh simulation…</div> : <div className="mt-5 space-y-3">{visible.length === 0 ? <div className="rounded-xl border border-dashed border-white/15 p-8 text-center"><FileAudio className="mx-auto size-7 text-slate-500" /><p className="mt-3 font-semibold">No local episodes in this stage</p><p className="mt-2 text-sm text-slate-500">Create an outline or change the stage.</p></div> : visible.map((item) => <button key={item.id} onClick={() => setSelected(item)} className={`w-full rounded-xl border p-4 text-left ${selected.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10"><Headphones className="size-5 text-cyan-200" /></div><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{item.title}</p><Badge variant="outline" className="border-white/10 text-amber-200">{item.status}</Badge></div><p className="mt-2 text-sm leading-5 text-slate-500">{item.description}</p><p className="mt-2 text-xs text-slate-600">Duration: {item.duration ? `${item.duration}s` : "Unset"} · Source: Local concept</p></div></div></button>)}</div>}<div className="mt-5 flex flex-wrap gap-2"><Button onClick={() => { setRecording(!recording); setSaved(false); }} variant="outline" className={`border-white/10 ${recording ? "text-rose-200" : "text-slate-300"}`}>{recording ? <Pause className="mr-2 size-4" /> : <Mic2 className="mr-2 size-4" />}{recording ? "Stop local intent" : "Record intent"}</Button><Button onClick={() => { setRefreshing(true); window.setTimeout(() => setRefreshing(false), 600); }} variant="outline" className="border-white/10 text-slate-300 hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Simulate refresh</Button><Button disabled variant="outline" className="border-white/10 text-white/40"><Upload className="mr-2 size-4" />Publish unavailable</Button></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Selected episode</p><h2 className="mt-2 text-2xl font-black">{selected.title}</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Stage", value: selected.stage }, { label: "Status", value: selected.status }, { label: "Duration", value: selected.duration ? `${selected.duration}s` : "Unset" }, { label: "Audio", value: "Unavailable" }, { label: "Transcript", value: "Unavailable" }, { label: "Hosting", value: "Unavailable" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><p className="mt-5 text-sm leading-6 text-slate-500">No recording file, waveform, transcript, edit render, RSS feed, upload receipt, license, or listener record exists.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake studio output</h2><p className="mt-3 text-sm leading-6 text-slate-400">Changing stages, recording intent, selecting an episode, refreshing, or saving a view changes browser state only. It does not access a microphone, produce audio, publish a feed, or generate listener analytics.</p></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Production checklist</p><h2 className="mt-2 text-2xl font-black">Podcast production must prove</h2><div className="mt-5 space-y-3">{["Microphone permission, capture lifecycle, device selection, monitoring, levels, interruption, and recovery", "Audio file integrity, waveform, codec, duration, storage, access control, retention, and deletion", "Editing operations, render progress, cancellation, retries, versioning, and accessible review", "Transcript/chapters, rights, consent, guest release, privacy, moderation, and takedown policy", "Hosting/RSS distribution, feed validation, delivery, listener analytics, privacy, and incident handling"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Studio surface preserved", description: "Stages, search, create, settings, recording intent, refresh, and publish gating remain interactive.", icon: Headphones, status: "Local studio" }, { title: "Capture and hosting are off", description: "Microphone, audio files, transcripts, providers, RSS, and publishing remain unavailable.", icon: ShieldCheck, status: "Guardrail" }, { title: "Analytics are off", description: "No listeners, plays, completion, reach, response time, or performance claim is fabricated.", icon: WifiOff, status: "Unavailable" }]} /></section></main></div>;
 }

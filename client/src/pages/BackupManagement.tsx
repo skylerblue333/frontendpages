@@ -1,89 +1,19 @@
-import { HardDrive } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Archive, CheckCircle2, Clock3, Cloud, Database, Download, FileArchive, HardDrive, KeyRound, LockKeyhole, RefreshCw, Search, Shield, Upload } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
 
-export default function BackupManagement() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={HardDrive} title="Backup Management" subtitle="Fully functional backup management page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Backup Management</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <HardDrive className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <HardDrive className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <HardDrive className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
-}
+type BackupPlan = { id: string; name: string; scope: string; status: "Export planning" | "Restore review" | "Connector required"; description: string };
+const PLANS: BackupPlan[] = [
+  { id: "account", name: "Account configuration snapshot", scope: "Settings and preferences", status: "Export planning", description: "A point-in-time plan for configuration that requires scope, destination, encryption, and verification." },
+  { id: "task", name: "Task and artifact snapshot", scope: "Selected project data", status: "Connector required", description: "A snapshot plan requiring an authoritative export tool and a manifest of included records and artifacts." },
+  { id: "team", name: "Team workspace snapshot", scope: "Owner-managed team data", status: "Restore review", description: "A team plan requiring owner authorization, separate workspace scope, and restore ordering." },
+  { id: "database", name: "Database recovery plan", scope: "Operational data", status: "Restore review", description: "A recovery plan requiring tested backups, schema compatibility, point-in-time evidence, and rollback." },
+];
+const REQUIREMENTS = ["Scope and point-in-time timestamp", "Destination and package integrity", "Encryption and key ownership", "Manifest and completeness check", "Restore order and permissions", "Test restore and rollback"];
+
+export default function BackupManagement() { const [query, setQuery] = useState(""); const [plans, setPlans] = useState(PLANS); const [selected, setSelected] = useState<BackupPlan | null>(null); const [action, setAction] = useState<"export" | "restore" | null>(null); const visible = useMemo(() => plans.filter((plan) => `${plan.name} ${plan.scope} ${plan.status} ${plan.description}`.toLowerCase().includes(query.toLowerCase())), [plans, query]); const addPlan = () => { const draft = { id: `draft-${plans.length + 1}`, name: `Backup plan ${plans.length + 1}`, scope: "Define scope", status: "Export planning" as const, description: "Local plan placeholder; no export was created and no data was uploaded." }; setPlans((current) => [draft, ...current]); setSelected(draft); setAction("export"); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={HardDrive} eyebrow="Resilience · Backups" title="Treat every backup as a verified snapshot, not a promise." description="Explore backup scopes, fixed-point export planning, restoration ordering, encryption, integrity, and rollback. This page does not claim stored packages, successful exports, recovery point objectives, or completed restores." badge="Preview backup workspace"><div className="flex flex-wrap gap-2"><Button onClick={addPlan} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><FileArchive className="mr-2 size-4" />Add local backup plan</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Shield className="mr-2 size-4" />Recovery checklist</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Backup plans", value: String(plans.length), hint: "Local recovery designs", icon: HardDrive }, { label: "Stored packages", value: "Unavailable", hint: "No backup destination connected", icon: Cloud, tone: "amber" }, { label: "Restore", value: "Gated", hint: "Order and permission required", icon: RefreshCw, tone: "violet" }, { label: "Encryption", value: "Required", hint: "Key ownership must be proven", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Backup evidence boundary">Backup plans, search, local export/restore previews, fixed-point snapshot language, package integrity, encryption, restore ordering, and rollback requirements are available for UX review. No backup package, record count, storage size, export success, recovery point, restore result, or encryption certification is fabricated.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search backup plans" aria-label="Search backup plans" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visible.map((plan) => <button key={plan.id} onClick={() => { setSelected(plan); setAction(null); }} className={`w-full rounded-xl border p-4 text-left transition ${selected?.id === plan.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><HardDrive className="size-4 text-cyan-300" /><span className="font-semibold">{plan.name}</span><Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">{plan.status}</Badge></div><p className="mt-2 text-xs uppercase tracking-wider text-slate-500">{plan.scope}</p><p className="mt-2 text-sm leading-6 text-slate-400">{plan.description}</p></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No backup plans match" description="Try another scope, status, or keyword." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected backup plan</p><h2 className="mt-1 text-2xl font-bold">{selected.name}</h2><p className="mt-2 text-sm text-slate-400">{selected.scope}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><p className="mt-5 text-sm leading-6 text-slate-300">{selected.description}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{REQUIREMENTS.map((item) => <div key={item} className="rounded-lg border border-white/10 bg-black/15 p-4"><CheckCircle2 className="size-4 text-emerald-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Evidence required</p></div>)}</div><div className="mt-6 flex flex-wrap gap-2"><Button size="sm" onClick={() => setAction("export")} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Download className="mr-2 size-4" />Preview export</Button><Button size="sm" variant="outline" onClick={() => setAction("restore")} className="border-white/15 text-slate-300"><Upload className="mr-2 size-4" />Preview restore</Button></div>{action && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-amber-200">{action === "export" ? <Download className="size-4" /> : <Upload className="size-4" />}{action === "export" ? "Export" : "Restore"} preview prepared</div><p className="mt-2 text-sm leading-6 text-slate-300">No data was exported or uploaded. Connect an authorized backup tool, verify the package manifest, and test recovery before performing this action.</p></div>}</> : <ScreenStatePanel type="empty" title="Select a backup plan" description="Inspect scope, timestamp, destination, encryption, integrity, restore, and rollback requirements." />}</CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Snapshots are fixed points", description: "A backup captures a defined scope at a timestamp; it does not silently sync later changes.", icon: Clock3, status: "Required" }, { title: "Restore is one-way risk", description: "Confirm package completeness, account scope, permissions, connector behavior, and rollback before restoring.", icon: RefreshCw, status: "Required" }, { title: "No fake recovery", description: "A local plan is not a backup package, export success, restore result, or encryption certification.", icon: AlertTriangleIcon, status: "Guardrail" }]} /></main></div>; }
+function AlertTriangleIcon() { return <span aria-hidden="true">!</span>; }

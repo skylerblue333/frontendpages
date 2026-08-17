@@ -1,74 +1,10 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Activity, Check, Database, FileSearch, Gauge, LockKeyhole, RefreshCw, ShieldAlert, SlidersHorizontal, TrendingDown, Users, WifiOff } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-export default function ChurnPrediction() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>ChurnPrediction</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">ChurnPrediction</h1>
-            <p className="text-muted-foreground mt-2">Churn prediction</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+const FEATURES = ["Recent activity", "Support contact", "Product adoption", "Subscription age"];
+export default function ChurnPrediction() { const [cohort, setCohort] = useState("Synthetic cohort"); const [size, setSize] = useState("120"); const [selected, setSelected] = useState<string[]>([FEATURES[0], FEATURES[2]]); const [scenario, setScenario] = useState("Baseline"); const [saved, setSaved] = useState(false); const numericSize = Number(size) || 0; const score = Math.min(100, selected.length * 18 + (scenario === "Conservative" ? 8 : scenario === "Stretch" ? -6 : 0)); const toggle = (feature: string) => { setSelected((items) => items.includes(feature) ? items.filter((item) => item !== feature) : [...items, feature]); setSaved(false); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={TrendingDown} eyebrow="Analytics · Retention Modeling" title="Model the assumptions before predicting a person." description="Explore a synthetic cohort worksheet, feature selection, and transparent scenario scoring. This page does not ingest personal data, calculate real churn, identify at-risk users, recommend interventions, or forecast revenue." badge="Preview modeling lab"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><FileSearch className="mr-2 size-4" />Save local model note</Button><Button onClick={() => { setCohort("Synthetic cohort"); setSize("120"); setSelected([FEATURES[0], FEATURES[2]]); setScenario("Baseline"); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset worksheet</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Cohort", value: cohort === "Synthetic cohort" ? "Synthetic" : cohort, hint: "Local label", icon: Users }, { label: "Rows", value: String(numericSize), hint: "Hypothetical only", icon: Database, tone: "violet" }, { label: "Features", value: String(selected.length), hint: "Local selection", icon: SlidersHorizontal, tone: "amber" }, { label: "Prediction", value: "Unavailable", hint: "No trained model", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Prediction evidence boundary">A score from a worksheet is not a churn probability, user risk label, intervention recommendation, revenue forecast, or validated model. A production system needs a lawful purpose, data minimization, consent or another basis, feature definitions, labels, training/validation split, calibration, bias testing, monitoring, human review, retention, access control, and an appeal path.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Model inputs</p><div className="mt-5 space-y-4"><div><label htmlFor="cohort" className="mb-2 block text-sm text-slate-300">Cohort label</label><Input id="cohort" value={cohort} onChange={(event) => { setCohort(event.target.value); setSaved(false); }} className="border-white/10 bg-black/20 text-white" /></div><div><label htmlFor="size" className="mb-2 block text-sm text-slate-300">Hypothetical row count</label><Input id="size" type="number" min="0" value={size} onChange={(event) => { setSize(event.target.value); setSaved(false); }} className="border-white/10 bg-black/20 text-white" /></div><div><p className="mb-2 text-sm text-slate-300">Feature candidates</p><div className="space-y-2">{FEATURES.map((feature) => <button key={feature} onClick={() => toggle(feature)} className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left text-sm ${selected.includes(feature) ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-200" : "border-white/10 text-slate-400"}`}><Activity className="size-4" /><span className="flex-1">{feature}</span><span className="text-xs">{selected.includes(feature) ? "Included" : "Excluded"}</span></button>)}</div></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Scenario score</p><h2 className="mt-2 text-4xl font-black">{score}</h2><p className="mt-1 text-sm text-slate-500">Illustrative index · not probability</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Synthetic</Badge></div><div className="mt-6 flex flex-wrap gap-2">{["Conservative", "Baseline", "Stretch"].map((item) => <button key={item} onClick={() => { setScenario(item); setSaved(false); }} className={`rounded-xl border px-3 py-2 text-sm ${scenario === item ? "border-violet-300/40 bg-violet-300/[0.1] text-violet-200" : "border-white/10 text-slate-400"}`}>{item}</button>)}</div><div className="mt-6 h-3 rounded-full bg-white/5"><div className="h-full rounded-full bg-gradient-to-r from-cyan-300 to-violet-300" style={{ width: `${score}%` }} /></div><p className="mt-3 text-sm leading-6 text-slate-400">Arithmetic: {selected.length} selected features × 18{scenario === "Baseline" ? "" : scenario === "Conservative" ? " + 8" : " − 6"}. This local index has no label, calibration, or decision threshold.</p><div className="mt-6 space-y-2">{["Outcome label and observation window", "Feature provenance and missingness", "Training and validation split", "Calibration and uncertainty", "Bias and subgroup review", "Human review and appeal", "Privacy and retention policy"].map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-3"><ShieldAlert className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}{saved && <div className="mt-5 flex items-center gap-2 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4 text-sm text-cyan-200"><Check className="size-4" />Local model note saved; no user profile or prediction changed.</div>}</div></CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Gauge className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Score is not probability</h3><p className="mt-2 text-sm leading-6 text-slate-400">A hand-built index cannot claim calibrated churn likelihood or predictive accuracy.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><LockKeyhole className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Data needs purpose</h3><p className="mt-2 text-sm leading-6 text-slate-400">Personal data requires minimization, lawful use, access control, retention, and review.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><WifiOff className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">No fake intervention</h3><p className="mt-2 text-sm leading-6 text-slate-400">No user is labeled, contacted, downgraded, or targeted by this local worksheet.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Prediction has a lifecycle", description: "Separate data intake, labels, training, calibration, monitoring, review, and intervention.", icon: TrendingDown, status: "Pattern" }, { title: "Privacy is part of the model", description: "Purpose, minimization, retention, access, bias, and appeal must be visible.", icon: LockKeyhole, status: "Required" }, { title: "No fake churn", description: "A local index is not a user risk score, forecast, revenue claim, or intervention.", icon: WifiOff, status: "Guardrail" }]} /></main></div>; }

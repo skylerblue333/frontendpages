@@ -1,75 +1,24 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Activity, AlertTriangle, BarChart3, Bell, Check, Clock3, FilePlus2, LockKeyhole, PieChart, RefreshCw, Search, Settings, ShieldAlert, ShieldCheck, TrendingUp, Wallet, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
+type View = "Overview" | "Holdings" | "Activity" | "Alerts";
+type Asset = { id: string; symbol: string; name: string; className: string; note: string; state: string };
+const assets: Asset[] = [
+  { id: "asset-001", symbol: "SKY444", name: "Sky concept asset", className: "Token concept", note: "Wallet, chain, custody, and balance evidence required.", state: "Unverified" },
+  { id: "asset-002", symbol: "BTC", name: "Bitcoin concept", className: "Digital asset", note: "Price, quantity, timestamp, and network evidence required.", state: "Unavailable" },
+  { id: "asset-003", symbol: "USD", name: "Cash concept", className: "Fiat concept", note: "Account, currency, institution, and balance evidence required.", state: "Unverified" },
+];
 export default function PortfolioOverview() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>PortfolioOverview</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">PortfolioOverview</h1>
-            <p className="text-muted-foreground mt-2">Investment portfolio</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [view, setView] = useState<View>("Overview");
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState(assets[0]);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const visible = useMemo(() => assets.filter((item) => !query || `${item.symbol} ${item.name} ${item.className} ${item.note}`.toLowerCase().includes(query.toLowerCase())), [query]);
+  const reset = () => { setView("Overview"); setQuery(""); setSelected(assets[0]); setSettingsOpen(false); setSaved(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Wallet} eyebrow="PortfolioOverview · Financial preview" title="See the portfolio surface without inventing a balance." description="Explore overview, holdings, activity, and alerts tabs with local asset concepts, search, settings, selected detail, and empty states. No account, wallet, market, transaction, price, performance, alert, or tax source is connected." badge="Portfolio overview preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} disabled={visible.length === 0} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "View saved locally" : "Save overview locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset overview</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Total value", value: "Unavailable", hint: "No verified balance", icon: Wallet, tone: "cyan" }, { label: "Assets", value: String(assets.length), hint: "Local concepts", icon: BarChart3, tone: "violet" }, { label: "Activity", value: "Unavailable", hint: "No transaction source", icon: Activity, tone: "amber" }, { label: "Alerts", value: "Off", hint: "No market source", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Overview evidence boundary"><strong>This is not a connected portfolio account.</strong> Labels, tabs, search, selected asset, unavailable values, and local save state are interface concepts. They do not prove ownership, balances, prices, transactions, returns, alerts, tax position, solvency, or investment suitability. No account or financial service is queried.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><div className="relative flex-1"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local assets…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><Button aria-label="Toggle overview settings" onClick={() => setSettingsOpen(!settingsOpen)} variant="outline" className="border-white/10 text-slate-300 hover:bg-white/10"><Settings className="size-4" /></Button></div>{settingsOpen && <div className="mt-4 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><p className="font-semibold">Local overview settings</p><p className="mt-2 text-sm leading-6 text-slate-400">Currency, alert thresholds, refresh frequency, tax, sharing, and privacy settings are preview-only. Nothing is persisted or applied.</p></div>}<div className="mt-6 grid grid-cols-2 gap-2">{(["Overview", "Holdings", "Activity", "Alerts"] as View[]).map((item) => <button key={item} onClick={() => setView(item)} className={`flex items-center gap-2 rounded-xl border p-3 text-left text-sm ${view === item ? "border-cyan-300/40 bg-cyan-300/[0.06] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item === "Overview" ? <PieChart className="size-4" /> : item === "Holdings" ? <Wallet className="size-4" /> : item === "Activity" ? <Activity className="size-4" /> : <Bell className="size-4" />}{item}</button>)}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><ShieldAlert className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-300">{view} is a local tab state. Connected balances, history, alerts, and performance remain unavailable.</p></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">{view} view</p><h2 className="mt-2 text-2xl font-black">Portfolio concepts</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">{visible.length} visible</Badge></div>{view === "Overview" || view === "Holdings" ? <div className="mt-5 space-y-3">{visible.map((item) => <button key={item.id} onClick={() => setSelected(item)} className={`w-full rounded-xl border p-4 text-left ${selected.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10"><Wallet className="size-5 text-cyan-200" /></div><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{item.symbol} · {item.name}</p><Badge variant="outline" className="border-white/10 text-slate-400">{item.className}</Badge></div><p className="mt-2 text-sm leading-5 text-slate-500">{item.note}</p></div><span className="text-xs text-amber-200">{item.state}</span></div></button>)}</div> : <div className="mt-5 rounded-xl border border-dashed border-white/15 p-8 text-center">{view === "Activity" ? <Clock3 className="mx-auto size-7 text-slate-500" /> : <Bell className="mx-auto size-7 text-slate-500" />}<p className="mt-3 font-semibold">{view} unavailable</p><p className="mt-2 text-sm leading-6 text-slate-500">A verified {view === "Activity" ? "transaction and valuation" : "market and alert"} service is required before this view can show real records.</p><Button disabled className="mt-5"><FilePlus2 className="mr-2 size-4" />Unavailable</Button></div>}<div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Total value", value: "Unavailable" }, { label: "Performance", value: "Unavailable" }, { label: "Allocation", value: "Unset" }, { label: "Data freshness", value: "Unavailable" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Selected asset</p><h2 className="mt-2 text-2xl font-black">{selected.symbol} · {selected.name}</h2><p className="mt-3 text-sm leading-6 text-slate-400">{selected.note}</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Balance", value: "Unavailable" }, { label: "Price", value: "Unavailable" }, { label: "Ownership", value: "Unverified" }, { label: "Source", value: "Off" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake overview</h2><p className="mt-3 text-sm leading-6 text-slate-400">Changing tabs, search, settings, selection, or save view changes browser state only. It does not connect an account, import holdings, calculate performance, send alerts, or recommend an action.</p></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Overview must prove</p><h2 className="mt-2 text-2xl font-black">Production checklist</h2><div className="mt-5 space-y-3">{["Authenticated account/wallet ownership, chain/network validation, custody boundaries, and privacy", "Timestamped prices, currency conversion, stale-data handling, and valuation reconciliation", "Transactions, cost basis, fees, transfers, duplicate handling, and export integrity", "Performance, allocation, benchmark, alerts, sharing, deletion, audit, and accessibility", "Tests for empty/loading/error/offline states, provider outage, stale data, and recovery"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Overview surface preserved", description: "Summary tabs, search, settings, local assets, selected detail, activity and alert states remain visible.", icon: PieChart, status: "Local overview" }, { title: "Account data is off", description: "Balances, prices, ownership, transactions, taxes, performance, and alerts remain unavailable.", icon: ShieldAlert, status: "Guardrail" }, { title: "No recommendation", description: "No financial advice, risk assessment, solvency claim, or action prompt is fabricated.", icon: WifiOff, status: "Unavailable" }]} /></section></main></div>;
 }

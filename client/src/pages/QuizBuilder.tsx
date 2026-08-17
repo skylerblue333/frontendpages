@@ -1,75 +1,22 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { BookOpenCheck, Check, ClipboardCheck, Eye, FileQuestion, LockKeyhole, Plus, RefreshCw, Search, ShieldAlert, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+type Quiz = { id: number; title: string; subject: string; questions: number; status: string; detail: string };
+const initial: Quiz[] = [{ id: 1, title: "Evidence literacy check", subject: "Governance", questions: 4, status: "Draft", detail: "A local quiz concept about distinguishing claims from verified evidence." }, { id: 2, title: "SkySchool foundations", subject: "Learning", questions: 6, status: "Needs review", detail: "A learning assessment concept awaiting answer-key and accessibility review." }, { id: 3, title: "Wallet safety primer", subject: "Security", questions: 3, status: "Blocked", detail: "A safety concept that must not imply custody, transactions, or financial advice." }];
 export default function QuizBuilder() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>QuizBuilder</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">QuizBuilder</h1>
-            <p className="text-muted-foreground mt-2">Build quizzes</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [quizzes, setQuizzes] = useState(initial);
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState(1);
+  const [saved, setSaved] = useState(false);
+  const [showGates, setShowGates] = useState(false);
+  const [question, setQuestion] = useState("What should a product claim include before publication?");
+  const [answerKey, setAnswerKey] = useState("Answer key not configured");
+  const filtered = useMemo(() => quizzes.filter((quiz) => `${quiz.title} ${quiz.subject} ${quiz.detail}`.toLowerCase().includes(query.toLowerCase())), [quizzes, query]);
+  const quiz = quizzes.find((item) => item.id === selected) ?? quizzes[0];
+  const create = () => { const id = Math.max(...quizzes.map((item) => item.id), 0) + 1; const item: Quiz = { id, title: `Local quiz draft ${id}`, subject: "Unassigned", questions: 1, status: "Draft", detail: "A browser-only assessment draft awaiting authored content and evidence review." }; setQuizzes((current) => [...current, item]); setSelected(id); };
+  const reset = () => { setQuizzes(initial); setQuery(""); setSelected(1); setSaved(false); setShowGates(false); setQuestion("What should a product claim include before publication?"); setAnswerKey("Answer key not configured"); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={BookOpenCheck} eyebrow="QuizBuilder · Authoring preview" title="Author the assessment before claiming the result." description="Explore a local quiz studio with draft search, question editing, answer-key intent, scoring, accessibility, preview, publishing, attempts, certificates, and analytics gates. No learner, grade, completion, certificate, or course record is connected." badge="Quiz workspace"><div className="flex flex-wrap gap-2"><Button onClick={create} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Plus className="mr-2 size-4" />New local quiz</Button><Button onClick={() => setSaved(true)} className="bg-white/10 text-white hover:bg-white/15"><Check className="mr-2 size-4" />{saved ? "Quiz saved locally" : "Save quiz locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review quiz gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset studio</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Quizzes", value: `${quizzes.length} local`, hint: "Not published", icon: BookOpenCheck, tone: "cyan" }, { label: "Questions", value: "Unverified", hint: "Local drafts", icon: FileQuestion, tone: "violet" }, { label: "Attempts", value: "Unavailable", hint: "No learner source", icon: ClipboardCheck, tone: "amber" }, { label: "Grades", value: "Unmeasured", hint: "No answer key", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Quiz evidence boundary"><strong>This is a local assessment-authoring preview, not a learning-management system.</strong> Drafts, questions, answer-key intent, scoring posture, preview state, saved state, and gates are browser concepts. No learner, attempt, score, completion, certificate, course enrollment, identity, publication, or learning outcome is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local quiz drafts" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.title}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.status}</Badge></div><div className="mt-4 flex gap-2"><Badge variant="outline" className="border-white/10 text-slate-500">{item.subject}</Badge><Badge variant="outline" className="border-white/10 text-slate-500">{item.questions} question concepts</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected quiz draft</p><h2 className="mt-2 text-2xl font-black">{quiz.title}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{quiz.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Subject", value: quiz.subject }, { label: "Questions", value: `${quiz.questions} local concepts` }, { label: "Answer key", value: answerKey }, { label: "Scoring", value: "Not configured" }, { label: "Accessibility", value: "Needs review" }, { label: "Learners", value: "Unknown" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><label className="mt-5 block text-sm text-slate-400">Question draft<textarea value={question} onChange={(event) => setQuestion(event.target.value)} rows={3} className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none" /></label><div className="mt-5 flex flex-wrap gap-2"><Button onClick={() => setAnswerKey(answerKey === "Answer key not configured" ? "Local key intent" : "Answer key not configured")} variant="outline" className="border-white/10 text-slate-300"><ClipboardCheck className="mr-2 size-4" />Toggle answer-key intent</Button><Button disabled className="bg-slate-700 text-slate-400"><Eye className="mr-2 size-4" />Preview unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Publish unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No grading claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A local question draft does not produce an attempt, score, grade, completion event, certificate, or learning outcome.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Quiz gates</p><h2 className="mt-2 text-2xl font-black">What a real assessment workflow must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Author identity, course ownership, permissions, versioning, and content rights", "Question quality, answer-key policy, scoring, partial credit, randomization, and accessibility", "Learner identity, enrollment, attempt rules, time limits, privacy, and accommodations", "Grading computation, feedback, appeal, audit, integrity, and error recovery", "Publication, delivery, autosave, offline behavior, retries, and data retention", "Certificates, completion, analytics, exports, deletion, support, and learning-evidence policy"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Authoring surface preserved", description: "Quiz drafts, search, question editing, answer-key intent, scoring, accessibility, preview, publish, attempts, certificates, save/reset, and gates remain interactive.", icon: BookOpenCheck, status: "Local authoring" }, { title: "No grading theater", description: "Learners, attempts, scores, grades, completion, certificates, identity, publication, and outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before assessment", description: "Real quizzes need authorship, learner identity, scoring rules, accessibility, persistence, audit, and support.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
 }

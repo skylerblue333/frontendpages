@@ -1,89 +1,20 @@
-import { Award } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Award, CheckCircle2, CircleDashed, Crown, Flag, LockKeyhole, Medal, Search, Shield, Sparkles, Star, Trophy } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
 
-export default function Badges() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={Award} title="Badges & Achievements" subtitle="Fully functional badges & achievements page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Badges & Achievements</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Award className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Award className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Award className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
-}
+type BadgeItem = { id: string; name: string; category: string; status: "Criteria preview" | "Claim unavailable" | "Progress unverified"; description: string; criteria: string[] };
+const BADGES: BadgeItem[] = [
+  { id: "builder", name: "First Builder", category: "Creation", status: "Criteria preview", description: "Recognizes a documented first contribution to a project or creative workflow.", criteria: ["Contribution source", "Review outcome", "Attribution record"] },
+  { id: "learner", name: "Learning Path", category: "Education", status: "Progress unverified", description: "A course-progress badge template requiring completion and certification evidence.", criteria: ["Course identifier", "Completion record", "Certificate policy"] },
+  { id: "guardian", name: "Safety Guardian", category: "Community", status: "Criteria preview", description: "A review-oriented badge requiring documented moderation or safety contributions.", criteria: ["Review scope", "Human decision", "Appeal and audit"] },
+  { id: "collector", name: "Digital Collector", category: "Digital assets", status: "Claim unavailable", description: "A digital-asset achievement template requiring verified provenance and ownership data.", criteria: ["Network and token", "Ownership proof", "Metadata integrity"] },
+  { id: "streak", name: "Consistency Streak", category: "Participation", status: "Progress unverified", description: "A participation template requiring an authoritative event stream and timezone policy.", criteria: ["Event source", "Streak definition", "Reset policy"] },
+];
+const CATEGORIES = ["All", "Creation", "Education", "Community", "Digital assets", "Participation"];
+
+export default function Badges() { const [query, setQuery] = useState(""); const [category, setCategory] = useState("All"); const [selected, setSelected] = useState<BadgeItem | null>(null); const [claimed, setClaimed] = useState(false); const visible = useMemo(() => BADGES.filter((badge) => (category === "All" || badge.category === category) && `${badge.name} ${badge.category} ${badge.status} ${badge.description}`.toLowerCase().includes(query.toLowerCase())), [category, query]); return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Award} eyebrow="Community · Achievements" title="Make recognition meaningful, inspectable, and earned." description="Explore achievement templates, criteria, progress requirements, and local claim previews. This page does not claim awards, rarity, ownership, user progress, streaks, or transferable value." badge="Preview achievement hub"><div className="flex flex-wrap gap-2"><Button onClick={() => setClaimed(true)} disabled={!selected} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Medal className="mr-2 size-4" />Preview local claim</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Shield className="mr-2 size-4" />Achievement policy</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Badge templates", value: String(BADGES.length), hint: "Criteria-driven previews", icon: Award }, { label: "Issued awards", value: "Unavailable", hint: "No achievement service connected", icon: Trophy, tone: "amber" }, { label: "Rarity", value: "Unverified", hint: "No supply or scarcity data", icon: Crown, tone: "violet" }, { label: "Transfer value", value: "Not claimed", hint: "No token or ownership promise", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Achievement evidence boundary">Badge catalog, search, category filters, criteria detail, local claim preview, and unavailable progress state are available for UX review. No badge was issued, no user progress, streak, rarity, supply, owner, certificate, token, or reward is fabricated.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search badge templates" aria-label="Search badge templates" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 flex gap-2 overflow-x-auto pb-1">{CATEGORIES.map((item) => <Button key={item} size="sm" variant={category === item ? "default" : "outline"} onClick={() => setCategory(item)} className={category === item ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "border-white/15 bg-white/5 text-slate-300 hover:bg-white/10"}>{item}</Button>)}</div><div className="mt-4 space-y-2">{visible.map((badge) => <button key={badge.id} onClick={() => { setSelected(badge); setClaimed(false); }} className={`w-full rounded-xl border p-4 text-left transition ${selected?.id === badge.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><Award className="size-4 text-cyan-300" /><span className="font-semibold">{badge.name}</span><Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">{badge.status}</Badge></div><p className="mt-2 text-xs uppercase tracking-wider text-slate-500">{badge.category}</p><p className="mt-2 text-sm leading-6 text-slate-400">{badge.description}</p></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No badges match" description="Try another category or search phrase." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected achievement</p><h2 className="mt-1 text-2xl font-bold">{selected.name}</h2><p className="mt-2 text-sm text-slate-400">{selected.category}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><p className="mt-5 text-sm leading-6 text-slate-300">{selected.description}</p><div className="mt-6 space-y-3">{selected.criteria.map((criterion) => <div key={criterion} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4 text-sm text-slate-300"><CircleDashed className="size-4 text-cyan-300" />{criterion}<Badge variant="outline" className="ml-auto border-white/10 text-slate-500">Evidence required</Badge></div>)}</div>{claimed && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-cyan-200"><Sparkles className="size-4" />Local claim preview prepared</div><p className="mt-2 text-sm leading-6 text-slate-300">No badge was issued, stored, transferred, or added to a profile. This is a local interaction preview.</p></div>}</> : <ScreenStatePanel type="empty" title="Select a badge template" description="Inspect criteria, progress evidence, issuance policy, and ownership boundaries." />}</CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Criteria before status", description: "Define the event source, evidence, reviewer, and appeal policy before marking an achievement earned.", icon: CheckCircle2, status: "Required" }, { title: "Progress is private", description: "Do not expose personal progress, streaks, or identity-linked activity without authorization and a verified source.", icon: Shield, status: "Required" }, { title: "No fake awards", description: "A template is not an issued badge, certificate, token, rarity claim, or transferable asset.", icon: AlertTriangleIcon, status: "Guardrail" }]} /></main></div>; }
+function AlertTriangleIcon() { return <span aria-hidden="true">!</span>; }

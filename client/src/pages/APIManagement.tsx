@@ -1,89 +1,20 @@
-import { Code } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Activity, AlertTriangle, BarChart3, CheckCircle2, Code2, Database, FileCheck2, Gauge, LockKeyhole, Search, Server, Settings, Shield, Sparkles, Terminal, Workflow } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
 
-export default function APIManagement() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={Code} title="API Management" subtitle="Fully functional api management page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">API Management</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Code className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Code className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Code className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
-}
+type Surface = { id: string; name: string; description: string; status: "Contract required" | "Review required" | "Unavailable"; icon: typeof Code2 };
+const SURFACES: Surface[] = [
+  { id: "routes", name: "Route inventory", description: "Track method, path, owner, authentication, input schema, output schema, and deprecation state.", status: "Contract required", icon: Code2 },
+  { id: "health", name: "Health evidence", description: "Show checks, timestamps, dependencies, and failure context instead of a green badge by default.", status: "Unavailable", icon: Activity },
+  { id: "usage", name: "Usage analytics", description: "Measure requests, errors, latency, and cost only from a verified telemetry source.", status: "Unavailable", icon: BarChart3 },
+  { id: "deploy", name: "Release management", description: "Review migrations, environment approval, rollback, and audit ownership before release.", status: "Review required", icon: Workflow },
+  { id: "schema", name: "Schema registry", description: "Keep frontend examples, tRPC procedures, database records, and versioning aligned.", status: "Contract required", icon: Database },
+  { id: "security", name: "Security controls", description: "Review authentication, authorization, rate limits, logging, and secret handling.", status: "Review required", icon: Shield },
+];
+const RELEASE_GATES = ["Route and schema match", "Auth and authorization tested", "Rate limits and error envelope verified", "Database migration reviewed", "Rollback and observability ready"];
+
+export default function APIManagement() { const [query, setQuery] = useState(""); const [selected, setSelected] = useState<Surface | null>(null); const [active, setActive] = useState("inventory"); const visible = useMemo(() => SURFACES.filter((surface) => `${surface.name} ${surface.description} ${surface.status}`.toLowerCase().includes(query.toLowerCase())), [query]); return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Server} eyebrow="Developer Platform · API Operations" title="Operate APIs with evidence, not decoration." description="Explore route inventory, schema alignment, health evidence, usage telemetry, release gates, and security controls. This page does not claim uptime, throughput, active users, transaction counts, success rates, or response times." badge="Preview operations console"><div className="flex flex-wrap gap-2"><Button onClick={() => setActive("inventory")} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Terminal className="mr-2 size-4" />Review inventory</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Settings className="mr-2 size-4" />Operations settings</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Operational surfaces", value: String(SURFACES.length), hint: "Reviewable control areas", icon: Server }, { label: "Live health", value: "Unavailable", hint: "No telemetry connection", icon: Activity, tone: "amber" }, { label: "Production users", value: "Unverified", hint: "No metric claim", icon: Gauge, tone: "violet" }, { label: "Release gate", value: "Required", hint: "Evidence before deploy", icon: FileCheck2, tone: "slate" }]} /><ScreenPreviewBanner title="Operations evidence boundary">The control-area catalog, search, selection, release checklist, and unavailable telemetry state are available for UX review. No live health, request volume, success rate, latency, uptime, deployment, active-user, or transaction data is fabricated.</ScreenPreviewBanner><section><div className="mb-5 flex flex-wrap gap-2 rounded-xl border border-white/10 bg-white/[0.04] p-2">{[["inventory", "Control inventory"], ["release", "Release gates"], ["telemetry", "Telemetry state"]].map(([value, label]) => <Button key={value} size="sm" variant={active === value ? "default" : "outline"} onClick={() => setActive(value)} className={active === value ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "border-white/15 bg-white/5 text-slate-300 hover:bg-white/10"}>{label}</Button>)}</div>{active === "inventory" && <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search operational surfaces" aria-label="Search operational surfaces" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visible.map((surface) => { const Icon = surface.icon; return <button key={surface.id} onClick={() => setSelected(surface)} className={`w-full rounded-xl border p-4 text-left transition ${selected?.id === surface.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-3"><Icon className="size-5 text-cyan-300" /><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-2"><span className="font-semibold">{surface.name}</span><Badge variant="outline" className="border-white/10 text-slate-400">{surface.status}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-400">{surface.description}</p></div></div></button>; })}{visible.length === 0 && <ScreenStatePanel type="empty" title="No control areas match" description="Try another search term." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected control area</p><h2 className="mt-1 text-2xl font-bold">{selected.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{selected.description}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><div className="mt-6 grid gap-3 sm:grid-cols-2">{["Owner and scope", "Evidence source", "Failure state", "Audit trail", "Access control", "Rollback path"].map((item) => <div key={item} className="rounded-xl border border-white/10 bg-black/15 p-4"><CheckCircle2 className="size-4 text-emerald-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Required before claim</p></div>)}</div></> : <ScreenStatePanel type="empty" title="Select an operational surface" description="Inspect evidence requirements for route, health, telemetry, release, schema, or security management." />}</CardContent></Card></div>}{active === "release" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><FileCheck2 className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Release readiness</p><h2 className="mt-1 text-2xl font-bold">Evidence checklist</h2></div></div><p className="mt-4 text-sm leading-6 text-slate-300">A release is not ready because a page renders. Verify every gate against the actual route, schema, database, security, and deployment state.</p><div className="mt-6 grid gap-3 md:grid-cols-2">{RELEASE_GATES.map((gate) => <div key={gate} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4 text-sm text-slate-300"><CheckCircle2 className="size-4 text-amber-300" />{gate}</div>)}</div></CardContent></Card>}{active === "telemetry" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><ScreenStatePanel type="unavailable" title="Operational telemetry is unavailable" description="No health check, metrics pipeline, trace source, or deployment feed is connected to this screen. Do not show invented performance numbers or a green production status." /><div className="mt-5 grid gap-3 md:grid-cols-3">{["Health checks", "Request metrics", "Deployment events"].map((item) => <div key={item} className="rounded-xl border border-white/10 bg-black/15 p-4"><AlertTriangle className="size-4 text-amber-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Source required</p></div>)}</div></CardContent></Card>}</section><ScreenFeatureGrid features={[{ title: "Typed contracts", description: "Keep API procedures, schemas, frontend examples, and database relationships aligned.", icon: Code2, status: "Required" }, { title: "Observable failure", description: "Make errors, stale telemetry, retries, and rollback state visible instead of hiding them.", icon: Activity, status: "Required" }, { title: "No fake production", description: "Use unavailable or unverified states when the platform has no evidence for a live claim.", icon: LockKeyhole, status: "Guardrail" }]} /></main></div>; }

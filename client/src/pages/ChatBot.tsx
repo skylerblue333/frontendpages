@@ -1,75 +1,38 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Bot, Check, FileText, LockKeyhole, MessageCircle, RefreshCw, Send, ShieldAlert, Sparkles, Wand2, WifiOff } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const PROMPTS = ["Summarize a project brief", "Explain a blockchain concept", "Draft a product checklist", "Review an accessibility issue"];
+const REPLIES: Record<string, string> = { "Summarize a project brief": "Preview response: identify the objective, audience, constraints, evidence, owners, and next decision. No external document was read.", "Explain a blockchain concept": "Preview response: define the concept, name the network assumptions, distinguish custody from observation, and flag where live RPC evidence is required.", "Draft a product checklist": "Preview response: separate requirements, states, permissions, validation, observability, tests, and deployment proof before calling a feature complete.", "Review an accessibility issue": "Preview response: inspect semantics, focus order, keyboard behavior, contrast, labels, async states, and screen-reader announcements; verify in the target environment." };
+type Turn = { role: "assistant" | "user"; text: string };
 
 export default function ChatBot() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>ChatBot</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
+  const [prompt, setPrompt] = useState(PROMPTS[0]);
+  const [message, setMessage] = useState("");
+  const [conversation, setConversation] = useState<Turn[]>([{ role: "assistant", text: REPLIES[PROMPTS[0]] }]);
+  const [saved, setSaved] = useState(false);
+  const response = useMemo(() => REPLIES[prompt], [prompt]);
+  const addPreviewTurn = () => { const text = message.trim() || prompt; setConversation((items) => [...items, { role: "user", text }, { role: "assistant", text: response }]); setMessage(""); setSaved(true); };
+  const reset = () => { setConversation([]); setMessage(""); setSaved(false); };
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">ChatBot</h1>
-            <p className="text-muted-foreground mt-2">AI chatbot interface</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+    <div className="min-h-screen bg-[#070a16] text-white">
+      <ScreenHero icon={Bot} eyebrow="AI · Conversation Sandbox" title="Design the conversation before claiming an assistant." description="Try local prompt patterns and a clearly synthetic response preview. This page does not call a model, send a message, retain memory, access tools, read private data, or guarantee answer quality." badge="Preview AI workspace">
+        <div className="flex flex-wrap gap-2"><Button onClick={addPreviewTurn} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Send className="mr-2 size-4" />Add local preview turn</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Clear sandbox</Button></div>
+      </ScreenHero>
+      <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+        <ScreenStatGrid items={[{ label: "Model", value: "Unavailable", hint: "No inference call", icon: WifiOff }, { label: "Turns", value: String(conversation.length), hint: "Local preview only", icon: MessageCircle, tone: "violet" }, { label: "Memory", value: "Off", hint: "No persistence", icon: LockKeyhole, tone: "amber" }, { label: "Tools", value: "Blocked", hint: "No external actions", icon: ShieldAlert, tone: "slate" }]} />
+        <ScreenPreviewBanner title="AI evidence boundary">A response-shaped card is not proof of model inference, factual accuracy, source use, memory, privacy, tool execution, or safe completion. A production assistant needs an identified model, request and response logging policy, prompt/data boundaries, moderation, rate limits, timeout and retry behavior, evaluation, and user-visible uncertainty.</ScreenPreviewBanner>
+        <section className="grid gap-6 lg:grid-cols-[0.75fr_1.25fr]">
+          <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Prompt patterns</p><div className="mt-5 space-y-2">{PROMPTS.map((item) => <button key={item} onClick={() => { setPrompt(item); setSaved(false); }} className={`w-full rounded-xl border p-4 text-left ${prompt === item ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15"}`}><div className="flex items-center gap-3"><Wand2 className="size-4 text-cyan-300" /><span className="flex-1 text-sm font-semibold">{item}</span><Badge variant="outline" className="border-amber-300/20 text-amber-200">Preview</Badge></div></button>)}</div><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 text-sm font-semibold text-amber-200"><ShieldAlert className="size-4" />No model call</div><p className="mt-2 text-xs leading-5 text-slate-400">Selecting a prompt changes the local fixture only; it does not send text to an AI provider.</p></div></CardContent></Card>
+          <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Conversation sandbox</p><h2 className="mt-2 text-2xl font-black">{prompt}</h2></div><Badge variant="outline" className="border-cyan-300/20 text-cyan-200">Synthetic</Badge></div><div className="mt-5 max-h-72 space-y-3 overflow-auto rounded-xl border border-white/10 bg-black/15 p-4">{conversation.length === 0 && <p className="py-8 text-center text-sm text-slate-500">No local turns yet. Choose a prompt or add your own draft.</p>}{conversation.map((turn, index) => <div key={`${turn.role}-${index}`} className={`rounded-xl p-3 ${turn.role === "assistant" ? "bg-cyan-300/[0.08]" : "bg-white/[0.05]"}`}><p className="text-[10px] uppercase tracking-[0.18em] text-slate-500">{turn.role === "assistant" ? "Synthetic assistant" : "Local draft"}</p><p className="mt-2 text-sm leading-6 text-slate-300">{turn.text}</p></div>)}</div><div className="mt-4 flex gap-2"><Input value={message} onChange={(event) => { setMessage(event.target.value); setSaved(false); }} placeholder="Write a local draft message" className="border-white/10 bg-black/20 text-white placeholder:text-slate-500" /><Button onClick={addPreviewTurn} variant="outline" className="border-white/15 text-white">Add</Button></div>{saved && <div className="mt-4 flex items-center gap-2 text-sm text-cyan-200"><Check className="size-4" />Local preview turn added; no message was sent or stored.</div>}</CardContent></Card>
+        </section>
+        <section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><FileText className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Sources need disclosure</h3><p className="mt-2 text-sm leading-6 text-slate-400">A response preview did not read a document, browse the web, or cite a source.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><LockKeyhole className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Privacy needs a contract</h3><p className="mt-2 text-sm leading-6 text-slate-400">Do not imply memory, training use, retention, or private-data access without a documented policy.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><WifiOff className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">No fake AI</h3><p className="mt-2 text-sm leading-6 text-slate-400">A fixture response is not model inference, factual verification, tool execution, or a safety guarantee.</p></CardContent></Card></section>
+        <ScreenFeatureGrid features={[{ title: "Prompt is not inference", description: "Keep the selected task, model call, response, and evaluation states separate.", icon: Sparkles, status: "Pattern" }, { title: "Conversation has boundaries", description: "Make memory, tools, sources, privacy, moderation, and retention explicit.", icon: LockKeyhole, status: "Required" }, { title: "No fake assistant", description: "Local fixtures are not model output, citations, actions, or reliable advice.", icon: WifiOff, status: "Guardrail" }]} />
+      </main>
     </div>
   );
 }

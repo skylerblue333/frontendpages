@@ -1,75 +1,29 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, ClipboardList, Flag, Grid2X2, LockKeyhole, RefreshCw, Search, ShieldAlert, SlidersHorizontal, Target, Users, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
+type Item = { id: string; title: string; area: string; impact: "High" | "Medium" | "Low"; effort: "High" | "Medium" | "Low"; status: string; owner: string };
+const initialItems: Item[] = [
+  { id: "item-001", title: "Validate live data connectors", area: "Platform", impact: "High", effort: "High", status: "Planned", owner: "Unassigned" },
+  { id: "item-002", title: "Improve empty-state recovery", area: "UX", impact: "High", effort: "Medium", status: "Ready", owner: "Unassigned" },
+  { id: "item-003", title: "Document evidence boundaries", area: "Trust", impact: "Medium", effort: "Low", status: "In review", owner: "Unassigned" },
+  { id: "item-004", title: "Add keyboard shortcut hints", area: "Accessibility", impact: "Medium", effort: "Low", status: "Backlog", owner: "Unassigned" },
+];
+const quadrants = ["All", "Do first", "Plan next", "Quick win", "Defer"];
+const quadrant = (item: Item) => item.impact === "High" && item.effort === "High" ? "Do first" : item.impact === "High" ? "Quick win" : item.effort === "High" ? "Plan next" : "Defer";
 export default function PriorityMatrix() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>PriorityMatrix</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">PriorityMatrix</h1>
-            <p className="text-muted-foreground mt-2">Prioritize tasks by importance</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [items, setItems] = useState(initialItems);
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("All");
+  const [selectedId, setSelectedId] = useState(initialItems[0].id);
+  const [saved, setSaved] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const visible = useMemo(() => items.filter((item) => (filter === "All" || quadrant(item) === filter) && `${item.title} ${item.area} ${item.status}`.toLowerCase().includes(query.toLowerCase())), [filter, items, query]);
+  const selected = items.find((item) => item.id === selectedId) ?? items[0];
+  const addItem = () => { const id = `item-${Date.now()}`; const next: Item = { id, title: "Untitled prioritization item", area: "Local draft", impact: "Medium", effort: "Medium", status: "Draft", owner: "Unassigned" }; setItems((current) => [next, ...current]); setSelectedId(id); setSaved(false); };
+  const reset = () => { setItems(initialItems); setQuery(""); setFilter("All"); setSelectedId(initialItems[0].id); setSaved(false); setShowSettings(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Target} eyebrow="PriorityMatrix · Planning preview" title="Make trade-offs visible before a priority becomes a promise." description="Organize local work concepts by impact and effort, filter quadrants, inspect ownership/status, and create a draft item. No shared backlog, team assignment, delivery date, sprint commitment, or completion metric is connected." badge="Decision board"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Matrix saved locally" : "Save matrix locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset matrix</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Items", value: String(items.length), hint: "Local concepts", icon: ClipboardList, tone: "cyan" }, { label: "Do first", value: String(items.filter((item) => quadrant(item) === "Do first").length), hint: "Impact/effort rule", icon: Flag, tone: "violet" }, { label: "Owners", value: "0", hint: "No team source", icon: Users, tone: "amber" }, { label: "Commitments", value: "Off", hint: "No sprint source", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Priority evidence boundary"><strong>This is a local prioritization worksheet, not a team backlog.</strong> Impact, effort, quadrant, status, and owner labels are browser concepts. No team member, due date, sprint, dependency, estimate, delivery commitment, completion rate, or business priority is verified or synchronized.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1.18fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Decision controls</p><h2 className="mt-2 text-2xl font-black">Filter the matrix</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">{visible.length} visible</Badge></div><div className="relative mt-5"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search planning items…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="mt-4 flex flex-wrap gap-2">{quadrants.map((item) => <button key={item} onClick={() => setFilter(item)} className={`rounded-lg border px-3 py-2 text-xs ${filter === item ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><Button onClick={addItem} className="mt-5 w-full bg-cyan-300 text-slate-950 hover:bg-cyan-200"><ClipboardList className="mr-2 size-4" />Add local item</Button>{showSettings && <div className="mt-5 rounded-xl border border-violet-300/20 bg-violet-300/[0.06] p-4"><p className="text-sm font-semibold text-violet-100">Matrix rule</p><p className="mt-2 text-sm leading-6 text-slate-400">High impact/high effort is classified as Do first; high impact/low effort as Quick win; low impact/high effort as Plan next; all other combinations defer. This is a local heuristic, not an executive decision.</p></div>}<Button onClick={() => setShowSettings((value) => !value)} variant="outline" className="mt-3 w-full border-white/10 text-slate-300"><SlidersHorizontal className="mr-2 size-4" />{showSettings ? "Hide matrix rule" : "View matrix rule"}</Button></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Priority board</p><h2 className="mt-2 text-2xl font-black">Local work concepts</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">No sync</Badge></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{visible.map((item) => <button key={item.id} onClick={() => setSelectedId(item.id)} className={`rounded-xl border p-4 text-left ${selected.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start gap-3"><Grid2X2 className="mt-1 size-5 text-cyan-200" /><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{item.title}</p><Badge variant="outline" className="border-white/10 text-slate-400">{quadrant(item)}</Badge></div><p className="mt-2 text-sm text-slate-500">{item.area} · {item.status}</p><div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-400"><span>Impact: {item.impact}</span><span>·</span><span>Effort: {item.effort}</span></div></div></div></button>)}</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Selected item</p><h2 className="mt-2 text-2xl font-black">{selected.title}</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Quadrant", value: quadrant(selected) }, { label: "Area", value: selected.area }, { label: "Impact", value: selected.impact }, { label: "Effort", value: selected.effort }, { label: "Status", value: selected.status }, { label: "Owner", value: selected.owner }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Planning gates</p><h2 className="mt-2 text-2xl font-black">What a real priority must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Authenticated workspace and role-based editing", "Evidence for impact, effort, risk, dependency, and urgency", "Owner, due date, status, acceptance criteria, and audit trail", "Team discussion, conflict handling, approval, and change history", "Actual delivery instrumentation, progress, completion, and outcome review", "Offline/error handling for shared-backlog sync"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldAlert className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Planning surface preserved", description: "Search, quadrant filters, local item creation, impact/effort labels, selected detail, matrix rule, save, and reset remain interactive.", icon: Grid2X2, status: "Local board" }, { title: "No false commitments", description: "Owners, dates, sprints, dependencies, delivery, completion, and team priority are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Heuristic is transparent", description: "The quadrant mapping is visible and labeled as a local heuristic rather than an executive or product decision.", icon: Target, status: "Evidence-aware" }]} /></main></div>;
 }

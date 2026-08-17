@@ -1,89 +1,27 @@
-import { GitCompare } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { BarChart3, Check, GitCompare, LockKeyhole, RefreshCw, Search, ShieldAlert, ShieldCheck, SlidersHorizontal, TriangleAlert, TrendingUp, Wallet, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
+type Metric = "Overview" | "Allocation" | "Performance" | "Risk";
+type Portfolio = { id: string; name: string; thesis: string; holdings: string; source: string; state: string };
+const portfolios: Portfolio[] = [
+  { id: "portfolio-a", name: "Core concept", thesis: "A diversified allocation hypothesis for review.", holdings: "Unverified", source: "No holdings source", state: "Draft" },
+  { id: "portfolio-b", name: "Exploration concept", thesis: "A higher-variance allocation hypothesis for comparison.", holdings: "Unverified", source: "No market source", state: "Draft" },
+];
+const checks = ["Same timestamp, currency, and price source", "Verified holdings, quantities, cost basis, and fees", "Comparable allocation and concentration methodology", "Historical period, benchmark, risk, and uncertainty definitions", "No recommendation, suitability, or expected-return claim"];
 export default function PortfolioComparison() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={GitCompare} title="Portfolio Comparison" subtitle="Fully functional portfolio comparison page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Portfolio Comparison</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <GitCompare className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <GitCompare className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <GitCompare className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
+  const [metric, setMetric] = useState<Metric>("Overview");
+  const [period, setPeriod] = useState("1M");
+  const [scenario, setScenario] = useState("Baseline");
+  const [selected, setSelected] = useState(portfolios[0]);
+  const [query, setQuery] = useState("");
+  const [checks, setChecks] = useState<string[]>([]);
+  const [saved, setSaved] = useState(false);
+  const visible = useMemo(() => portfolios.filter((item) => !query || `${item.name} ${item.thesis}`.toLowerCase().includes(query.toLowerCase())), [query]);
+  const toggle = (item: string) => setChecks((items) => items.includes(item) ? items.filter((value) => value !== item) : [...items, item]);
+  const reset = () => { setMetric("Overview"); setPeriod("1M"); setScenario("Baseline"); setSelected(portfolios[0]); setQuery(""); setChecks([]); setSaved(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={GitCompare} eyebrow="PortfolioComparison · Financial preview" title="Compare assumptions without declaring a winner." description="Explore two local portfolio concepts, metric views, periods, scenarios, and evidence requirements. No holdings, prices, returns, risk, benchmark, suitability, investor profile, or recommendation source is connected." badge="Comparison preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} disabled={visible.length < 2} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Comparison saved locally" : "Save comparison view"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset comparison</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Portfolios", value: String(portfolios.length), hint: "Local concepts", icon: Wallet, tone: "cyan" }, { label: "Metric", value: metric, hint: "Local view", icon: BarChart3, tone: "violet" }, { label: "Period", value: period, hint: "Local selection", icon: TrendingUp, tone: "amber" }, { label: "Result", value: "Unset", hint: "No live comparison", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Comparison evidence boundary"><strong>This is not a performance ranking or investment recommendation.</strong> Portfolio names, theses, metric labels, periods, scenarios, and selected detail are local comparison concepts. They do not represent holdings, value, return, volatility, drawdown, correlation, benchmark results, suitability, or a recommendation to act. No financial service is connected.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search portfolio concepts…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Comparison metric</p><div className="mt-3 grid grid-cols-2 gap-2">{(["Overview", "Allocation", "Performance", "Risk"] as Metric[]).map((item) => <button key={item} onClick={() => setMetric(item)} className={`rounded-xl border p-3 text-left text-sm ${metric === item ? "border-cyan-300/40 bg-cyan-300/[0.06] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Review period</p><div className="mt-3 flex gap-2">{["1W", "1M", "3M", "1Y"].map((item) => <button key={item} onClick={() => setPeriod(item)} className={`rounded-lg border px-3 py-2 text-xs ${period === item ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Scenario</p><div className="mt-3 flex gap-2">{["Baseline", "Stress", "Recovery"].map((item) => <button key={item} onClick={() => setScenario(item)} className={`rounded-lg border px-3 py-2 text-xs ${scenario === item ? "border-violet-300/40 bg-violet-300/10 text-violet-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><TriangleAlert className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-300">A scenario label is not a forecast. It has no prices, distributions, correlations, probabilities, or investor assumptions behind it.</p></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Portfolio concepts</p><h2 className="mt-2 text-2xl font-black">Compare locally</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">{visible.length} visible</Badge></div><div className="mt-5 grid gap-3 md:grid-cols-2">{visible.map((item) => <button key={item.id} onClick={() => setSelected(item)} className={`rounded-xl border p-4 text-left ${selected.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-center justify-between gap-3"><p className="font-semibold">{item.name}</p><Badge variant="outline" className="border-white/10 text-amber-200">{item.state}</Badge></div><p className="mt-3 text-sm leading-6 text-slate-400">{item.thesis}</p><p className="mt-3 text-xs text-slate-500">Holdings: {item.holdings} · Source: {item.source}</p></button>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Selected metric", value: metric }, { label: "Period", value: period }, { label: "Scenario", value: scenario }, { label: "Comparison output", value: "Unavailable" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Selected comparison</p><h2 className="mt-2 text-2xl font-black">{selected.name}</h2><p className="mt-3 text-sm leading-6 text-slate-400">{selected.thesis}</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Allocation", value: "Unavailable" }, { label: "Return", value: "Unavailable" }, { label: "Risk", value: "Unmodeled" }, { label: "Benchmark", value: "Unset" }, { label: "Data freshness", value: "Unavailable" }, { label: "Suitability", value: "Not assessed" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake winner</h2><p className="mt-3 text-sm leading-6 text-slate-400">Changing metrics, periods, scenarios, search, or selection changes browser state only. It does not rank portfolios, calculate returns, assess risk, or recommend an investment.</p></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Evidence checklist</p><h2 className="mt-2 text-2xl font-black">Comparison must prove</h2><div className="mt-5 space-y-2">{checks.map((item) => <button key={item} onClick={() => toggle(item)} className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left ${checks.includes(item) ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><span className="flex size-5 items-center justify-center rounded border border-white/20">{checks.includes(item) ? "✓" : ""}</span><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></button>)}</div><Button disabled={checks.length === 0} className="mt-5 bg-cyan-300 text-slate-950 hover:bg-cyan-200"><ShieldCheck className="mr-2 size-4" />{checks.length}/5 local checks selected</Button></CardContent></Card><ScreenFeatureGrid features={[{ title: "Comparison surface preserved", description: "Two portfolios, metric tabs, periods, scenarios, selection, evidence checks, and output states remain interactive.", icon: GitCompare, status: "Local worksheet" }, { title: "Live data is off", description: "Holdings, prices, return, risk, benchmark, correlation, and suitability remain unavailable.", icon: ShieldAlert, status: "Guardrail" }, { title: "No recommendation", description: "No winner, forecast, investor profile, or financial action is fabricated.", icon: WifiOff, status: "Unavailable" }]} /></section></main></div>;
 }

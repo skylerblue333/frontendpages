@@ -1,210 +1,23 @@
-// @ts-nocheck
-import { useEffect, useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Bell, TrendingUp, Heart, ShoppingCart, Target, Vote, Zap, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Bell, Check, FileCheck2, Heart, LockKeyhole, RefreshCw, ShieldCheck, ShoppingCart, Target, TrendingUp, Vote, WifiOff, Zap } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const ITEMS = [{ id: "t1", tab: "Trading", kind: "Trading concept", title: "Market signal worksheet", detail: "A synthetic prompt to verify source, network, and risk before discussing a trade.", icon: TrendingUp, tone: "amber" }, { id: "m1", tab: "Market", kind: "Marketplace concept", title: "Listing review checkpoint", detail: "A local marketplace card with no item, seller, price, or inventory source.", icon: ShoppingCart, tone: "cyan" }, { id: "s1", tab: "Social", kind: "Social concept", title: "Community interaction", detail: "A synthetic social card with no person, profile, follower, or message identity.", icon: Heart, tone: "rose" }, { id: "g1", tab: "Activity", kind: "Governance concept", title: "Decision review window", detail: "A local governance prompt with no vote, quorum, proposal, or outcome record.", icon: Vote, tone: "violet" }, { id: "a1", tab: "Activity", kind: "Activity concept", title: "Platform checklist", detail: "A synthetic activity card with no live presence, uptime, or event stream.", icon: Zap, tone: "slate" }];
+const TABS = ["All", "Trading", "Market", "Social", "Activity"];
 
 export default function NotificationsHub() {
-  const [selectedTab, setSelectedTab] = useState("all");
-  const { data: notifications } = trpc.notifications.getNotifications.useQuery({ limit: 50 });
-  const { data: trading } = trpc.notifications.getTradingAlerts.useQuery({ symbol: undefined });
-  const { data: marketplace } = trpc.notifications.getMarketplaceAlerts.useQuery();
-  const { data: social } = trpc.notifications.getSocialAlerts.useQuery();
-
-  const getIconForType = (type: string) => {
-    switch (type) {
-      case "trading_signal": return <TrendingUp className="w-5 h-5 text-yellow-400" />;
-      case "new_follower": return <Heart className="w-5 h-5 text-pink-400" />;
-      case "marketplace": return <ShoppingCart className="w-5 h-5 text-cyan-400" />;
-      case "charity": return <Target className="w-5 h-5 text-purple-400" />;
-      case "governance": return <Vote className="w-5 h-5 text-purple-400" />;
-      default: return <Bell className="w-5 h-5 text-blue-400" />;
-    }
-  };
-
-  const getGradientForType = (type: string) => {
-    switch (type) {
-      case "trading_signal": return "from-yellow-900/20 to-yellow-900/5 border-yellow-500/20";
-      case "new_follower": return "from-pink-900/20 to-pink-900/5 border-pink-500/20";
-      case "marketplace": return "from-cyan-900/20 to-cyan-900/5 border-cyan-500/20";
-      case "charity": return "from-green-900/20 to-green-900/5 border-purple-500/20";
-      case "governance": return "from-purple-900/20 to-purple-900/5 border-purple-500/20";
-      default: return "from-blue-900/20 to-blue-900/5 border-blue-500/20";
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-lg">
-              <Bell className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold text-white">Notifications Hub</h1>
-              <p className="text-slate-400">Stay updated with real-time alerts</p>
-            </div>
-          </div>
-          <Badge className="bg-red-500/20 text-red-300 border-red-500/30">
-            {notifications?.unreadCount || 0} Unread
-          </Badge>
-        </div>
-
-        {/* Tabs */}
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="mb-6">
-          <TabsList className="grid w-full grid-cols-5 bg-slate-800/50 border border-slate-700/50">
-            <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="trading">Trading</TabsTrigger>
-            <TabsTrigger value="marketplace">Market</TabsTrigger>
-            <TabsTrigger value="social">Social</TabsTrigger>
-            <TabsTrigger value="activity">Activity</TabsTrigger>
-          </TabsList>
-
-          {/* All Notifications */}
-          <TabsContent value="all" className="space-y-4">
-            {notifications?.notifications.map((notif: any) => (
-              <div
-                key={notif.id}
-                className={`group relative overflow-hidden rounded-lg border bg-gradient-to-r ${getGradientForType(notif.type)} p-4 transition-all hover:border-opacity-100 hover:shadow-lg hover:shadow-cyan-500/20 cursor-pointer`}
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="relative flex items-start gap-4">
-                  <div className="mt-1">{getIconForType(notif.type)}</div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-1">
-                      <h3 className="font-semibold text-white">{notif.title}</h3>
-                      {!notif.read && <div className="w-2 h-2 bg-cyan-400 rounded-full" />}
-                    </div>
-                    <p className="text-sm text-slate-300">{notif.message}</p>
-                    <p className="text-xs text-slate-500 mt-2">
-                      {new Date(notif.timestamp).toLocaleTimeString()}
-                    </p>
-                  </div>
-                  <Button variant="ghost" size="sm" className="text-slate-400 hover:text-slate-200">
-                    <X className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </TabsContent>
-
-          {/* Trading Alerts */}
-          <TabsContent value="trading" className="space-y-4">
-            {trading?.alerts.map((alert: any) => (
-              <div
-                key={alert.id}
-                className="group relative overflow-hidden rounded-lg border from-yellow-900/20 to-yellow-900/5 border-yellow-500/20 bg-gradient-to-r p-4 transition-all hover:shadow-lg hover:shadow-yellow-500/20"
-              >
-                <div className="relative flex items-start gap-4">
-                  <div className="p-2 bg-yellow-500/20 rounded-lg">
-                    <TrendingUp className="w-5 h-5 text-yellow-400" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-semibold text-white">{alert.symbol}</h3>
-                      <Badge className={alert.signal === "BUY" ? "bg-purple-600/20 text-purple-400" : "bg-blue-500/20 text-blue-300"}>
-                        {alert.signal}
-                      </Badge>
-                      <Badge className="bg-slate-700 text-slate-300">
-                        {Math.round(alert.confidence * 100)}% confidence
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-slate-300">
-                      Price: ${alert.price} → Target: ${alert.target || "N/A"}
-                    </p>
-                  </div>
-                  <Button className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600">
-                    Trade
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </TabsContent>
-
-          {/* Marketplace Alerts */}
-          <TabsContent value="marketplace" className="space-y-4">
-            {marketplace?.alerts.map((alert: any) => (
-              <div
-                key={alert.id}
-                className="group relative overflow-hidden rounded-lg border from-cyan-900/20 to-cyan-900/5 border-cyan-500/20 bg-gradient-to-r p-4 transition-all hover:shadow-lg hover:shadow-cyan-500/20"
-              >
-                <div className="relative flex items-start gap-4">
-                  <div className="p-2 bg-cyan-500/20 rounded-lg">
-                    <ShoppingCart className="w-5 h-5 text-cyan-400" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-white mb-1">{alert.message}</h3>
-                    <p className="text-sm text-slate-300">{alert.seller || alert.item}</p>
-                  </div>
-                  <Button className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
-                    View
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </TabsContent>
-
-          {/* Social Alerts */}
-          <TabsContent value="social" className="space-y-4">
-            {social?.alerts.map((alert: any) => (
-              <div
-                key={alert.id}
-                className="group relative overflow-hidden rounded-lg border from-pink-900/20 to-pink-900/5 border-pink-500/20 bg-gradient-to-r p-4 transition-all hover:shadow-lg hover:shadow-pink-500/20"
-              >
-                <div className="relative flex items-start gap-4">
-                  <div className="p-2 bg-pink-500/20 rounded-lg">
-                    <Heart className="w-5 h-5 text-pink-400" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-white mb-1">{alert.user}</h3>
-                    <p className="text-sm text-slate-300">{alert.message}</p>
-                  </div>
-                  <Button className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600">
-                    View Profile
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </TabsContent>
-
-          {/* Activity Feed */}
-          <TabsContent value="activity" className="space-y-4">
-            <Card className="bg-slate-800/50 border-slate-700/50 p-6">
-              <div className="text-center text-slate-400">
-                <Zap className="w-12 h-12 mx-auto mb-3 text-slate-500" />
-                <p>Real-time activity feed coming soon</p>
-              </div>
-            </Card>
-          </TabsContent>
-        </Tabs>
-
-        {/* Stats */}
-        <div className="grid grid-cols-4 gap-4 mt-8">
-          <Card className="bg-gradient-to-br from-cyan-900/20 to-cyan-900/5 border-cyan-500/20 p-4">
-            <div className="text-sm text-slate-400 mb-2">Trading Alerts</div>
-            <div className="text-2xl font-bold text-cyan-400">{trading?.alerts.length || 0}</div>
-          </Card>
-          <Card className="bg-gradient-to-br from-yellow-900/20 to-yellow-900/5 border-yellow-500/20 p-4">
-            <div className="text-sm text-slate-400 mb-2">Marketplace</div>
-            <div className="text-2xl font-bold text-yellow-400">{marketplace?.alerts.length || 0}</div>
-          </Card>
-          <Card className="bg-gradient-to-br from-pink-900/20 to-pink-900/5 border-pink-500/20 p-4">
-            <div className="text-sm text-slate-400 mb-2">Social</div>
-            <div className="text-2xl font-bold text-pink-400">{social?.alerts.length || 0}</div>
-          </Card>
-          <Card className="bg-gradient-to-br from-purple-900/20 to-purple-900/5 border-purple-500/20 p-4">
-            <div className="text-sm text-slate-400 mb-2">Total</div>
-            <div className="text-2xl font-bold text-purple-400">
-              {(trading?.alerts.length || 0) + (marketplace?.alerts.length || 0) + (social?.alerts.length || 0)}
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
+  const [tab, setTab] = useState("All");
+  const [selectedId, setSelectedId] = useState(ITEMS[0].id);
+  const [read, setRead] = useState<string[]>([]);
+  const [dismissed, setDismissed] = useState<string[]>([]);
+  const [saved, setSaved] = useState(false);
+  const visible = useMemo(() => ITEMS.filter((item) => (tab === "All" || item.tab === tab) && !dismissed.includes(item.id)), [dismissed, tab]);
+  const selected = ITEMS.find((item) => item.id === selectedId) ?? ITEMS[0];
+  const SelectedIcon = selected.icon;
+  const reset = () => { setTab("All"); setSelectedId(ITEMS[0].id); setRead([]); setDismissed([]); setSaved(false); };
+  const markRead = (id: string) => setRead((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Bell} eyebrow="NotificationsHub · Cross-domain preview" title="Connect the surfaces without fabricating the signal." description="Review synthetic trading, marketplace, social, governance, and activity concepts with local filters and read state. No live prices, confidence, users, listings, votes, activity stream, delivery, or backend response is claimed." badge="Hub preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Hub state saved locally" : "Save hub state locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset hub</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Cards", value: String(visible.length), hint: "Synthetic domains", icon: Bell }, { label: "Unread", value: String(ITEMS.filter((item) => !read.includes(item.id) && !dismissed.includes(item.id)).length), hint: "Local state", icon: Zap, tone: "violet" }, { label: "Live data", value: "Off", hint: "No tRPC source", icon: WifiOff, tone: "slate" }, { label: "Actions", value: "Blocked", hint: "No trade/view/vote", icon: LockKeyhole, tone: "amber" }]} /><ScreenPreviewBanner title="NotificationsHub evidence boundary"><strong>Cross-domain cards, tabs, local read/dismiss state, and safety labels are notification fixtures—not live market alerts, prices, confidence, users, listings, sellers, social identities, votes, activity, delivery, or backend records.</strong> Production cross-domain notifications require source contracts, identity/consent, live-data provenance, authentication, authorization, provider delivery, retries, rate limits, privacy, auditability, support, and incident response.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Synthetic feed</p><h2 className="mt-2 text-3xl font-black">Domain review</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">Sources unavailable</Badge></div><div className="mt-4 flex gap-2 overflow-x-auto">{TABS.map((item) => <button key={item} onClick={() => setTab(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${tab === item ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-5 space-y-3">{visible.map((item) => { const Icon = item.icon; return <button key={item.id} onClick={() => { setSelectedId(item.id); markRead(item.id); }} className={`w-full rounded-2xl border p-4 text-left ${selectedId === item.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/10"}`}><div className="flex items-start gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-200"><Icon className="size-4" /></div><div className="flex-1"><div className="flex items-center justify-between gap-2"><p className="font-black">{item.title}</p><Badge variant="outline" className="border-white/10 text-[10px] text-slate-400">{item.kind}</Badge></div><p className="mt-2 text-sm text-slate-400">{item.detail}</p><p className="mt-2 text-xs text-slate-500">{read.includes(item.id) ? "Read locally" : "Unread locally"}</p></div></div></button>; })}{visible.length === 0 && <p className="py-8 text-center text-slate-500">No synthetic cards match.</p>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><div className="flex size-11 items-center justify-center rounded-2xl bg-violet-300/10 text-violet-200"><SelectedIcon className="size-5" /></div><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected concept</p><h2 className="mt-2 text-3xl font-black">{selected.title}</h2></div></div><p className="mt-4 text-slate-400">{selected.detail}</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Domain", value: selected.tab }, { label: "Source", value: "Synthetic" }, { label: "Price/data", value: "Unavailable" }, { label: "Identity", value: "Not sourced" }, { label: "Confidence", value: "Not calculated" }, { label: "Action", value: "Blocked" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 flex flex-wrap gap-2"><Button onClick={() => markRead(selected.id)} className="bg-violet-500 text-white hover:bg-violet-400"><Check className="mr-2 size-4" />{read.includes(selected.id) ? "Mark unread locally" : "Mark read locally"}</Button><Button onClick={() => setDismissed((current) => [...current, selected.id])} variant="outline" className="border-white/10 text-white">Dismiss locally</Button><Button disabled variant="outline" className="border-white/10 text-white/40">Action unavailable</Button></div><div className="mt-5 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />Local selection does not trade, open a listing, view a profile, vote, or send a notification.</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-2"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Cross-domain readiness</p><h2 className="mt-2 text-2xl font-black">Required before hub claims</h2><div className="mt-5 space-y-3">{["Source contracts, timestamps, identity, freshness, and provenance per domain", "Authentication, authorization, consent, privacy, and sensitive-data policy", "No-fake finance gates for prices, signals, orders, wallets, and transactions", "Delivery lifecycle, retries, rate limits, quiet hours, and user controls", "Auditability, accessibility, support, incident response, and appeals"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><FileCheck2 className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake cross-domain signal</h2><p className="mt-3 text-sm leading-6 text-slate-400">This hub changes local state only. It does not query markets, identify users, read listings, count votes, report activity, send alerts, or persist backend data.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A card is not a signal", description: "Synthetic domain cards preserve navigation UX without price, person, vote, listing, or activity claims.", icon: Bell, status: "Guardrail" }, { title: "Finance needs a higher bar", description: "Prices, confidence, actions, wallets, orders, privacy, and authorization need evidence.", icon: ShieldCheck, status: "Required" }, { title: "No fake action", description: "Local read and dismiss actions make no tRPC, market, social, marketplace, or delivery request.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

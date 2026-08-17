@@ -1,75 +1,18 @@
 import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Bookmark, Check, Clapperboard, FileWarning, Film, Heart, Info, LockKeyhole, Play, RefreshCw, ShieldCheck, Star, Users, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const CAST = [{ name: "Mara Vale", role: "Signal cartographer", status: "Synthetic role" }, { name: "Jonah Reed", role: "Archive keeper", status: "Synthetic role" }, { name: "The Blue Relay", role: "Story device", status: "Fictional concept" }];
+const DETAILS = [{ label: "Genre", value: "Sci-fi" }, { label: "Format", value: "Feature concept" }, { label: "Runtime", value: "Not assigned" }, { label: "Age rating", value: "Not assigned" }, { label: "Release", value: "Not scheduled" }, { label: "Availability", value: "Not sourced" }];
 
 export default function MovieDetail() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>MovieDetail</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">MovieDetail</h1>
-            <p className="text-muted-foreground mt-2">Movie info</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [watchlisted, setWatchlisted] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [note, setNote] = useState("");
+  const [saved, setSaved] = useState(false);
+  const reset = () => { setWatchlisted(false); setLiked(false); setNote(""); setSaved(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Clapperboard} eyebrow="MovieDetail · Title workspace" title="Explore the story before claiming the screen." description="Review a synthetic title synopsis, local metadata, fictional cast-role concepts, and personal planning controls. No real film, cast, rating, runtime, release, licensing, regional availability, playback, or subscription entitlement is asserted." badge="Title detail preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Notes saved locally" : "Save title notes"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset title</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Title", value: "Concept", hint: "Synthetic detail", icon: Film }, { label: "Rating", value: "Unset", hint: "No source", icon: Star, tone: "amber" }, { label: "Playback", value: "Off", hint: "No media source", icon: Play, tone: "violet" }, { label: "Watchlist", value: watchlisted ? "Saved" : "Local", hint: "No account sync", icon: Bookmark, tone: "slate" }]} /><ScreenPreviewBanner title="MovieDetail evidence boundary"><strong>Synopsis, metadata, cast-role concepts, watchlist state, and personal notes are synthetic title-workspace fixtures—not a real movie record, cast listing, rating, runtime, release schedule, content license, regional availability, playback result, subscription entitlement, or recommendation.</strong> Production title detail requires trusted metadata, rights and territory provenance, age ratings, media delivery, privacy, and support.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="overflow-hidden border-white/10 bg-white/[0.04]"><CardContent className="p-0"><div className="min-h-[320px] bg-gradient-to-br from-cyan-300/15 via-violet-400/15 to-rose-300/15 p-6"><div className="flex items-start justify-between"><Badge variant="outline" className="border-white/10 bg-black/20 text-slate-300">Poster placeholder</Badge><Badge variant="outline" className="border-cyan-300/20 text-cyan-200">Sci-fi · concept</Badge></div><div className="flex min-h-[250px] items-end"><div><p className="text-xs uppercase tracking-[0.24em] text-cyan-200">Atmospheric feature concept</p><h2 className="mt-3 text-4xl font-black tracking-tight">Signal Beyond the Blue</h2><p className="mt-3 max-w-xl text-slate-300">A cartographer of forgotten signals follows a blue transmission across a city that no longer remembers how to listen.</p></div></div></div><div className="flex flex-wrap gap-2 border-t border-white/10 p-5"><Button onClick={() => setWatchlisted((value) => !value)} className="bg-violet-500 text-white hover:bg-violet-400"><Bookmark className="mr-2 size-4" />{watchlisted ? "Remove from watchlist" : "Save to watchlist"}</Button><Button onClick={() => setLiked((value) => !value)} variant="outline" className="border-white/10 text-white hover:bg-white/10"><Heart className={`mr-2 size-4 ${liked ? "fill-rose-300 text-rose-300" : ""}`} />{liked ? "Saved as a favorite" : "Mark favorite"}</Button><Button disabled variant="outline" className="border-white/10 text-white/40"><Play className="mr-2 size-4" />Playback unavailable</Button></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Title metadata</p><h2 className="mt-2 text-3xl font-black">Signal Beyond the Blue</h2><p className="mt-3 text-slate-400">Metadata is intentionally incomplete until a trusted catalog source and rights owner are connected.</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{DETAILS.map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-200">No rating source</p><p className="mt-2 text-sm leading-6 text-slate-400">This detail page does not infer quality, age suitability, audience response, or critic sentiment.</p></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Story notes</p><h2 className="mt-2 text-2xl font-black">Keep your own context</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">Local only</Badge></div><textarea value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} placeholder="Write a personal viewing or research note…" className="mt-5 min-h-32 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-slate-500" /><div className="mt-4 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />Notes demonstrate local interaction and do not sync to a profile or imply watch history.</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Users className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Cast concepts</p><h2 className="mt-2 text-2xl font-black">Story roles, not credits</h2></div></div><div className="mt-5 space-y-3">{CAST.map((item) => <div key={item.name} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><div className="flex size-10 items-center justify-center rounded-full bg-violet-300/10 text-violet-200"><Users className="size-4" /></div><div className="flex-1"><p className="font-semibold">{item.name}</p><p className="text-xs text-slate-500">{item.role}</p></div><span className="text-[10px] text-amber-200">{item.status}</span></div>)}</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Availability readiness</p><h2 className="mt-2 text-2xl font-black">Required before playback</h2><div className="mt-5 space-y-3">{["Trusted title and cast metadata", "Rights, territory, release window, and age rating", "Media delivery, DRM, captions, and device support", "Subscription entitlement and parental controls", "Playback analytics, privacy, support, and takedown flow"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><FileWarning className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake title record</h2><p className="mt-3 text-sm leading-6 text-slate-400">The page does not claim real cast credits, a verified synopsis, a rating, a runtime, a release, a license, or streamability.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A detail page is not a rights record", description: "Synthetic metadata preserves title UX without licensing, territory, or release claims.", icon: FileWarning, status: "Guardrail" }, { title: "Personal controls stay local", description: "Watchlist, favorite, and notes demonstrate interaction without account sync or viewing analytics.", icon: Bookmark, status: "Local" }, { title: "No fake playback", description: "Playback remains unavailable until media delivery, rights, ratings, and support are verified.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

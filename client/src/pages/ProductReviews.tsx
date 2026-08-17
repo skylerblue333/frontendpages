@@ -1,75 +1,22 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, FileCheck2, Flag, LockKeyhole, MessageSquareText, RefreshCw, Search, ShieldAlert, Star, UserRoundCheck, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+type Review = { id: string; product: string; title: string; body: string; status: string; rating: string; authenticity: string };
+const initial: Review[] = [{ id: "rev-001", product: "HopeAI workspace", title: "Evidence question", body: "What sources and limitations should a user see before relying on this capability?", status: "Draft", rating: "Not rated", authenticity: "Not verified" }, { id: "rev-002", product: "SkySchool learning", title: "Learning flow note", body: "Which practice state should remain available when progress is not synchronized?", status: "Review required", rating: "Not rated", authenticity: "Not verified" }, { id: "rev-003", product: "Crypto Hub", title: "Custody question", body: "What evidence is required before a wallet or transaction claim can be shown?", status: "High-risk review", rating: "Not rated", authenticity: "Not verified" }];
+const filters = ["All", "Draft", "Review required", "High-risk review"];
 export default function ProductReviews() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>ProductReviews</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">ProductReviews</h1>
-            <p className="text-muted-foreground mt-2">Detailed review management and moderation</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [reviews, setReviews] = useState(initial);
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("All");
+  const [selectedId, setSelectedId] = useState(initial[0].id);
+  const [saved, setSaved] = useState(false);
+  const [showGates, setShowGates] = useState(false);
+  const visible = useMemo(() => reviews.filter((item) => (filter === "All" || item.status === filter) && `${item.product} ${item.title} ${item.body}`.toLowerCase().includes(query.toLowerCase())), [filter, query, reviews]);
+  const selected = reviews.find((item) => item.id === selectedId) ?? reviews[0];
+  const addReview = () => { const id = `rev-${Date.now()}`; const next: Review = { id, product: "Unselected product", title: "Untitled local review", body: "Draft review question", status: "Draft", rating: "Not rated", authenticity: "Not verified" }; setReviews((items) => [next, ...items]); setSelectedId(id); setSaved(false); };
+  const reset = () => { setReviews(initial); setQuery(""); setFilter("All"); setSelectedId(initial[0].id); setSaved(false); setShowGates(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={MessageSquareText} eyebrow="ProductReviews · Review-quality preview" title="Make feedback useful without manufacturing trust signals." description="Search local review drafts, filter moderation states, inspect rating and authenticity boundaries, and add a question. No live reviewer, rating, sentiment, review count, moderation decision, product quality, or public feedback is asserted or recorded." badge="Review workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Drafts saved locally" : "Save drafts locally"}</Button><Button onClick={addReview} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><MessageSquareText className="mr-2 size-4" />New review draft</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Drafts", value: String(reviews.length), hint: "Local review concepts", icon: MessageSquareText, tone: "cyan" }, { label: "Ratings", value: "Off", hint: "No rating source", icon: Star, tone: "violet" }, { label: "Authenticity", value: "Unverified", hint: "No identity source", icon: UserRoundCheck, tone: "amber" }, { label: "Moderation", value: "Blocked", hint: "No review service", icon: ShieldAlert, tone: "slate" }]} /><ScreenPreviewBanner title="Review evidence boundary"><strong>This is a local feedback-quality worksheet, not a review platform.</strong> Drafts, product names, statuses, ratings, authenticity labels, and moderation states are browser concepts. No reviewer identity, review count, sentiment, product rating, moderation decision, verified purchase, or public feedback is claimed or recorded.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1.18fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Review registry</p><h2 className="mt-2 text-2xl font-black">Find a local review</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">{visible.length} visible</Badge></div><div className="relative mt-5"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search reviews…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="mt-4 flex flex-wrap gap-2">{filters.map((item) => <button key={item} onClick={() => setFilter(item)} className={`rounded-lg border px-3 py-2 text-xs ${filter === item ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-4 space-y-3">{visible.map((item) => <button key={item.id} onClick={() => setSelectedId(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start gap-3"><MessageSquareText className="mt-1 size-5 text-cyan-200" /><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{item.title}</p><Badge variant="outline" className="border-white/10 text-slate-400">{item.status}</Badge></div><p className="mt-2 text-sm text-slate-500">{item.product} · {item.rating} · {item.authenticity}</p><p className="mt-2 line-clamp-2 text-xs leading-5 text-slate-500">{item.body}</p></div></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Review detail</p><h2 className="mt-2 text-2xl font-black">{selected.title}</h2><p className="mt-2 text-sm text-slate-500">{selected.product} · local draft</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><div className="mt-6 rounded-xl border border-white/10 p-5"><p className="text-sm leading-7 text-slate-300">{selected.body}</p></div><div className="mt-5 grid gap-3 sm:grid-cols-3">{[{ label: "Rating", value: selected.rating }, { label: "Authenticity", value: selected.authenticity }, { label: "Visibility", value: "Private draft" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-6 rounded-2xl border border-amber-300/25 bg-amber-300/[0.06] p-5"><div className="flex items-start gap-3"><LockKeyhole className="mt-0.5 size-5 shrink-0 text-amber-200" /><div><p className="font-semibold text-amber-100">Publication is blocked</p><p className="mt-2 text-sm leading-6 text-slate-400">No identity, verified-purchase source, moderation queue, abuse controls, rating policy, public review endpoint, or support workflow is connected.</p></div></div></div></CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Review gates</p><h2 className="mt-2 text-2xl font-black">What public feedback must prove</h2></div><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/10 text-slate-300">{showGates ? <X className="size-4" /> : <FileCheck2 className="mr-2 size-4" />} {showGates ? "Close" : "Review evidence"}</Button></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Authenticated reviewer identity and consent", "Verified-purchase or product-use context when claimed", "Rating scale, aggregation, sentiment, and sample-size method", "Moderation, abuse, privacy, appeals, and deletion workflow", "Public visibility, audit, support, and product-response ownership"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><FileCheck2 className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div>{showGates && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.05] p-4 text-sm leading-6 text-slate-400">The checklist is a planning surface. No review is submitted, moderated, verified, scored, or published from this route.</div>}</CardContent></Card><ScreenFeatureGrid features={[{ title: "Review surface preserved", description: "Draft search, status filters, local creation, selected detail, rating/authenticity labels, evidence gates, save/reset, and moderation boundary remain interactive.", icon: MessageSquareText, status: "Local workspace" }, { title: "No trust-signal theater", description: "Review counts, ratings, sentiment, reviewer identity, verified purchase, moderation, and product quality are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Moderation before publication", description: "Public feedback requires identity, policy, abuse handling, privacy, appeals, deletion, aggregation, audit, and support workflows.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
 }

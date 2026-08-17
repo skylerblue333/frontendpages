@@ -1,84 +1,13 @@
-import { Link } from "lucide-react";
+import { useMemo, useState } from "react";
+import { AlertTriangle, ArrowDown, ArrowRight, Check, CheckCircle2, ChevronRight, CircleDashed, ClipboardCheck, ExternalLink, FileCheck2, Link2, LockKeyhole, Network, RefreshCw, ShieldCheck, Timer, WalletCards, WifiOff } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
 
-export default function BridgeProtocol() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={Link} title="Bridge Protocol" subtitle="Advanced bridge protocol with cutting-edge technology" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20">
-          <div className="space-y-6">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Bridge Protocol</h2>
-            
-            {/* Advanced Features */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
-                <div className="space-y-3">
-                  <Link className="w-8 h-8 text-primary" />
-                  <h3 className="font-bold text-lg">Advanced Analytics</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data processing with AI insights</p>
-                  <Button size="sm" variant="outline" className="w-full">Explore</Button>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
-                <div className="space-y-3">
-                  <Link className="w-8 h-8 text-primary" />
-                  <h3 className="font-bold text-lg">Automation Engine</h3>
-                  <p className="text-sm text-muted-foreground">Autonomous operations with intelligent decision making</p>
-                  <Button size="sm" variant="outline" className="w-full">Configure</Button>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
-                <div className="space-y-3">
-                  <Link className="w-8 h-8 text-primary" />
-                  <h3 className="font-bold text-lg">Security First</h3>
-                  <p className="text-sm text-muted-foreground">Robust encryption and protection</p>
-                  <Button size="sm" variant="outline" className="w-full">Secure</Button>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Performance Metrics */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
-              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
-                <p className="text-xs text-muted-foreground">Processing Speed</p>
-                <p className="text-2xl font-bold text-primary">99.9%</p>
-              </div>
-              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
-                <p className="text-xs text-muted-foreground">Uptime</p>
-                <p className="text-2xl font-bold text-primary">24/7</p>
-              </div>
-              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
-                <p className="text-xs text-muted-foreground">Latency</p>
-                <p className="text-2xl font-bold text-primary">&lt;50ms</p>
-              </div>
-              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
-                <p className="text-xs text-muted-foreground">Throughput</p>
-                <p className="text-2xl font-bold text-primary">10K+/s</p>
-              </div>
-            </div>
-            
-            {/* Action Section */}
-            <div className="flex gap-4 flex-wrap pt-6">
-              <Button size="lg" className="bg-primary hover:bg-primary/90">
-                Get Started Now
-              </Button>
-              <Button size="lg" variant="outline">
-                View Documentation
-              </Button>
-              <Button size="lg" variant="ghost">
-                Schedule Demo
-              </Button>
-            </div>
-          </div>
-        </Card>
-      </div>
-    </div>
-  );
-}
+const STAGES = [{ id: "source", label: "Source chain", detail: "Network and asset origin" }, { id: "route", label: "Message route", detail: "Relayer and verification path" }, { id: "destination", label: "Destination chain", detail: "Mint or release policy" }, { id: "settlement", label: "Settlement", detail: "Receipt and finality evidence" }];
+const GATES = [{ label: "Network identity", detail: "Chain ID, asset contract, and environment must be verified." }, { label: "Message integrity", detail: "Nonce, domain, replay protection, and message hash must be bound." }, { label: "Liquidity or mint policy", detail: "Destination release rules and limits must be explicit." }, { label: "Finality and recovery", detail: "Reorg, timeout, retry, refund, and dispute states must be modeled." }];
+
+export default function BridgeProtocol() { const [stage, setStage] = useState("source"); const [source, setSource] = useState("Ethereum preview"); const [destination, setDestination] = useState("Skycoin preview"); const [amount, setAmount] = useState(""); const [prepared, setPrepared] = useState(false); const current = STAGES.find((item) => item.id === stage) ?? STAGES[0]; const stageIndex = STAGES.findIndex((item) => item.id === stage); const readiness = useMemo(() => [Boolean(source), Boolean(destination), Boolean(amount), false].filter(Boolean).length, [source, destination, amount]); const prepare = () => setPrepared(true); return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Link2} eyebrow="Crypto Infrastructure · Bridge Safety" title="Understand the route before anything crosses it." description="Walk through bridge stages, inspect verification gates, and prepare a local transfer plan. This page does not quote live fees, validate a wallet, reserve liquidity, broadcast a message, release assets, or claim settlement." badge="Preview bridge protocol"><div className="flex flex-wrap gap-2"><Button onClick={prepare} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><ClipboardCheck className="mr-2 size-4" />Prepare local plan</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><ExternalLink className="mr-2 size-4" />Read safety notes</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Protocol stages", value: String(STAGES.length), hint: "Source to settlement", icon: Network }, { label: "Plan readiness", value: `${readiness}/4`, hint: "Local inputs only", icon: ClipboardCheck, tone: "violet" }, { label: "Live route", value: "Unavailable", hint: "No bridge adapter", icon: WifiOff, tone: "amber" }, { label: "Settlement", value: "Unverified", hint: "No receipt or finality", icon: CircleDashed, tone: "slate" }]} /><ScreenPreviewBanner title="Bridge evidence boundary">A bridge is not a button between two logos. A production implementation must verify networks, contracts, domains, nonces, replay protection, message signatures, relayer behavior, liquidity or mint policy, limits, fees, finality, reorgs, failure recovery, and an auditable settlement receipt. No live transfer is implied here.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><p className="px-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Protocol walkthrough</p><div className="mt-4 space-y-2">{STAGES.map((item, index) => <button key={item.id} onClick={() => setStage(item.id)} className={`flex w-full items-center gap-4 rounded-xl border p-4 text-left transition ${stage === item.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><span className={`flex size-8 items-center justify-center rounded-full text-xs font-bold ${index <= stageIndex ? "bg-cyan-300 text-slate-950" : "bg-white/10 text-slate-500"}`}>{index + 1}</span><span className="flex-1"><span className="block font-semibold">{item.label}</span><span className="mt-1 block text-xs text-slate-500">{item.detail}</span></span>{index < STAGES.length - 1 && <ChevronRight className="size-4 text-slate-600" />}</button>)}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-amber-200"><AlertTriangle className="size-4" />Failure is a first-class state</div><p className="mt-2 text-sm leading-6 text-slate-300">Timeout, rejected message, insufficient liquidity, reorg, duplicate submission, and refund states must be visible—not collapsed into a spinner.</p></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Stage {stageIndex + 1} · {current.label}</p><h2 className="mt-2 text-2xl font-black">{current.detail}</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Preview only</Badge></div>{stage === "source" && <div className="mt-6 space-y-4"><div><label className="mb-2 block text-sm text-slate-300" htmlFor="source-chain">Source chain</label><Input id="source-chain" value={source} onChange={(event) => setSource(event.target.value)} className="border-white/10 bg-black/20 text-white" /></div><div><label className="mb-2 block text-sm text-slate-300" htmlFor="destination-chain">Destination chain</label><Input id="destination-chain" value={destination} onChange={(event) => setDestination(event.target.value)} className="border-white/10 bg-black/20 text-white" /></div><div><label className="mb-2 block text-sm text-slate-300" htmlFor="bridge-amount">Amount for local plan</label><Input id="bridge-amount" value={amount} onChange={(event) => { setAmount(event.target.value); setPrepared(false); }} placeholder="No currency or balance claim" className="border-white/10 bg-black/20 text-white placeholder:text-slate-500" /></div><div className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/15 p-4"><WalletCards className="size-4 text-cyan-300" /><p className="text-sm text-slate-300">{source} <ArrowRight className="mx-1 inline size-3" /> {destination}</p></div></div>}{stage === "route" && <div className="mt-6 space-y-4"><RouteRow label="Message creation" state="Requires verified domain and nonce" icon={FileCheck2} /><RouteRow label="Relayer" state="Not connected" icon={WifiOff} /><RouteRow label="Verification" state="Signature and replay checks required" icon={ShieldCheck} /><RouteRow label="Retry policy" state="Timeout and duplicate handling required" icon={RefreshCw} /></div>}{stage === "destination" && <div className="mt-6 space-y-4"><RouteRow label="Asset policy" state="Release or mint rule required" icon={WalletCards} /><RouteRow label="Recipient validation" state="Address and network required" icon={CheckCircle2} /><RouteRow label="Limits" state="Daily, per-message, and circuit-breaker limits required" icon={LockKeyhole} /><RouteRow label="Emergency pause" state="Operator and governance path required" icon={AlertTriangle} /></div>}{stage === "settlement" && <div className="mt-6 space-y-4"><RouteRow label="Receipt" state="No transaction hash available" icon={FileCheck2} /><RouteRow label="Finality" state="No canonical block source" icon={Timer} /><RouteRow label="Reconciliation" state="No ledger or custody record" icon={RefreshCw} /><RouteRow label="User outcome" state="Unavailable until verified" icon={WifiOff} /></div>}{prepared && <div className="mt-6 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-cyan-200"><Check className="size-4" />Local bridge plan prepared</div><p className="mt-2 text-sm leading-6 text-slate-300">No wallet was connected, no asset was locked or minted, no relayer was called, and no transaction was broadcast.</p></div>}<div className="mt-6 flex justify-between gap-3"><Button onClick={() => setStage(STAGES[Math.max(0, stageIndex - 1)].id)} disabled={stageIndex === 0} variant="outline" className="border-white/15 text-white">Previous</Button><Button onClick={() => setStage(STAGES[Math.min(STAGES.length - 1, stageIndex + 1)].id)} disabled={stageIndex === STAGES.length - 1} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200">Next stage <ArrowRight className="ml-2 size-4" /></Button></div></CardContent></Card></section><section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">{GATES.map((gate) => <Card key={gate.label} className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><ShieldCheck className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">{gate.label}</h3><p className="mt-2 text-sm leading-6 text-slate-400">{gate.detail}</p></CardContent></Card>)}</section><ScreenFeatureGrid features={[{ title: "Route is a state machine", description: "Source, message, destination, and settlement each have their own evidence and failure conditions.", icon: Network, status: "Pattern" }, { title: "Security before velocity", description: "Replay protection, signature domains, limits, pause controls, and recovery are part of the happy path.", icon: ShieldCheck, status: "Required" }, { title: "No fake bridge success", description: "A local plan is not a locked asset, minted asset, transaction hash, confirmation, or settlement receipt.", icon: LockKeyhole, status: "Guardrail" }]} /></main></div>; }
+function RouteRow({ label, state, icon: Icon }: { label: string; state: string; icon: typeof FileCheck2 }) { return <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/15 p-4"><Icon className="size-4 text-slate-400" /><div className="flex-1"><p className="text-sm font-semibold text-slate-200">{label}</p><p className="mt-1 text-xs text-slate-500">{state}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Required</Badge></div>; }

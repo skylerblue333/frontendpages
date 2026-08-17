@@ -1,75 +1,13 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Accessibility, Check, CheckCircle2, Clipboard, Code2, Contrast, Copy, Eye, FileCheck2, Grid3X3, Layers3, Palette, Ruler, Search, ShieldCheck, Type, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-export default function BrandGuidelines() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+const COLORS = [{ name: "Sky Cyan", value: "#67e8f9", role: "Primary action" }, { name: "Deep Space", value: "#070a16", role: "App background" }, { name: "Aurora Violet", value: "#c084fc", role: "Secondary accent" }, { name: "Signal Amber", value: "#fcd34d", role: "Caution state" }, { name: "Success Mint", value: "#86efac", role: "Positive state" }, { name: "Signal Rose", value: "#fda4af", role: "Destructive state" }];
+const TYPE_STYLES = [{ name: "Display", sample: "Build the future visibly.", className: "text-4xl font-black tracking-tight" }, { name: "Heading", sample: "A clear hierarchy earns attention.", className: "text-2xl font-bold" }, { name: "Body", sample: "Use readable text, meaningful labels, and enough context for the next decision.", className: "text-base leading-7 text-slate-300" }, { name: "Caption", sample: "METADATA · STATUS · PROVENANCE", className: "text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300" }];
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>BrandGuidelines</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">BrandGuidelines</h1>
-            <p className="text-muted-foreground mt-2">Brand standards</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+export default function BrandGuidelines() { const [section, setSection] = useState<"identity" | "tokens" | "components" | "accessibility">("identity"); const [copied, setCopied] = useState(""); const [previewMode, setPreviewMode] = useState<"dark" | "light">("dark"); const [query, setQuery] = useState(""); const visibleColors = useMemo(() => COLORS.filter((color) => `${color.name} ${color.role} ${color.value}`.toLowerCase().includes(query.toLowerCase())), [query]); const copyValue = (value: string) => { setCopied(value); window.setTimeout(() => setCopied(""), 1200); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Palette} eyebrow="Design System · Governance" title="Make the Skycoin language repeatable, not mysterious." description="Explore the visual tokens, component behaviors, and accessibility guardrails that keep SKYCOIN4444 recognizable across a large screen inventory. This is a reference preview, not a claim that every route is currently compliant." badge="Preview design system"><div className="flex flex-wrap gap-2"><Button onClick={() => setSection("tokens")} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Palette className="mr-2 size-4" />Inspect tokens</Button><Button onClick={() => setSection("accessibility")} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Accessibility className="mr-2 size-4" />Run guidance</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Color tokens", value: String(COLORS.length), hint: "Reference palette", icon: Palette }, { label: "Type roles", value: String(TYPE_STYLES.length), hint: "Hierarchy examples", icon: Type, tone: "violet" }, { label: "Contrast guidance", value: "Required", hint: "Verify in context", icon: Contrast, tone: "amber" }, { label: "Governance", value: "Preview", hint: "No automated enforcement", icon: ShieldCheck, tone: "slate" }]} /><ScreenPreviewBanner title="Design-system evidence boundary">These values and examples are reference tokens for UX review. A production design system needs versioned ownership, change review, component documentation, automated visual regression, contrast testing, localization checks, and adoption telemetry before claiming ecosystem-wide compliance.</ScreenPreviewBanner><nav className="flex flex-wrap gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-2" aria-label="Brand guideline sections">{[{ id: "identity", label: "Identity", icon: Eye }, { id: "tokens", label: "Tokens", icon: Palette }, { id: "components", label: "Components", icon: Layers3 }, { id: "accessibility", label: "Accessibility", icon: Accessibility }].map(({ id, label, icon: Icon }) => <button key={id} onClick={() => setSection(id as typeof section)} className={`flex items-center gap-2 rounded-xl px-4 py-3 text-sm transition ${section === id ? "bg-cyan-300/15 text-cyan-200" : "text-slate-500 hover:text-white"}`}><Icon className="size-4" />{label}</button>)}</nav>{section === "identity" && <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]"><Card className="overflow-hidden border-white/10 bg-gradient-to-br from-indigo-950 via-[#11162d] to-fuchsia-950"><CardContent className="p-8"><div className="flex items-center gap-4"><div className="flex size-16 items-center justify-center rounded-3xl bg-cyan-300 text-3xl font-black text-slate-950">S</div><div><p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-300">SKYCOIN4444</p><h2 className="mt-1 text-3xl font-black">Signal, space, and proof.</h2></div></div><p className="mt-8 max-w-xl text-lg leading-8 text-slate-300">The identity pairs a high-energy cyan signal with deep-space surfaces and violet depth. Use the palette to clarify hierarchy, not to decorate over missing product state.</p><div className="mt-8 grid gap-3 sm:grid-cols-3"><div className="rounded-xl border border-white/10 bg-black/20 p-4"><Grid3X3 className="size-4 text-cyan-300" /><p className="mt-3 text-sm font-semibold">Modular</p><p className="mt-1 text-xs leading-5 text-slate-500">Reusable patterns, distinct page stories.</p></div><div className="rounded-xl border border-white/10 bg-black/20 p-4"><Ruler className="size-4 text-violet-300" /><p className="mt-3 text-sm font-semibold">Measured</p><p className="mt-1 text-xs leading-5 text-slate-500">Spacing and type create rhythm.</p></div><div className="rounded-xl border border-white/10 bg-black/20 p-4"><FileCheck2 className="size-4 text-amber-300" /><p className="mt-3 text-sm font-semibold">Honest</p><p className="mt-1 text-xs leading-5 text-slate-500">Style never substitutes for proof.</p></div></div></CardContent></Card><Card className={`border-white/10 ${previewMode === "dark" ? "bg-[#0b1020]" : "bg-slate-100 text-slate-950"}`}><CardContent className="p-8"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Live composition</p><h2 className="mt-1 text-2xl font-bold">Preview the atmosphere</h2></div><Button onClick={() => setPreviewMode(previewMode === "dark" ? "light" : "dark")} variant="outline" className={previewMode === "dark" ? "border-white/15 text-white" : "border-slate-300 text-slate-800"}>{previewMode === "dark" ? "Light mode" : "Dark mode"}</Button></div><div className="mt-7 rounded-2xl bg-gradient-to-br from-cyan-400 to-violet-500 p-[1px]"><div className={`rounded-2xl p-6 ${previewMode === "dark" ? "bg-[#10152e]" : "bg-white"}`}><Badge className="bg-cyan-300/15 text-cyan-300">Preview card</Badge><h3 className="mt-4 text-2xl font-black">A useful state has a shape.</h3><p className={`mt-3 text-sm leading-6 ${previewMode === "dark" ? "text-slate-300" : "text-slate-600"}`}>Use contrast, spacing, and status labels so a user can understand what happened and what to do next.</p><Button className="mt-5 bg-cyan-300 text-slate-950 hover:bg-cyan-200">Primary action</Button></div></div></CardContent></Card></section>}{section === "tokens" && <section className="space-y-6"><div className="flex flex-col gap-3 sm:flex-row"><div className="relative flex-1"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search color tokens" aria-label="Search color tokens" className="border-white/10 bg-white/[0.04] pl-9 text-white placeholder:text-slate-500" /></div><Button variant="outline" className="border-white/15 text-white hover:bg-white/10"><Code2 className="mr-2 size-4" />Token JSON preview</Button></div><div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{visibleColors.map((color) => <Card key={color.name} className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex items-center gap-3"><div className="size-12 rounded-xl border border-white/15" style={{ backgroundColor: color.value }} /><div className="flex-1"><p className="font-semibold">{color.name}</p><p className="text-xs text-slate-500">{color.role}</p></div><Button onClick={() => copyValue(color.value)} variant="ghost" size="icon" className="text-slate-400">{copied === color.value ? <Check className="size-4 text-emerald-300" /> : <Copy className="size-4" />}</Button></div><p className="mt-4 font-mono text-sm text-slate-300">{color.value}</p></CardContent></Card>)}</div><div className="grid gap-4 md:grid-cols-2">{TYPE_STYLES.map((style) => <Card key={style.name} className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><span className="text-xs uppercase tracking-[0.2em] text-cyan-300">{style.name}</span><Type className="size-4 text-slate-500" /></div><p className={`mt-5 ${style.className}`}>{style.sample}</p></CardContent></Card>)}</div></section>}{section === "components" && <section className="grid gap-6 lg:grid-cols-2"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="space-y-5 p-6"><div className="flex items-center justify-between"><h2 className="text-xl font-bold">Component anatomy</h2><Layers3 className="size-5 text-cyan-300" /></div><div className="rounded-xl border border-white/10 bg-black/20 p-5"><div className="flex items-start justify-between"><div><Badge className="bg-violet-300/15 text-violet-200">Status</Badge><h3 className="mt-3 text-lg font-semibold">A card needs a next action</h3><p className="mt-2 text-sm leading-6 text-slate-400">Context, status, primary action, and failure path should be discoverable without hover.</p></div><Button variant="ghost" size="icon" className="text-slate-400"><MoreIcon /></Button></div><div className="mt-5 flex gap-2"><Button className="bg-cyan-300 text-slate-950 hover:bg-cyan-200">Continue</Button><Button variant="outline" className="border-white/15 text-white">Learn more</Button></div></div><div className="rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="text-sm font-semibold text-amber-200">Do not hide state in decoration</p><p className="mt-1 text-sm leading-6 text-slate-300">A gradient, glow, or badge cannot replace an explicit unavailable, loading, empty, or error state.</p></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><h2 className="text-xl font-bold">Interaction checklist</h2><div className="mt-5 space-y-3">{["Visible keyboard focus", "Button label describes the result", "Loading state preserves layout", "Error state offers retry", "Empty state offers a next action", "Icons have text or accessible names"].map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4"><CheckCircle2 className="size-4 text-emerald-300" /><span className="text-sm text-slate-300">{item}</span></div>)}</div></CardContent></Card></section>}{section === "accessibility" && <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Accessibility className="size-5 text-cyan-300" /><h2 className="text-xl font-bold">Guidance, not a compliance claim</h2></div><p className="mt-4 text-sm leading-7 text-slate-300">These checks guide implementation. They are not a substitute for automated audits, assistive-technology testing, keyboard testing, localization review, or user research.</p><div className="mt-6 space-y-3">{[{ label: "Contrast", detail: "Check text, icons, borders, focus rings, and disabled states in context." }, { label: "Keyboard", detail: "Every interactive element needs a visible focus path and logical order." }, { label: "Motion", detail: "Respect reduced-motion preferences and avoid meaning conveyed only by animation." }, { label: "Content", detail: "Use plain labels, helpful errors, and status text that does not rely on color." }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 bg-black/15 p-4"><div className="flex items-center gap-2"><Contrast className="size-4 text-amber-300" /><span className="font-semibold">{item.label}</span></div><p className="mt-2 text-sm leading-6 text-slate-400">{item.detail}</p></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Review worksheet</p><h2 className="mt-2 text-2xl font-black">Before calling a screen done</h2><div className="mt-6 space-y-4">{["A useful state is visible without hover", "The primary action is reachable by keyboard", "Async success and failure are distinguishable", "Unavailable integrations are labeled", "No sensitive claim is implied by the UI", "Evidence screenshot captures a useful state"].map((item) => <div key={item} className="flex items-center gap-3 border-b border-white/10 pb-4"><div className="flex size-6 items-center justify-center rounded-full bg-emerald-300/10"><Check className="size-3 text-emerald-300" /></div><span className="text-sm text-slate-300">{item}</span></div>)}</div></CardContent></Card></section>}<ScreenFeatureGrid features={[{ title: "Tokens over one-off values", description: "Centralize color and type roles so the inventory can evolve without visual drift.", icon: Palette, status: "Reference" }, { title: "Components carry state", description: "A component is not complete until its loading, empty, error, unavailable, and success paths are designed.", icon: Layers3, status: "Required" }, { title: "Accessibility is continuous", description: "Guidance belongs beside visual polish, not after it, and must be verified in context.", icon: Accessibility, status: "Guardrail" }]} /></main></div>; }
+function MoreIcon() { return <span className="text-lg leading-none">•••</span>; }

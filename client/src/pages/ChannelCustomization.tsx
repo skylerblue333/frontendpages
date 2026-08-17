@@ -1,89 +1,11 @@
-import { Palette } from "lucide-react";
+import { useState } from "react";
+import { Bell, Check, Eye, Globe2, LockKeyhole, Palette, RefreshCw, Save, ShieldAlert, SlidersHorizontal, UsersRound, WifiOff } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-export default function ChannelCustomization() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={Palette} title="Channel Customization" subtitle="Fully functional channel customization page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Channel Customization</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Palette className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Palette className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Palette className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
-}
+const TABS = ["Appearance", "Access", "Behavior"];
+const THEMES = ["Midnight cyan", "Solar violet", "Paper neutral"];
+export default function ChannelCustomization() { const [tab, setTab] = useState("Appearance"); const [theme, setTheme] = useState(THEMES[0]); const [channelName, setChannelName] = useState("Preview channel"); const [visibility, setVisibility] = useState("Private preview"); const [saved, setSaved] = useState(false); return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Palette} eyebrow="Community · Channel Configuration" title="Shape the channel before anyone is notified." description="Preview local appearance, access, and behavior settings for a synthetic channel. This page does not change a real channel, invite members, send notifications, synchronize permissions, or report engagement." badge="Preview customization studio"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Save className="mr-2 size-4" />Save local configuration</Button><Button onClick={() => { setTheme(THEMES[0]); setChannelName("Preview channel"); setVisibility("Private preview"); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset studio</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Channel state", value: "Local preview", hint: "No server object", icon: Palette }, { label: "Theme", value: theme, hint: "Local selection", icon: Eye, tone: "violet" }, { label: "Access", value: visibility, hint: "Not enforced", icon: LockKeyhole, tone: "amber" }, { label: "Live sync", value: "Unavailable", hint: "No channel provider", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Channel configuration evidence boundary">A local preview is not a published channel configuration. Real customization requires an authenticated owner, authorization scope, member and moderation policy, asset validation, persistence, audit history, notification consent, rollback, and a provider-backed delivery state.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Configuration sections</p><div className="mt-5 space-y-2">{TABS.map((item) => <button key={item} onClick={() => setTab(item)} className={`flex w-full items-center gap-3 rounded-xl border p-4 text-left ${tab === item ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15"}`}>{item === "Appearance" ? <Palette className="size-4 text-cyan-300" /> : item === "Access" ? <LockKeyhole className="size-4 text-violet-300" /> : <SlidersHorizontal className="size-4 text-amber-300" />}<span className="flex-1 font-semibold">{item}</span><span className="text-xs text-slate-500">Local</span></button>)}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 text-sm font-medium text-amber-200"><ShieldAlert className="size-4" />No live mutation</div><p className="mt-2 text-xs leading-5 text-slate-400">Changing a control updates this preview only. No channel, member, permission, notification, or analytics record changes.</p></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">{tab} settings</p><h2 className="mt-1 text-2xl font-black">Configure the preview</h2></div><Badge variant="outline" className="border-cyan-300/20 text-cyan-200">Draft only</Badge></div>{tab === "Appearance" && <div className="mt-6 space-y-5"><div><label className="mb-2 block text-sm text-slate-300" htmlFor="channel-name">Channel name</label><Input id="channel-name" value={channelName} onChange={(event) => { setChannelName(event.target.value); setSaved(false); }} className="border-white/10 bg-black/20 text-white" /><p className="mt-2 text-xs text-slate-500">A typed name does not create or rename a channel.</p></div><div><p className="mb-2 text-sm text-slate-300">Theme preset</p><div className="grid gap-2 sm:grid-cols-3">{THEMES.map((item) => <button key={item} onClick={() => { setTheme(item); setSaved(false); }} className={`rounded-xl border p-4 text-left text-sm ${theme === item ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-200" : "border-white/10 text-slate-400"}`}><Palette className="size-4" /><span className="mt-3 block">{item}</span></button>)}</div></div><div className="rounded-2xl border border-white/10 bg-gradient-to-br from-cyan-300/20 via-violet-300/10 to-black/20 p-6"><p className="text-xs uppercase tracking-[0.2em] text-cyan-200">Live preview · local</p><h3 className="mt-3 text-2xl font-black">{channelName || "Untitled preview"}</h3><p className="mt-2 text-sm text-slate-300">No members, messages, notifications, or channel records are connected.</p></div></div>}{tab === "Access" && <div className="mt-6 space-y-3"><p className="text-sm text-slate-400">Choose a label for the preview; enforcement remains unavailable.</p>{["Private preview", "Invite-only preview", "Public preview"].map((item) => <button key={item} onClick={() => { setVisibility(item); setSaved(false); }} className={`flex w-full items-center gap-3 rounded-xl border p-4 text-left ${visibility === item ? "border-violet-300/40 bg-violet-300/[0.08]" : "border-white/10"}`}><LockKeyhole className="size-4 text-violet-300" /><span className="flex-1 font-semibold">{item}</span><span className="text-xs text-amber-200">Not enforced</span></button>)}<div className="mt-5 space-y-2">{["Owner authentication", "Member invitation", "Moderator roles", "Content visibility policy", "Audit history"].map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-3"><UsersRound className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></div>}{tab === "Behavior" && <div className="mt-6 space-y-3">{["Notification consent", "Moderation escalation", "Message retention", "Slow mode or rate limit", "Analytics event definitions"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/15 p-4"><Bell className="size-4 text-amber-300" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Unavailable</span></div>)}<p className="mt-4 text-xs leading-5 text-slate-500">Behavior settings require consent, server enforcement, auditability, and clear failure states before they can be called active.</p></div>}{saved && <div className="mt-6 flex items-center gap-2 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4 text-sm text-cyan-200"><Check className="size-4" />Local configuration saved; no channel state changed.</div>}</CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Palette className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Preview is useful</h3><p className="mt-2 text-sm leading-6 text-slate-400">Let users reason about composition and controls without claiming persistence.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><LockKeyhole className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Access is security</h3><p className="mt-2 text-sm leading-6 text-slate-400">Visibility labels do not replace authorization, invitations, roles, or moderation enforcement.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><WifiOff className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">No fake updates</h3><p className="mt-2 text-sm leading-6 text-slate-400">A local control is not a channel mutation, delivery event, or analytics signal.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Three surfaces, one boundary", description: "Separate appearance, access, and behavior so each setting has a clear contract.", icon: SlidersHorizontal, status: "Pattern" }, { title: "Permissions before personalization", description: "Owner, member, moderator, and content policies need explicit authorization and audit.", icon: LockKeyhole, status: "Required" }, { title: "No fake channel state", description: "A preview is not a published channel, invited member, notification, or engagement metric.", icon: WifiOff, status: "Guardrail" }]} /></main></div>; }

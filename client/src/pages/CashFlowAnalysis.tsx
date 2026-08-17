@@ -1,75 +1,18 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { ArrowDownRight, ArrowUpRight, Calculator, Check, CircleDollarSign, FileText, Info, RefreshCw, ShieldAlert, TrendingDown, TrendingUp, WalletCards, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+type Row = { id: string; label: string; amount: string; kind: "inflow" | "outflow" };
+const INITIAL: Row[] = [{ id: "in-1", label: "Hypothetical inflow", amount: "0", kind: "inflow" }, { id: "out-1", label: "Hypothetical operating cost", amount: "0", kind: "outflow" }, { id: "out-2", label: "Hypothetical reserve", amount: "0", kind: "outflow" }];
+const value = (text: string) => { const parsed = Number(text.replace(/[^0-9.-]/g, "")); return Number.isFinite(parsed) ? Math.max(0, parsed) : 0; };
 
 export default function CashFlowAnalysis() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>CashFlowAnalysis</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">CashFlowAnalysis</h1>
-            <p className="text-muted-foreground mt-2">Cash flow</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [rows, setRows] = useState(INITIAL); const [period, setPeriod] = useState("Monthly scenario"); const [saved, setSaved] = useState(false);
+  const inflow = rows.filter((row) => row.kind === "inflow").reduce((sum, row) => sum + value(row.amount), 0); const outflow = rows.filter((row) => row.kind === "outflow").reduce((sum, row) => sum + value(row.amount), 0); const net = inflow - outflow; const scenario = useMemo(() => net > 0 ? "Positive scenario" : net < 0 ? "Negative scenario" : "Break-even scenario", [net]);
+  const update = (id: string, field: "label" | "amount", next: string) => { setRows((current) => current.map((row) => row.id === id ? { ...row, [field]: next } : row)); setSaved(false); }; const add = (kind: "inflow" | "outflow") => setRows((current) => [...current, { id: `${kind}-${Date.now()}`, label: kind === "inflow" ? "New inflow assumption" : "New outflow assumption", amount: "0", kind }]);
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={WalletCards} eyebrow="Finance · Hypothetical Modeling" title="Model cash movement without pretending it is a balance sheet." description="Enter hypothetical inflows and outflows, inspect net-flow arithmetic, and label the result as a scenario. This page does not connect accounts, fetch transactions, forecast reality, recommend action, or provide financial advice." badge="Preview cash-flow worksheet"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><FileText className="mr-2 size-4" />Save local scenario</Button><Button onClick={() => { setRows(INITIAL); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset assumptions</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Inflow assumptions", value: `$${inflow.toLocaleString()}`, hint: "User-entered scenario", icon: ArrowUpRight }, { label: "Outflow assumptions", value: `$${outflow.toLocaleString()}`, hint: "User-entered scenario", icon: ArrowDownRight, tone: "amber" }, { label: "Net scenario", value: `$${net.toLocaleString()}`, hint: scenario, icon: net >= 0 ? TrendingUp : TrendingDown, tone: net >= 0 ? "violet" : "amber" }, { label: "Sync", value: "Unavailable", hint: "No account connector", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Finance evidence boundary">I’m an AI, not a licensed financial advisor—this is a hypothetical calculation, not guaranteed advice. The figures below come only from values entered in this browser session. They are not actual cash, income, expenses, runway, solvency, forecast, bank balance, tax result, or recommendation. Verify consequential decisions with a qualified professional.</ScreenPreviewBanner><section className="flex flex-wrap items-center justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Scenario canvas</p><h2 className="mt-1 text-2xl font-black">{period}</h2></div><select value={period} onChange={(event) => { setPeriod(event.target.value); setSaved(false); }} className="rounded-md border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"><option>Monthly scenario</option><option>Quarterly scenario</option><option>Annual scenario</option></select></section><section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Calculator className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Assumption rows</p><h2 className="mt-1 text-2xl font-black">Show every input</h2></div></div><div className="mt-5 space-y-3">{rows.map((row) => <div key={row.id} className="rounded-xl border border-white/10 bg-black/15 p-4"><div className="grid gap-3 sm:grid-cols-[1fr_0.4fr] sm:items-center"><Input value={row.label} onChange={(event) => update(row.id, "label", event.target.value)} aria-label="Cash-flow assumption label" className="border-white/10 bg-white/[0.04] text-white" /><Input value={row.amount} onChange={(event) => update(row.id, "amount", event.target.value)} aria-label="Cash-flow assumption amount" inputMode="decimal" className="border-white/10 bg-white/[0.04] text-white" /></div><p className={`mt-2 flex items-center gap-2 text-xs ${row.kind === "inflow" ? "text-emerald-200" : "text-amber-200"}`}>{row.kind === "inflow" ? <ArrowUpRight className="size-3" /> : <ArrowDownRight className="size-3" />}{row.kind === "inflow" ? "Inflow assumption" : "Outflow assumption"} · no source connected</p></div>)}<div className="flex flex-wrap gap-2"><Button onClick={() => add("inflow")} variant="outline" className="border-emerald-300/20 text-emerald-200">Add inflow</Button><Button onClick={() => add("outflow")} variant="outline" className="border-amber-300/20 text-amber-200">Add outflow</Button></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><CircleDollarSign className="size-5 text-violet-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Scenario summary</p><h2 className="mt-1 text-2xl font-black">Arithmetic only</h2></div></div><div className="mt-6 space-y-3"><Summary label="Total inflow assumptions" value={`$${inflow.toLocaleString()}`} icon={ArrowUpRight} tone="text-emerald-200" /><Summary label="Total outflow assumptions" value={`$${outflow.toLocaleString()}`} icon={ArrowDownRight} tone="text-amber-200" /><Summary label="Net scenario" value={`$${net.toLocaleString()}`} icon={Calculator} tone="text-cyan-200" /><Summary label="Inflow / outflow ratio" value={inflow > 0 && outflow > 0 ? (inflow / outflow).toFixed(2) : "—"} icon={TrendingUp} tone="text-violet-200" /></div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 text-sm font-medium text-amber-200"><ShieldAlert className="size-4" />No forecast claim</div><p className="mt-2 text-sm leading-6 text-slate-300">A ratio or net number does not establish runway, profitability, solvency, affordability, or future performance.</p></div>{saved && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><div className="flex items-center gap-2 font-semibold text-cyan-200"><Check className="size-4" />Local scenario saved</div><p className="mt-1 text-sm text-slate-400">No account, transaction, balance, forecast, or report was changed.</p></div>}</CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Info className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Assumptions are visible</h3><p className="mt-2 text-sm leading-6 text-slate-400">A useful model shows each input and its direction rather than hiding a magic result.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><TrendingUp className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Scenario is not forecast</h3><p className="mt-2 text-sm leading-6 text-slate-400">A hypothetical period label does not turn entered numbers into a prediction.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><WifiOff className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">No fake account data</h3><p className="mt-2 text-sm leading-6 text-slate-400">Without verified statements or transactions, balances and cash history remain unavailable.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Model the assumptions", description: "Separate inflow and outflow inputs so users can inspect the arithmetic and change the scenario.", icon: Calculator, status: "Pattern" }, { title: "Label risk honestly", description: "Net flow, ratio, runway, and forecast are different claims with different evidence requirements.", icon: ShieldAlert, status: "Required" }, { title: "No fake finance", description: "A local scenario is not account data, a prediction, a recommendation, or a financial statement.", icon: WifiOff, status: "Guardrail" }]} /></main></div>;
 }
+function Summary({ label, value, icon: Icon, tone }: { label: string; value: string; icon: typeof ArrowUpRight; tone: string }) { return <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/15 p-4"><Icon className={`size-4 ${tone}`} /><span className="flex-1 text-sm text-slate-300">{label}</span><span className={`font-mono text-sm ${tone}`}>{value}</span></div>; }

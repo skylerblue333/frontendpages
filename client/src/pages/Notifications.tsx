@@ -1,89 +1,23 @@
-import { Bell } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Bell, Check, Clock3, FileCheck2, Filter, LockKeyhole, Mail, RefreshCw, ShieldCheck, Tag, UserRound, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const SEEDS = [{ id: "n1", title: "Evidence review reminder", category: "Workspace", body: "Review the claim ledger before promoting a frontend preview.", source: "Synthetic workspace" }, { id: "n2", title: "Safety boundary check", category: "Security", body: "Confirm secrets, consent, access, and failure states before integration.", source: "Local guardrail" }, { id: "n3", title: "Learning checkpoint", category: "Learning", body: "Capture one reflection before moving to the next lesson concept.", source: "Synthetic course" }, { id: "n4", title: "Community digest", category: "Community", body: "A local digest concept with no sender, membership, or delivery.", source: "Preview only" }, { id: "n5", title: "Wallet safety note", category: "Finance", body: "Never enter recovery secrets into an unverified interface.", source: "Safety fixture" }];
+const CATEGORIES = ["All", "Workspace", "Security", "Learning", "Community", "Finance"];
 
 export default function Notifications() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={Bell} title="Notifications" subtitle="Fully functional notifications page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Notifications</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Bell className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Bell className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Bell className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
+  const [category, setCategory] = useState("All");
+  const [selectedId, setSelectedId] = useState(SEEDS[0].id);
+  const [read, setRead] = useState<string[]>([]);
+  const [dismissed, setDismissed] = useState<string[]>([]);
+  const [saved, setSaved] = useState(false);
+  const visible = useMemo(() => SEEDS.filter((item) => (category === "All" || item.category === category) && !dismissed.includes(item.id)), [category, dismissed]);
+  const selected = SEEDS.find((item) => item.id === selectedId) ?? SEEDS[0];
+  const unread = SEEDS.filter((item) => !read.includes(item.id) && !dismissed.includes(item.id)).length;
+  const reset = () => { setCategory("All"); setSelectedId(SEEDS[0].id); setRead([]); setDismissed([]); setSaved(false); };
+  const markRead = (id: string) => setRead((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Bell} eyebrow="Notifications · Inbox preview" title="Make the event useful without calling it delivered." description="Review synthetic inbox cards, category filters, local read/dismiss state, and selected detail. No live event, sender, timestamp, unread count, delivery, automation, analytics, or backend synchronization is claimed." badge="Inbox preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Inbox state saved locally" : "Save inbox state locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset inbox</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Events", value: String(visible.length), hint: "Synthetic cards", icon: Bell }, { label: "Unread", value: String(unread), hint: "Local state", icon: Filter, tone: "violet" }, { label: "Channel", value: "Off", hint: "No provider", icon: WifiOff, tone: "slate" }, { label: "Automation", value: "Off", hint: "No backend", icon: LockKeyhole, tone: "cyan" }]} /><ScreenPreviewBanner title="Notifications evidence boundary"><strong>Event cards, categories, local read/dismiss state, and selected detail are inbox fixtures—not live alerts, sender identity, timestamps, unread counts, delivery receipts, user activity, automation, analytics, or backend records.</strong> Production notifications require event contracts, durable storage, authentication, consent, delivery providers, retries, rate limits, privacy controls, unsubscribe, auditability, and support.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Synthetic inbox</p><h2 className="mt-2 text-3xl font-black">Review events</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">Delivery unavailable</Badge></div><div className="mt-4 flex gap-2 overflow-x-auto">{CATEGORIES.map((item) => <button key={item} onClick={() => setCategory(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${category === item ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-5 space-y-3">{visible.map((item) => <button key={item.id} onClick={() => { setSelectedId(item.id); markRead(item.id); }} className={`w-full rounded-2xl border p-4 text-left ${selectedId === item.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/10"}`}><div className="flex items-start gap-3"><div className={`mt-1 size-2 rounded-full ${read.includes(item.id) ? "bg-slate-600" : "bg-cyan-300"}`} /><div className="flex-1"><div className="flex items-center justify-between gap-2"><p className="font-black">{item.title}</p><Badge variant="outline" className="border-white/10 text-[10px] text-slate-400">{item.category}</Badge></div><p className="mt-2 text-sm text-slate-400">{item.body}</p><p className="mt-2 text-xs text-slate-500">{item.source} · {read.includes(item.id) ? "Read locally" : "Unread locally"}</p></div></div></button>)}{visible.length === 0 && <p className="py-8 text-center text-slate-500">No synthetic events match this category.</p>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected detail</p><h2 className="mt-2 text-3xl font-black">{selected.title}</h2><p className="mt-3 text-slate-400">{selected.body}</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Category", value: selected.category }, { label: "Source", value: selected.source }, { label: "Timestamp", value: "Not sourced" }, { label: "Sender", value: "Synthetic" }, { label: "Delivery", value: "Unavailable" }, { label: "Automation", value: "Off" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 flex flex-wrap gap-2"><Button onClick={() => markRead(selected.id)} className="bg-violet-500 text-white hover:bg-violet-400"><Check className="mr-2 size-4" />{read.includes(selected.id) ? "Mark unread locally" : "Mark read locally"}</Button><Button onClick={() => setDismissed((current) => [...current, selected.id])} variant="outline" className="border-white/10 text-white">Dismiss locally</Button><Button disabled variant="outline" className="border-white/10 text-white/40">Open source unavailable</Button></div><div className="mt-5 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />Local actions do not send, delete, restore, export, or update a provider record.</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Inbox readiness</p><h2 className="mt-2 text-2xl font-black">Required before notification claims</h2><div className="mt-5 space-y-3">{["Event contracts, durable records, timestamps, and idempotency", "Identity, consent, channel authorization, and quiet hours", "Provider delivery, tokens, retries, receipts, and failure handling", "Read/unread semantics, deduplication, rate limits, and unsubscribe", "Privacy, accessibility, support, auditability, deletion, and incident response"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><FileCheck2 className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake inbox</h2><p className="mt-3 text-sm leading-6 text-slate-400">This page changes local state only. It does not receive alerts, contact a provider, identify a sender, calculate platform metrics, or persist a backend event.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "An event is not a delivery", description: "Synthetic cards preserve inbox UX without sender, timestamp, unread, or provider claims.", icon: Bell, status: "Guardrail" }, { title: "Inbox needs lifecycle", description: "Durability, consent, retries, receipts, deduplication, privacy, and support need evidence.", icon: ShieldCheck, status: "Required" }, { title: "No fake automation", description: "Read, dismiss, and reset actions make no backend, email, push, or provider request.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

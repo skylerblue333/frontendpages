@@ -1,75 +1,20 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, Filter, Home, KeyRound, LockKeyhole, MapPin, RefreshCw, Search, ShieldAlert, Star, Wallet, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+const properties = [{ id: 1, name: "Urban studio concept", type: "Apartment", intent: "Explore", location: "Location unverified", summary: "A local listing concept for evaluating compact layouts and evidence." }, { id: 2, name: "Garden townhouse concept", type: "Townhouse", intent: "Compare", location: "Location unverified", summary: "A local listing concept for evaluating space, maintenance, and disclosure." }, { id: 3, name: "Skyline workspace concept", type: "Workspace", intent: "Research", location: "Location unverified", summary: "A local listing concept for evaluating use, access, and operating assumptions." }];
 export default function PropertyListing() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>PropertyListing</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">PropertyListing</h1>
-            <p className="text-muted-foreground mt-2">Browse properties</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [query, setQuery] = useState("");
+  const [type, setType] = useState("All types");
+  const [intent, setIntent] = useState("All intents");
+  const [selected, setSelected] = useState(properties[0].id);
+  const [interest, setInterest] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [showGates, setShowGates] = useState(false);
+  const filtered = useMemo(() => properties.filter((property) => `${property.name} ${property.summary}`.toLowerCase().includes(query.toLowerCase()) && (type === "All types" || property.type === type) && (intent === "All intents" || property.intent === intent)), [intent, query, type]);
+  const selectedProperty = properties.find((property) => property.id === selected) ?? properties[0];
+  const reset = () => { setQuery(""); setType("All types"); setIntent("All intents"); setSelected(1); setInterest(false); setSaved(false); setShowGates(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Home} eyebrow="PropertyListing · Discovery preview" title="Browse property concepts without inventing availability." description="Explore local property concepts with search, filters, location posture, ownership, valuation, price, financing, legal, interest, and action boundaries. No listing inventory, price, rating, owner, title, mortgage, or transaction is verified." badge="Property catalog"><div className="flex flex-wrap gap-2"><Button onClick={() => setInterest((value) => !value)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200">{interest ? "Interest saved locally" : "Save interest locally"}</Button><Button onClick={() => setSaved(true)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Check className="mr-2 size-4" />{saved ? "Catalog saved locally" : "Save catalog locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review property gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset catalog</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Properties", value: `${properties.length} concepts`, hint: "No inventory source", icon: Home, tone: "cyan" }, { label: "Price", value: "Unpublished", hint: "No market source", icon: Wallet, tone: "violet" }, { label: "Ownership", value: "Unknown", hint: "No title source", icon: KeyRound, tone: "amber" }, { label: "Ratings", value: "Unmeasured", hint: "No trust source", icon: Star, tone: "slate" }]} /><ScreenPreviewBanner title="Property listing evidence boundary"><strong>This is a local property-discovery catalog, not a listing service.</strong> Cards, filters, location, intent, selected detail, interest, and saved state are browser concepts. No property, inventory, address, price, valuation, owner, title, availability, rating, financing, legal status, contact, viewing, rent, sale, or purchase is measured or persisted.</ScreenPreviewBanner><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex flex-wrap items-center gap-3"><div className="relative min-w-64 flex-1"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local property concepts" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><Filter className="size-4 text-slate-500" />{["All types", "Apartment", "Townhouse", "Workspace"].map((item) => <button key={item} onClick={() => setType(item)} className={`rounded-lg border px-3 py-2 text-xs ${type === item ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}{["All intents", "Explore", "Compare", "Research"].map((item) => <button key={item} onClick={() => setIntent(item)} className={`rounded-lg border px-3 py-2 text-xs ${intent === item ? "border-violet-300/40 bg-violet-300/10 text-violet-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-6 grid gap-4 md:grid-cols-3">{filtered.map((property) => <button key={property.id} onClick={() => setSelected(property.id)} className={`rounded-2xl border p-5 text-left ${selected === property.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><h2 className="font-black">{property.name}</h2><Badge variant="outline" className="border-amber-300/20 text-amber-200">Unverified</Badge></div><p className="mt-3 text-sm leading-6 text-slate-400">{property.summary}</p><div className="mt-5 flex flex-wrap gap-2"><Badge variant="outline" className="border-white/10 text-slate-500">{property.type}</Badge><Badge variant="outline" className="border-white/10 text-slate-500">{property.intent}</Badge><Badge variant="outline" className="border-white/10 text-slate-500">{property.location}</Badge></div></button>)}{filtered.length === 0 && <div className="col-span-full rounded-2xl border border-dashed border-white/10 p-12 text-center text-slate-500">No local property concepts match these filters.</div>}</div></CardContent></Card><section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected listing concept</p><h2 className="mt-2 text-2xl font-black">{selectedProperty.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{selectedProperty.summary}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Type", value: selectedProperty.type }, { label: "Intent", value: selectedProperty.intent }, { label: "Location", value: selectedProperty.location }, { label: "Price", value: "Unpublished" }, { label: "Availability", value: "Unknown" }, { label: "Ownership", value: "Unverified" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 flex flex-wrap gap-2"><Button onClick={() => setInterest((value) => !value)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200">{interest ? "Interest saved locally" : "I’m interested locally"}</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Contact unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">View unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No listing claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A local card does not prove an address, owner, title, condition, market value, availability, financing eligibility, or an opportunity to buy or rent.</p></div>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Listing gates</p><h2 className="mt-2 text-2xl font-black">What a real property listing must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Verified source, address, parcel, owner, title, and listing authorization", "Current price, rent, fees, tax, insurance, maintenance, and valuation", "Availability, showing, contact routing, fraud prevention, and status freshness", "Inspection, condition, disclosures, amenities, media rights, and accessibility", "Mortgage, financing, affordability, underwriting, and regional legal context", "No buy, sell, rent, or investment recommendation without qualified review"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Listing surface preserved", description: "Search, type and intent filters, property cards, selected detail, price/location/ownership posture, interest, blocked actions, save/reset, and gates remain interactive.", icon: Home, status: "Local catalog" }, { title: "No listing theater", description: "Inventory, addresses, prices, valuations, owners, title, availability, ratings, financing, viewings, and transactions are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before action", description: "Real listings require verified sources, fraud controls, legal and financial review, freshness, privacy, and qualified advice.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
 }

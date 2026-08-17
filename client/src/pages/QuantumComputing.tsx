@@ -1,84 +1,18 @@
-import { Zap } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { Atom, BookOpen, Check, CircuitBoard, FlaskConical, LockKeyhole, RefreshCw, Search, ShieldAlert, Sparkles, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+const concepts = [{ id: 1, name: "Grover search study", area: "Algorithm concept", detail: "A research note about search complexity; no quantum speedup is measured." }, { id: 2, name: "Variational circuit study", area: "Circuit concept", detail: "A circuit-design concept awaiting simulator, hardware, and benchmark evidence." }, { id: 3, name: "Post-quantum review", area: "Security concept", detail: "A reading checklist for cryptographic migration; no security guarantee is made." }];
 export default function QuantumComputing() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={Zap} title="Quantum Computing Hub" subtitle="Advanced quantum computing hub with cutting-edge technology" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20">
-          <div className="space-y-6">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Quantum Computing Hub</h2>
-            
-            {/* Advanced Features */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
-                <div className="space-y-3">
-                  <Zap className="w-8 h-8 text-primary" />
-                  <h3 className="font-bold text-lg">Advanced Analytics</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data processing with AI insights</p>
-                  <Button size="sm" variant="outline" className="w-full">Explore</Button>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
-                <div className="space-y-3">
-                  <Zap className="w-8 h-8 text-primary" />
-                  <h3 className="font-bold text-lg">Automation Engine</h3>
-                  <p className="text-sm text-muted-foreground">Autonomous operations with intelligent decision making</p>
-                  <Button size="sm" variant="outline" className="w-full">Configure</Button>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
-                <div className="space-y-3">
-                  <Zap className="w-8 h-8 text-primary" />
-                  <h3 className="font-bold text-lg">Security First</h3>
-                  <p className="text-sm text-muted-foreground">Robust encryption and protection</p>
-                  <Button size="sm" variant="outline" className="w-full">Secure</Button>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Performance Metrics */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
-              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
-                <p className="text-xs text-muted-foreground">Processing Speed</p>
-                <p className="text-2xl font-bold text-primary">99.9%</p>
-              </div>
-              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
-                <p className="text-xs text-muted-foreground">Uptime</p>
-                <p className="text-2xl font-bold text-primary">24/7</p>
-              </div>
-              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
-                <p className="text-xs text-muted-foreground">Latency</p>
-                <p className="text-2xl font-bold text-primary">&lt;50ms</p>
-              </div>
-              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
-                <p className="text-xs text-muted-foreground">Throughput</p>
-                <p className="text-2xl font-bold text-primary">10K+/s</p>
-              </div>
-            </div>
-            
-            {/* Action Section */}
-            <div className="flex gap-4 flex-wrap pt-6">
-              <Button size="lg" className="bg-primary hover:bg-primary/90">
-                Get Started Now
-              </Button>
-              <Button size="lg" variant="outline">
-                View Documentation
-              </Button>
-              <Button size="lg" variant="ghost">
-                Schedule Demo
-              </Button>
-            </div>
-          </div>
-        </Card>
-      </div>
-    </div>
-  );
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState(1);
+  const [qubits, setQubits] = useState("Not configured");
+  const [saved, setSaved] = useState(false);
+  const [showGates, setShowGates] = useState(false);
+  const filtered = useMemo(() => concepts.filter((concept) => `${concept.name} ${concept.area} ${concept.detail}`.toLowerCase().includes(query.toLowerCase())), [query]);
+  const concept = concepts.find((item) => item.id === selected) ?? concepts[0];
+  const reset = () => { setQuery(""); setSelected(1); setQubits("Not configured"); setSaved(false); setShowGates(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Atom} eyebrow="QuantumComputing · Research preview" title="Study the circuit before claiming the quantum result." description="Explore local algorithm, circuit, simulator, hardware, benchmark, security, and research concepts. No quantum job, hardware session, qubit measurement, speedup, uptime, latency, cryptographic protection, or scientific conclusion is connected." badge="Quantum workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Study saved locally" : "Save study locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review quantum gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset study</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Concepts", value: `${concepts.length} local`, hint: "Research only", icon: Atom, tone: "cyan" }, { label: "Qubits", value: qubits, hint: "No circuit source", icon: CircuitBoard, tone: "violet" }, { label: "Hardware", value: "Unavailable", hint: "No provider", icon: FlaskConical, tone: "amber" }, { label: "Result", value: "Unmeasured", hint: "No job submitted", icon: Sparkles, tone: "slate" }]} /><ScreenPreviewBanner title="Quantum evidence boundary"><strong>This is a local quantum-research worksheet, not a quantum runtime or scientific result.</strong> Concepts, circuit intent, qubit posture, simulator state, reading lists, saved state, and research gates are browser concepts. No quantum hardware, job, qubit count, measurement, speedup, error rate, uptime, latency, cryptographic security, optimization, or scientific conclusion is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local quantum concepts" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Local</Badge></div><Badge variant="outline" className="mt-4 border-white/10 text-slate-500">{item.area}</Badge></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected research concept</p><h2 className="mt-2 text-2xl font-black">{concept.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{concept.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Area", value: concept.area }, { label: "Qubits", value: qubits }, { label: "Simulator", value: "Not connected" }, { label: "Hardware", value: "Unavailable" }, { label: "Benchmark", value: "Unmeasured" }, { label: "Security", value: "Unattested" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><label className="mt-5 block text-sm text-slate-400">Circuit scale intent<select value={qubits} onChange={(event) => setQubits(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Not configured</option><option>2 qubits · concept</option><option>8 qubits · concept</option><option>32 qubits · concept</option></select></label><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400"><CircuitBoard className="mr-2 size-4" />Run circuit unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Open hardware unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No quantum result</p><p className="mt-2 text-sm leading-6 text-slate-400">A research card does not prove a circuit ran, a quantum advantage exists, or a security claim is valid.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Quantum research gates</p><h2 className="mt-2 text-2xl font-black">What a real quantum claim must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Algorithm definition, circuit, inputs, oracle, measurement, and reproducible implementation", "Simulator or hardware provider, device identity, calibration, noise, queue, and runtime", "Qubit count, gate fidelity, error mitigation, sampling, confidence, and benchmark design", "Classical baseline, workload, cost, latency, reproducibility, and independent validation", "Cryptographic scope, threat model, assumptions, and post-quantum review", "Research provenance, peer review, uncertainty, disclosure, and support"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Quantum surface preserved", description: "Algorithm concepts, circuit scale, simulator, hardware, benchmarks, security, research notes, save/reset, and blocked execution remain interactive.", icon: Atom, status: "Local research" }, { title: "No quantum theater", description: "Hardware, qubits, measurements, speedup, uptime, latency, cryptography, and scientific results are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before advantage", description: "Real quantum claims need reproducible circuits, baselines, provider data, uncertainty, security scope, and review.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
 }

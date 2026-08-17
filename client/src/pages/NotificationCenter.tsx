@@ -1,89 +1,24 @@
-import { Bell } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Bell, Check, Clock3, FileText, Mail, MessageSquare, RefreshCw, Settings2, ShieldCheck, Smartphone, Tag, UserRound, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const SEEDS = [{ id: "review", title: "Review window opened", category: "Workspace", detail: "A synthetic reminder to review evidence before changing a screen.", age: "Local fixture" }, { id: "message", title: "New message concept", category: "Community", detail: "A local inbox example; no sender, account, or delivery is attached.", age: "Preview only" }, { id: "security", title: "Security checklist due", category: "Security", detail: "Confirm consent, access controls, and secrets boundaries before integration.", age: "Guidance" }, { id: "course", title: "Study plan checkpoint", category: "Learning", detail: "A local learning reminder without enrollment, grade, or instructor state.", age: "Synthetic" }, { id: "wallet", title: "Wallet safety note", category: "Finance", detail: "Never enter recovery secrets into a preview or unverified integration.", age: "Guardrail" }];
+const CATEGORIES = ["All", "Workspace", "Community", "Security", "Learning", "Finance"];
 
 export default function NotificationCenter() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={Bell} title="Notification Center" subtitle="Fully functional notification center page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Notification Center</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Bell className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Bell className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Bell className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
+  const [events, setEvents] = useState(SEEDS);
+  const [selectedId, setSelectedId] = useState(SEEDS[0].id);
+  const [category, setCategory] = useState("All");
+  const [read, setRead] = useState<string[]>([]);
+  const [channels, setChannels] = useState({ inbox: true, email: false, push: false });
+  const [saved, setSaved] = useState(false);
+  const visible = useMemo(() => events.filter((item) => category === "All" || item.category === category), [category, events]);
+  const selected = events.find((item) => item.id === selectedId) ?? events[0];
+  const unread = events.filter((item) => !read.includes(item.id)).length;
+  const toggleRead = (id: string) => setRead((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
+  const reset = () => { setEvents(SEEDS); setSelectedId(SEEDS[0].id); setCategory("All"); setRead([]); setChannels({ inbox: true, email: false, push: false }); setSaved(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Bell} eyebrow="NotificationCenter · Inbox and preferences" title="Plan the notification flow before claiming delivery." description="Review synthetic inbox events, local read state, category filters, channel preferences, and digest planning. No live alert, unread count, push delivery, email, automation, user activity, transaction, success-rate, or response-time claim is made." badge="Notifications preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Preferences saved locally" : "Save preferences locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset inbox</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Events", value: String(events.length), hint: "Synthetic inbox", icon: Bell }, { label: "Unread", value: String(unread), hint: "Local state only", icon: MessageSquare, tone: "violet" }, { label: "Inbox", value: channels.inbox ? "On" : "Off", hint: "Local preference", icon: Settings2, tone: "cyan" }, { label: "Push", value: "Off", hint: "No device channel", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="NotificationCenter evidence boundary"><strong>Event titles, categories, read state, channel toggles, and digest language are local notification fixtures—not live alerts, delivery receipts, unread counts, sender identity, user activity, push tokens, email delivery, automation, or backend synchronization.</strong> Production notifications require event contracts, durable storage, user consent, channel authorization, deduplication, retries, delivery status, rate limits, quiet hours, privacy controls, and support.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Synthetic inbox</p><h2 className="mt-2 text-3xl font-black">Review events</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">Delivery off</Badge></div><div className="mt-4 flex gap-2 overflow-x-auto">{CATEGORIES.map((item) => <button key={item} onClick={() => setCategory(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${category === item ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-5 space-y-3">{visible.map((item) => <button key={item.id} onClick={() => { setSelectedId(item.id); toggleRead(item.id); }} className={`w-full rounded-2xl border p-4 text-left ${selectedId === item.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/10"}`}><div className="flex items-start gap-3"><div className={`mt-1 size-2 rounded-full ${read.includes(item.id) ? "bg-slate-600" : "bg-cyan-300"}`} /><div className="flex-1"><div className="flex items-center justify-between gap-2"><p className="font-black">{item.title}</p><Badge variant="outline" className="border-white/10 text-[10px] text-slate-400">{item.category}</Badge></div><p className="mt-2 text-sm text-slate-400">{item.detail}</p><p className="mt-2 text-xs text-slate-500">{item.age} · {read.includes(item.id) ? "Read locally" : "Unread locally"}</p></div></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Notification settings</p><h2 className="mt-2 text-3xl font-black">{selected.title}</h2><p className="mt-3 text-slate-400">{selected.detail}</p><div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-5"><p className="font-black">Channel planning</p><p className="mt-2 text-xs text-slate-500">Local toggles do not authorize or contact a delivery provider.</p><div className="mt-4 space-y-3">{[{ key: "inbox", label: "In-app inbox", icon: Bell }, { key: "email", label: "Email digest", icon: Mail }, { key: "push", label: "Device push", icon: Smartphone }].map((item) => { const Icon = item.icon; const active = channels[item.key as keyof typeof channels]; return <button key={item.key} onClick={() => setChannels((current) => ({ ...current, [item.key]: !active }))} className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left ${active ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10"}`}><Icon className="size-4 text-cyan-200" /><span className="flex-1 text-sm font-semibold">{item.label}</span><span className={`text-xs ${active ? "text-cyan-200" : "text-slate-500"}`}>{active ? "Local on" : "Off"}</span></button>; })}</div></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Sender", value: "Not sourced" }, { label: "Delivery", value: "Unavailable" }, { label: "Timestamp", value: "Fixture only" }, { label: "Automation", value: "Off" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 flex gap-2"><Button onClick={() => toggleRead(selected.id)} className="bg-violet-500 text-white hover:bg-violet-400"><Check className="mr-2 size-4" />{read.includes(selected.id) ? "Mark unread locally" : "Mark read locally"}</Button><Button disabled variant="outline" className="border-white/10 text-white/40">Open source unavailable</Button></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Delivery readiness</p><h2 className="mt-2 text-2xl font-black">Required before alert claims</h2><div className="mt-5 space-y-3">{["Event contracts, durable records, timestamps, and idempotency", "User consent, channel authorization, privacy, and quiet hours", "Delivery provider, tokens, retries, receipts, and failure handling", "Deduplication, rate limits, preferences, digest, and unsubscribe", "Support, auditability, deletion, incident response, and accessibility"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><FileText className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake delivery</h2><p className="mt-3 text-sm leading-6 text-slate-400">The center changes local state only. It does not send alerts, request push tokens, contact email, calculate platform metrics, or record backend activity.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "An event is not an alert", description: "Synthetic inbox cards preserve notification UX without delivery, sender, or user-activity claims.", icon: Bell, status: "Guardrail" }, { title: "Delivery needs consent", description: "Channels, tokens, quiet hours, retries, privacy, and unsubscribe need evidence.", icon: ShieldCheck, status: "Required" }, { title: "No fake automation", description: "Local read state and toggles create no provider request, push, email, or backend record.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

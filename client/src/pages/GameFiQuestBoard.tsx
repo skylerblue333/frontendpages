@@ -1,174 +1,22 @@
-import { useState } from "react";
-import { Sword, Star, Zap, Trophy, Clock, CheckCircle, Lock, Gift, TrendingUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { toast } from "sonner";
-import { PageHeader } from "@/components/PageHeader";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, CheckCircle2, Clock3, Gift, LockKeyhole, RefreshCw, ShieldAlert, Sparkles, Target, Trophy, Users, WifiOff, Zap } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-const quests = [
-  { id: "q1", title: "First Blood", desc: "Win your first tournament match", reward: 50, rewardToken: "SKY444", xp: 100, progress: 1, total: 1, completed: true, category: "tournament", difficulty: "easy" },
-  { id: "q2", title: "Social Butterfly", desc: "Make 10 posts and get 50 likes", reward: 25, rewardToken: "SKY444", xp: 75, progress: 7, total: 10, completed: false, category: "social", difficulty: "easy" },
-  { id: "q3", title: "Diamond Hands", desc: "Stake SKY444 for 30 days without unstaking", reward: 500, rewardToken: "SKY444", xp: 500, progress: 12, total: 30, completed: false, category: "defi", difficulty: "hard" },
-  { id: "q4", title: "Code Warrior", desc: "Solve 5 Assembly Puzzle challenges", reward: 150, rewardToken: "SKY444", xp: 250, progress: 3, total: 5, completed: false, category: "gaming", difficulty: "medium" },
-  { id: "q5", title: "Whale Watcher", desc: "Monitor 10 whale transactions", reward: 75, rewardToken: "SKY444", xp: 150, progress: 10, total: 10, completed: true, category: "defi", difficulty: "easy" },
-  { id: "q6", title: "Community Champion", desc: "Get 100 followers and 500 total likes", reward: 200, rewardToken: "SKY444", xp: 300, progress: 67, total: 100, completed: false, category: "social", difficulty: "medium" },
-  { id: "q7", title: "Governance Guru", desc: "Vote on 5 governance proposals", reward: 100, rewardToken: "SKY444", xp: 200, progress: 2, total: 5, completed: false, category: "governance", difficulty: "easy" },
-  { id: "q8", title: "NFT Collector", desc: "Own 10 different NFTs from the marketplace", reward: 300, rewardToken: "SKY444", xp: 400, progress: 4, total: 10, completed: false, category: "nft", difficulty: "hard" },
-];
-
-const dailyQuests = [
-  { title: "Daily Login", reward: 5, completed: true },
-  { title: "Post Something", reward: 10, completed: true },
-  { title: "Like 5 Posts", reward: 8, completed: false },
-  { title: "Check Price Feed", reward: 3, completed: false },
-];
-
-const difficultyColors: Record<string, string> = {
-  easy: "text-purple-400 border-purple-500/30",
-  medium: "text-yellow-400 border-yellow-400/30",
-  hard: "text-red-400 border-red-400/30",
-};
-
-const categoryIcons: Record<string, string> = {
-  tournament: "🏆", social: "💬", defi: "💎", gaming: "🎮", governance: "🗳️", nft: "🖼️",
-};
+const QUESTS = [{ id: "q1", title: "First match plan", description: "Draft a match plan for a local tournament scenario.", progress: 1, total: 1, category: "tournament", difficulty: "Easy", icon: Trophy }, { id: "q2", title: "Community prompt", description: "Write three constructive prompts for a community session.", progress: 2, total: 3, category: "social", difficulty: "Easy", icon: Users }, { id: "q3", title: "Protocol glossary", description: "Review five DeFi terms and record their evidence requirements.", progress: 3, total: 5, category: "defi", difficulty: "Hard", icon: Sparkles }, { id: "q4", title: "Puzzle practice", description: "Complete five local logic challenges in the learning sandbox.", progress: 3, total: 5, category: "gaming", difficulty: "Medium", icon: Target }, { id: "q5", title: "Governance brief", description: "Compare proposal, quorum, delegation, and execution steps.", progress: 2, total: 4, category: "governance", difficulty: "Medium", icon: Zap }, { id: "q6", title: "NFT provenance review", description: "List the source and ownership checks a gallery would need.", progress: 1, total: 3, category: "nft", difficulty: "Hard", icon: ShieldAlert }];
+const DAILY = [{ title: "Open the learning board", progress: 1, total: 1 }, { title: "Complete one evidence review", progress: 0, total: 1 }, { title: "Write a reflection note", progress: 0, total: 1 }, { title: "Review a safety boundary", progress: 0, total: 1 }];
+const CATEGORIES = ["all", "social", "defi", "gaming", "tournament", "governance", "nft"];
 
 export default function GameFiQuestBoard() {
-  const [claimed, setClaimed] = useState<string[]>([]);
   const [filter, setFilter] = useState("all");
-
-  const claimReward = (questId: string, reward: number) => {
-    setClaimed(prev => [...prev, questId]);
-    toast.success(`Claimed ${reward} SKY444! Reward sent to your wallet.`);
-  };
-
-  const filteredQuests = filter === "all" ? quests : quests.filter(q => q.category === filter);
-  const totalXP = quests.filter(q => q.completed).reduce((sum, q) => sum + q.xp, 0);
-  const completedCount = quests.filter(q => q.completed).length;
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container py-8 max-w-5xl">
-        <PageHeader backHref="/gaming" icon={Sword} title="GameFi Quest Board" subtitle="Complete quests, earn SKY444 rewards, and level up your reputation" />
-
-        {/* Player Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {[
-            { label: "Total XP", value: totalXP.toLocaleString(), icon: Star, color: "text-yellow-400" },
-            { label: "Quests Done", value: `${completedCount}/${quests.length}`, icon: CheckCircle, color: "text-purple-400" },
-            { label: "SKY444 Earned", value: "725", icon: Gift, color: "text-primary" },
-            { label: "Rank", value: "#847", icon: TrendingUp, color: "text-purple-400" },
-          ].map(s => (
-            <Card key={s.label} className="border-border/50">
-              <CardContent className="pt-6">
-                <s.icon className={`w-5 h-5 ${s.color} mb-2`} />
-                <p className="text-2xl font-bold">{s.value}</p>
-                <p className="text-xs text-muted-foreground">{s.label}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        <Tabs defaultValue="quests">
-          <TabsList className="mb-6">
-            <TabsTrigger value="quests">All Quests</TabsTrigger>
-            <TabsTrigger value="daily">Daily Quests</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="quests">
-            {/* Category Filter */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              {["all", "social", "defi", "gaming", "tournament", "governance", "nft"].map(cat => (
-                <Button key={cat} size="sm" variant={filter === cat ? "default" : "outline"} onClick={() => setFilter(cat)} className="capitalize">{cat}</Button>
-              ))}
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {filteredQuests.map(quest => {
-                const pct = (quest.progress / quest.total) * 100;
-                const isClaimed = claimed.includes(quest.id);
-                return (
-                  <Card key={quest.id} className={`border-border/50 ${quest.completed ? "border-purple-500/20 bg-purple-600/5" : ""}`}>
-                    <CardContent className="pt-6">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-2">
-                          <span className="text-2xl">{categoryIcons[quest.category]}</span>
-                          <div>
-                            <p className="font-medium text-sm">{quest.title}</p>
-                            <p className="text-xs text-muted-foreground">{quest.desc}</p>
-                          </div>
-                        </div>
-                        <Badge variant="outline" className={`text-xs ${difficultyColors[quest.difficulty]}`}>{quest.difficulty}</Badge>
-                      </div>
-
-                      <div className="mb-3">
-                        <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                          <span>Progress</span>
-                          <span>{quest.progress}/{quest.total}</span>
-                        </div>
-                        <Progress value={pct} className="h-2" />
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3 text-xs">
-                          <span className="text-primary font-medium">+{quest.reward} {quest.rewardToken}</span>
-                          <span className="text-yellow-400">+{quest.xp} XP</span>
-                        </div>
-                        {quest.completed ? (
-                          isClaimed ? (
-                            <Badge variant="outline" className="text-purple-400 border-purple-500/30 text-xs">Claimed</Badge>
-                          ) : (
-                            <Button size="sm" onClick={() => claimReward(quest.id, quest.reward)} className="bg-purple-600 hover:bg-purple-600 text-white">
-                              <Gift className="w-3 h-3 mr-1" />Claim
-                            </Button>
-                          )
-                        ) : (
-                          <Badge variant="secondary" className="text-xs"><Clock className="w-3 h-3 mr-1" />In Progress</Badge>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="daily">
-            <Card className="border-border/50">
-              <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-yellow-400" />
-                  Daily Quests — Resets in 14h 32m
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {dailyQuests.map((q, i) => (
-                    <div key={i} className={`flex items-center justify-between p-3 rounded-lg ${q.completed ? "bg-purple-600/10 border border-purple-500/20" : "bg-muted/30"}`}>
-                      <div className="flex items-center gap-3">
-                        {q.completed ? <CheckCircle className="w-4 h-4 text-purple-400" /> : <Clock className="w-4 h-4 text-muted-foreground" />}
-                        <span className="text-sm">{q.title}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-primary font-medium">+{q.reward} SKY444</span>
-                        {q.completed && <Badge variant="outline" className="text-purple-400 border-purple-500/30 text-xs">Done</Badge>}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 p-3 rounded-lg bg-primary/10 border border-primary/20">
-                  <p className="text-sm font-medium">Complete all daily quests for a 2x bonus!</p>
-                  <Progress value={50} className="h-2 mt-2" />
-                  <p className="text-xs text-muted-foreground mt-1">2/4 completed</p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
-    </div>
-  );
+  const [tab, setTab] = useState<"quests" | "daily">("quests");
+  const [selected, setSelected] = useState(QUESTS[0].id);
+  const [localDone, setLocalDone] = useState<string[]>([]);
+  const current = QUESTS.find((quest) => quest.id === selected) ?? QUESTS[0];
+  const visible = useMemo(() => QUESTS.filter((quest) => filter === "all" || quest.category === filter), [filter]);
+  const completed = QUESTS.filter((quest) => quest.progress >= quest.total || localDone.includes(quest.id)).length;
+  const markDone = (id: string) => setLocalDone((items) => items.includes(id) ? items : [...items, id]);
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Target} eyebrow="GameFi · Quest board" title="Turn game loops into honest learning loops." description="Explore local quest cards, category filters, daily planning, progress bars, difficulty, and completion review. No tokens, XP, rank, NFT ownership, wallet claim, payout, or blockchain action is attached." badge="Quest preview"><div className="flex flex-wrap gap-2"><Button onClick={() => markDone(current.id)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{localDone.includes(current.id) ? "Marked locally" : "Mark local review"}</Button><Button onClick={() => { setFilter("all"); setTab("quests"); setSelected(QUESTS[0].id); setLocalDone([]); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset board</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Quest cards", value: String(QUESTS.length), hint: "Local objectives", icon: Target }, { label: "Reviewed", value: `${completed}/${QUESTS.length}`, hint: "Local state", icon: CheckCircle2, tone: "violet" }, { label: "Rewards", value: "Off", hint: "No token or XP", icon: Gift, tone: "amber" }, { label: "Wallet", value: "Off", hint: "No claim action", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Quest evidence boundary"><strong>Quest titles, progress, difficulty, completion, daily planning, and local review state are UX fixtures—not verified player activity, leaderboard rank, token rewards, XP, NFT ownership, staking, governance votes, or wallet transactions.</strong> Production GameFi requires authenticated event sources, anti-cheat controls, reward contracts, custody and signing, eligibility, settlement, disclosures, and reconciliation.</ScreenPreviewBanner><section className="flex flex-wrap gap-2"><button onClick={() => setTab("quests")} className={`rounded-xl border px-4 py-2 text-sm ${tab === "quests" ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-400"}`}>All quests</button><button onClick={() => setTab("daily")} className={`rounded-xl border px-4 py-2 text-sm ${tab === "daily" ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-400"}`}>Daily planner</button></section>{tab === "quests" ? <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><div><div className="mb-5 flex flex-wrap gap-2">{CATEGORIES.map((category) => <button key={category} onClick={() => setFilter(category)} className={`rounded-xl border px-3 py-2 text-xs capitalize ${filter === category ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-500"}`}>{category}</button>)}</div><div className="grid gap-4 sm:grid-cols-2">{visible.map((quest) => { const done = quest.progress >= quest.total || localDone.includes(quest.id); return <button key={quest.id} onClick={() => setSelected(quest.id)} className={`rounded-2xl border p-5 text-left ${selected === quest.id ? "border-cyan-300/40 bg-cyan-300/[0.07]" : "border-white/10 bg-white/[0.04]"}`}><div className="flex items-start justify-between gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-violet-300/10 text-violet-200"><quest.icon className="size-5" /></div><Badge variant="outline" className="border-white/10 text-[10px] text-slate-400">{quest.difficulty}</Badge></div><h2 className="mt-5 font-black">{quest.title}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{quest.description}</p><div className="mt-4"><div className="flex justify-between text-xs text-slate-500"><span>{done ? "Complete locally" : "Review progress"}</span><span>{done ? quest.total : quest.progress}/{quest.total}</span></div><div className="mt-2 h-2 overflow-hidden rounded-full bg-white/10"><div className={`h-full rounded-full ${done ? "bg-emerald-300" : "bg-cyan-300"}`} style={{ width: `${Math.min(100, (done ? quest.total : quest.progress) / quest.total * 100)}%` }} /></div></div><div className="mt-4 flex items-center justify-between text-xs"><span className="text-amber-200">No reward attached</span>{done && <CheckCircle2 className="size-4 text-emerald-300" />}</div></button>; })}</div></div><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected quest</p><h2 className="mt-2 text-3xl font-black">{current.title}</h2><p className="mt-3 text-slate-400">{current.description}</p><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-200">Local review only</p><p className="mt-2 text-sm leading-6 text-slate-400">This quest has no authenticated player event, reward contract, token balance, NFT condition, rank, or wallet claim attached.</p></div><div className="mt-5 space-y-3">{["Define the evidence needed", "Complete the local review", "Record a reflection", "Verify the boundary"] .map((item, index) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><span className="flex size-7 items-center justify-center rounded-full bg-white/10 text-xs">{index + 1}</span><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-slate-500">Plan</span></div>)}</div><Button onClick={() => markDone(current.id)} className="mt-6 w-full bg-violet-500 text-white hover:bg-violet-400">{localDone.includes(current.id) || current.progress >= current.total ? "Reviewed locally" : "Complete local review"}</Button></CardContent></Card></section> : <section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Clock3 className="size-5 text-amber-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-300">Daily planner</p><h2 className="mt-1 text-2xl font-black">A local rhythm, not a live reset</h2></div></div><div className="mt-6 space-y-3">{DAILY.map((item) => <div key={item.title} className="flex items-center gap-3 rounded-xl border border-white/10 p-4"><div className={`flex size-8 items-center justify-center rounded-full ${item.progress >= item.total ? "bg-emerald-300/10 text-emerald-300" : "bg-white/10 text-slate-500"}`}>{item.progress >= item.total ? <Check className="size-4" /> : <Clock3 className="size-4" />}</div><span className="flex-1 text-sm text-slate-300">{item.title}</span><span className="text-xs text-amber-200">Local plan</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">Reward gate</h2><p className="mt-3 text-sm leading-6 text-slate-400">No claim button is exposed. Any future reward flow would require a verified contract, eligibility rule, anti-cheat event source, user confirmation, signing, transaction reference, and settlement state.</p></CardContent></Card></section>}<ScreenFeatureGrid features={[{ title: "Progress is not player data", description: "Local bars preserve quest UX without claiming an authenticated player record or leaderboard position.", icon: Target, status: "Guardrail" }, { title: "Rewards require settlement", description: "Tokens, XP, NFTs, and payouts need contracts, eligibility, custody, signing, reconciliation, and support.", icon: Gift, status: "Required" }, { title: "No fake claim", description: "The board keeps quest planning usable without pretending a wallet received anything.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

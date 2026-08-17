@@ -1,89 +1,27 @@
-import { TrendingUp } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Activity, AlertTriangle, Bell, Check, Clock3, Eye, LockKeyhole, RefreshCw, Search, ShieldAlert, ShieldCheck, Target, TrendingUp, Wallet, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
+type Window = "1h" | "24h" | "7d" | "30d";
+type Asset = { id: string; symbol: string; name: string; className: string; note: string; state: string };
+const assets: Asset[] = [
+  { id: "watch-001", symbol: "SKY444", name: "Sky concept asset", className: "Token concept", note: "Wallet, chain, custody, price, and balance evidence required.", state: "Unverified" },
+  { id: "watch-002", symbol: "BTC", name: "Bitcoin concept", className: "Digital asset", note: "Market source, timestamp, currency, and network evidence required.", state: "Unavailable" },
+  { id: "watch-003", symbol: "USD", name: "Cash concept", className: "Fiat concept", note: "Account, institution, balance, and currency evidence required.", state: "Unverified" },
+];
+const evidence = ["Authenticated holdings/account and ownership", "Timestamped market price and currency source", "Performance methodology, period, fees, and benchmark", "Alert threshold, delivery, consent, and privacy controls", "Refresh, stale data, outage, audit, and recovery behavior"];
 export default function PortfolioTracker() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={TrendingUp} title="Portfolio Tracker" subtitle="Fully functional portfolio tracker page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Portfolio Tracker</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <TrendingUp className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <TrendingUp className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <TrendingUp className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
+  const [window, setWindow] = useState<Window>("24h");
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState(assets[0]);
+  const [watching, setWatching] = useState<string[]>([]);
+  const [checks, setChecks] = useState<string[]>([]);
+  const [refreshed, setRefreshed] = useState(false);
+  const visible = useMemo(() => assets.filter((item) => !query || `${item.symbol} ${item.name} ${item.className} ${item.note}`.toLowerCase().includes(query.toLowerCase())), [query]);
+  const toggle = (item: string, setter: React.Dispatch<React.SetStateAction<string[]>>) => setter((items) => items.includes(item) ? items.filter((value) => value !== item) : [...items, item]);
+  const reset = () => { setWindow("24h"); setQuery(""); setSelected(assets[0]); setWatching([]); setChecks([]); setRefreshed(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={TrendingUp} eyebrow="PortfolioTracker · Monitoring preview" title="Track evidence requirements without faking market movement." description="Explore watch concepts, local windows, performance and alert states, refresh simulation, selected detail, and production requirements. No holdings, wallet, market, price, transaction, alert delivery, user, automation, or performance source is connected." badge="Portfolio tracker preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setRefreshed(true)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />{refreshed ? "Preview refreshed" : "Refresh preview"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">Reset tracker</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Watch concepts", value: String(assets.length), hint: "Local fixtures", icon: Eye, tone: "cyan" }, { label: "Window", value: window, hint: "Local selection", icon: Clock3, tone: "violet" }, { label: "Performance", value: "Unavailable", hint: "No market source", icon: TrendingUp, tone: "amber" }, { label: "Alerts", value: watching.length ? String(watching.length) : "Off", hint: "No delivery source", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Tracking evidence boundary"><strong>This is not a live portfolio monitor.</strong> Asset names, watch intent, time windows, performance labels, refresh state, and alert counts are local UI concepts. They do not prove holdings, prices, movement, P&L, transactions, alerts, users, automation, or delivery. No account or market service is queried.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local watch concepts…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Review window</p><div className="mt-3 flex gap-2">{["1h", "24h", "7d", "30d"].map((item) => <button key={item} onClick={() => setWindow(item as Window)} className={`rounded-lg border px-3 py-2 text-xs ${window === item ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><ShieldAlert className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-300">A selected time window is not telemetry. Real tracking requires scoped, timestamped holdings and market sources with stale-data and outage handling.</p></div></div><p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Local watch intent</p><div className="mt-3 space-y-2">{visible.map((item) => <button key={item.id} onClick={() => { setSelected(item); toggle(item.id, setWatching); }} className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left ${selected.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex size-9 items-center justify-center rounded-xl bg-cyan-300/10"><Eye className="size-4 text-cyan-200" /></div><div className="flex-1"><p className="font-semibold">{item.symbol} · {item.name}</p><p className="mt-1 text-xs text-slate-500">{item.note}</p></div><span className="text-xs text-amber-200">{watching.includes(item.id) ? "Watching locally" : item.state}</span></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Monitoring worksheet</p><h2 className="mt-2 text-2xl font-black">{selected.symbol} · {selected.name}</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">Source off</Badge></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Current price", value: "Unavailable" }, { label: "Window movement", value: "Unmeasured" }, { label: "Balance", value: "Unavailable" }, { label: "Performance", value: "Unavailable" }, { label: "Alert threshold", value: "Unset" }, { label: "Delivery", value: "Off" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-4"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-lg font-black text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 rounded-xl border border-white/10 p-4"><p className="text-xs text-slate-500">Local state</p><p className="mt-2 text-sm leading-6 text-slate-400">{watching.includes(selected.id) ? "This concept is marked for local watch intent only." : "Select the concept to add local watch intent."} No alert is scheduled or delivered.</p></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Evidence checklist</p><h2 className="mt-2 text-2xl font-black">Before trusting tracking</h2><div className="mt-5 space-y-2">{evidence.map((item) => <button key={item} onClick={() => toggle(item, setChecks)} className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left ${checks.includes(item) ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><span className="flex size-5 items-center justify-center rounded border border-white/20">{checks.includes(item) ? "✓" : ""}</span><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></button>)}</div><Button disabled={checks.length === 0} className="mt-5 bg-cyan-300 text-slate-950 hover:bg-cyan-200"><ShieldCheck className="mr-2 size-4" />{checks.length}/{evidence.length} local checks selected</Button></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake monitoring</h2><p className="mt-3 text-sm leading-6 text-slate-400">Changing windows, search, watch intent, selection, refresh, or evidence checks changes browser state only. It does not fetch prices, calculate performance, schedule alerts, or automate a response.</p></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Production checklist</p><h2 className="mt-2 text-2xl font-black">Tracking must prove</h2><div className="mt-5 space-y-3">{["Authenticated holdings/wallet scope, asset identity, chain/network, privacy, and consent", "Timestamped market source, currency, stale-data policy, outage handling, and reconciliation", "Performance math, period boundaries, fees, benchmark, uncertainty, and no-guarantee messaging", "Alert thresholds, delivery, retries, rate limits, duplicate suppression, audit, and deletion", "Tests for empty/loading/error/offline states, provider outage, stale data, and recovery"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Tracker surface preserved", description: "Search, windows, watch intent, selected detail, refresh, alerts, performance, and evidence states remain interactive.", icon: TrendingUp, status: "Local tracker" }, { title: "Data and automation are off", description: "Holdings, prices, performance, alerts, delivery, user counts, and automation remain unavailable.", icon: ShieldAlert, status: "Guardrail" }, { title: "No financial result", description: "No movement, P&L, success rate, response time, or action prompt is fabricated.", icon: WifiOff, status: "Unavailable" }]} /></section></main></div>;
 }

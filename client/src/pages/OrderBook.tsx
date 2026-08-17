@@ -1,89 +1,20 @@
-import { BookOpen } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { BookOpen, Check, FileCheck2, Layers3, LockKeyhole, RefreshCw, ShieldCheck, TrendingDown, TrendingUp, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const BIDS = [{ price: 99.8, size: 12 }, { price: 99.6, size: 24 }, { price: 99.4, size: 38 }, { price: 99.2, size: 52 }];
+const ASKS = [{ price: 100.2, size: 10 }, { price: 100.4, size: 21 }, { price: 100.6, size: 33 }, { price: 100.8, size: 47 }];
 
 export default function OrderBook() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={BookOpen} title="Order Book" subtitle="Fully functional order book page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Order Book</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <BookOpen className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <BookOpen className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <BookOpen className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
+  const [selectedSide, setSelectedSide] = useState<"bid" | "ask">("bid");
+  const [selectedPrice, setSelectedPrice] = useState(99.8);
+  const [note, setNote] = useState("");
+  const [saved, setSaved] = useState(false);
+  const spread = useMemo(() => (ASKS[0].price - BIDS[0].price).toFixed(2), []);
+  const depth = useMemo(() => BIDS.reduce((sum, item) => sum + item.size, 0) + ASKS.reduce((sum, item) => sum + item.size, 0), []);
+  const reset = () => { setSelectedSide("bid"); setSelectedPrice(99.8); setNote(""); setSaved(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={BookOpen} eyebrow="OrderBook · Market-depth preview" title="Inspect the levels before imagining the liquidity." description="Review synthetic bid/ask ladders, spread and depth arithmetic, and a local order-intent note. No live market, exchange, user, timestamp, liquidity, order placement, fill, or financial advice is claimed." badge="Order book preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Intent saved locally" : "Save intent locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset book</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Levels", value: "8", hint: "Synthetic rows", icon: Layers3 }, { label: "Spread", value: spread, hint: "Local arithmetic", icon: TrendingUp, tone: "cyan" }, { label: "Depth", value: String(depth), hint: "Placeholder units", icon: BookOpen, tone: "violet" }, { label: "Execution", value: "Off", hint: "No exchange", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="OrderBook evidence boundary"><strong>Bid/ask rows, spread, depth, selected levels, and intent notes are market-structure fixtures—not live bids, asks, quantities, prices, liquidity, users, timestamps, exchange state, order acceptance, fills, or trading advice.</strong> Production order books require authenticated market-data streams, sequencing, timestamps, symbol/contract semantics, decimal rules, rate limits, snapshots, reconciliation, exchange connectivity, order controls, and auditability.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.85fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Synthetic depth</p><h2 className="mt-2 text-3xl font-black">Bid / ask ladder</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">Market source off</Badge></div><div className="mt-5 grid gap-6 sm:grid-cols-2"><div><div className="mb-3 flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-cyan-200"><TrendingUp className="size-4" />Bids</div><div className="space-y-2">{BIDS.map((item) => <button key={item.price} onClick={() => { setSelectedSide("bid"); setSelectedPrice(item.price); setSaved(false); }} className={`flex w-full items-center justify-between rounded-xl border p-3 text-left ${selectedSide === "bid" && selectedPrice === item.price ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10"}`}><span className="font-semibold text-cyan-200">{item.price.toFixed(2)}</span><span className="text-sm text-slate-400">{item.size} units</span></button>)}</div></div><div><div className="mb-3 flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-amber-200"><TrendingDown className="size-4" />Asks</div><div className="space-y-2">{ASKS.map((item) => <button key={item.price} onClick={() => { setSelectedSide("ask"); setSelectedPrice(item.price); setSaved(false); }} className={`flex w-full items-center justify-between rounded-xl border p-3 text-left ${selectedSide === "ask" && selectedPrice === item.price ? "border-amber-300/40 bg-amber-300/[0.08]" : "border-white/10"}`}><span className="font-semibold text-amber-200">{item.price.toFixed(2)}</span><span className="text-sm text-slate-400">{item.size} units</span></button>)}</div></div></div><div className="mt-5 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />Rows are synthetic. Do not interpret them as an available market, quote, or executable order.</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected level</p><h2 className="mt-2 text-3xl font-black">{selectedSide === "bid" ? "Bid" : "Ask"} {selectedPrice.toFixed(2)}</h2><p className="mt-3 text-slate-400">Local level selection only. No order intent is transmitted.</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Side", value: selectedSide === "bid" ? "Bid concept" : "Ask concept" }, { label: "Price", value: selectedPrice.toFixed(2) }, { label: "Timestamp", value: "Not sourced" }, { label: "Venue", value: "Unset" }, { label: "Liquidity", value: "Not measured" }, { label: "Order state", value: "Blocked" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><textarea value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} placeholder="Write a local market-structure question…" className="mt-5 min-h-28 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-slate-500" /><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-cyan-300/20 text-cyan-100/40">Place order unavailable</Button><Button disabled variant="outline" className="border-white/10 text-white/40">Connect exchange unavailable</Button></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Book readiness</p><h2 className="mt-2 text-2xl font-black">Required before market claims</h2><div className="mt-5 space-y-3">{["Authenticated streaming source, symbol/contract semantics, snapshots, sequencing, and timestamps", "Decimal, quantity, lot-size, spread, depth, and stale-data policy", "Exchange connectivity, rate limits, disconnects, reconciliation, and circuit breakers", "Order auth, idempotency, balance checks, fills, cancellations, and receipts", "Privacy, auditability, support, incident response, and no-advice boundary"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><FileCheck2 className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake book</h2><p className="mt-3 text-sm leading-6 text-slate-400">This preview changes local state only. It does not query a venue, identify users, report liquidity, place orders, or claim a fill.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A row is not liquidity", description: "Synthetic levels preserve market-depth UX without live price, size, venue, or timestamp claims.", icon: BookOpen, status: "Guardrail" }, { title: "Trading needs reconciliation", description: "Streams, sequencing, stale-data handling, authorization, fills, and receipts need evidence.", icon: ShieldCheck, status: "Required" }, { title: "No fake order", description: "The preview makes no exchange, wallet, broker, order, or execution request.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

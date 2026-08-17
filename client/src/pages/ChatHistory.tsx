@@ -1,75 +1,12 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Archive, Check, Clock3, Download, FileText, LockKeyhole, MessageSquareText, RefreshCw, Search, ShieldAlert, Trash2, UserRound, WifiOff } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-export default function ChatHistory() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>ChatHistory</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">ChatHistory</h1>
-            <p className="text-muted-foreground mt-2">Conversation history</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+type Thread = { id: string; title: string; topic: string; turns: number; note: string };
+const THREADS: Thread[] = [{ id: "thread-1", title: "Project brief review", topic: "Planning", turns: 4, note: "Synthetic transcript for reviewing archive layout and retention states." }, { id: "thread-2", title: "Wallet safety questions", topic: "Blockchain", turns: 6, note: "Synthetic transcript; no wallet address, balance, or private conversation is present." }, { id: "thread-3", title: "Accessibility checklist", topic: "UX", turns: 3, note: "Synthetic transcript; no model call, user identity, or saved message source is connected." }];
+const TOPICS = ["All", "Planning", "Blockchain", "UX"];
+export default function ChatHistory() { const [query, setQuery] = useState(""); const [topic, setTopic] = useState("All"); const [selectedId, setSelectedId] = useState(THREADS[0].id); const [threads, setThreads] = useState(THREADS); const [saved, setSaved] = useState(false); const visible = useMemo(() => threads.filter((thread) => `${thread.title} ${thread.topic} ${thread.note}`.toLowerCase().includes(query.toLowerCase()) && (topic === "All" || thread.topic === topic)), [threads, query, topic]); const selected = visible.find((thread) => thread.id === selectedId) ?? visible[0]; const removeLocal = () => { if (!selected) return; setThreads((items) => items.filter((thread) => thread.id !== selected.id)); setSaved(true); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Archive} eyebrow="AI · Conversation Archive" title="Give history a clear privacy contract." description="Explore synthetic conversation threads, inspect a local transcript preview, and rehearse archive controls. This page does not sync messages, retain personal data, export a record, or claim a server-side deletion." badge="Preview conversation archive"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Archive className="mr-2 size-4" />Save local archive view</Button><Button onClick={() => { setThreads(THREADS); setQuery(""); setTopic("All"); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset archive</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Threads", value: String(visible.length), hint: "Synthetic previews", icon: MessageSquareText }, { label: "Search", value: "Local", hint: "No server query", icon: Search, tone: "violet" }, { label: "Retention", value: "Undefined", hint: "No policy connected", icon: Clock3, tone: "amber" }, { label: "Sync", value: "Unavailable", hint: "No message store", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Conversation-history evidence boundary">A thread-shaped card is not proof of a conversation, timestamp, model response, sender identity, retention policy, export, or deletion. A production archive needs authenticated ownership, message provenance, encryption, retention and legal-hold rules, access logs, export format, deletion semantics, and clear sync failure states.</ScreenPreviewBanner><section className="flex flex-col gap-4 sm:flex-row"><div className="relative flex-1"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search synthetic threads" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="flex flex-wrap gap-2">{TOPICS.map((item) => <button key={item} onClick={() => setTopic(item)} className={`rounded-xl border px-3 py-2 text-sm ${topic === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-400"}`}>{item}</button>)}</div></section><section className="grid gap-6 lg:grid-cols-[1fr_1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Synthetic threads</p><div className="mt-5 space-y-3">{visible.map((thread) => <button key={thread.id} onClick={() => { setSelectedId(thread.id); setSaved(false); }} className={`w-full rounded-xl border p-4 text-left ${selected?.id === thread.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15"}`}><div className="flex items-center gap-3"><MessageSquareText className="size-5 text-cyan-300" /><div className="flex-1"><p className="font-semibold">{thread.title}</p><p className="mt-1 text-xs text-slate-500">{thread.topic} · {thread.turns} preview turns</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Synthetic</Badge></div><p className="mt-3 text-xs text-slate-500">{thread.note}</p></button>)}{visible.length === 0 && <p className="py-8 text-center text-sm text-slate-500">No synthetic threads match this view.</p>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected thread</p><h2 className="mt-2 text-2xl font-black">{selected.title}</h2><p className="mt-2 text-sm text-slate-400">{selected.topic} · {selected.turns} synthetic turns</p></div><Badge variant="outline" className="border-cyan-300/20 text-cyan-200">Local preview</Badge></div><div className="mt-6 rounded-xl border border-white/10 bg-black/15 p-4"><p className="text-[10px] uppercase tracking-[0.18em] text-slate-500">Transcript preview</p><p className="mt-3 text-sm leading-6 text-slate-300">{selected.note}</p><p className="mt-3 text-sm leading-6 text-cyan-200">No external model response or private message content is displayed.</p></div><div className="mt-6 flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} variant="outline" className="border-white/15 text-white"><Download className="mr-2 size-4" />Preview export</Button><Button onClick={removeLocal} variant="outline" className="border-rose-300/20 text-rose-200"><Trash2 className="mr-2 size-4" />Remove local thread</Button></div><div className="mt-6 space-y-2">{["Authenticated ownership", "Message provenance and timestamps", "Retention and legal hold", "Encryption and access logs", "Export format and redaction", "Server-side deletion semantics"].map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-3"><ShieldAlert className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Unavailable</span></div>)}</div>{saved && <div className="mt-5 flex items-center gap-2 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4 text-sm text-cyan-200"><Check className="size-4" />Local archive state updated; no server history changed.</div>}</> : <p className="text-sm text-slate-500">Select a synthetic thread.</p>}</CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><LockKeyhole className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Privacy is a feature</h3><p className="mt-2 text-sm leading-6 text-slate-400">Retention, access, export, and deletion need a user-visible contract.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><UserRound className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Ownership matters</h3><p className="mt-2 text-sm leading-6 text-slate-400">A label cannot prove who authored, viewed, or deleted a message.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><WifiOff className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">No fake archive</h3><p className="mt-2 text-sm leading-6 text-slate-400">Synthetic threads are not saved conversations, exports, or deletion records.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "History has a lifecycle", description: "Make capture, sync, retention, export, archive, and deletion states explicit.", icon: Archive, status: "Pattern" }, { title: "Privacy is operational", description: "Access logs, encryption, redaction, legal holds, and ownership belong in the design.", icon: LockKeyhole, status: "Required" }, { title: "No fake history", description: "Local threads are not model conversations, user records, or server-side history.", icon: WifiOff, status: "Guardrail" }]} /></main></div>; }

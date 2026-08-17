@@ -1,75 +1,12 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { BadgeCheck, Check, ClipboardCheck, FileBadge, Fingerprint, KeyRound, RefreshCw, Search, ShieldAlert, ShieldCheck, UserRound, WifiOff } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-export default function CertificateManager() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>CertificateManager</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">CertificateManager</h1>
-            <p className="text-muted-foreground mt-2">Digital certificates</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+type Certificate = { id: string; title: string; subject: string; state: string; issuer: string; detail: string };
+const CERTS: Certificate[] = [{ id: "cert-01", title: "Learning pathway preview", subject: "Synthetic learner", state: "Draft", issuer: "Issuer unverified", detail: "A certificate-shaped record for reviewing fields and verification states." }, { id: "cert-02", title: "Community contribution preview", subject: "Synthetic contributor", state: "Needs review", issuer: "Issuer unverified", detail: "No credential, achievement, signature, or recipient identity is established." }, { id: "cert-03", title: "Builder milestone preview", subject: "Synthetic builder", state: "Unavailable", issuer: "No issuer connected", detail: "A local preview cannot prove completion, eligibility, or revocation status." }];
+const STATES = ["All", "Draft", "Needs review", "Unavailable"];
+export default function CertificateManager() { const [query, setQuery] = useState(""); const [state, setState] = useState("All"); const [selectedId, setSelectedId] = useState(CERTS[0].id); const [recipient, setRecipient] = useState(""); const [saved, setSaved] = useState(false); const visible = useMemo(() => CERTS.filter((cert) => `${cert.title} ${cert.subject} ${cert.issuer}`.toLowerCase().includes(query.toLowerCase()) && (state === "All" || cert.state === state)), [query, state]); const selected = visible.find((cert) => cert.id === selectedId) ?? visible[0]; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={FileBadge} eyebrow="Trust · Certificate Management" title="Review the credential before anyone calls it verified." description="Inspect synthetic certificate records, verification fields, and a local issuance-plan draft. This page does not issue credentials, sign claims, verify identity, publish a credential, or promise revocation handling." badge="Preview credential workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><ClipboardCheck className="mr-2 size-4" />Save local issuance plan</Button><Button onClick={() => { setQuery(""); setState("All"); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset review</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Records", value: String(visible.length), hint: "Synthetic certificates", icon: FileBadge }, { label: "Signature", value: "Unavailable", hint: "No signing key", icon: KeyRound, tone: "violet" }, { label: "Issuer", value: "Unverified", hint: "No issuer registry", icon: ShieldAlert, tone: "amber" }, { label: "Verification", value: "Unavailable", hint: "No verifier service", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Credential evidence boundary">A certificate-shaped record is not a credential. Real issuance requires a verified issuer, recipient identity and consent, achievement evidence, signed payload, key custody, serial or status registry, expiration and revocation semantics, privacy controls, and an independently verifiable presentation.</ScreenPreviewBanner><section className="flex flex-col gap-4 sm:flex-row"><div className="relative flex-1"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search synthetic certificates" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="flex flex-wrap gap-2">{STATES.map((item) => <button key={item} onClick={() => setState(item)} className={`rounded-xl border px-3 py-2 text-sm ${state === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-400"}`}>{item}</button>)}</div></section><section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Synthetic record queue</p><div className="mt-5 space-y-3">{visible.map((cert) => <button key={cert.id} onClick={() => setSelectedId(cert.id)} className={`w-full rounded-xl border p-4 text-left ${selected?.id === cert.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15"}`}><div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10"><FileBadge className="size-5 text-cyan-300" /></div><div className="flex-1"><p className="font-semibold">{cert.title}</p><p className="mt-1 text-xs text-slate-500">{cert.subject} · {cert.issuer}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{cert.state}</Badge></div><p className="mt-3 text-xs text-slate-500">{cert.detail}</p></button>)}{visible.length === 0 && <p className="py-8 text-center text-sm text-slate-500">No synthetic certificates match this view.</p>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected evidence</p><h2 className="mt-2 text-2xl font-black">{selected.title}</h2><p className="mt-2 text-sm text-slate-400">{selected.subject} · {selected.state}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Synthetic</Badge></div><p className="mt-6 text-sm leading-6 text-slate-300">{selected.detail}</p><div className="mt-6 space-y-2">{["Issuer identity and authorization", "Recipient identity and consent", "Achievement evidence", "Signed payload and key custody", "Expiration and revocation status", "Independent verification endpoint"].map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Unavailable</span></div>)}</div><div className="mt-6 rounded-xl border border-white/10 bg-black/15 p-4"><p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Local issuance plan</p><div className="mt-3 flex gap-2"><Input value={recipient} onChange={(event) => { setRecipient(event.target.value); setSaved(false); }} placeholder="Recipient label" className="border-white/10 bg-black/20 text-white placeholder:text-slate-500" /><Button onClick={() => setSaved(true)} variant="outline" className="border-white/15 text-white">Prepare</Button></div>{saved && <p className="mt-3 flex items-center gap-2 text-sm text-cyan-200"><Check className="size-4" />Local plan saved; no credential was signed or issued.</p>}</div></> : <p className="text-sm text-slate-500">Select a certificate record.</p>}</CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Fingerprint className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Identity is a gate</h3><p className="mt-2 text-sm leading-6 text-slate-400">A recipient label is not a verified person, consent record, or claim of achievement.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><BadgeCheck className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Signature proves origin</h3><p className="mt-2 text-sm leading-6 text-slate-400">A real credential needs key custody, signed payload verification, and status semantics.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><WifiOff className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">No fake verification</h3><p className="mt-2 text-sm leading-6 text-slate-400">A preview record is not issued, verified, transferable, expiring, or revocable.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Evidence before credential", description: "Surface issuer, recipient, achievement, signature, and status requirements before a certificate is meaningful.", icon: FileBadge, status: "Pattern" }, { title: "Verification is independent", description: "Recipients need a way to verify claims without trusting a screenshot or page state.", icon: ShieldCheck, status: "Required" }, { title: "No fake issuance", description: "A local issuance plan is not a credential, signature, registry entry, or achievement claim.", icon: WifiOff, status: "Guardrail" }]} /></main></div>; }

@@ -1,89 +1,21 @@
-import { Coins } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Banknote, BarChart3, Check, CircleDollarSign, FileText, LockKeyhole, RefreshCw, Search, ShieldCheck, Sparkles, WalletCards, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const STREAMS = [{ title: "Membership", category: "Recurring", description: "Plan a gated member offer with transparent entitlement and cancellation rules.", status: "Plan" }, { title: "Tips", category: "One-time", description: "Define a voluntary support flow without asserting payment capture or settlement.", status: "Preview" }, { title: "Digital goods", category: "Commerce", description: "Map a product, delivery, refund, and support checklist before listing.", status: "Needs setup" }, { title: "Sponsorship", category: "Partnership", description: "Draft sponsor deliverables and disclosure requirements locally.", status: "Draft" }, { title: "Creator fund", category: "Program", description: "Explore eligibility and allocation questions without claiming a funded program.", status: "Unavailable" }];
+const FILTERS = ["All", "Recurring", "One-time", "Commerce", "Partnership", "Program"];
+const GATES = ["Verified owner and beneficiary", "Pricing, currency, tax, and disclosure rules", "Payment provider and custody contract", "Entitlement, refund, and cancellation lifecycle", "Payout reconciliation, support, and audit history"];
 
 export default function Monetization() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={Coins} title="Monetization" subtitle="Fully functional monetization page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Monetization</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Coins className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Coins className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Coins className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("All");
+  const [selected, setSelected] = useState(STREAMS[0].title);
+  const [note, setNote] = useState("");
+  const [saved, setSaved] = useState(false);
+  const stream = STREAMS.find((item) => item.title === selected) ?? STREAMS[0];
+  const visible = useMemo(() => STREAMS.filter((item) => (filter === "All" || item.category === filter) && `${item.title} ${item.category} ${item.description}`.toLowerCase().includes(query.toLowerCase())), [filter, query]);
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={CircleDollarSign} eyebrow="Monetization · Revenue planning" title="Plan sustainable revenue before claiming a payout." description="Explore local revenue-stream scenarios, offer and entitlement planning, payout-readiness gates, and a transparent metrics boundary. No active users, transactions, conversion, earnings, payment, payout, tax, or financial performance is asserted." badge="Monetization preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Plan saved locally" : "Save revenue plan"}</Button><Button onClick={() => { setQuery(""); setFilter("All"); setSelected(STREAMS[0].title); setNote(""); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset plan</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Revenue streams", value: String(STREAMS.length), hint: "Local scenarios", icon: CircleDollarSign }, { label: "Live revenue", value: "Off", hint: "No payment source", icon: Banknote, tone: "amber" }, { label: "Payouts", value: "Blocked", hint: "No custody contract", icon: WalletCards, tone: "violet" }, { label: "Analytics", value: "Unset", hint: "No event source", icon: BarChart3, tone: "slate" }]} /><ScreenPreviewBanner title="Monetization evidence boundary"><strong>Revenue stream cards, categories, checklist gates, and local notes are planning fixtures—not active users, conversion, transaction volume, earnings, payment processing, payout status, tax treatment, or financial performance.</strong> Production monetization requires verified ownership, payment and custody contracts, pricing and tax rules, entitlements, refunds, reconciliation, support, and auditable financial events.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search revenue streams" className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 flex gap-2 overflow-x-auto">{FILTERS.map((item) => <button key={item} onClick={() => setFilter(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${filter === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-5 space-y-3">{visible.map((item) => <button key={item.title} onClick={() => { setSelected(item.title); setSaved(false); }} className={`w-full rounded-2xl border p-4 text-left ${selected === item.title ? "border-cyan-300/40 bg-cyan-300/[0.07]" : "border-white/10 bg-black/10"}`}><div className="flex items-start gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-violet-300/10 text-violet-200"><Sparkles className="size-5" /></div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center justify-between gap-2"><h2 className="font-black">{item.title}</h2><Badge variant="outline" className="border-amber-300/20 text-[10px] text-amber-200">{item.status}</Badge></div><p className="mt-1 text-xs text-cyan-200">{item.category} stream</p><p className="mt-2 text-sm text-slate-400">{item.description}</p></div></div></button>)}{visible.length === 0 && <div className="p-8 text-center text-slate-500">No revenue streams match this view.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Selected stream</p><h2 className="mt-2 text-3xl font-black">{stream.title}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{stream.status}</Badge></div><p className="mt-4 text-slate-400">{stream.description}</p><div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4"><div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-200"><FileText className="size-5" /></div><div><p className="font-semibold">Offer worksheet</p><p className="text-xs text-slate-500">No price, payment, entitlement, or payout record</p></div></div><div className="mt-4 grid gap-3 sm:grid-cols-2">{[{ label: "Offer", value: "Local draft" }, { label: "Price", value: "Not set" }, { label: "Entitlement", value: "Not configured" }, { label: "Payout", value: "Unavailable" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></div><textarea value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} placeholder="Write a local revenue-planning note…" className="mt-5 min-h-24 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-slate-500" /><div className="mt-3 flex gap-2"><Button onClick={() => setSaved(true)} className="bg-violet-500 text-white hover:bg-violet-400"><Check className="mr-2 size-4" />Save local note</Button><Button disabled variant="outline" className="border-white/10 text-white/40"><Banknote className="mr-2 size-4" />Collect unavailable</Button></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Payout readiness</p><h2 className="mt-2 text-2xl font-black">Required before revenue action</h2><div className="mt-5 space-y-3">{GATES.map((gate) => <div key={gate} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{gate}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><ShieldCheck className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake financials</h2><p className="mt-3 text-sm leading-6 text-slate-400">The planner creates no charge, subscription, entitlement, payout, invoice, tax record, refund, or earnings claim.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A stream is not revenue", description: "Scenario cards preserve monetization UX without active users, transactions, conversion, or earnings claims.", icon: CircleDollarSign, status: "Guardrail" }, { title: "Entitlements need proof", description: "Pricing, access, cancellation, refunds, and support must share one authoritative lifecycle.", icon: FileText, status: "Required" }, { title: "No fake payout", description: "Local planning remains useful while payment collection, reconciliation, tax, and payout stay unavailable.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

@@ -1,75 +1,22 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, CircleUserRound, Filter, Heart, LockKeyhole, MessageCircle, Network, RefreshCw, Search, ShieldCheck, Sparkles, UserPlus, Users, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const PROFILES = [{ name: "Avery North", focus: "Creative systems", overlap: "Creator tools", path: "1 shared interest", note: "Synthetic profile for exploring interest-based discovery." }, { name: "Rin Sol", focus: "Learning design", overlap: "Education", path: "2 shared interests", note: "Local concept for consent-aware community discovery." }, { name: "Mika Vale", focus: "Game communities", overlap: "Gaming", path: "1 shared interest", note: "Synthetic card for testing mutual-connection presentation." }, { name: "Noor Fields", focus: "AI research", overlap: "AI", path: "3 shared interests", note: "Example profile; no actual identity or relationship is asserted." }];
+const FILTERS = ["All", "Creator tools", "Education", "Gaming", "AI"];
 
 export default function MutualConnections() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>MutualConnections</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">MutualConnections</h1>
-            <p className="text-muted-foreground mt-2">Find common friends</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("All");
+  const [selected, setSelected] = useState(PROFILES[0].name);
+  const [shortlist, setShortlist] = useState<string[]>([]);
+  const [saved, setSaved] = useState(false);
+  const profile = PROFILES.find((item) => item.name === selected) ?? PROFILES[0];
+  const visible = useMemo(() => PROFILES.filter((item) => (filter === "All" || item.overlap === filter) && `${item.name} ${item.focus} ${item.overlap} ${item.note}`.toLowerCase().includes(query.toLowerCase())), [filter, query]);
+  const toggle = (name: string) => { setShortlist((current) => current.includes(name) ? current.filter((item) => item !== name) : [...current, name]); setSaved(false); };
+  const reset = () => { setQuery(""); setFilter("All"); setSelected(PROFILES[0].name); setShortlist([]); setSaved(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Network} eyebrow="MutualConnections · Consent-aware discovery" title="Map shared interests before claiming a relationship." description="Explore synthetic profile cards, shared-interest paths, privacy-aware filters, and a local shortlist. No real identity, mutual connection, social graph, contact availability, message delivery, or recommendation is asserted." badge="Connection preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Map saved locally" : "Save connection map"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset map</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Profiles", value: String(PROFILES.length), hint: "Synthetic cards", icon: Users }, { label: "Shortlist", value: String(shortlist.length), hint: "Local only", icon: Heart, tone: "violet" }, { label: "Graph", value: "Off", hint: "No social source", icon: Network, tone: "amber" }, { label: "Messages", value: "Blocked", hint: "No delivery", icon: MessageCircle, tone: "slate" }]} /><ScreenPreviewBanner title="MutualConnections evidence boundary"><strong>Profile names, interests, overlap labels, and shortlist state are synthetic discovery fixtures—not real people, mutual-friend counts, social-graph data, identity verification, contact availability, relationship recommendations, or message delivery.</strong> Production connection discovery requires consent, profile provenance, privacy controls, block/report tools, abuse prevention, visibility rules, and auditable relationship state.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search synthetic profiles" className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 flex gap-2 overflow-x-auto">{FILTERS.map((item) => <button key={item} onClick={() => setFilter(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${filter === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-5 space-y-3">{visible.map((item) => <div key={item.name} className={`rounded-2xl border p-4 ${selected === item.name ? "border-cyan-300/40 bg-cyan-300/[0.07]" : "border-white/10 bg-black/10"}`}><button onClick={() => { setSelected(item.name); setSaved(false); }} className="w-full text-left"><div className="flex items-start gap-3"><div className="flex size-10 items-center justify-center rounded-full bg-violet-300/10 text-violet-200"><CircleUserRound className="size-5" /></div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center justify-between gap-2"><h2 className="font-black">{item.name}</h2><Badge variant="outline" className="border-amber-300/20 text-[10px] text-amber-200">{item.overlap}</Badge></div><p className="mt-1 text-xs text-cyan-200">{item.focus} · {item.path}</p><p className="mt-2 text-sm text-slate-400">{item.note}</p></div></div></button><div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3"><span className="text-xs text-slate-500">Synthetic profile</span><button onClick={() => toggle(item.name)} className={`rounded-lg p-2 ${shortlist.includes(item.name) ? "bg-cyan-300/15 text-cyan-200" : "text-slate-500 hover:bg-white/10"}`} aria-label={`Toggle ${item.name} shortlist`}><Heart className={`size-4 ${shortlist.includes(item.name) ? "fill-current" : ""}`} /></button></div></div>)}{visible.length === 0 && <div className="p-8 text-center text-slate-500">No profiles match this view.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Selected profile</p><h2 className="mt-2 text-3xl font-black">{profile.name}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{profile.overlap}</Badge></div><p className="mt-4 text-slate-400">{profile.note}</p><div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-5"><div className="flex items-center gap-3"><div className="flex size-11 items-center justify-center rounded-full bg-cyan-300/10 text-cyan-200"><Network className="size-5" /></div><div><p className="font-black">Shared-interest path</p><p className="text-xs text-slate-500">A local concept, not a verified graph edge</p></div></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Focus", value: profile.focus }, { label: "Overlap", value: profile.overlap }, { label: "Identity", value: "Synthetic" }, { label: "Contact", value: "Unavailable" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></div><div className="mt-5 flex gap-2"><Button onClick={() => toggle(profile.name)} className="bg-violet-500 text-white hover:bg-violet-400"><UserPlus className="mr-2 size-4" />{shortlist.includes(profile.name) ? "Remove from shortlist" : "Shortlist locally"}</Button><Button disabled variant="outline" className="border-white/10 text-white/40"><MessageCircle className="mr-2 size-4" />Message unavailable</Button></div><div className="mt-5 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />No profile identity, contact detail, mutual-friend count, or relationship edge is exposed by this preview.</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Connection readiness</p><h2 className="mt-2 text-2xl font-black">Required before discovery claims</h2><div className="mt-5 space-y-3">{["Consented identity and profile provenance", "Visibility, privacy, block, and report controls", "Verified relationship and mutuality source", "Abuse prevention, rate limits, and moderation", "Message delivery, notifications, retention, and support"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><Filter className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake relationship</h2><p className="mt-3 text-sm leading-6 text-slate-400">The planner does not identify people, expose a social graph, infer mutual friends, send messages, or claim connection recommendations.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "An interest is not a mutual", description: "Synthetic overlap cards preserve discovery UX without identity or graph claims.", icon: Network, status: "Guardrail" }, { title: "Consent comes first", description: "Visibility, block/report tools, provenance, and relationship rules need real privacy ownership.", icon: LockKeyhole, status: "Required" }, { title: "No fake contact", description: "Shortlist state remains local while profile contact and message delivery stay unavailable.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

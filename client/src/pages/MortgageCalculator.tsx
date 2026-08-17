@@ -1,75 +1,28 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Calculator, Check, CircleDollarSign, FileText, Home, Info, LockKeyhole, Percent, RefreshCw, ShieldCheck, SlidersHorizontal, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+const pct = new Intl.NumberFormat("en-US", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 export default function MortgageCalculator() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>MortgageCalculator</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">MortgageCalculator</h1>
-            <p className="text-muted-foreground mt-2">Mortgage calc</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [price, setPrice] = useState(420000);
+  const [downPayment, setDownPayment] = useState(84000);
+  const [rate, setRate] = useState(6.5);
+  const [years, setYears] = useState(30);
+  const [taxes, setTaxes] = useState(0);
+  const [insurance, setInsurance] = useState(0);
+  const [saved, setSaved] = useState(false);
+  const principal = Math.max(0, price - downPayment);
+  const monthlyRate = rate / 100 / 12;
+  const periods = years * 12;
+  const payment = useMemo(() => monthlyRate === 0 ? principal / periods : principal * (monthlyRate * (1 + monthlyRate) ** periods) / ((1 + monthlyRate) ** periods - 1), [monthlyRate, periods, principal]);
+  const totalInterest = Math.max(0, payment * periods - principal);
+  const monthlyTotal = payment + taxes / 12 + insurance / 12;
+  const ltv = price > 0 ? principal / price : 0;
+  const reset = () => { setPrice(420000); setDownPayment(84000); setRate(6.5); setYears(30); setTaxes(0); setInsurance(0); setSaved(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Home} eyebrow="MortgageCalculator · Scenario planning" title="Model the payment math before treating it as an offer." description="Adjust a transparent principal-and-interest scenario with optional annual placeholders for taxes and insurance. This is an educational worksheet: it is not a lender quote, approval, affordability assessment, rate lock, tax estimate, insurance quote, or financial recommendation." badge="Calculator preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Scenario saved locally" : "Save scenario"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset inputs</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Principal", value: money.format(principal), hint: "Price less down payment", icon: CircleDollarSign }, { label: "P&I payment", value: money.format(payment), hint: "Monthly estimate", icon: Calculator, tone: "cyan" }, { label: "Total interest", value: money.format(totalInterest), hint: `Over ${years} years`, icon: Percent, tone: "violet" }, { label: "LTV", value: pct.format(ltv), hint: "Simple worksheet ratio", icon: SlidersHorizontal, tone: "amber" }]} /><ScreenPreviewBanner title="MortgageCalculator evidence boundary"><strong>Displayed values are deterministic worksheet outputs from the inputs shown—not a lender quote, approval, affordability assessment, APR disclosure, rate lock, tax estimate, insurance quote, closing-cost estimate, or financial advice.</strong> Verify rates, terms, fees, taxes, insurance, local rules, and borrower-specific suitability with qualified professionals and authoritative documents before making a decision.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Inputs</p><h2 className="mt-2 text-3xl font-black">Build a scenario</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">Local only</Badge></div><div className="mt-6 space-y-5">{[{ label: "Home price", value: price, set: setPrice, min: 0, step: 5000 }, { label: "Down payment", value: downPayment, set: setDownPayment, min: 0, step: 5000 }, { label: "Annual interest rate (%)", value: rate, set: setRate, min: 0, step: 0.05 }, { label: "Term (years)", value: years, set: setYears, min: 1, step: 1 }, { label: "Annual property taxes (optional)", value: taxes, set: setTaxes, min: 0, step: 500 }, { label: "Annual insurance (optional)", value: insurance, set: setInsurance, min: 0, step: 250 }].map((item) => <label key={item.label} className="block"><span className="mb-2 block text-sm font-semibold text-slate-300">{item.label}</span><input type="number" min={item.min} step={item.step} value={item.value} onChange={(event) => { item.set(Number(event.target.value)); setSaved(false); }} className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white" /></label>)}</div><div className="mt-5 flex items-start gap-3 rounded-xl border border-white/10 bg-black/10 p-4"><Info className="mt-0.5 size-4 shrink-0 text-cyan-300" /><p className="text-xs leading-5 text-slate-400">Taxes and insurance are optional placeholders. A zero value means “not entered,” not zero actual cost.</p></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Scenario result</p><h2 className="mt-2 text-3xl font-black">{money.format(monthlyTotal)}<span className="text-base font-medium text-slate-500"> / month</span></h2></div><Badge variant="outline" className="border-cyan-300/20 text-cyan-200">Formula output</Badge></div><p className="mt-3 text-sm text-slate-400">Principal and interest plus any optional annual tax and insurance placeholders.</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Principal", value: money.format(principal) }, { label: "Monthly P&I", value: money.format(payment) }, { label: "Monthly tax placeholder", value: money.format(taxes / 12) }, { label: "Monthly insurance placeholder", value: money.format(insurance / 12) }, { label: "Total of P&I payments", value: money.format(payment * periods) }, { label: "Simple LTV", value: pct.format(ltv) }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-4"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-lg font-black text-cyan-200">{item.value}</p></div>)}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-200">No affordability conclusion</p><p className="mt-2 text-sm leading-6 text-slate-400">The calculator does not know income, debts, credit, reserves, fees, local taxes, insurance pricing, or lender underwriting.</p></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Verification checklist</p><h2 className="mt-2 text-2xl font-black">Confirm before relying on a number</h2><div className="mt-5 space-y-3">{["Rate type, APR, points, and lock period", "Taxes, insurance, HOA, and closing costs", "Lender fees, prepayment rules, and escrow", "Income, debts, credit, reserves, and underwriting", "Local legal, tax, and housing guidance"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Verify</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><ShieldCheck className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake lender connection</h2><p className="mt-3 text-sm leading-6 text-slate-400">This worksheet does not submit an application, retrieve rates, contact a lender, estimate approval odds, or create a financial commitment.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Transparent formula", description: "Principal-and-interest math is visible from the displayed inputs; optional costs are clearly separated.", icon: Calculator, status: "Local" }, { title: "Inputs are not advice", description: "A payment estimate cannot establish affordability or suitability for a person or property.", icon: FileText, status: "Guardrail" }, { title: "No fake application", description: "The page does not quote a lender, lock a rate, approve a borrower, or create a mortgage record.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

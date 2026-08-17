@@ -1,74 +1,17 @@
 import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { AtSign, Check, Eye, EyeOff, Fingerprint, Heart, LockKeyhole, RefreshCw, Shield, UserRound, Users, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const GATES = ["Account session and ownership", "Identity verification and recovery", "Profile persistence and validation", "Follower and social graph source", "Privacy, blocking, and moderation"];
 
 export default function MobileProfile() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>MobileProfile</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">MobileProfile</h1>
-            <p className="text-muted-foreground mt-2">Mobile profile</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [name, setName] = useState("Local creator");
+  const [handle, setHandle] = useState("preview_profile");
+  const [bio, setBio] = useState("A local profile draft for mobile UX review.");
+  const [visibility, setVisibility] = useState<"public" | "private">("public");
+  const [saved, setSaved] = useState(false);
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={UserRound} eyebrow="Mobile profile · Account" title="Edit the profile without certifying the person." description="Review editable local profile fields, visibility state, public-preview presentation, and identity/security readiness. No verified identity, follower count, social graph, account session, persistence, security credential, or device action is claimed." badge="Profile preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Draft saved locally" : "Save profile draft"}</Button><Button onClick={() => { setName("Local creator"); setHandle("preview_profile"); setBio("A local profile draft for mobile UX review."); setVisibility("public"); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset profile</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Draft fields", value: "3", hint: "Local inputs", icon: UserRound }, { label: "Visibility", value: visibility === "public" ? "Preview" : "Private", hint: "Local state", icon: visibility === "public" ? Eye : EyeOff, tone: "violet" }, { label: "Verified", value: "Off", hint: "No identity source", icon: Fingerprint, tone: "amber" }, { label: "Followers", value: "Off", hint: "No social graph", icon: Users, tone: "slate" }]} /><ScreenPreviewBanner title="MobileProfile evidence boundary"><strong>Name, handle, bio, visibility, avatar placeholder, and profile presentation are local draft state—not verified identity, public ownership, follower count, social links, account persistence, or security proof.</strong> Production profiles require authenticated ownership, validation, privacy controls, recovery, moderation, social graph provenance, and secure session handling.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Local profile draft</p><h2 className="mt-2 text-2xl font-black">Edit fields for UX review</h2><div className="mt-5 space-y-4"><label className="block"><span className="text-xs text-slate-500">Display name</span><input value={name} onChange={(event) => { setName(event.target.value); setSaved(false); }} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white" /></label><label className="block"><span className="text-xs text-slate-500">Handle</span><div className="relative mt-2"><AtSign className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={handle} onChange={(event) => { setHandle(event.target.value.replace(/\s/g, "_")); setSaved(false); }} className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white" /></div></label><label className="block"><span className="text-xs text-slate-500">Bio</span><textarea value={bio} onChange={(event) => { setBio(event.target.value); setSaved(false); }} className="mt-2 min-h-28 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-white" /></label><div className="flex gap-2"><button onClick={() => setVisibility("public")} className={`flex-1 rounded-xl border p-3 text-sm ${visibility === "public" ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-500"}`}><Eye className="mx-auto mb-1 size-4" />Public preview</button><button onClick={() => setVisibility("private")} className={`flex-1 rounded-xl border p-3 text-sm ${visibility === "private" ? "border-violet-300/40 bg-violet-300/[0.1] text-violet-200" : "border-white/10 text-slate-500"}`}><EyeOff className="mx-auto mb-1 size-4" />Private draft</button></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">{visibility === "public" ? "Public-preview" : "Private-draft"} card</p><h2 className="mt-2 text-3xl font-black">{name || "Unnamed draft"}</h2><p className="mt-1 text-sm text-cyan-200">@{handle || "preview"}</p></div><div className="flex size-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-300 to-violet-400 text-slate-950"><UserRound className="size-8" /></div></div><p className="mt-5 leading-7 text-slate-400">{bio || "No bio in this local draft."}</p><div className="mt-6 grid gap-3 sm:grid-cols-3">{[{ label: "Verification", value: "Not verified" }, { label: "Followers", value: "Unavailable" }, { label: "Social links", value: "Not attached" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-200">Preview only</p><p className="mt-2 text-sm leading-6 text-slate-400">This card does not create a profile, publish an identity, add a follower, or persist a setting.</p></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Account readiness</p><h2 className="mt-2 text-2xl font-black">Required before publish</h2><div className="mt-5 space-y-3">{GATES.map((gate) => <div key={gate} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{gate}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><Shield className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake ownership</h2><p className="mt-3 text-sm leading-6 text-slate-400">No sign-in, session, verification, follower, social-link, recovery, biometric, or profile-publish action is attached to this draft.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A draft is not an identity", description: "Editable fields preserve profile UX without certifying who owns them or whether they are public.", icon: UserRound, status: "Guardrail" }, { title: "Privacy needs controls", description: "Visibility, blocking, recovery, moderation, and deletion need persisted policy and account ownership.", icon: Shield, status: "Required" }, { title: "No fake social proof", description: "The preview keeps profile review useful without followers, likes, verification, or social graph claims.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

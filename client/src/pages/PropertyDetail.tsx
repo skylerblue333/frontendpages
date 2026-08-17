@@ -1,75 +1,15 @@
 import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { FileText, Home, KeyRound, LockKeyhole, MapPin, RefreshCw, ShieldAlert, Star, Wallet, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+const tabs = ["Overview", "Amenities", "Location", "Financial", "Legal"];
 export default function PropertyDetail() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>PropertyDetail</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">PropertyDetail</h1>
-            <p className="text-muted-foreground mt-2">Property details</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [tab, setTab] = useState(tabs[0]);
+  const [saved, setSaved] = useState(false);
+  const [showGates, setShowGates] = useState(false);
+  const [note, setNote] = useState("");
+  const reset = () => { setTab(tabs[0]); setSaved(false); setShowGates(false); setNote(""); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Home} eyebrow="PropertyDetail · Evidence-aware preview" title="Inspect the record before acting on the property." description="Explore a local property detail surface with overview, amenities, location, financial, legal, and action tabs. No listing, address, price, valuation, ownership, title, inspection, financing, availability, or purchase action is verified." badge="Property detail"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200">{saved ? "Detail saved locally" : "Save detail locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><ShieldAlert className="mr-2 size-4" />{showGates ? "Close gates" : "Review property gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset detail</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Property", value: "Local concept", hint: "No listing source", icon: Home, tone: "cyan" }, { label: "Location", value: "Unverified", hint: "No address source", icon: MapPin, tone: "violet" }, { label: "Value", value: "Unmeasured", hint: "No appraisal source", icon: Wallet, tone: "amber" }, { label: "Ownership", value: "Unknown", hint: "No title source", icon: KeyRound, tone: "slate" }]} /><ScreenPreviewBanner title="Property detail evidence boundary"><strong>This is a local property-detail worksheet, not a listing, appraisal, or transaction workflow.</strong> Tabs, fields, notes, and blocked actions are browser concepts. No address, price, rent, valuation, owner, title, availability, inspection, rating, mortgage, tax, legal status, or purchase outcome is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start gap-4"><div className="flex size-20 items-center justify-center rounded-3xl bg-cyan-300/10"><Home className="size-9 text-cyan-200" /></div><div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Unverified concept</Badge><h2 className="mt-3 text-2xl font-black">Skyline residence concept</h2><p className="mt-2 text-sm text-slate-500">Location unverified · Property type unverified</p></div></div><p className="mt-6 text-sm leading-7 text-slate-300">A local detail surface for documenting which evidence would be needed before a property could be described, compared, financed, purchased, rented, sold, or legally relied upon.</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Price", value: "Unpublished" }, { label: "Availability", value: "Unknown" }, { label: "Rating", value: "Unmeasured" }, { label: "Ownership", value: "Unverified" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Evidence posture</p><h2 className="mt-2 text-2xl font-black">No verified property record</h2><div className="mt-6 space-y-3">{[{ label: "Address and parcel", value: "Not loaded", icon: MapPin }, { label: "Title and ownership", value: "Not loaded", icon: KeyRound }, { label: "Condition and inspection", value: "Not loaded", icon: FileText }, { label: "Financing and taxes", value: "Not loaded", icon: Wallet }].map((item) => { const Icon = item.icon; return <div key={item.label} className="flex items-center gap-3 rounded-xl border border-white/10 p-4"><Icon className="size-5 text-slate-500" /><div className="flex-1"><p className="font-semibold">{item.label}</p><p className="mt-1 text-sm text-amber-200">{item.value}</p></div></div>; })}</div><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">Actions blocked</p><p className="mt-2 text-sm leading-6 text-slate-400">No contact, offer, financing, viewing, rent, buy, sell, or transaction action is available.</p><Button disabled className="mt-4 bg-slate-700 text-slate-400">Contact or transact unavailable</Button></div></CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex flex-wrap gap-2">{tabs.map((item) => <button key={item} onClick={() => setTab(item)} className={`flex items-center gap-2 rounded-lg border px-4 py-2 text-sm ${tab === item ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500"}`}>{item === "Overview" && <Home className="size-4" />}{item === "Amenities" && <Star className="size-4" />}{item === "Location" && <MapPin className="size-4" />}{item === "Financial" && <Wallet className="size-4" />}{item === "Legal" && <KeyRound className="size-4" />}{item}</button>)}</div><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-10">{tab === "Overview" ? <div><FileText className="size-9 text-cyan-300/40" /><h3 className="mt-4 text-xl font-black">Overview preserved as a local concept</h3><p className="mt-2 text-sm leading-6 text-slate-500">No verified listing summary, property facts, media, owner statement, or public record is connected.</p></div> : <div className="text-center"><ShieldAlert className="mx-auto size-10 text-violet-300/40" /><h3 className="mt-4 text-xl font-black">{tab} unavailable in preview</h3><p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-slate-500">No {tab.toLowerCase()} source is connected. Nothing is fabricated to imply suitability, value, title, condition, location, or affordability.</p><Button disabled className="mt-5 bg-slate-700 text-slate-400">Load {tab.toLowerCase()} unavailable</Button></div>}</div></CardContent></Card><label className="block text-sm text-slate-400">Evidence note<textarea value={note} onChange={(event) => setNote(event.target.value)} rows={3} placeholder="Record what would need independent verification..." className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none" /></label>{showGates && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Property decision gates</p><h2 className="mt-2 text-2xl font-black">What a real detail page must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Verified source, address, parcel, title, ownership, and legal status", "Independent inspection, condition, disclosures, hazards, and environmental review", "Price, rent, valuation, comparable evidence, taxes, fees, insurance, and maintenance", "Financing, affordability, rate, underwriting, and regional legal treatment", "Privacy, fraud prevention, moderation, contact routing, and audit", "No buy, sell, rent, or investment recommendation without qualified review"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card>}<ScreenFeatureGrid features={[{ title: "Detail surface preserved", description: "Overview, amenities, location, financial, legal, evidence, notes, availability, ownership, and blocked actions remain interactive.", icon: Home, status: "Local detail" }, { title: "No property theater", description: "Listings, addresses, prices, valuations, owners, title, inspections, ratings, financing, and transactions are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before action", description: "Real property actions require verified records, regional legal and financial review, fraud controls, and qualified advice.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
 }

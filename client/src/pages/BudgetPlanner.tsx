@@ -1,75 +1,13 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { ArrowDownRight, ArrowUpRight, Calculator, Check, CircleAlert, FileSpreadsheet, Info, LockKeyhole, PieChart, Plus, RefreshCw, SlidersHorizontal, Target, WalletCards, WifiOff } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-export default function BudgetPlanner() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+type Category = { name: string; amount: string; color: string; purpose: string };
+const INITIAL_CATEGORIES: Category[] = [{ name: "Housing", amount: "0", color: "bg-cyan-300", purpose: "User-entered scenario" }, { name: "Essentials", amount: "0", color: "bg-violet-300", purpose: "User-entered scenario" }, { name: "Flexible", amount: "0", color: "bg-amber-300", purpose: "User-entered scenario" }, { name: "Goals", amount: "0", color: "bg-emerald-300", purpose: "User-entered scenario" }];
+const parseAmount = (value: string) => { const number = Number(value.replace(/[^0-9.-]/g, "")); return Number.isFinite(number) && number >= 0 ? number : 0; };
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>BudgetPlanner</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">BudgetPlanner</h1>
-            <p className="text-muted-foreground mt-2">Budget creation</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+export default function BudgetPlanner() { const [income, setIncome] = useState("0"); const [categories, setCategories] = useState(INITIAL_CATEGORIES); const [scenario, setScenario] = useState("Baseline"); const [saved, setSaved] = useState(false); const totalIncome = parseAmount(income); const totalPlanned = useMemo(() => categories.reduce((sum, category) => sum + parseAmount(category.amount), 0), [categories]); const remainder = totalIncome - totalPlanned; const allocation = totalIncome > 0 ? Math.min(100, Math.round((totalPlanned / totalIncome) * 100)) : 0; const updateCategory = (index: number, amount: string) => { setCategories((current) => current.map((category, categoryIndex) => categoryIndex === index ? { ...category, amount } : category)); setSaved(false); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Calculator} eyebrow="Planning Tools · Scenario Canvas" title="Model a plan before you call it a budget." description="Enter hypothetical income and allocations, compare scenarios, and inspect the arithmetic. This canvas does not connect to accounts, import transactions, predict outcomes, recommend financial decisions, or represent a user's actual financial position." badge="Preview planning workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><FileSpreadsheet className="mr-2 size-4" />Save local scenario</Button><Button onClick={() => { setIncome("0"); setCategories(INITIAL_CATEGORIES); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset inputs</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Scenario", value: scenario, hint: "Local planning label", icon: SlidersHorizontal }, { label: "Planned", value: `$${totalPlanned.toLocaleString()}`, hint: "Sum of entered categories", icon: PieChart, tone: "violet" }, { label: "Remaining", value: `$${remainder.toLocaleString()}`, hint: remainder < 0 ? "Over allocated" : "Not a recommendation", icon: remainder < 0 ? ArrowDownRight : ArrowUpRight, tone: remainder < 0 ? "amber" : "cyan" }, { label: "Account sync", value: "Unavailable", hint: "No transactions imported", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Financial data boundary">Every value in this planner is entered locally by the user or starts at zero. The calculations show arithmetic only; they are not financial advice, a forecast, a budget recommendation, an affordability assessment, or a claim about a connected account, balance, debt, income, or spending history.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Scenario inputs</p><h2 className="mt-1 text-2xl font-black">Set the assumptions</h2></div><Target className="size-5 text-cyan-300" /></div><div className="mt-6 space-y-5"><div><label className="mb-2 block text-sm font-medium text-slate-300" htmlFor="scenario-name">Scenario label</label><Input id="scenario-name" value={scenario} onChange={(event) => setScenario(event.target.value || "Unnamed") } className="border-white/10 bg-black/20 text-white" /></div><div><label className="mb-2 block text-sm font-medium text-slate-300" htmlFor="income">Hypothetical monthly inflow</label><div className="relative"><span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">$</span><Input id="income" inputMode="decimal" value={income} onChange={(event) => { setIncome(event.target.value); setSaved(false); }} className="border-white/10 bg-black/20 pl-8 text-white" /></div><p className="mt-2 text-xs text-slate-500">Enter a scenario value; no income source is connected or verified.</p></div><div className="rounded-xl border border-white/10 bg-black/15 p-4"><div className="flex items-center gap-2 text-sm font-medium"><Info className="size-4 text-cyan-300" />Arithmetic only</div><p className="mt-2 text-sm leading-6 text-slate-400">Remaining = hypothetical inflow − entered allocations. Negative remaining means the scenario is over allocated, not that a financial action is required.</p></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Allocation canvas</p><h2 className="mt-1 text-2xl font-black">Where would it go?</h2></div><Badge variant="outline" className="border-cyan-300/25 text-cyan-200">{allocation}% allocated</Badge></div><div className="mt-6 space-y-4">{categories.map((category, index) => <div key={category.name} className="rounded-xl border border-white/10 bg-black/15 p-4"><div className="flex items-center gap-3"><span className={`size-3 rounded-full ${category.color}`} /><div className="flex-1"><p className="font-semibold">{category.name}</p><p className="text-xs text-slate-500">{category.purpose}</p></div><div className="relative w-36"><span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">$</span><Input value={category.amount} onChange={(event) => updateCategory(index, event.target.value)} inputMode="decimal" aria-label={`${category.name} amount`} className="border-white/10 bg-white/[0.04] pl-8 text-right text-white" /></div></div><div className="mt-3 h-2 overflow-hidden rounded-full bg-white/5"><div className={`h-full ${category.color} transition-all`} style={{ width: `${totalIncome > 0 ? Math.min(100, (parseAmount(category.amount) / totalIncome) * 100) : 0}%` }} /></div></div>)}<Button onClick={() => setCategories((current) => [...current, { name: `Category ${current.length + 1}`, amount: "0", color: "bg-slate-300", purpose: "Local custom category" }])} variant="outline" className="w-full border-dashed border-white/15 text-slate-300 hover:bg-white/10"><Plus className="mr-2 size-4" />Add category</Button></div>{saved && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-cyan-200"><Check className="size-4" />Scenario saved locally</div><p className="mt-2 text-sm leading-6 text-slate-300">No account record, transaction import, notification, recommendation, or financial decision was created.</p></div>}</CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Button onClick={() => setScenario("Conservative") } variant={scenario === "Conservative" ? "default" : "outline"} className={scenario === "Conservative" ? "bg-cyan-300 text-slate-950" : "border-white/15 text-white"}>Conservative scenario</Button><Button onClick={() => setScenario("Baseline") } variant={scenario === "Baseline" ? "default" : "outline"} className={scenario === "Baseline" ? "bg-violet-300 text-slate-950" : "border-white/15 text-white"}>Baseline scenario</Button><Button onClick={() => setScenario("Stretch") } variant={scenario === "Stretch" ? "default" : "outline"} className={scenario === "Stretch" ? "bg-amber-300 text-slate-950" : "border-white/15 text-white"}>Stretch scenario</Button></section><Card className="border-amber-300/20 bg-amber-300/[0.05]"><CardContent className="p-6"><div className="flex items-center gap-3"><CircleAlert className="size-5 text-amber-300" /><div><h2 className="font-semibold text-amber-200">No personalized recommendation</h2><p className="mt-2 text-sm leading-6 text-slate-300">A real financial planning product would need explicit consent, secure data connections, jurisdiction-aware disclosures, transaction categorization, corrections, audit history, and clear limits on any recommendation engine.</p></div></div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Inputs stay visible", description: "Show the assumptions that drive the arithmetic instead of presenting unexplained totals.", icon: SlidersHorizontal, status: "Ready" }, { title: "Scenario, not prediction", description: "A what-if model helps users inspect a chosen set of values without claiming an outcome.", icon: Calculator, status: "Guardrail" }, { title: "Financial data needs custody", description: "Account linking, transaction import, encryption, correction, and deletion require a real backend contract.", icon: LockKeyhole, status: "Required" }]} /></main></div>; }

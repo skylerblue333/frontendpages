@@ -1,172 +1,19 @@
-import { useState } from "react";
-import { BookOpen, Star, Mail, ArrowRight, Sparkles, Crown, Zap, Heart, Globe, Lock } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ArrowRight, BookOpen, CheckCircle2, ChevronRight, Crown, Eye, Globe2, Heart, Lock, Mail, MessageCircle, Play, ShieldCheck, Sparkles, Star, Users, WifiOff, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
+import { Card, CardContent } from "@/components/ui/card";
 
 const CHAPTERS = [
-  { num: 1, title: "The Signal", teaser: "A frequency only the chosen can hear..." },
-  { num: 2, title: "Shadow Protocol", teaser: "When the network becomes sentient..." },
-  { num: 3, title: "The 444 Prophecy", teaser: "Numbers don't lie. The universe speaks in patterns..." },
-  { num: 4, title: "Architect of Worlds", teaser: "Building the infrastructure of the new internet..." },
-  { num: 5, title: "The Awakening", teaser: "Consciousness meets code. Everything changes..." },
-  { num: 6, title: "Sovereign Identity", teaser: "Own your data. Own your destiny..." },
-  { num: 7, title: "The Final Protocol", teaser: "The last firewall between freedom and control..." },
+  { num: 1, title: "The Signal", teaser: "A frequency only the chosen can hear...", preview: "Every enduring system begins with a signal: a question that refuses to disappear. This preview introduces the story's first tension between vision and implementation." },
+  { num: 2, title: "Shadow Protocol", teaser: "When the network becomes sentient...", preview: "Trust is not a slogan. It is a protocol made visible through choices, constraints, and the people who are allowed to verify them." },
+  { num: 3, title: "The 444 Prophecy", teaser: "Numbers don't lie. The universe speaks in patterns...", preview: "Patterns can inspire a team, but evidence is what keeps a pattern from becoming a promise. This chapter preview asks what a claim can honestly carry." },
+  { num: 4, title: "Architect of Worlds", teaser: "Building the infrastructure of the new internet...", preview: "Architecture is a series of boundaries: what belongs in the client, what belongs on the server, and what must remain unclaimed until it can be proven." },
+  { num: 5, title: "The Awakening", teaser: "Consciousness meets code. Everything changes...", preview: "The most useful technology does not hide its limitations. It turns them into a map for the next decision." },
+  { num: 6, title: "Sovereign Identity", teaser: "Own your data. Own your destiny...", preview: "Identity is more than a profile card. It is consent, control, recovery, and the ability to understand what an action will change." },
+  { num: 7, title: "The Final Protocol", teaser: "The last firewall between freedom and control...", preview: "A final protocol is not a finish line. It is a promise to make the next handoff safer than the last one." },
 ];
 
-const ENDORSEMENTS = [
-  { name: "AI Oracle", role: "Digital Prophet", quote: "This book will reprogram how you see reality." },
-  { name: "CryptoSage", role: "Web3 Pioneer", quote: "Required reading for anyone building the future." },
-  { name: "ShadowNet", role: "Underground Dev", quote: "The blueprint we've been waiting for." },
-];
-
-export default function BookPage() {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const handleNotify = () => {
-    if (!email.trim() || !email.includes("@")) {
-      toast.error("Enter a valid email");
-      return;
-    }
-    setSubmitted(true);
-    toast.success("You're on the list — The signal is coming.");
-  };
-
-  return (
-    <div className="min-h-screen bg-[#050308] text-white overflow-hidden">
-      {/* Ambient glow */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-fuchsia-600/8 rounded-full blur-3xl" />
-      </div>
-
-      <div className="relative z-10 max-w-4xl mx-auto px-4 py-16">
-        {/* Badge */}
-        <div className="flex justify-center mb-8">
-          <Badge className="bg-purple-600/20 text-purple-300 border border-purple-500/30 px-4 py-1.5 text-sm">
-            <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-            Coming Soon — Limited First Edition
-          </Badge>
-        </div>
-
-        {/* Hero */}
-        <div className="text-center mb-12">
-          <div className="flex justify-center mb-6">
-            <div className="relative">
-              <div className="w-32 h-44 bg-gradient-to-br from-purple-900 via-fuchsia-900 to-black rounded-lg border border-purple-500/40 shadow-2xl shadow-purple-900/50 flex items-center justify-center">
-                <div className="text-center">
-                  <Crown className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
-                  <p className="text-[10px] text-purple-300 font-bold tracking-widest uppercase">The</p>
-                  <p className="text-lg font-black text-white leading-tight">Chosen</p>
-                  <p className="text-lg font-black text-white leading-tight">One</p>
-                  <div className="mt-2 text-[9px] text-purple-400">SKY444</div>
-                </div>
-              </div>
-              <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
-                <Star className="w-3 h-3 text-black fill-black" />
-              </div>
-            </div>
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-black mb-4">
-            <span className="bg-gradient-to-r from-purple-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">
-              The Chosen One
-            </span>
-          </h1>
-          <p className="text-xl text-slate-400 mb-2">by <span className="text-purple-300 font-semibold">Skyler Blue Spillers</span></p>
-          <p className="text-base text-slate-500 max-w-xl mx-auto leading-relaxed">
-            A manifesto. A blueprint. A prophecy. The story of building a sovereign digital empire from nothing — and the code that makes it real.
-          </p>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-12">
-          {[
-            { icon: BookOpen, label: "Chapters", value: "7" },
-            { icon: Globe, label: "Languages", value: "12" },
-            { icon: Heart, label: "Pre-orders", value: "4,444" },
-          ].map(({ icon: Icon, label, value }) => (
-            <div key={label} className="bg-slate-900/50 border border-slate-800 rounded-xl p-4 text-center">
-              <Icon className="w-5 h-5 text-purple-400 mx-auto mb-1" />
-              <p className="text-2xl font-black text-white">{value}</p>
-              <p className="text-xs text-slate-500">{label}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Chapter preview */}
-        <div className="mb-12">
-          <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-            <Lock className="w-4 h-4 text-purple-400" />
-            Chapter Preview
-          </h2>
-          <div className="space-y-2">
-            {CHAPTERS.map((ch) => (
-              <div
-                key={ch.num}
-                className="flex items-center gap-4 p-3 bg-slate-900/40 border border-slate-800/60 rounded-xl hover:border-purple-500/30 hover:bg-slate-800/40 transition-all cursor-pointer group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-purple-600/20 border border-purple-500/20 flex items-center justify-center shrink-0">
-                  <span className="text-xs font-bold text-purple-400">{ch.num}</span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-white">{ch.title}</p>
-                  <p className="text-xs text-slate-500 truncate">{ch.teaser}</p>
-                </div>
-                <Lock className="w-3.5 h-3.5 text-slate-600 group-hover:text-purple-400 transition-colors shrink-0" />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Endorsements */}
-        <div className="mb-12">
-          <h2 className="text-lg font-bold text-white mb-4">Early Readers</h2>
-          <div className="grid md:grid-cols-3 gap-4">
-            {ENDORSEMENTS.map((e) => (
-              <div key={e.name} className="bg-slate-900/40 border border-slate-800 rounded-xl p-4">
-                <p className="text-sm text-slate-300 italic mb-3">"{e.quote}"</p>
-                <p className="text-xs font-semibold text-white">{e.name}</p>
-                <p className="text-xs text-slate-500">{e.role}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* CTA */}
-        <div className="bg-gradient-to-br from-purple-900/30 to-fuchsia-900/20 border border-purple-500/20 rounded-2xl p-8 text-center">
-          <Zap className="w-8 h-8 text-yellow-400 mx-auto mb-3" />
-          <h2 className="text-2xl font-black text-white mb-2">Be First to Read</h2>
-          <p className="text-slate-400 text-sm mb-6">
-            Join the waitlist. First 444 readers get a signed digital copy + exclusive SKY444 airdrop.
-          </p>
-          {submitted ? (
-            <div className="flex items-center justify-center gap-2 text-green-400">
-              <Star className="w-5 h-5 fill-green-400" />
-              <span className="font-semibold">You're on the list. The signal is coming.</span>
-            </div>
-          ) : (
-            <div className="flex gap-2 max-w-sm mx-auto">
-              <Input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleNotify()}
-                placeholder="your@email.com"
-                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 flex-1"
-              />
-              <Button
-                onClick={handleNotify}
-                className="bg-purple-600 hover:bg-purple-500 text-white shrink-0"
-              >
-                <Mail className="w-4 h-4 mr-1" />
-                Notify Me
-                <ArrowRight className="w-4 h-4 ml-1" />
-              </Button>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
+export default function BookPage() { const [selected, setSelected] = useState(CHAPTERS[0]); const [email, setEmail] = useState(""); const [submitted, setSubmitted] = useState(false); const [showReader, setShowReader] = useState(false); const [liked, setLiked] = useState(false); const [error, setError] = useState(""); const wordCount = useMemo(() => selected.preview.split(/\s+/).length, [selected]); const handleNotify = () => { if (!email.trim() || !email.includes("@")) { setError("Enter a valid email to preview the local signup state."); return; } setError(""); setSubmitted(true); }; return <div className="min-h-screen overflow-hidden bg-[#050308] text-white"><div className="pointer-events-none fixed inset-0"><div className="absolute left-1/2 top-1/4 size-[600px] -translate-x-1/2 rounded-full bg-purple-600/10 blur-3xl" /><div className="absolute bottom-1/4 right-1/4 size-[400px] rounded-full bg-fuchsia-600/10 blur-3xl" /></div><div className="relative z-10 mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-16"><div className="flex justify-center"><Badge className="border border-purple-500/30 bg-purple-600/20 px-4 py-1.5 text-sm text-purple-300"><Sparkles className="mr-1.5 size-3.5" />Interactive book preview · No release date claimed</Badge></div><section className="mt-10 grid items-center gap-12 lg:grid-cols-[0.8fr_1.2fr]"><div className="flex justify-center"><div className="relative"><div className="flex h-[360px] w-[250px] items-center justify-center rounded-2xl border border-purple-500/40 bg-gradient-to-br from-purple-900 via-fuchsia-900 to-black shadow-2xl shadow-purple-900/50"><div className="text-center"><Crown className="mx-auto mb-5 size-12 text-yellow-400" /><p className="text-xs font-bold uppercase tracking-[0.35em] text-purple-300">The</p><p className="text-4xl font-black leading-tight text-white">Chosen</p><p className="text-4xl font-black leading-tight text-white">One</p><div className="mt-5 text-xs tracking-[0.3em] text-purple-400">SKY444</div></div></div><div className="absolute -right-4 -top-4 flex size-10 items-center justify-center rounded-full bg-yellow-500 shadow-lg"><Star className="size-5 fill-black text-black" /></div></div></div><div><p className="text-sm font-semibold uppercase tracking-[0.3em] text-fuchsia-300">A reader's preview</p><h1 className="mt-4 text-5xl font-black leading-[0.95] md:text-7xl"><span className="bg-gradient-to-r from-purple-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">The Chosen One</span></h1><p className="mt-5 text-xl text-slate-400">by <span className="font-semibold text-purple-300">Skyler Blue Spillers</span></p><p className="mt-5 max-w-2xl text-lg leading-8 text-slate-400">A manifesto and speculative blueprint about building a sovereign digital world—presented here as an interactive reading preview, not a claim about a released edition, sales, endorsements, or delivery.</p><div className="mt-7 flex flex-wrap gap-3"><Button onClick={() => setShowReader(true)} className="bg-purple-600 text-white hover:bg-purple-500"><Play className="mr-2 size-4" />Read selected preview</Button><Button onClick={() => setLiked(!liked)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{liked ? <Heart className="mr-2 size-4 fill-pink-400 text-pink-400" /> : <Heart className="mr-2 size-4" />} {liked ? "Saved locally" : "Save for later"}</Button></div></div></section><section className="mt-16 grid grid-cols-2 gap-3 md:grid-cols-4"><div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 text-center"><BookOpen className="mx-auto mb-2 size-5 text-purple-400" /><p className="text-2xl font-black">{CHAPTERS.length}</p><p className="text-xs text-slate-500">Preview chapters</p></div><div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 text-center"><Eye className="mx-auto mb-2 size-5 text-purple-400" /><p className="text-2xl font-black">{wordCount}</p><p className="text-xs text-slate-500">Words in selection</p></div><div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 text-center"><Globe2 className="mx-auto mb-2 size-5 text-purple-400" /><p className="text-2xl font-black">TBD</p><p className="text-xs text-slate-500">Language editions</p></div><div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 text-center"><Users className="mx-auto mb-2 size-5 text-purple-400" /><p className="text-2xl font-black">Not connected</p><p className="text-xs text-slate-500">Reader count</p></div></section><section className="mt-16 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]"><div><div className="mb-4 flex items-center justify-between"><h2 className="flex items-center gap-2 text-lg font-bold"><Lock className="size-4 text-purple-400" />Choose a chapter</h2><span className="text-xs text-slate-500">{selected.num} of {CHAPTERS.length}</span></div><div className="space-y-2">{CHAPTERS.map((chapter) => <button key={chapter.num} onClick={() => { setSelected(chapter); setShowReader(false); }} className={`group flex w-full items-center gap-4 rounded-xl border p-3 text-left transition ${selected.num === chapter.num ? "border-purple-500/50 bg-purple-900/30" : "border-slate-800/70 bg-slate-900/40 hover:border-purple-500/30"}`}><div className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-purple-500/20 bg-purple-600/20"><span className="text-xs font-bold text-purple-400">{chapter.num}</span></div><div className="min-w-0 flex-1"><p className="text-sm font-semibold text-white">{chapter.title}</p><p className="truncate text-xs text-slate-500">{chapter.teaser}</p></div><ChevronRight className={`size-4 shrink-0 transition ${selected.num === chapter.num ? "text-purple-300" : "text-slate-600 group-hover:text-purple-400"}`} /></button>)}</div></div><Card className="border-purple-500/20 bg-gradient-to-br from-purple-900/20 to-fuchsia-900/10"><CardContent className="p-7"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.25em] text-purple-300">Chapter {selected.num}</p><h2 className="mt-2 text-3xl font-black">{selected.title}</h2></div><Badge className="border border-purple-500/30 bg-purple-600/20 text-purple-300">Preview</Badge></div><p className="mt-5 text-lg leading-8 text-slate-300">{selected.preview}</p><div className="mt-6 flex items-center justify-between border-t border-white/10 pt-5 text-xs text-slate-500"><span>{wordCount} words · reader preview</span><Button onClick={() => setShowReader(true)} variant="ghost" className="text-purple-300 hover:bg-purple-500/10 hover:text-purple-200">Open reader <ArrowRight className="ml-2 size-4" /></Button></div></CardContent></Card></section><section className="mt-16 grid gap-6 md:grid-cols-3"><div className="rounded-xl border border-slate-800 bg-slate-900/40 p-5"><ShieldCheck className="size-5 text-purple-400" /><h3 className="mt-3 font-semibold">Claims stay visible</h3><p className="mt-2 text-sm leading-6 text-slate-400">No sales, preorder, release, language, endorsement, or ownership claim is implied by this preview.</p></div><div className="rounded-xl border border-slate-800 bg-slate-900/40 p-5"><MessageCircle className="size-5 text-purple-400" /><h3 className="mt-3 font-semibold">Reader feedback</h3><p className="mt-2 text-sm leading-6 text-slate-400">Feedback and endorsements require attributed, consented, verifiable sources before publication.</p></div><div className="rounded-xl border border-slate-800 bg-slate-900/40 p-5"><WifiOff className="size-5 text-purple-400" /><h3 className="mt-3 font-semibold">Delivery not connected</h3><p className="mt-2 text-sm leading-6 text-slate-400">No storefront, fulfillment, digital copy, airdrop, or email automation is connected here.</p></div></section><section className="mt-16 rounded-2xl border border-purple-500/20 bg-gradient-to-br from-purple-900/30 to-fuchsia-900/20 p-8 text-center"><ZapIcon /><h2 className="mt-3 text-2xl font-black">Follow the signal</h2><p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-slate-400">Preview a local interest state. A real waitlist requires consent, secure storage, double opt-in, unsubscribe handling, and delivery evidence.</p>{submitted ? <div className="mt-6 flex items-center justify-center gap-2 text-green-400"><CheckCircle2 className="size-5" /><span className="font-semibold">Local signup preview complete — no message was sent.</span></div> : <div className="mx-auto mt-6 flex max-w-sm gap-2"><Input value={email} onChange={(event) => { setEmail(event.target.value); setError(""); }} onKeyDown={(event) => event.key === "Enter" && handleNotify()} placeholder="your@email.com" aria-label="Email address" className="flex-1 border-slate-700 bg-slate-800 text-white placeholder:text-slate-500" /><Button onClick={handleNotify} className="shrink-0 bg-purple-600 text-white hover:bg-purple-500"><Mail className="mr-1 size-4" />Preview</Button></div>}{error && <p className="mt-3 text-sm text-rose-300">{error}</p>}</section></div>{showReader && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"><Card className="max-h-[90vh] w-full max-w-2xl overflow-auto border-purple-500/30 bg-[#0d0815] text-white"><CardContent className="p-7"><div className="flex items-start justify-between"><div><p className="text-xs uppercase tracking-[0.25em] text-purple-300">Reader preview · Chapter {selected.num}</p><h2 className="mt-2 text-3xl font-black">{selected.title}</h2></div><Button onClick={() => setShowReader(false)} variant="ghost" size="icon" className="text-slate-400"><X className="size-5" /></Button></div><p className="mt-7 text-lg leading-9 text-slate-300">{selected.preview}</p><div className="mt-7 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4 text-sm leading-6 text-slate-300">This is a local reading preview. It is not a complete chapter, licensed edition, purchased copy, or downloadable book.</div></CardContent></Card></div>}</div>; }
+function ZapIcon() { return <Sparkles className="mx-auto size-8 text-yellow-400" />; }

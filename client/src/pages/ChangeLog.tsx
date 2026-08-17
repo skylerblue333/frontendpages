@@ -1,74 +1,12 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { AlertTriangle, Check, ClipboardList, Code2, FileClock, GitBranch, Info, RefreshCw, Search, ShieldCheck, Sparkles, WifiOff } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-export default function ChangeLog() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>ChangeLog</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">ChangeLog</h1>
-            <p className="text-muted-foreground mt-2">API changelog</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+type Entry = { id: string; version: string; title: string; kind: string; status: string; detail: string };
+const ENTRIES: Entry[] = [{ id: "release-01", version: "Preview 0.1", title: "Evidence-first screen patterns", kind: "Frontend", status: "Review", detail: "A synthetic release entry for documenting reusable preview-state patterns and proof boundaries." }, { id: "release-02", version: "Preview 0.2", title: "Workflow-specific experiences", kind: "UX", status: "Draft", detail: "A synthetic entry for distinguishing editorial, financial, infrastructure, and blockchain interaction models." }, { id: "release-03", version: "Unreleased", title: "Provider-backed integrations", kind: "Integration", status: "Unavailable", detail: "No deployment, provider connection, incident, adoption, or production release is claimed." }];
+const KINDS = ["All", "Frontend", "UX", "Integration"];
+export default function ChangeLog() { const [query, setQuery] = useState(""); const [kind, setKind] = useState("All"); const [selectedId, setSelectedId] = useState(ENTRIES[0].id); const [note, setNote] = useState(""); const [saved, setSaved] = useState(false); const visible = useMemo(() => ENTRIES.filter((entry) => `${entry.version} ${entry.title} ${entry.kind} ${entry.detail}`.toLowerCase().includes(query.toLowerCase()) && (kind === "All" || entry.kind === kind)), [query, kind]); const selected = visible.find((entry) => entry.id === selectedId) ?? visible[0]; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={FileClock} eyebrow="Delivery · Change History" title="Document what changed before calling it shipped." description="Review synthetic release entries, change types, proof notes, and deployment boundaries. This page does not claim production deployment, version availability, incident resolution, adoption, or customer impact." badge="Preview change log"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><ClipboardList className="mr-2 size-4" />Save local note</Button><Button onClick={() => { setQuery(""); setKind("All"); setNote(""); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset history</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Entries", value: String(visible.length), hint: "Synthetic release notes", icon: FileClock }, { label: "Latest", value: "Preview 0.2", hint: "Not a shipped version", icon: GitBranch, tone: "violet" }, { label: "Proof", value: "Required", hint: "Evidence before status", icon: ShieldCheck, tone: "amber" }, { label: "Deployment", value: "Unavailable", hint: "No release pipeline", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Release-history evidence boundary">A changelog entry is not proof of deployment, availability, version adoption, uptime, incident resolution, customer impact, or API compatibility. A trustworthy release history needs commit or build provenance, environment, rollout state, migration notes, rollback plan, owner, monitoring evidence, and a timestamped source.</ScreenPreviewBanner><section className="flex flex-col gap-4 sm:flex-row"><div className="relative flex-1"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search synthetic entries" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="flex flex-wrap gap-2">{KINDS.map((item) => <button key={item} onClick={() => setKind(item)} className={`rounded-xl border px-3 py-2 text-sm ${kind === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-400"}`}>{item}</button>)}</div></section><section className="grid gap-6 lg:grid-cols-[1fr_1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Synthetic history</p><div className="mt-5 space-y-3">{visible.map((entry) => <button key={entry.id} onClick={() => setSelectedId(entry.id)} className={`w-full rounded-xl border p-4 text-left ${selected?.id === entry.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15"}`}><div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10"><Code2 className="size-5 text-cyan-300" /></div><div className="flex-1"><p className="font-semibold">{entry.title}</p><p className="mt-1 text-xs text-slate-500">{entry.version} · {entry.kind}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{entry.status}</Badge></div><p className="mt-3 text-xs text-slate-500">{entry.detail}</p></button>)}{visible.length === 0 && <p className="py-8 text-center text-sm text-slate-500">No synthetic entries match this view.</p>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected entry</p><h2 className="mt-2 text-2xl font-black">{selected.title}</h2><p className="mt-2 text-sm text-slate-400">{selected.version} · {selected.kind} · {selected.status}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Synthetic</Badge></div><p className="mt-6 text-sm leading-6 text-slate-300">{selected.detail}</p><div className="mt-6 space-y-2">{["Source commit or build", "Environment and rollout state", "Migration and rollback notes", "Monitoring evidence", "Incident and support impact", "Availability and compatibility claim"].map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-3"><Info className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Unavailable</span></div>)}</div><div className="mt-6"><label className="mb-2 block text-sm text-slate-300" htmlFor="change-note">Local evidence note</label><Input id="change-note" value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} placeholder="What proof would make this status publishable?" className="border-white/10 bg-black/20 text-white placeholder:text-slate-500" />{saved && <p className="mt-3 flex items-center gap-2 text-sm text-cyan-200"><Check className="size-4" />Local note saved; no release status changed.</p>}</div></> : <p className="text-sm text-slate-500">Select an entry to inspect it.</p>}</CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><GitBranch className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Version needs provenance</h3><p className="mt-2 text-sm leading-6 text-slate-400">A label is not a build, tag, environment, rollout, or compatibility guarantee.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><AlertTriangle className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Incidents need evidence</h3><p className="mt-2 text-sm leading-6 text-slate-400">Do not claim resolution, uptime, or customer impact without incident and monitoring records.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Sparkles className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">No fake adoption</h3><p className="mt-2 text-sm leading-6 text-slate-400">A release note cannot prove users upgraded, engaged, or benefited.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "History is evidence", description: "Make version, change type, status, and missing proof visible in every entry.", icon: FileClock, status: "Pattern" }, { title: "Status is a claim", description: "Draft, review, deployed, rolled back, and deprecated need separate verified states.", icon: ShieldCheck, status: "Required" }, { title: "No fake shipment", description: "A local release note is not a deployment, incident resolution, adoption metric, or availability guarantee.", icon: WifiOff, status: "Guardrail" }]} /></main></div>; }

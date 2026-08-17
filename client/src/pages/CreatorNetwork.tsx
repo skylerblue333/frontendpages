@@ -1,89 +1,22 @@
-import { Network } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Check, Handshake, LockKeyhole, MessageCircle, Network, Plus, Search, Send, Shield, Sparkles, Users, Video, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const MEMBERS = [{ id: "m1", name: "Aster North", role: "Visual storyteller", tags: ["Art", "Video"], availability: "Preview match", color: "from-violet-500 to-fuchsia-500" }, { id: "m2", name: "Nova Field", role: "Community educator", tags: ["Learning", "Audio"], availability: "Preview match", color: "from-cyan-500 to-blue-500" }, { id: "m3", name: "Kai Horizon", role: "Game systems creator", tags: ["Gaming", "Design"], availability: "Needs verification", color: "from-emerald-500 to-teal-500" }, { id: "m4", name: "Mira Sol", role: "Research writer", tags: ["Tech", "Writing"], availability: "Preview match", color: "from-amber-500 to-orange-500" }];
+const FILTERS = ["All", "Art", "Learning", "Gaming", "Tech"];
 
 export default function CreatorNetwork() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={Network} title="Creator Network" subtitle="Fully functional creator network page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Creator Network</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Network className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Network className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Network className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("All");
+  const [connected, setConnected] = useState<string[]>([]);
+  const [brief, setBrief] = useState(false);
+  const members = useMemo(() => MEMBERS.filter((member) => `${member.name} ${member.role} ${member.tags.join(" ")}`.toLowerCase().includes(query.toLowerCase()) && (filter === "All" || member.tags.includes(filter))), [filter, query]);
+  const toggle = (id: string) => setConnected((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Network} eyebrow="Creator community · Network" title="Find a collaborator without inventing a social graph." description="Explore a local network of synthetic creator profiles, collaboration tags, search/filter controls, and a brief-builder preview. No real member directory, relationship, messaging, verification, availability, or match score is connected." badge="Collaboration preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setBrief(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Handshake className="mr-2 size-4" />{brief ? "Brief ready locally" : "Create collaboration brief"}</Button><Button onClick={() => { setQuery(""); setFilter("All"); setConnected([]); setBrief(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">Reset network</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Profiles", value: String(MEMBERS.length), hint: "Synthetic cards", icon: Users }, { label: "Connections", value: String(connected.length), hint: "Local only", icon: Handshake, tone: "violet" }, { label: "Messaging", value: "Off", hint: "No inbox connected", icon: MessageCircle, tone: "amber" }, { label: "Verification", value: "Off", hint: "No identity proof", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Social-graph evidence boundary"><strong>Profile names, roles, tags, availability labels, connection counts, and “match” wording are synthetic presentation data—not proof of a real person, relationship, message, introduction, or collaboration commitment.</strong> Production networking requires consent, identity and profile provenance, privacy controls, abuse prevention, messaging delivery, block/report tools, and auditable relationship state.</ScreenPreviewBanner>{brief && <Card className="border-cyan-300/20 bg-cyan-300/[0.05]"><CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center"><Sparkles className="size-5 text-cyan-200" /><div className="flex-1"><h2 className="font-black">Local collaboration brief created</h2><p className="mt-1 text-sm text-slate-400">This brief is a UI preview only; no invitation, notification, message, or agreement was sent.</p></div><Badge variant="outline" className="border-cyan-300/20 text-cyan-200">No delivery</Badge></CardContent></Card>}<section className="grid gap-6 lg:grid-cols-[1fr_0.72fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex flex-col gap-3 sm:flex-row"><div className="relative flex-1"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search profile, role, or tag" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="flex gap-2 overflow-x-auto">{FILTERS.map((item) => <button key={item} onClick={() => setFilter(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${filter === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div></div><div className="mt-5 grid gap-4 md:grid-cols-2">{members.map((member) => <div key={member.id} className="rounded-2xl border border-white/10 bg-black/10 p-4"><div className="flex items-start gap-3"><div className={`flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br ${member.color} text-lg font-black`}>{member.name[0]}</div><div className="min-w-0 flex-1"><div className="flex items-center justify-between gap-2"><h2 className="truncate font-black">{member.name}</h2><Badge variant="outline" className="border-amber-300/20 text-[10px] text-amber-200">{member.availability}</Badge></div><p className="mt-1 text-sm text-slate-400">{member.role}</p></div></div><div className="mt-4 flex flex-wrap gap-1.5">{member.tags.map((tag) => <Badge key={tag} variant="outline" className="border-white/10 text-[10px] text-slate-400">{tag}</Badge>)}</div><Button onClick={() => toggle(member.id)} variant="outline" className="mt-4 w-full border-white/15 text-white">{connected.includes(member.id) ? <><Check className="mr-2 size-4" />Connection saved locally</> : <><Plus className="mr-2 size-4" />Save collaborator locally</>}</Button></div>)}</div>{members.length === 0 && <div className="p-10 text-center text-slate-500">No synthetic profiles match this filter.</div>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Sparkles className="size-5 text-violet-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Brief builder</p><h2 className="mt-1 text-2xl font-black">Define the collaboration</h2></div></div><div className="mt-6 space-y-3">{["Purpose and expected outcome", "Roles and content ownership", "Timeline and review points", "Communication and consent", "Compensation and rights"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><Handshake className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div><div className="mt-5 rounded-xl border border-red-300/20 bg-red-300/[0.05] p-4"><div className="flex items-center gap-2 font-semibold text-red-200"><LockKeyholeIcon />No social action</div><p className="mt-2 text-sm leading-6 text-slate-400">The local network cannot send messages, create a relationship, promise availability, verify a person, or form a contract.</p></div></CardContent></Card></section><section className="grid gap-4 md:grid-cols-3">{[{ title: "Consent and privacy", description: "Profiles, tags, visibility, direct messages, and introductions need explicit consent and controls.", icon: Shield }, { title: "Ownership and rights", description: "Collaboration briefs need role, credit, license, compensation, and dispute terms.", icon: FileIcon }, { title: "No fake connections", description: "Local saved cards are not members, followers, contacts, messages, or network edges.", icon: WifiOff }].map((item) => <Card key={item.title} className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><item.icon className="size-5 text-cyan-300" /><h2 className="mt-4 font-black">{item.title}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{item.description}</p></CardContent></Card>)}</section><ScreenFeatureGrid features={[{ title: "Network data needs consent", description: "Identity, visibility, relationship, and messaging state require provenance and privacy controls.", icon: Shield, status: "Required" }, { title: "Collaboration needs terms", description: "A brief is not an agreement; rights, roles, compensation, and dispute paths need authoritative records.", icon: Send, status: "Guardrail" }, { title: "No fake social graph", description: "The preview preserves networking utility without claiming real users, connections, availability, or introductions.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }
+function LockKeyholeIcon() { return <LockKeyhole className="size-4" />; }
+function FileIcon() { return <Sparkles className="size-5" />; }

@@ -1,75 +1,15 @@
 import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { BookOpen, Check, ChevronRight, Eye, FileCheck2, LockKeyhole, RefreshCw, ShieldAlert, Sparkles, Star, Wallet, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+const product = { name: "HopeAI workspace", category: "AI", summary: "A local product concept for guided AI interaction, evidence-aware responses, and user-controlled exploration.", capabilities: ["Conversation workspace concept", "Evidence and limitation disclosure", "Local draft history intent", "Human review before consequential action"], related: ["HopeAI Advanced", "AI Control Center", "AI Companion"] };
+const tabs = ["Overview", "Capabilities", "Evidence", "Related"];
 export default function ProductDetail() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>ProductDetail</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">ProductDetail</h1>
-            <p className="text-muted-foreground mt-2">Single product view with reviews and ratings</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [tab, setTab] = useState(tabs[0]);
+  const [saved, setSaved] = useState(false);
+  const [showReview, setShowReview] = useState(false);
+  const reset = () => { setTab(tabs[0]); setSaved(false); setShowReview(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Sparkles} eyebrow="ProductDetail · Detail preview" title="Understand the product before trusting the claim." description="Review a local product concept through overview, capabilities, evidence, and related surfaces. No live price, inventory, rating, review, user, model capability, ownership, or purchase is asserted or executed." badge="Product detail"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Interest saved locally" : "Save interest locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset detail</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Product", value: "1", hint: "Local concept", icon: Sparkles, tone: "cyan" }, { label: "Capabilities", value: String(product.capabilities.length), hint: "Design concepts", icon: FileCheck2, tone: "violet" }, { label: "Rating", value: "Unmeasured", hint: "No review source", icon: Star, tone: "amber" }, { label: "Purchase", value: "Blocked", hint: "No commerce path", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Product detail evidence boundary"><strong>This is an evidence-aware detail preview, not a storefront or capability guarantee.</strong> The product name, summary, capabilities, related surfaces, availability, price, review, and rating labels are local concepts. No model performance, user outcome, inventory, ownership, payment, or purchase claim is connected.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1.18fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start gap-3"><div className="flex size-14 items-center justify-center rounded-2xl bg-cyan-300/10"><Sparkles className="size-7 text-cyan-200" /></div><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><h2 className="text-2xl font-black">{product.name}</h2><Badge variant="outline" className="border-white/10 text-slate-400">{product.category}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-400">{product.summary}</p></div></div><div className="mt-6 flex flex-wrap gap-2">{tabs.map((item) => <button key={item} onClick={() => setTab(item)} className={`rounded-lg border px-3 py-2 text-xs ${tab === item ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-6 rounded-xl border border-white/10 p-5">{tab === "Overview" && <div><p className="text-sm font-semibold text-cyan-100">Overview</p><p className="mt-3 text-sm leading-7 text-slate-300">This surface communicates a product concept and its boundaries. It does not prove the availability, accuracy, safety, or performance of any AI capability.</p></div>}{tab === "Capabilities" && <div><p className="text-sm font-semibold text-cyan-100">Capability concepts</p><div className="mt-3 space-y-2">{product.capabilities.map((item) => <div key={item} className="flex items-center gap-3 text-sm text-slate-300"><Check className="size-4 text-cyan-200" />{item}</div>)}</div></div>}{tab === "Evidence" && <div><p className="text-sm font-semibold text-cyan-100">Evidence required</p><div className="mt-3 space-y-2">{["Model/version and capability scope", "Source citations and uncertainty", "Privacy, security, and abuse review", "Human evaluation and recovery behavior"].map((item) => <div key={item} className="flex items-center gap-3 text-sm text-slate-300"><FileCheck2 className="size-4 text-slate-500" />{item}<span className="ml-auto text-xs text-amber-200">Required</span></div>)}</div></div>}{tab === "Related" && <div><p className="text-sm font-semibold text-cyan-100">Related concepts</p><div className="mt-3 space-y-2">{product.related.map((item) => <button key={item} className="flex w-full items-center gap-3 rounded-lg border border-white/10 p-3 text-left text-sm text-slate-300"><ChevronRight className="size-4 text-slate-500" />{item}<Badge variant="outline" className="ml-auto border-white/10 text-slate-500">Preview</Badge></button>)}</div></div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Availability posture</p><h2 className="mt-2 text-2xl font-black">Preview only</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Price", value: "Unpublished" }, { label: "Inventory", value: "Unknown" }, { label: "Rating", value: "Unmeasured" }, { label: "Reviews", value: "Unavailable" }, { label: "Ownership", value: "Not verified" }, { label: "Checkout", value: "Blocked" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-6 rounded-2xl border border-amber-300/25 bg-amber-300/[0.06] p-5"><div className="flex items-start gap-3"><LockKeyhole className="mt-0.5 size-5 shrink-0 text-amber-200" /><div><p className="font-semibold text-amber-100">Action is unavailable</p><p className="mt-2 text-sm leading-6 text-slate-400">No live product source, entitlement, customer identity, model service, review store, price book, checkout, payment, or fulfillment integration is connected.</p><Button disabled className="mt-4 bg-slate-700 text-slate-400">Get product unavailable</Button></div></div></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Review intent</p><h2 className="mt-2 text-2xl font-black">Share a local question</h2></div><Button onClick={() => setShowReview((value) => !value)} variant="outline" className="border-white/10 text-slate-300">{showReview ? <X className="size-4" /> : <Eye className="size-4" />}</Button></div>{showReview && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.05] p-4"><textarea placeholder="What evidence would you need before using this product?" className="min-h-28 w-full rounded-lg border border-white/10 bg-black/20 p-3 text-sm text-white outline-none" /><p className="mt-3 text-xs leading-5 text-slate-500">This draft is local and does not create a review, rating, support ticket, or product feedback record.</p></div>}{!showReview && <div className="mt-5 rounded-xl border border-dashed border-white/10 p-6 text-center text-sm text-slate-500">Open review intent to draft a question without submitting it.</div>}</CardContent></Card><ScreenFeatureGrid features={[{ title: "Detail surface preserved", description: "Overview, capabilities, evidence, related concepts, availability posture, local interest, review intent, and reset remain interactive.", icon: Sparkles, status: "Local detail" }, { title: "No storefront theater", description: "Prices, inventory, ratings, reviews, ownership, model performance, checkout, payment, and purchases are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before trust", description: "Real use requires model scope, source citations, uncertainty, privacy/security review, evaluation, identity, and support.", icon: LockKeyhole, status: "Blocked" }]} /></section></main></div>;
 }

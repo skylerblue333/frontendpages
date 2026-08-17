@@ -1,75 +1,12 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { AlertTriangle, Check, CheckCircle2, ClipboardList, Database, FileCheck2, FileSpreadsheet, Info, LockKeyhole, Rows3, ScanLine, ShieldAlert, UploadCloud, WifiOff, XCircle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-export default function BulkUpload() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+const SAMPLE = `name,sku,quantity\nPreview item A,SKU-PREVIEW-01,10\nPreview item B,,five\nPreview item C,SKU-PREVIEW-03,4`;
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>BulkUpload</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">BulkUpload</h1>
-            <p className="text-muted-foreground mt-2">CSV bulk product import tool</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+type Row = { values: string[]; errors: string[] };
+export default function BulkUpload() { const [csv, setCsv] = useState(SAMPLE); const [validated, setValidated] = useState(false); const [persisted, setPersisted] = useState(false); const [delimiter, setDelimiter] = useState(","); const lines = csv.split(/\r?\n/).filter(Boolean); const headers = lines[0]?.split(delimiter).map((value) => value.trim()) ?? []; const rows: Row[] = useMemo(() => lines.slice(1).map((line) => { const values = line.split(delimiter).map((value) => value.trim()); const errors: string[] = []; if (values.length !== headers.length) errors.push("Column count mismatch"); if (!values[0]) errors.push("Name required"); if (!values[1]) errors.push("SKU required"); if (values[2] && !/^\d+$/.test(values[2])) errors.push("Quantity must be an integer"); return { values, errors }; }), [csv, delimiter, headers.length]); const valid = rows.filter((row) => row.errors.length === 0).length; const invalid = rows.length - valid; const validate = () => { setValidated(true); setPersisted(false); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={UploadCloud} eyebrow="Data Operations · Import Validation" title="Validate the rows before they touch a database." description="Paste a small CSV sample, inspect schema and row-level errors, and preview an import result. This page does not upload files, persist records, overwrite products, deduplicate data, or claim a completed import." badge="Preview import studio"><div className="flex flex-wrap gap-2"><Button onClick={validate} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><ScanLine className="mr-2 size-4" />Validate sample</Button><Button onClick={() => { setCsv(SAMPLE); setValidated(false); setPersisted(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><FileSpreadsheet className="mr-2 size-4" />Reset sample</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Rows detected", value: String(rows.length), hint: "Local text only", icon: Rows3 }, { label: "Valid preview", value: String(valid), hint: "Schema checks only", icon: CheckCircle2, tone: "violet" }, { label: "Needs review", value: String(invalid), hint: "Row-level errors", icon: AlertTriangle, tone: invalid ? "amber" : "cyan" }, { label: "Persistence", value: "Unavailable", hint: "No import API", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Import evidence boundary">Parsing text in the browser is not an upload or database write. A production importer must authenticate the operator, limit file size and type, scan content, map schema explicitly, validate every row, protect against formula injection and secrets, preview creates/updates/skips, support idempotency and rollback, and confirm durable persistence.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Local sample</p><h2 className="mt-1 text-2xl font-black">Paste CSV to inspect</h2></div><FileSpreadsheet className="size-5 text-cyan-300" /></div><Textarea value={csv} onChange={(event) => { setCsv(event.target.value); setValidated(false); setPersisted(false); }} aria-label="CSV sample" className="mt-6 min-h-48 border-white/10 bg-black/20 font-mono text-sm text-white" /><div className="mt-4 flex flex-wrap items-center gap-3"><label className="text-sm text-slate-400" htmlFor="delimiter">Delimiter</label><select id="delimiter" value={delimiter} onChange={(event) => { setDelimiter(event.target.value); setValidated(false); }} className="rounded-md border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"><option value=",">Comma</option><option value=";">Semicolon</option><option value="\t">Tab</option></select><span className="text-xs text-slate-500">Headers: {headers.join(" · ") || "none"}</span></div><div className="mt-5 rounded-xl border border-white/10 bg-black/15 p-4"><div className="flex items-center gap-2 text-sm font-medium"><Info className="size-4 text-cyan-300" />Preview-only parser</div><p className="mt-2 text-sm leading-6 text-slate-400">The sample stays in local component state. No file picker, upload request, storage write, or database mutation is connected.</p></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Validation preview</p><h2 className="mt-1 text-2xl font-black">Row-level results</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{validated ? "Validated locally" : "Not validated"}</Badge></div><div className="mt-6 space-y-3">{rows.map((row, index) => <div key={index} className={`rounded-xl border p-4 ${row.errors.length ? "border-rose-300/20 bg-rose-300/[0.05]" : "border-emerald-300/20 bg-emerald-300/[0.04]"}`}><div className="flex items-start gap-3"><span className={`flex size-6 items-center justify-center rounded-full ${row.errors.length ? "bg-rose-300/15 text-rose-200" : "bg-emerald-300/15 text-emerald-200"}`}>{row.errors.length ? <XCircle className="size-4" /> : <Check className="size-4" />}</span><div className="flex-1"><p className="font-semibold">Row {index + 2}</p><p className="mt-1 font-mono text-xs text-slate-400">{row.values.join(" · ") || "Empty row"}</p>{row.errors.map((error) => <p key={error} className="mt-2 flex items-center gap-1 text-xs text-rose-200"><AlertTriangle className="size-3" />{error}</p>)}</div><Badge variant="outline" className={row.errors.length ? "border-rose-300/20 text-rose-200" : "border-emerald-300/20 text-emerald-200"}>{row.errors.length ? "Needs review" : "Valid preview"}</Badge></div></div>)}{rows.length === 0 && <p className="text-sm text-slate-500">Add data rows to see validation results.</p>}</div></CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><ClipboardList className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Map before mutate</h3><p className="mt-2 text-sm leading-6 text-slate-400">A real importer should show field mapping, creates, updates, skips, and conflicts before commit.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><ShieldAlert className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">Rows can fail independently</h3><p className="mt-2 text-sm leading-6 text-slate-400">Do not turn one parser pass into a claim that every record persisted successfully.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><LockKeyhole className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Imports carry risk</h3><p className="mt-2 text-sm leading-6 text-slate-400">Scan attachments, reject unsafe content, protect secrets, and keep an immutable import audit trail.</p></CardContent></Card></section>{validated && <Card className="border-cyan-300/20 bg-cyan-300/[0.06]"><CardContent className="flex flex-wrap items-center gap-3 p-5"><CheckCircle2 className="size-5 text-cyan-300" /><div><p className="font-semibold">Local validation complete</p><p className="mt-1 text-sm text-slate-400">{valid} valid preview row(s), {invalid} row(s) requiring review. No records were written.</p></div><Button onClick={() => setPersisted(true)} variant="outline" className="ml-auto border-white/15 text-white">Preview import boundary</Button></CardContent></Card>}{persisted && <Card className="border-amber-300/20 bg-amber-300/[0.06]"><CardContent className="flex items-center gap-3 p-5"><ShieldAlert className="size-5 text-amber-300" /><div><p className="font-semibold text-amber-200">Persistence unavailable</p><p className="mt-1 text-sm text-slate-400">No upload was sent and no database records were created, updated, skipped, or deduplicated.</p></div></CardContent></Card>}<ScreenFeatureGrid features={[{ title: "Preview before commit", description: "The useful state is a row-level review with valid and invalid outcomes, not a fake completed-upload banner.", icon: FileCheck2, status: "Pattern" }, { title: "Schema is a contract", description: "Headers, types, required fields, and normalization rules need explicit versioned definitions.", icon: Database, status: "Required" }, { title: "No fake persistence", description: "Parsing local text is not upload, storage, import completion, or durable product data.", icon: ShieldAlert, status: "Guardrail" }]} /></main></div>; }

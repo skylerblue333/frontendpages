@@ -1,75 +1,28 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, FileVideo, FolderPlus, Settings, LockKeyhole, PlaySquare, RefreshCw, Search, ShieldCheck, TriangleAlert, UserRound, Video, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
+type Playlist = { id: string; title: string; description: string; videos: number; duration: number; visibility: string };
+const seed: Playlist[] = [
+  { id: "pl-001", title: "Product walkthroughs", description: "Local video concepts for onboarding and product learning.", videos: 6, duration: 1480, visibility: "Draft" },
+  { id: "pl-002", title: "Creator research", description: "Interview and reference concepts awaiting source review.", videos: 4, duration: 920, visibility: "Private" },
+  { id: "pl-003", title: "Community highlights", description: "Community video concepts with moderation requirements.", videos: 8, duration: 1960, visibility: "Review" },
+];
+const tabs = ["My playlists", "Shared concepts", "Templates"];
+const formatTime = (seconds: number) => `${Math.floor(seconds / 60)}m ${seconds % 60}s`;
 export default function PlaylistManager() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>PlaylistManager</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">PlaylistManager</h1>
-            <p className="text-muted-foreground mt-2">Organize video playlists</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [tab, setTab] = useState(tabs[0]);
+  const [query, setQuery] = useState("");
+  const [playlists, setPlaylists] = useState(seed);
+  const [selected, setSelected] = useState(seed[0]);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const visible = useMemo(() => playlists.filter((item) => !query || `${item.title} ${item.description} ${item.visibility}`.toLowerCase().includes(query.toLowerCase())), [playlists, query]);
+  const createIntent = () => { const item: Playlist = { id: `local-${playlists.length + 1}`, title: "Untitled local playlist", description: "Local creation intent; no videos attached.", videos: 0, duration: 0, visibility: "Draft" }; setPlaylists((items) => [item, ...items]); setSelected(item); setSaved(false); };
+  const reset = () => { setTab(tabs[0]); setQuery(""); setPlaylists(seed); setSelected(seed[0]); setSettingsOpen(false); setSaved(false); setLoading(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={PlaySquare} eyebrow="PlaylistManager · Video preview" title="Organize video concepts without pretending a library is connected." description="Explore playlist tabs, search, create intent, selected detail, settings, and loading/empty states. No authentication, video provider, file, playlist persistence, viewer, playback, or sharing record is connected." badge="Video playlist preview"><div className="flex flex-wrap gap-2"><Button onClick={createIntent} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><FolderPlus className="mr-2 size-4" />New local playlist</Button><Button onClick={() => setSaved(true)} disabled={visible.length === 0} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Check className="mr-2 size-4" />{saved ? "View saved locally" : "Save view locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset manager</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Playlists", value: String(playlists.length), hint: "Local concepts", icon: PlaySquare, tone: "cyan" }, { label: "Visible", value: String(visible.length), hint: "Search result", icon: Search, tone: "violet" }, { label: "Videos", value: String(playlists.reduce((sum, item) => sum + item.videos, 0)), hint: "Unverified counts", icon: Video, tone: "amber" }, { label: "Account", value: "Off", hint: "No auth source", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Playlist manager evidence boundary"><strong>This is not a connected video library.</strong> Playlist names, video counts, durations, visibility, create intent, and selection are local fixtures. They do not prove uploaded files, rights, ownership, viewers, playback, sharing, persistence, or analytics. No account or provider is queried.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10"><Search className="size-5 text-cyan-200" /></div><div className="relative flex-1"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local playlists…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><Button aria-label="Toggle local settings" onClick={() => setSettingsOpen(!settingsOpen)} variant="outline" className="border-white/10 text-slate-300 hover:bg-white/10"><Settings className="size-4" /></Button></div>{settingsOpen && <div className="mt-4 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><p className="font-semibold">Local settings</p><p className="mt-2 text-sm leading-6 text-slate-400">Sort, privacy, notifications, and provider settings are preview-only. Nothing is persisted or synchronized.</p></div>}<div className="mt-6 flex flex-wrap gap-2">{tabs.map((item) => <button key={item} onClick={() => setTab(item)} className={`rounded-lg border px-3 py-2 text-xs ${tab === item ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><TriangleAlert className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-300">{tab} is a local tab state. Shared access, templates, ownership, permissions, and persistence remain unavailable.</p></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">{tab}</p><h2 className="mt-2 text-2xl font-black">Playlist concepts</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">{visible.length} visible</Badge></div>{loading ? <div className="flex items-center justify-center py-16 text-slate-400"><RefreshCw className="mr-2 size-4 animate-spin" />Local refresh simulation…</div> : <div className="mt-5 space-y-3">{visible.length === 0 ? <div className="rounded-xl border border-dashed border-white/15 p-8 text-center"><FileVideo className="mx-auto size-7 text-slate-500" /><p className="mt-3 font-semibold">No local playlists match</p><p className="mt-2 text-sm text-slate-500">Create a local playlist or change the search.</p></div> : visible.map((item) => <button key={item.id} onClick={() => setSelected(item)} className={`w-full rounded-xl border p-4 text-left ${selected.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10"><PlaySquare className="size-5 text-cyan-200" /></div><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{item.title}</p><Badge variant="outline" className="border-white/10 text-amber-200">{item.visibility}</Badge></div><p className="mt-2 text-sm leading-5 text-slate-500">{item.description}</p><p className="mt-2 text-xs text-slate-600">{item.videos} local video concepts · {formatTime(item.duration)}</p></div></div></button>)}</div>}<Button onClick={() => { setLoading(true); window.setTimeout(() => setLoading(false), 600); }} variant="outline" className="mt-5 border-white/10 text-slate-300 hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Simulate refresh</Button></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Selected playlist</p><h2 className="mt-2 text-2xl font-black">{selected.title}</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Description", value: selected.description }, { label: "Video concepts", value: String(selected.videos) }, { label: "Duration", value: formatTime(selected.duration) }, { label: "Visibility", value: selected.visibility }, { label: "Owner", value: "Unavailable" }, { label: "Persistence", value: "Off" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><p className="mt-5 text-sm leading-6 text-slate-500">No video file, source URL, upload receipt, license, viewer, collaborator, or persistent record exists.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake library</h2><p className="mt-3 text-sm leading-6 text-slate-400">Searching, creating, selecting, changing tabs, toggling settings, or refreshing changes local browser state only. It does not authenticate, upload, play, share, persist, or report video analytics.</p></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Production checklist</p><h2 className="mt-2 text-2xl font-black">Playlist management must prove</h2><div className="mt-5 space-y-3">{["Authenticated ownership, roles, sharing permissions, persistence, versioning, and conflict resolution", "Video upload/stream source, processing, thumbnails, duration, captions, rights, takedown, and regional policy", "Playback, buffering, access failures, progress, resume, accessibility, and device behavior", "Search, sorting, recommendations, privacy-safe analytics, consent, retention, and deletion", "Tests for create/edit/delete, duplicates, empty/error/loading states, provider outage, and recovery"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Manager surface preserved", description: "Tabs, search, create intent, selected detail, settings, and refresh states remain interactive.", icon: PlaySquare, status: "Local manager" }, { title: "Auth and provider are off", description: "Ownership, video source, persistence, sharing, and playback stay unavailable.", icon: UserRound, status: "Guardrail" }, { title: "Analytics are off", description: "No viewers, plays, engagement, recommendations, or completion claim is fabricated.", icon: WifiOff, status: "Unavailable" }]} /></section></main></div>;
 }

@@ -1,74 +1,20 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Gamepad2, Heart, LockKeyhole, Play, RefreshCw, Search, Smartphone, Sparkles, Trophy, Users, WifiOff, Zap } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const GAMES = [{ title: "Skyline Arena", genre: "Arcade", mode: "Solo concept", note: "Responsive tap and timing loop", color: "from-cyan-400 to-blue-500" }, { title: "Orbital Tactics", genre: "Strategy", mode: "Local planning", note: "Turn-based board preview", color: "from-violet-400 to-fuchsia-500" }, { title: "Neon Drift", genre: "Racing", mode: "Time trial concept", note: "Gesture and control study", color: "from-amber-400 to-orange-500" }, { title: "Guild Garden", genre: "Social", mode: "Co-op concept", note: "Consent-first community loop", color: "from-emerald-400 to-teal-500" }, { title: "Puzzle Circuit", genre: "Puzzle", mode: "Solo concept", note: "Short-session learning loop", color: "from-rose-400 to-pink-500" }, { title: "Quest Atlas", genre: "Adventure", mode: "Progress concept", note: "Local map and objective study", color: "from-blue-400 to-indigo-500" }];
+const GENRES = ["All", "Arcade", "Strategy", "Racing", "Social", "Puzzle", "Adventure"];
 
 export default function MobileGaming() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>MobileGaming</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">MobileGaming</h1>
-            <p className="text-muted-foreground mt-2">Mobile gaming</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [query, setQuery] = useState("");
+  const [genre, setGenre] = useState("All");
+  const [selected, setSelected] = useState(GAMES[0].title);
+  const [planned, setPlanned] = useState<string[]>([]);
+  const game = GAMES.find((item) => item.title === selected) ?? GAMES[0];
+  const games = useMemo(() => GAMES.filter((item) => (genre === "All" || item.genre === genre) && `${item.title} ${item.genre} ${item.note}`.toLowerCase().includes(query.toLowerCase())), [genre, query]);
+  const togglePlan = (title: string) => setPlanned((items) => items.includes(title) ? items.filter((item) => item !== title) : [...items, title]);
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Gamepad2} eyebrow="Mobile gaming · Discovery" title="Make mobile play usable before calling it live." description="Browse synthetic game concepts with search, genre filters, local selection, play-plan state, mobile control notes, and honest availability gates. No installed game, player account, leaderboard, multiplayer session, reward, purchase, or telemetry is asserted." badge="Mobile game preview"><div className="flex flex-wrap gap-2"><Button onClick={() => togglePlan(game.title)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Heart className="mr-2 size-4" />{planned.includes(game.title) ? "Planned locally" : "Plan a play test"}</Button><Button onClick={() => { setQuery(""); setGenre("All"); setSelected(GAMES[0].title); setPlanned([]); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset gaming view</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Game concepts", value: String(GAMES.length), hint: "Local catalog", icon: Gamepad2 }, { label: "Genres", value: String(GENRES.length - 1), hint: "Local filters", icon: Sparkles, tone: "violet" }, { label: "Install", value: "Off", hint: "No game package", icon: WifiOff, tone: "amber" }, { label: "Rewards", value: "Off", hint: "No player economy", icon: Trophy, tone: "slate" }]} /><ScreenPreviewBanner title="MobileGaming evidence boundary"><strong>Game names, genres, modes, controls, cards, filters, and local play-plan state are product concepts—not installed games, player progression, leaderboard rank, multiplayer connectivity, purchases, rewards, NFT ownership, or device telemetry.</strong> Production mobile gaming requires signed builds, device testing, account and session contracts, anti-cheat, multiplayer services, privacy, moderation, store records, and observability.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex flex-col gap-3 sm:flex-row"><div className="relative flex-1"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search game concepts" className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white placeholder:text-slate-500" /></div><div className="flex gap-2 overflow-x-auto">{GENRES.map((item) => <button key={item} onClick={() => setGenre(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${genre === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{games.map((item) => <button key={item.title} onClick={() => setSelected(item.title)} className={`rounded-2xl border p-4 text-left ${selected === item.title ? "border-cyan-300/40 bg-cyan-300/[0.07]" : "border-white/10 bg-black/10"}`}><div className={`flex h-24 items-center justify-center rounded-xl bg-gradient-to-br ${item.color} text-slate-950`}><Gamepad2 className="size-8" /></div><div className="mt-4 flex items-center justify-between gap-2"><h2 className="font-black">{item.title}</h2><Badge variant="outline" className="border-amber-300/20 text-[10px] text-amber-200">{item.genre}</Badge></div><p className="mt-2 text-xs text-slate-500">{item.mode} · {item.note}</p></button>)}{games.length === 0 && <div className="p-8 text-center text-slate-500">No game concepts match this view.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected game concept</p><h2 className="mt-2 text-3xl font-black">{game.title}</h2><p className="mt-3 text-slate-400">{game.genre} · {game.mode}</p><div className={`mt-5 flex h-32 items-center justify-center rounded-2xl bg-gradient-to-br ${game.color} text-slate-950`}><Gamepad2 className="size-12" /></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Controls", value: "Needs device test" }, { label: "Player state", value: "Local only" }, { label: "Multiplayer", value: "Not connected" }, { label: "Store", value: "Unavailable" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 font-semibold text-amber-200"><LockKeyhole className="size-4" />Play test unavailable</div><p className="mt-2 text-sm leading-6 text-slate-400">No installable build, account, session, leaderboard, purchase, reward, device API, or telemetry source is attached.</p></div><Button onClick={() => togglePlan(game.title)} className="mt-5 w-full bg-violet-500 text-white hover:bg-violet-400">{planned.includes(game.title) ? "Local play test planned" : "Plan local play test"}</Button></CardContent></Card></section><section className="grid gap-4 md:grid-cols-3">{[{ title: "Controls need testing", description: "Touch, haptic, camera, microphone, and performance claims require device evidence.", icon: Smartphone }, { title: "Players need services", description: "Accounts, sessions, multiplayer, moderation, anti-cheat, and privacy are not implied by a card.", icon: Users }, { title: "Rewards need contracts", description: "Purchases, tokens, NFTs, and leaderboard rewards require audited settlement and support.", icon: Trophy }].map((item) => <Card key={item.title} className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><item.icon className="size-5 text-cyan-300" /><h2 className="mt-4 font-black">{item.title}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{item.description}</p></CardContent></Card>)}</section><ScreenFeatureGrid features={[{ title: "A catalog is not a game build", description: "Game cards preserve discovery UX without establishing installed software, device support, or playability.", icon: WifiOff, status: "Guardrail" }, { title: "Multiplayer needs observability", description: "Sessions, chat, leaderboards, moderation, and anti-cheat require authenticated services and operational telemetry.", icon: Users, status: "Required" }, { title: "No fake reward loop", description: "The preview keeps mobile discovery usable without purchases, tokens, NFTs, ranks, or payout claims.", icon: LockKeyhole, status: "Unavailable" }]} /></main></div>;
 }

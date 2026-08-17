@@ -1,74 +1,16 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, ChevronDown, FileText, Globe2, LockKeyhole, RefreshCw, Search, ShieldAlert, UserRoundCheck, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+const sections = [{ id: "collection", title: "Data collection", body: "A production policy must identify categories, sources, purpose, minimization, and retention for every data flow." }, { id: "use", title: "Use and sharing", body: "A production policy must describe processing purposes, processors, integrations, disclosure rules, and user controls." }, { id: "security", title: "Security safeguards", body: "A production policy must state safeguards accurately without claiming encryption, certifications, audits, or controls that are not verified." }, { id: "rights", title: "Data rights", body: "A production policy must explain access, correction, deletion, export, objection, consent withdrawal, and request verification." }, { id: "contact", title: "Contact and changes", body: "A production policy must name a maintained contact, effective date, change history, and regional applicability." }];
 export default function PrivacyPolicy() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>PrivacyPolicy</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">PrivacyPolicy</h1>
-            <p className="text-muted-foreground mt-2">Privacy policy</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(sections[0].id);
+  const [acknowledged, setAcknowledged] = useState(false);
+  const [showRights, setShowRights] = useState(false);
+  const visible = useMemo(() => sections.filter((item) => `${item.title} ${item.body}`.toLowerCase().includes(query.toLowerCase())), [query]);
+  const reset = () => { setQuery(""); setOpen(sections[0].id); setAcknowledged(false); setShowRights(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={FileText} eyebrow="PrivacyPolicy · Policy reading preview" title="Read the policy before asking people to trust the product." description="Review policy topics, search sections, version/date labels, acknowledgement intent, and data-rights requirements. This route does not publish legal terms, create consent records, or claim regional compliance, certifications, retention, or safeguards." badge="Policy center"><div className="flex flex-wrap gap-2"><Button onClick={() => setAcknowledged(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{acknowledged ? "Read locally" : "Mark read locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset reader</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Sections", value: String(sections.length), hint: "Policy topics", icon: FileText, tone: "cyan" }, { label: "Version", value: "Draft", hint: "Not published", icon: RefreshCw, tone: "violet" }, { label: "Consent", value: "Off", hint: "No record", icon: LockKeyhole, tone: "amber" }, { label: "Regions", value: "Unknown", hint: "No legal review", icon: Globe2, tone: "slate" }]} /><ScreenPreviewBanner title="Policy evidence boundary"><strong>This is a policy-reading and requirements preview, not legal advice or a published privacy notice.</strong> The draft topics do not establish data practices, consent, retention, security, regional compliance, certification, processor relationships, or legal obligations. Marking the page read is local browser state and is not consent or acknowledgement of binding terms.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1.18fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Policy sections</p><h2 className="mt-2 text-2xl font-black">Find a topic</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">Draft</Badge></div><div className="relative mt-5"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search policy topics…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="mt-4 space-y-2">{visible.map((item) => <button key={item.id} onClick={() => setOpen(open === item.id ? "" : item.id)} className={`flex w-full items-center gap-3 rounded-xl border p-4 text-left ${open === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><FileText className="size-5 text-cyan-200" /><span className="flex-1 text-sm font-semibold">{item.title}</span><ChevronDown className={`size-4 text-slate-500 transition ${open === item.id ? "rotate-180" : ""}`} /></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Policy draft</p><h2 className="mt-2 text-2xl font-black">SKYCOIN4444 privacy topics</h2><p className="mt-2 text-sm text-slate-500">Version draft · effective date not set · legal owner unassigned</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Not published</Badge></div><div className="mt-6 rounded-xl border border-white/10 p-5">{open ? <>{sections.find((item) => item.id === open)?.title && <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-300">{sections.find((item) => item.id === open)?.title}</p>}<p className="mt-3 text-sm leading-7 text-slate-300">{sections.find((item) => item.id === open)?.body}</p></> : <p className="text-sm text-slate-500">Select a policy section to review its requirements.</p>}</div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Legal owner", value: "Unassigned" }, { label: "Effective date", value: "Not set" }, { label: "Consent record", value: "Unavailable" }, { label: "Regional review", value: "Unknown" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Data-rights checklist</p><h2 className="mt-2 text-2xl font-black">Before publication</h2></div><Button onClick={() => setShowRights((value) => !value)} variant="outline" className="border-white/10 text-slate-300">{showRights ? <X className="size-4" /> : <UserRoundCheck className="size-4" />}</Button></div><div className="mt-5 space-y-3">{["Access and portability request", "Correction and deletion request", "Consent withdrawal and objection", "Identity verification and request status", "Retention, export, and regional handling"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><Check className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Requires policy</span></div>)}</div>{showRights && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.05] p-4 text-sm leading-6 text-slate-400">The checklist is a planning aid. It does not submit a rights request, identify a legal basis, verify a requester, or promise a response deadline.</div>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Publication gates</p><h2 className="mt-2 text-2xl font-black">What the live notice must prove</h2><div className="mt-5 space-y-3">{["Accurate data inventory and processing purposes", "Named controller, processor, legal, and security ownership", "Retention, deletion, consent, rights, and regional rules", "Verified security controls without unsupported certification claims", "Versioning, effective dates, change notice, and acknowledgement", "Accessible language, contact channel, and escalation path"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldAlert className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Reading surface preserved", description: "Policy topics, search, expandable sections, version/date labels, local mark-read, rights checklist, and reset remain interactive.", icon: FileText, status: "Local reader" }, { title: "No legal overclaim", description: "No compliance, certification, retention, consent, legal basis, security, or regional applicability is asserted as fact.", icon: ShieldAlert, status: "Guardrail" }, { title: "Publication requires review", description: "A real privacy notice needs accurate inventory, legal/security ownership, regional review, accessible language, and change management.", icon: LockKeyhole, status: "Required" }]} /></main></div>;
 }

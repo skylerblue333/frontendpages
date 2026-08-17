@@ -1,75 +1,18 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { AlertTriangle, CheckCircle2, Code2, Database, FlaskConical, Gauge, Play, Search, Server, Shield, Square, TestTube2, Wand2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
 
-export default function APITesting() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+type TestCase = { id: string; name: string; method: "GET" | "POST"; path: string; purpose: string; status: "Draft" | "Review required" | "Execution unavailable" };
+const TESTS: TestCase[] = [
+  { id: "auth", name: "Authentication boundary", method: "GET", path: "/api/trpc/auth.me", purpose: "Verify unauthenticated and authenticated response envelopes.", status: "Review required" },
+  { id: "feedback", name: "Feedback pagination", method: "GET", path: "/api/trpc/feedback.list", purpose: "Check pagination, authorization, validation, and empty state.", status: "Execution unavailable" },
+  { id: "debate", name: "Agent request validation", method: "POST", path: "/api/trpc/agents.debate", purpose: "Check schema validation, provider metadata, and safe failure state.", status: "Draft" },
+  { id: "order", name: "Order idempotency", method: "POST", path: "/api/trpc/orders.create", purpose: "Verify duplicate-submit prevention without creating a real order.", status: "Review required" },
+];
+const ASSERTIONS = ["Expected HTTP status and tRPC envelope", "Authentication and authorization outcome", "Input validation and error shape", "No sensitive data in response or logs", "Idempotency and retry behavior"];
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>APITesting</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">APITesting</h1>
-            <p className="text-muted-foreground mt-2">API testing tool</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+export default function APITesting() { const [query, setQuery] = useState(""); const [selected, setSelected] = useState<TestCase | null>(null); const [running, setRunning] = useState(false); const [ran, setRan] = useState(false); const visible = useMemo(() => TESTS.filter((test) => `${test.name} ${test.path} ${test.purpose}`.toLowerCase().includes(query.toLowerCase())), [query]); const runPreview = () => { setRunning(true); setRan(false); window.setTimeout(() => { setRunning(false); setRan(true); }, 500); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={TestTube2} eyebrow="Developer Platform · Testing" title="Prove a route before you call it production-ready." description="Plan API tests with request templates, assertions, authentication checks, idempotency, and safe failure states. This page does not run against production or claim pass rates, coverage, execution, or CI results." badge="Preview API test lab"><div className="flex flex-wrap gap-2"><Button onClick={runPreview} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200">{running ? <><Square className="mr-2 size-4" />Preparing preview</> : <><Play className="mr-2 size-4" />Run local preview</>}</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Shield className="mr-2 size-4" />No production calls</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Test cases", value: String(TESTS.length), hint: "Reviewable request plans", icon: TestTube2 }, { label: "Assertions", value: String(ASSERTIONS.length), hint: "Evidence requirements", icon: CheckCircle2, tone: "violet" }, { label: "Execution", value: running ? "Preparing" : "Unavailable", hint: "No live endpoint calls", icon: Server, tone: "amber" }, { label: "Production side effects", value: "Blocked", hint: "Safe preview only", icon: Shield, tone: "slate" }]} /><ScreenPreviewBanner title="Testing safety boundary">The test catalog, search, selection, assertion checklist, local preview-run state, and unavailable execution result are available for UX review. No request is sent to production, no order or transaction is created, and no pass rate, coverage, latency, CI, or test result is fabricated.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search test cases" aria-label="Search API tests" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visible.map((test) => <button key={test.id} onClick={() => { setSelected(test); setRan(false); }} className={`w-full rounded-xl border p-4 text-left transition ${selected?.id === test.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><Badge variant="outline" className={test.method === "GET" ? "border-cyan-300/20 text-cyan-200" : "border-violet-300/20 text-violet-200"}>{test.method}</Badge><code className="truncate text-xs text-slate-300">{test.path}</code><Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">{test.status}</Badge></div><h3 className="mt-3 font-semibold">{test.name}</h3><p className="mt-1 text-sm leading-6 text-slate-400">{test.purpose}</p></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No test cases match" description="Try another endpoint or test purpose." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected test</p><h2 className="mt-1 text-2xl font-bold">{selected.name}</h2><p className="mt-2 font-mono text-sm text-slate-400">{selected.method} {selected.path}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><div className="mt-6 space-y-3">{ASSERTIONS.map((assertion) => <div key={assertion} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4 text-sm text-slate-300"><CheckCircle2 className="size-4 text-emerald-300" />{assertion}</div>)}</div>{ran && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-amber-200"><Database className="size-4" />Preview prepared; execution unavailable</div><p className="mt-2 text-sm leading-6 text-slate-300">No endpoint call was made. Connect a test environment and verified runner before showing a pass, failure, response body, or timing.</p></div>}</> : <ScreenStatePanel type="empty" title="Select a test case" description="Inspect request, assertion, auth, redaction, and idempotency requirements." />}</CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Safe test harness", description: "Separate local preview planning from real endpoint execution and production side effects.", icon: FlaskConical, status: "Required" }, { title: "Assertions over vibes", description: "Verify status, schema, auth, errors, redaction, retries, and idempotency with evidence.", icon: CheckCircle2, status: "Required" }, { title: "No fake CI", description: "Pass rates, coverage, timing, and deployment gates appear only from a real runner.", icon: AlertTriangle, status: "Guardrail" }]} /></main></div>; }

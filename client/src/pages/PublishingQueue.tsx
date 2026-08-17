@@ -1,89 +1,20 @@
-import { Clock } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, Clock3, FileCheck2, LockKeyhole, RefreshCw, Search, ShieldAlert, Users, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+type Draft = { id: number; title: string; channel: string; status: string; detail: string };
+const initial: Draft[] = [{ id: 1, title: "HopeAI evidence note", channel: "Owned concept", status: "Needs review", detail: "A local draft explaining evidence boundaries for an AI concept." }, { id: 2, title: "SkySchool lesson preview", channel: "Education concept", status: "Draft", detail: "A local learning surface awaiting content, accessibility, and audience review." }, { id: 3, title: "Creator marketplace note", channel: "Community concept", status: "Blocked", detail: "A governance note describing what publication would require." }];
 export default function PublishingQueue() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={Clock} title="Publishing Queue" subtitle="Fully functional publishing queue page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Publishing Queue</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Clock className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Clock className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Clock className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
+  const [drafts, setDrafts] = useState(initial);
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState(1);
+  const [saved, setSaved] = useState(false);
+  const [showGates, setShowGates] = useState(false);
+  const filtered = useMemo(() => drafts.filter((draft) => `${draft.title} ${draft.channel} ${draft.detail}`.toLowerCase().includes(query.toLowerCase())), [drafts, query]);
+  const selectedDraft = drafts.find((draft) => draft.id === selected) ?? drafts[0];
+  const create = () => { const id = Math.max(...drafts.map((draft) => draft.id), 0) + 1; const item: Draft = { id, title: `Local publishing draft ${id}`, channel: "Unassigned", status: "Draft", detail: "A browser-only draft awaiting content, ownership, review, and publication evidence." }; setDrafts((current) => [...current, item]); setSelected(id); };
+  const reset = () => { setDrafts(initial); setQuery(""); setSelected(1); setSaved(false); setShowGates(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Clock3} eyebrow="PublishingQueue · Governance preview" title="Queue the review before claiming the release." description="Explore a local publishing queue with drafts, channels, reviewer intent, evidence, moderation, scheduling, audience, delivery, and publication gates. No users, approvals, publication, delivery, reach, analytics, or automation is connected." badge="Publishing workspace"><div className="flex flex-wrap gap-2"><Button onClick={create} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><FileCheck2 className="mr-2 size-4" />New local draft</Button><Button onClick={() => setSaved(true)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Check className="mr-2 size-4" />{saved ? "Queue saved locally" : "Save queue locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review publish gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset queue</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Queue", value: `${drafts.length} local`, hint: "Not published", icon: Clock3, tone: "cyan" }, { label: "Reviewers", value: "Unassigned", hint: "No identity source", icon: Users, tone: "violet" }, { label: "Delivery", value: "Blocked", hint: "No channel source", icon: ShieldAlert, tone: "amber" }, { label: "Reach", value: "Unmeasured", hint: "No audience source", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Publishing evidence boundary"><strong>This is a local publishing-governance preview, not a distribution system.</strong> Drafts, status, channel, reviewer intent, schedule intent, saved state, and gates are browser concepts. No content ownership, approval, user, audience, moderation result, schedule, delivery, reach, impression, click, notification, analytics, publication, or automation is asserted.</ScreenPreviewBanner><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local publishing drafts" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-6 grid gap-4 md:grid-cols-3">{filtered.map((draft) => <button key={draft.id} onClick={() => setSelected(draft.id)} className={`rounded-2xl border p-5 text-left ${selected === draft.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><h2 className="font-black">{draft.title}</h2><Badge variant="outline" className="border-amber-300/20 text-amber-200">{draft.status}</Badge></div><p className="mt-3 text-sm leading-6 text-slate-400">{draft.detail}</p><Badge variant="outline" className="mt-5 border-white/10 text-slate-500">{draft.channel}</Badge></button>)}{filtered.length === 0 && <div className="col-span-full rounded-2xl border border-dashed border-white/10 p-12 text-center text-slate-500">No local drafts match this search.</div>}</div></CardContent></Card><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected draft</p><h2 className="mt-2 text-2xl font-black">{selectedDraft.title}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{selectedDraft.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Status", value: selectedDraft.status }, { label: "Channel", value: selectedDraft.channel }, { label: "Reviewer", value: "Unassigned" }, { label: "Audience", value: "Unspecified" }, { label: "Schedule", value: "Not set" }, { label: "Delivery", value: "Blocked" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Publish unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Schedule unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No distribution claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A local queue item does not establish rights, approval, moderation, audience consent, schedule, delivery, or public visibility.</p></div>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Publishing gates</p><h2 className="mt-2 text-2xl font-black">What a real release workflow must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Authenticated author, owner, role permissions, content rights, and version history", "Claims, safety, moderation, privacy, accessibility, legal, and regional review", "Audience consent, channel configuration, frequency, opt-out, and policy", "Schedule timezone, idempotency, retries, delivery, rollback, and incident response", "Reach, impressions, clicks, conversions, notifications, freshness, and analytics", "Audit, support, deletion, export, retention, and confirmation before publication"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Queue surface preserved", description: "Drafts, search, status, channel, reviewer intent, audience, schedule, delivery, gates, local creation, save/reset, and blocked publication remain interactive.", icon: Clock3, status: "Local queue" }, { title: "No publication theater", description: "Users, approvals, content rights, moderation, schedules, delivery, reach, analytics, and publication are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Governance before distribution", description: "Real publishing needs authorization, claims review, privacy, consent, scheduling, delivery, rollback, audit, and support.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
 }

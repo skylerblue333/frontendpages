@@ -23,7 +23,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmptyState } from "@/components/EmptyState";
 import { PageHeader } from "@/components/PageHeader";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { getLoginUrl } from "@/const";
 
 const TOKENS = [
   { symbol: "SKY444", name: "SkyCoin 4444", state: "Integration required" },
@@ -113,30 +112,6 @@ export default function CryptoHub() {
     );
   }
 
-  if (!isAuthenticated) {
-    const loginUrl = getLoginUrl();
-    return (
-      <div className="min-h-screen bg-background px-4 py-10 sm:px-6">
-        <div className="mx-auto flex min-h-[70vh] max-w-xl items-center justify-center">
-          <Card className="w-full border-border/70 bg-card/90 text-center shadow-lg">
-            <CardContent className="space-y-5 p-8 sm:p-10">
-              <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary" aria-hidden="true"><Wallet className="size-7" /></div>
-              <div>
-                <h1 className="text-2xl font-semibold tracking-tight">Crypto Hub requires authentication</h1>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">Balances, transaction history, and account actions are private capabilities. Sign in when authentication is configured for this environment.</p>
-              </div>
-              {loginUrl ? (
-                <Button asChild><a href={loginUrl}>Sign in to continue</a></Button>
-              ) : (
-                <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-200" role="status">Authentication is not configured in this environment.</div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="border-b border-border/70 bg-card/60">
@@ -173,6 +148,7 @@ export default function CryptoHub() {
         <Card className="border-border/70 bg-card/80">
           <CardContent className="flex flex-col gap-4 p-5 lg:flex-row lg:items-center lg:justify-between">
             <div>
+              <div className="mb-2 flex flex-wrap items-center gap-2"><Badge variant="outline" className="border-amber-500/30 bg-amber-500/10 text-amber-300">Unauthenticated preview</Badge>{!isAuthenticated && <span className="text-xs text-muted-foreground">Private wallet actions remain locked</span>}</div>
               <h2 className="font-semibold">Asset coverage</h2>
               <p className="mt-1 text-sm text-muted-foreground">These symbols are present in the current screen design; availability and pricing still require verified integrations.</p>
             </div>

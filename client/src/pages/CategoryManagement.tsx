@@ -1,74 +1,24 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Check, ChevronRight, FolderTree, Hash, Info, Layers3, Plus, RefreshCw, Search, ShieldAlert, Tag, WifiOff } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+type Category = { id: string; name: string; parent: string; description: string; status: string; children: number };
+const INITIAL: Category[] = [
+  { id: "cat-1", name: "Learning", parent: "Root", description: "Educational content and curriculum concepts.", status: "Preview taxonomy", children: 3 },
+  { id: "cat-2", name: "Community", parent: "Root", description: "Community spaces and participation concepts.", status: "Preview taxonomy", children: 2 },
+  { id: "cat-3", name: "Crypto concepts", parent: "Learning", description: "Educational blockchain and wallet topics.", status: "Needs governance", children: 0 },
+  { id: "cat-4", name: "Creator tools", parent: "Community", description: "Creator workflow and publishing concepts.", status: "Preview taxonomy", children: 0 },
+];
 
 export default function CategoryManagement() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>CategoryManagement</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">CategoryManagement</h1>
-            <p className="text-muted-foreground mt-2">Manage categories</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [categories, setCategories] = useState(INITIAL); const [query, setQuery] = useState(""); const [selectedId, setSelectedId] = useState(INITIAL[0].id); const [draft, setDraft] = useState(""); const [saved, setSaved] = useState(false);
+  const visible = useMemo(() => categories.filter((category) => `${category.name} ${category.parent} ${category.description}`.toLowerCase().includes(query.toLowerCase())), [categories, query]); const selected = visible.find((category) => category.id === selectedId) ?? visible[0];
+  const addCategory = () => { const name = draft.trim() || `Local category ${categories.length + 1}`; const next: Category = { id: `local-${Date.now()}`, name, parent: "Root", description: "Local taxonomy draft; no content was reassigned.", status: "Local draft", children: 0 }; setCategories((current) => [...current, next]); setSelectedId(next.id); setDraft(""); setSaved(true); };
+  const reset = () => { setCategories(INITIAL); setSelectedId(INITIAL[0].id); setQuery(""); setDraft(""); setSaved(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={FolderTree} eyebrow="Content · Taxonomy Management" title="Shape the taxonomy before moving anyone’s content." description="Explore a synthetic category tree, search and inspect category context, and add a local taxonomy draft. This page does not reclassify content, change permissions, report usage, or synchronize a category service." badge="Preview taxonomy workspace"><div className="flex flex-wrap gap-2"><Button onClick={addCategory} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Plus className="mr-2 size-4" />Add local category</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset taxonomy</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Categories", value: String(categories.length), hint: "Synthetic and local drafts", icon: FolderTree }, { label: "Hierarchy", value: "Preview", hint: "Parent-child context", icon: Layers3, tone: "violet" }, { label: "Assignments", value: "Unchanged", hint: "No content mutation", icon: WifiOff, tone: "amber" }, { label: "Usage analytics", value: "Unavailable", hint: "No event source", icon: Hash, tone: "slate" }]} /><ScreenPreviewBanner title="Taxonomy evidence boundary">A category label is not a content assignment, permission, recommendation, usage metric, or reporting segment. A real taxonomy workflow needs stable identifiers, parent-child validation, slug and locale policy, migration previews, conflict handling, authorization, audit history, and a reversible reassignment plan.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search categories" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-5 space-y-2">{visible.map((category) => <button key={category.id} onClick={() => { setSelectedId(category.id); setSaved(false); }} className={`w-full rounded-xl border p-4 text-left ${selected?.id === category.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15"}`}><div className="flex items-center gap-3"><Tag className="size-4 text-cyan-300" /><span className="flex-1 font-semibold">{category.name}</span><Badge variant="outline" className="border-white/10 text-slate-400">{category.status}</Badge></div><div className="mt-2 flex items-center gap-2 text-xs text-slate-500"><ChevronRight className="size-3" />{category.parent} · {category.children} child concepts</div></button>)}{visible.length === 0 && <p className="py-8 text-center text-sm text-slate-500">No categories match this search.</p>}<div className="mt-5 rounded-xl border border-dashed border-white/15 p-4"><p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Local category draft</p><div className="mt-3 flex gap-2"><Input value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="New category name" className="border-white/10 bg-black/20 text-white placeholder:text-slate-500" /><Button onClick={addCategory} variant="outline" className="border-white/15 text-white">Add</Button></div></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected category</p><h2 className="mt-2 text-3xl font-black">{selected.name}</h2><p className="mt-2 text-sm text-slate-400">Parent: {selected.parent}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><p className="mt-6 text-sm leading-6 text-slate-300">{selected.description}</p><div className="mt-6 grid gap-3 sm:grid-cols-3"><Detail label="Children" value={String(selected.children)} icon={Layers3} /><Detail label="Content" value="Unassigned" icon={WifiOff} /><Detail label="Usage" value="Unavailable" icon={Hash} /></div><div className="mt-6 space-y-2">{["Stable identifier and slug", "Parent cycle check", "Locale and accessibility labels", "Migration preview", "Permission and audit policy"].map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-3"><Info className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div>{saved && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><div className="flex items-center gap-2 font-semibold text-cyan-200"><Check className="size-4" />Local taxonomy draft saved</div><p className="mt-1 text-sm text-slate-400">No content moved, permission changed, slug published, or analytics record created.</p></div>}</> : <p className="text-sm text-slate-500">Select a category to inspect it.</p>}</CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Layers3 className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Hierarchy needs rules</h3><p className="mt-2 text-sm leading-6 text-slate-400">Prevent cycles, ambiguous parents, duplicate slugs, and inaccessible labels before publishing.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><ShieldAlert className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Assignment is a mutation</h3><p className="mt-2 text-sm leading-6 text-slate-400">Moving content can affect URLs, permissions, search, feeds, and user expectations.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><WifiOff className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">No fake usage</h3><p className="mt-2 text-sm leading-6 text-slate-400">Without event data, category counts, popularity, and recommendation signals remain unavailable.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Taxonomy is structure", description: "Make parent, child, label, slug, and governance rules legible before content assignment.", icon: FolderTree, status: "Pattern" }, { title: "Migration before mutation", description: "Preview creates, reassignments, redirects, and conflicts before changing content.", icon: ShieldAlert, status: "Required" }, { title: "No fake category service", description: "A local taxonomy draft is not a published category, content update, or usage report.", icon: WifiOff, status: "Guardrail" }]} /></main></div>;
 }
+function Detail({ label, value, icon: Icon }: { label: string; value: string; icon: typeof FolderTree }) { return <div className="rounded-lg border border-white/10 bg-black/15 p-4"><Icon className="size-4 text-slate-400" /><p className="mt-3 text-xs uppercase tracking-wider text-slate-500">{label}</p><p className="mt-1 text-sm text-slate-200">{value}</p></div>; }

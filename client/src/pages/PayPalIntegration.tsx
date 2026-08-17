@@ -1,74 +1,19 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, CreditCard, FileKey2, Globe2, LockKeyhole, RefreshCw, Search, ShieldCheck, TriangleAlert, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
+type Mode = "sandbox" | "live";
 export default function PayPalIntegration() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>PayPalIntegration</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">PayPalIntegration</h1>
-            <p className="text-muted-foreground mt-2">PayPal setup</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [mode, setMode] = useState<Mode>("sandbox");
+  const [label, setLabel] = useState("Primary checkout");
+  const [search, setSearch] = useState("");
+  const [acknowledged, setAcknowledged] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const valid = label.trim().length >= 3;
+  const status = useMemo(() => saved ? "Draft saved locally" : "Not connected", [saved]);
+  const reset = () => { setMode("sandbox"); setLabel("Primary checkout"); setSearch(""); setAcknowledged(false); setSaved(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={CreditCard} eyebrow="PayPalIntegration · Provider preview" title="Design the payment boundary before connecting money." description="Configure a local provider profile, compare sandbox/live intent, and inspect payment readiness. No PayPal account, credential, webhook, checkout, charge, refund, or transaction is connected." badge="Payment preview"><div className="flex flex-wrap gap-2"><Button disabled={!valid || !acknowledged} onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Draft saved locally" : "Save local profile"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset integration</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Provider", value: "PayPal", hint: "Concept only", icon: CreditCard, tone: "cyan" }, { label: "Mode", value: mode === "sandbox" ? "Sandbox" : "Live", hint: "Local choice", icon: Globe2, tone: "violet" }, { label: "Connection", value: status, hint: "No API call", icon: WifiOff, tone: "amber" }, { label: "Payments", value: "Off", hint: "No charge path", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Payment integration evidence boundary"><strong>This is not a connected PayPal integration.</strong> The form does not store or transmit client IDs, secrets, access tokens, webhooks, payer data, billing addresses, payment methods, orders, charges, refunds, disputes, or transaction status. Use server-side secret storage and provider documentation before any real connection.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.85fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Connection profile</p><h2 className="mt-2 text-3xl font-black">{label}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{status}</Badge></div><label className="mt-6 block text-sm text-slate-400">Profile label<input value={label} onChange={(e) => { setLabel(e.target.value); setSaved(false); }} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-white outline-none focus:border-cyan-300/50" /></label><p className="mt-5 text-sm text-slate-400">Environment</p><div className="mt-2 flex rounded-xl border border-white/10 bg-black/20 p-1">{(["sandbox", "live"] as Mode[]).map((item) => <button key={item} onClick={() => { setMode(item); setSaved(false); }} className={`flex-1 rounded-lg py-2 text-sm font-semibold capitalize ${mode === item ? item === "sandbox" ? "bg-cyan-300 text-slate-950" : "bg-amber-300 text-slate-950" : "text-slate-400 hover:text-white"}`}>{item}{item === "live" ? " (preview only)" : ""}</button>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Client ID", value: "Not entered" }, { label: "Secret", value: "Never enter here" }, { label: "Webhook", value: "Not configured" }, { label: "Merchant account", value: "Not verified" }, { label: "Currencies", value: "Not configured" }, { label: "Return URLs", value: "Not configured" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 flex gap-3"><button aria-label="Acknowledge payment boundary" onClick={() => setAcknowledged(!acknowledged)} className={`flex size-5 shrink-0 items-center justify-center rounded border ${acknowledged ? "border-cyan-300 bg-cyan-300 text-slate-950" : "border-white/20"}`}>{acknowledged ? "✓" : ""}</button><p className="text-sm leading-6 text-slate-400">I understand this local profile cannot connect PayPal, store credentials, or process a payment.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled={!valid || !acknowledged} className="bg-cyan-300/20 text-cyan-100/40">Connect unavailable</Button><Button disabled variant="outline" className="border-white/10 text-white/40">Test checkout unavailable</Button></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search readiness items…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><p className="mt-5 text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Provider readiness</p><h2 className="mt-2 text-2xl font-black">Production evidence</h2><div className="mt-5 space-y-3">{["Server-side credential storage and least-privilege permissions", "Sandbox/live separation, redirect and return URL validation", "Webhook signature verification, idempotency, replay protection, and event reconciliation", "Order, capture, refund, dispute, currency, tax, and settlement contracts", "Fraud controls, PCI/privacy scope, monitoring, support, audit, and incident response"].filter((item) => !search || item.toLowerCase().includes(search.toLowerCase())).map((item) => <div key={item} className="flex items-start gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="mt-0.5 size-4 text-slate-500" /><span className="flex-1 text-sm leading-5 text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><TriangleAlert className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-300">Never put a PayPal secret, webhook secret, access token, private key, or customer payment data in frontend code or local storage.</p></div></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Integration checklist</p><h2 className="mt-2 text-2xl font-black">A real payment path must prove</h2><div className="mt-5 space-y-3">{["Official server-side SDK/API contract, environment isolation, and credential rotation", "Authenticated payer/order scope, amount/currency/line-item validation, and duplicate protection", "Server-created order, approval, capture, webhook verification, and reconciliation", "Refunds, disputes, failures, chargebacks, support, privacy, and audit events", "Monitoring, alerting, rate limits, fraud controls, and incident response"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><FileKey2 className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake payment</h2><p className="mt-3 text-sm leading-6 text-slate-400">Saving a local profile changes browser state only. It does not connect PayPal, create an order, capture a charge, issue a refund, or prove a transaction.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Sandbox/live distinction", description: "Environment selection is interactive but explicitly local and not a provider connection.", icon: Globe2, status: "Local choice" }, { title: "Secrets stay out", description: "Credential fields are represented as unavailable rather than collecting secrets in the browser.", icon: LockKeyhole, status: "Security guardrail" }, { title: "Payment is blocked", description: "No checkout, charge, refund, webhook, or transaction success is fabricated.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

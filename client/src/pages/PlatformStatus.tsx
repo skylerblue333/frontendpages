@@ -1,90 +1,29 @@
-import { Link } from "wouter";
-import { PageHeader } from "@/components/PageHeader";
-import { Activity, CheckCircle, AlertTriangle, XCircle, Clock, Zap } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Activity, AlertTriangle, Check, Clock3, Database, FileWarning, Gauge, LockKeyhole, RefreshCw, Search, ServerCog, ShieldCheck, TriangleAlert, WifiOff, XCircle } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-const SERVICES = [
-  { name: "API Gateway", status: "operational", latency: "12ms", uptime: "99.99%" },
-  { name: "Authentication", status: "operational", latency: "8ms", uptime: "100%" },
-  { name: "Database (TiDB)", status: "operational", latency: "4ms", uptime: "..." },
-  { name: "File Storage (S3)", status: "operational", latency: "45ms", uptime: "99.99%" },
-  { name: "WebSocket Server", status: "degraded", latency: "120ms", uptime: "98.2%" },
-  { name: "AI/LLM Engine", status: "operational", latency: "850ms", uptime: "99.5%" },
-  { name: "Blockchain RPC", status: "operational", latency: "230ms", uptime: "99.1%" },
-  { name: "Email Service", status: "operational", latency: "320ms", uptime: "99.8%" },
-  { name: "CDN / Media", status: "operational", latency: "18ms", uptime: "99.99%" },
-  { name: "Sprint Engine", status: "operational", latency: "N/A", uptime: "99.3%" },
+type State = "Not measured" | "Needs evidence" | "Blocked";
+type Service = { name: string; domain: string; state: State; evidence: string; requirement: string };
+const services: Service[] = [
+  { name: "Application runtime", domain: "Core", state: "Needs evidence", evidence: "No live probe, deploy version, or health trace connected.", requirement: "Synthetic and live health checks with owner and rollback." },
+  { name: "Authentication", domain: "Security", state: "Needs evidence", evidence: "No session, failure, or dependency telemetry connected.", requirement: "Auth metrics, safe redaction, alerting, and incident runbook." },
+  { name: "Database", domain: "Data", state: "Not measured", evidence: "No query, pool, replica, or recovery source connected.", requirement: "Query plans, pool health, backups, recovery, and SLO." },
+  { name: "File storage", domain: "Data", state: "Not measured", evidence: "No upload, availability, integrity, or object trace connected.", requirement: "Provider health, object checks, retention, and audit." },
+  { name: "AI/LLM provider", domain: "Integrations", state: "Blocked", evidence: "No model, quota, latency, safety, or error stream connected.", requirement: "Model contract, evals, quota, privacy, fallback, and cost controls." },
+  { name: "Blockchain RPC", domain: "Finance", state: "Blocked", evidence: "No network, chain, node, receipt, or confirmation source connected.", requirement: "Network validation, RPC health, receipt verification, and failure states." },
+  { name: "Notifications", domain: "Delivery", state: "Needs evidence", evidence: "No email/SMS/push provider delivery stream connected.", requirement: "Provider events, retries, suppression, consent, and delivery audit." },
 ];
-
-const INCIDENTS = [
-  { date: "Jun 15, 2026", title: "WebSocket latency spike", status: "monitoring", duration: "Ongoing", severity: "minor" },
-  { date: "Jun 10, 2026", title: "Database connection pool exhaustion", status: "resolved", duration: "14 min", severity: "major" },
-  { date: "Jun 3, 2026", title: "AI engine timeout errors", status: "resolved", duration: "8 min", severity: "minor" },
-];
-
-function StatusIcon({ status }: { status: string }) {
-  if (status === "operational") return <CheckCircle className="w-4 h-4 text-success" />;
-  if (status === "degraded") return <AlertTriangle className="w-4 h-4 text-warning" />;
-  return <XCircle className="w-4 h-4 text-destructive" />;
-}
-
+const incidents = [{ id: "fixture-incident-001", title: "Example dependency degradation", state: "Fixture only", detail: "No date, duration, impact, affected users, or resolution is verified." }, { id: "fixture-incident-002", title: "Example recovery exercise", state: "Fixture only", detail: "No production incident, postmortem, or action owner exists." }];
 export default function PlatformStatus() {
-  const allOperational = SERVICES.every(s => s.status === "operational");
-
-  return (
-    <div className="container py-8 max-w-4xl animate-page-in">
-      <PageHeader backHref="/dashboard" icon={Activity} title="Platform Status" subtitle="Real-time health and uptime for all SKYCOIN4444 services" />
-
-      {/* Overall Status Banner */}
-      <div className={`rounded-xl p-4 mb-8 flex items-center gap-3 border ${allOperational ? "bg-success/10 border-success/30" : "bg-warning/10 border-warning/30"}`}>
-        {allOperational ? <CheckCircle className="w-6 h-6 text-success" /> : <AlertTriangle className="w-6 h-6 text-warning" />}
-        <div>
-          <div className={`font-semibold ${allOperational ? "text-success" : "text-warning"}`}>
-            {allOperational ? "All Systems Operational" : "Minor Service Degradation"}
-          </div>
-          <div className="text-xs text-muted-foreground">Last updated: just now</div>
-        </div>
-        <div className="ml-auto text-right">
-          <div className="text-2xl font-bold text-success">99.97%</div>
-          <div className="text-xs text-muted-foreground">30-day uptime</div>
-        </div>
-      </div>
-
-      {/* Services Grid */}
-      <div className="card mb-6 overflow-hidden">
-        <div className="px-5 py-3 border-b border-border/50 flex items-center justify-between">
-          <h3 className="font-semibold text-sm">Service Health</h3>
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground"><Zap className="w-3 h-3 text-primary" />Live</div>
-        </div>
-        {SERVICES.map((s, i) => (
-          <div key={i} className="flex items-center gap-4 px-5 py-3 border-b border-border/10 last:border-0 hover:bg-secondary/20 transition-colors">
-            <StatusIcon status={s.status} />
-            <div className="flex-1 text-sm font-medium">{s.name}</div>
-            <div className="text-xs text-muted-foreground font-mono">{s.latency}</div>
-            <div className={`text-xs font-semibold ${s.status === "operational" ? "text-success" : "text-warning"}`}>{s.uptime}</div>
-            <div className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-              s.status === "operational" ? "bg-success/10 text-success" :
-              s.status === "degraded" ? "bg-warning/10 text-warning" : "bg-destructive/10 text-destructive"
-            }`}>{s.status}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* Incident History */}
-      <div className="card p-5">
-        <h3 className="font-semibold mb-4 flex items-center gap-2"><Clock className="w-4 h-4 text-primary" />Incident History</h3>
-        {INCIDENTS.map((inc, i) => (
-          <div key={i} className="flex items-start gap-3 py-3 border-b border-border/20 last:border-0">
-            <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${inc.status === "resolved" ? "bg-success" : "bg-warning"}`} />
-            <div className="flex-1">
-              <div className="text-sm font-medium">{inc.title}</div>
-              <div className="text-xs text-muted-foreground">{inc.date} · Duration: {inc.duration}</div>
-            </div>
-            <div className={`text-xs px-2 py-0.5 rounded-full ${inc.status === "resolved" ? "bg-success/10 text-success" : "bg-warning/10 text-warning"}`}>
-              {inc.status}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  const [domain, setDomain] = useState("All");
+  const [state, setState] = useState<State | "All">("All");
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState(services[0]);
+  const [refreshed, setRefreshed] = useState(false);
+  const filtered = useMemo(() => services.filter((item) => (domain === "All" || item.domain === domain) && (state === "All" || item.state === state) && (!query || `${item.name} ${item.domain} ${item.evidence}`.toLowerCase().includes(query.toLowerCase()))), [domain, query, state]);
+  const reset = () => { setDomain("All"); setState("All"); setQuery(""); setSelected(services[0]); setRefreshed(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Activity} eyebrow="PlatformStatus · Health preview" title="Report health only when the system can prove it." description="Review service-health concepts, evidence states, incident fixtures, and readiness requirements. No live uptime, latency, availability, incident, user impact, transaction, or SLO claim is connected." badge="Status preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setRefreshed(true)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />{refreshed ? "Preview refreshed" : "Refresh preview"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">Reset status</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Services", value: String(services.length), hint: "Local registry", icon: ServerCog, tone: "cyan" }, { label: "Visible", value: String(filtered.length), hint: "Local filters", icon: Search, tone: "violet" }, { label: "Live source", value: "Off", hint: "No health probe", icon: WifiOff, tone: "amber" }, { label: "Uptime", value: "Unset", hint: "No SLO", icon: Gauge, tone: "slate" }]} /><ScreenPreviewBanner title="Platform status evidence boundary"><strong>This is not a live status page.</strong> Service states, incident fixtures, refresh actions, and readiness labels are local UI data. They do not represent uptime, response time, error rate, availability, incident impact, affected users, recovery duration, transaction success, or SLO compliance. No provider, database, RPC, account, or monitoring source is connected.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.88fr_1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search services…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Domains</p><div className="mt-3 flex flex-wrap gap-2">{["All", "Core", "Security", "Data", "Integrations", "Finance", "Delivery"].map((item) => <button key={item} onClick={() => setDomain(item)} className={`rounded-lg border px-3 py-2 text-xs ${domain === item ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Evidence state</p><div className="mt-3 grid gap-2">{(["All", "Not measured", "Needs evidence", "Blocked"] as const).map((item) => <button key={item} onClick={() => setState(item)} className={`flex items-center justify-between rounded-xl border p-3 text-left ${state === item ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10 text-slate-400"}`}><span className="text-sm font-semibold">{item}</span><span className="text-xs text-slate-500">{item === "All" ? services.length : services.filter((service) => service.state === item).length}</span></button>)}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><TriangleAlert className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-300">A status label without a source, timestamp, scope, and reproducible check is not a health measurement.</p></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Service health concepts</p><h2 className="mt-2 text-2xl font-black">Evidence status</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">Source off</Badge></div><div className="mt-5 space-y-3">{filtered.length === 0 ? <div className="rounded-xl border border-dashed border-white/15 p-8 text-center"><p className="font-semibold">No services match</p><p className="mt-2 text-sm text-slate-500">Change the local filters.</p></div> : filtered.map((item) => <button key={item.name} onClick={() => setSelected(item)} className={`w-full rounded-xl border p-4 text-left ${selected.name === item.name ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-center gap-3"><div className="flex size-9 items-center justify-center rounded-xl bg-cyan-300/10">{item.state === "Blocked" ? <XCircle className="size-4 text-rose-200" /> : item.state === "Needs evidence" ? <AlertTriangle className="size-4 text-amber-200" /> : <Database className="size-4 text-slate-400" />}</div><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{item.name}</p><Badge variant="outline" className="border-white/10 text-slate-400">{item.domain}</Badge></div><p className="mt-1 text-sm text-slate-500">{item.evidence}</p></div><span className="text-xs text-amber-200">{item.state}</span></div></button>)}</div><div className="mt-5 rounded-xl border border-white/10 p-4"><p className="text-xs text-slate-500">Selected service</p><p className="mt-2 text-lg font-black">{selected.name}</p><p className="mt-2 text-sm leading-6 text-slate-400">{selected.evidence}</p><div className="mt-4 grid gap-3 sm:grid-cols-2">{[{ label: "State", value: selected.state }, { label: "Latency", value: "Not measured" }, { label: "Uptime", value: "Unset" }, { label: "Requirement", value: selected.requirement }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></div></CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Incident fixtures</p><h2 className="mt-2 text-2xl font-black">No verified incidents</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{incidents.length} local rows</Badge></div><div className="mt-5 grid gap-3 md:grid-cols-2">{incidents.map((item) => <div key={item.id} className="rounded-xl border border-white/10 p-4"><div className="flex items-center justify-between gap-3"><p className="font-semibold">{item.title}</p><Badge variant="outline" className="border-white/10 text-amber-200">{item.state}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-500">{item.detail}</p><p className="mt-3 text-xs text-slate-600">{item.id}</p></div>)}</div><p className="mt-5 text-sm text-slate-500">Fixtures contain no timestamp, duration, affected-user count, incident commander, provider event, remediation, postmortem, or resolution evidence.</p></CardContent></Card><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Production checklist</p><h2 className="mt-2 text-2xl font-black">Status must prove</h2><div className="mt-5 space-y-3">{["Defined service catalog, owner, dependency graph, environment, scope, timestamps, and probe semantics", "Metrics and traces for availability, latency, errors, saturation, traffic, and meaningful SLOs", "Incident detection, impact assessment, communications, status updates, remediation, and postmortem", "Provider/database/RPC health, retry/failure states, backup/recovery, and reconciliation", "Privacy-safe logs, redaction, access control, audit, alerting, support, and incident response"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake status</h2><p className="mt-3 text-sm leading-6 text-slate-400">Filtering services, selecting a row, and refreshing the preview changes local state only. It does not measure health, declare an outage, confirm recovery, report users affected, or publish a status.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Service catalog preserved", description: "Core, security, data, integration, finance, and delivery concepts remain searchable.", icon: ServerCog, status: "Local registry" }, { title: "Evidence states are explicit", description: "Not measured, needs evidence, and blocked prevent unsupported availability claims.", icon: ShieldCheck, status: "Guardrail" }, { title: "Live probes are off", description: "No uptime, latency, incident, user-impact, transaction, or SLO number is fabricated.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

@@ -1,162 +1,21 @@
-/**
- * Bookmarks — Saved posts with notes, collections, and search
- */
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useLocation } from "wouter";
-import { Bookmark, Search, Trash2, ChevronLeft, FileText, Heart, MessageCircle, Share2, Filter } from "lucide-react";
-import { trpc } from "@/lib/trpc";
+import { Bookmark, BookOpen, ChevronLeft, CircleAlert, FileText, Filter, Heart, Image, LayoutGrid, MessageCircle, MoreHorizontal, Search, Share2, Trash2, Video, WifiOff } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScreenPreviewBanner, ScreenStatePanel } from "@/components/ScreenExperience";
 
-export default function Bookmarks() {
-  const { user } = useAuth();
-  const [, navigate] = useLocation();
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<"all" | "text" | "image" | "video" | "reel">("all");
+type BookmarkRecord = { id: string; note?: string; createdAt: string; post: { type: "text" | "image" | "video" | "reel"; content: string; likesCount: number; commentsCount: number; sharesCount: number; author: { displayName: string; username: string } } };
+const PREVIEW_BOOKMARKS: BookmarkRecord[] = [
+  { id: "preview-1", note: "Review the evidence checklist before the next release.", createdAt: "2026-08-15", post: { type: "text", content: "A useful product surface should make its source, state, and next action visible without inventing a backend result.", likesCount: 24, commentsCount: 6, sharesCount: 3, author: { displayName: "Synthetic Editorial Team", username: "preview_editorial" } }, },
+  { id: "preview-2", note: "Visual reference for the community launch.", createdAt: "2026-08-12", post: { type: "image", content: "A synthetic visual brief for a cyan-and-violet community hub with clear empty, loading, and retry states.", likesCount: 18, commentsCount: 4, sharesCount: 2, author: { displayName: "Synthetic Design Desk", username: "preview_design" } }, },
+  { id: "preview-3", createdAt: "2026-08-08", post: { type: "video", content: "A preview walkthrough showing how a user moves from a saved idea to a reviewed action.", likesCount: 31, commentsCount: 9, sharesCount: 5, author: { displayName: "Synthetic Product Studio", username: "preview_product" } }, },
+];
+const FILTERS = ["all", "text", "image", "video", "reel"] as const;
+type Filter = (typeof FILTERS)[number];
+const COLLECTIONS = [{ id: "all", label: "All saved", icon: LayoutGrid }, { id: "read", label: "Read later", icon: BookOpen }, { id: "ideas", label: "Ideas", icon: FileText }, { id: "media", label: "Media", icon: Image }];
 
-  const { data, refetch, isLoading } = trpc.feed.bookmarks.useQuery(
-    { limit: 50, offset: 0 },
-    { enabled: !!user }
-  );
-
-  const removeBookmark = trpc.feed.removeBookmark.useMutation({
-    onSuccess: () => { toast.success("Bookmark removed"); refetch(); },
-    onError: (err: unknown) => toast.error((err as Error).message),
-  });
-
-  const bookmarks = ((data as any[]) ?? []).filter((b: any) => {
-    const post = b.post;
-    if (!post) return false;
-    if (filter !== "all" && post.type !== filter) return false;
-    if (search && !post.content?.toLowerCase().includes(search.toLowerCase())) return false;
-    return true;
-  });
-
-  return (
-    <div className="min-h-screen bg-[#050508] text-white">
-      {/* Hero */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-cyan-950/40 via-[#050508] to-blue-950/30 py-12">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="glow-orb w-56 h-56 bg-cyan-500/15 top-0 left-1/3" />
-        </div>
-        <div className="container max-w-3xl mx-auto px-4 relative z-10">
-          <button onClick={() => navigate(-1 as any)} className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-white mb-4 transition-colors">
-            <ChevronLeft className="w-4 h-4" /> Back
-          </button>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center">
-              <Bookmark className="w-5 h-5 text-cyan-400" />
-            </div>
-            <h1 className="text-3xl font-black rainbow-text">Bookmarks</h1>
-          </div>
-          <p className="text-muted-foreground metallic-shimmer">Your saved posts, articles, and content.</p>
-        </div>
-      </div>
-
-      <div className="container max-w-3xl mx-auto px-4 py-8">
-        {!user ? (
-          <div className="text-center py-20 text-muted-foreground">Sign in to view your bookmarks</div>
-        ) : (
-          <>
-            {/* Search + Filter */}
-            <div className="flex flex-col sm:flex-row gap-3 mb-6">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <input
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                  placeholder="Search bookmarks..."
-                  className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-cyan-500/50"
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <Filter className="w-4 h-4 text-muted-foreground" />
-                {(["all", "text", "image", "video", "reel"] as const).map(f => (
-                  <button
-                    key={f}
-                    onClick={() => setFilter(f)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors capitalize ${
-                      filter === f ? "bg-cyan-500/20 border border-cyan-500/40 text-cyan-300" : "bg-white/5 border border-white/10 text-muted-foreground hover:text-white"
-                    }`}
-                  >
-                    {f}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Count */}
-            <div className="text-sm text-muted-foreground mb-4">
-              {bookmarks.length} bookmark{bookmarks.length !== 1 ? "s" : ""}
-              {search && ` matching "${search}"`}
-            </div>
-
-            {/* Bookmark list */}
-            {isLoading ? (
-              <div className="space-y-3">
-                {[1,2,3].map(i => (
-                  <div key={i} className="h-28 rounded-xl bg-white/5 animate-pulse" />
-                ))}
-              </div>
-            ) : bookmarks.length === 0 ? (
-              <div className="text-center py-20">
-                <Bookmark className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-30" />
-                <div className="text-muted-foreground">
-                  {search ? "No bookmarks match your search" : "No bookmarks yet — save posts to find them here"}
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {bookmarks.map((b: any) => {
-                  const post = b.post;
-                  return (
-                    <div
-                      key={b.id}
-                      className="group rounded-xl border border-white/10 bg-white/3 hover:bg-white/5 p-4 transition-all"
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex-1 min-w-0">
-                          {/* Author */}
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-xs font-bold text-white">
-                              {post?.author?.displayName?.[0] ?? "?"}
-                            </div>
-                            <span className="text-sm font-medium text-white">{post?.author?.displayName ?? "Unknown"}</span>
-                            <span className="text-xs text-muted-foreground">@{post?.author?.username ?? "unknown"}</span>
-                            <span className="ml-auto text-xs text-muted-foreground capitalize px-2 py-0.5 rounded-full bg-white/5 border border-white/10">
-                              {post?.type ?? "post"}
-                            </span>
-                          </div>
-                          {/* Content */}
-                          <p className="text-sm text-white/80 line-clamp-3 mb-2">{post?.content ?? "No content"}</p>
-                          {/* Note */}
-                          {b.note && (
-                            <div className="text-xs text-cyan-400/70 italic mb-2">Note: {b.note}</div>
-                          )}
-                          {/* Stats */}
-                          <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                            <span className="flex items-center gap-1"><Heart className="w-3 h-3" />{post?.likesCount ?? 0}</span>
-                            <span className="flex items-center gap-1"><MessageCircle className="w-3 h-3" />{post?.commentsCount ?? 0}</span>
-                            <span className="flex items-center gap-1"><Share2 className="w-3 h-3" />{post?.sharesCount ?? 0}</span>
-                            <span className="ml-auto">{b.createdAt ? new Date(b.createdAt).toLocaleDateString() : ""}</span>
-                          </div>
-                        </div>
-                        {/* Remove */}
-                        <button
-                          onClick={() => removeBookmark.mutate({ postId: post?.id })}
-                          className="opacity-0 group-hover:opacity-100 p-2 rounded-lg hover:bg-red-500/20 text-muted-foreground hover:text-red-400 transition-all"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
+export default function Bookmarks() { const { user } = useAuth(); const [, navigate] = useLocation(); const [records, setRecords] = useState(PREVIEW_BOOKMARKS); const [search, setSearch] = useState(""); const [filter, setFilter] = useState<Filter>("all"); const [collection, setCollection] = useState("all"); const [selectedId, setSelectedId] = useState<string | null>("preview-1"); const visible = useMemo(() => records.filter((record) => { const haystack = `${record.post.content} ${record.post.author.displayName} ${record.post.author.username}`.toLowerCase(); if (filter !== "all" && record.post.type !== filter) return false; return haystack.includes(search.toLowerCase()); }), [records, filter, search]); const selected = visible.find((record) => record.id === selectedId) ?? visible[0]; const collectionLabel = COLLECTIONS.find((item) => item.id === collection)?.label ?? "All saved"; return <div className="min-h-screen bg-[#050508] text-white"><header className="border-b border-white/10 bg-gradient-to-r from-cyan-950/40 via-[#050508] to-blue-950/30"><div className="mx-auto max-w-7xl px-4 py-8 sm:px-6"><Button onClick={() => navigate(-1 as never)} variant="ghost" className="mb-5 px-0 text-slate-400 hover:bg-transparent hover:text-white"><ChevronLeft className="mr-2 size-4" />Back</Button><div className="flex flex-wrap items-end justify-between gap-5"><div><div className="flex items-center gap-3"><div className="flex size-11 items-center justify-center rounded-xl bg-cyan-500/20"><Bookmark className="size-5 text-cyan-300" /></div><div><p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-300">Personal library</p><h1 className="text-4xl font-black">Bookmarks</h1></div></div><p className="mt-3 max-w-xl text-slate-400">A focused retrieval space for saved posts, notes, and media. The current records are synthetic previews because no bookmark API is connected.</p></div><Badge variant="outline" className="border-amber-300/25 text-amber-200">Preview records</Badge></div></div></header><main className="mx-auto max-w-7xl px-4 py-8 sm:px-6"><ScreenPreviewBanner title="Saved-content evidence boundary">The three records below are explicitly labeled synthetic preview content. No real account bookmarks, authors, engagement counts, dates, notes, or server mutations are represented. A production integration must authenticate the account, validate ownership, persist notes safely, and confirm removal from the server.</ScreenPreviewBanner>{!user ? <div className="mt-8"><ScreenStatePanel type="auth" title="Sign in to open your library" description="Your saved content is private and requires an authenticated account." /></div> : <div className="mt-8 grid gap-6 lg:grid-cols-[220px_1fr_330px]"><aside className="space-y-2"><p className="px-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Collections</p>{COLLECTIONS.map(({ id, label, icon: Icon }) => <button key={id} onClick={() => setCollection(id)} className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm transition ${collection === id ? "bg-cyan-300/10 text-cyan-200" : "text-slate-400 hover:bg-white/[0.05] hover:text-white"}`}><Icon className="size-4" /><span className="flex-1">{label}</span>{id === "all" && <span className="text-xs text-slate-500">{records.length}</span>}</button>)}<div className="mt-8 rounded-xl border border-white/10 bg-white/[0.03] p-4"><BookOpen className="size-4 text-cyan-300" /><p className="mt-3 text-sm font-medium">Notes stay attached</p><p className="mt-1 text-xs leading-5 text-slate-500">Open a saved item to review its note and source context before returning to the feed.</p></div></aside><section className="min-w-0"><div className="mb-5 flex flex-col gap-3 sm:flex-row"><div className="relative flex-1"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search saved previews" aria-label="Search saved previews" className="border-white/10 bg-white/[0.04] pl-9 text-white placeholder:text-slate-500" /></div><div className="flex items-center gap-1 overflow-x-auto rounded-xl border border-white/10 bg-white/[0.03] p-1"><Filter className="mx-2 size-4 shrink-0 text-slate-500" />{FILTERS.map((item) => <button key={item} onClick={() => setFilter(item)} className={`rounded-lg px-3 py-2 text-xs capitalize transition ${filter === item ? "bg-cyan-300/15 text-cyan-200" : "text-slate-500 hover:text-white"}`}>{item}</button>)}</div></div><div className="mb-4 flex items-center justify-between"><div><p className="text-sm font-semibold text-white">{collectionLabel}</p><p className="text-xs text-slate-500">{visible.length} matching preview item{visible.length === 1 ? "" : "s"}</p></div><Button variant="ghost" size="icon" className="text-slate-400"><MoreHorizontal className="size-5" /></Button></div>{visible.length === 0 ? <ScreenStatePanel type="empty" title={search ? "No saved previews match" : "Your preview library is empty"} description={search ? "Try a different phrase or media filter." : "A production feed would place saved content here after a confirmed bookmark action."} /> : <div className="space-y-3">{visible.map((record) => { const Icon = record.post.type === "image" ? Image : record.post.type === "video" || record.post.type === "reel" ? Video : FileText; return <button key={record.id} onClick={() => setSelectedId(record.id)} className={`group w-full rounded-2xl border p-5 text-left transition ${selected?.id === record.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-white/[0.03] hover:bg-white/[0.06]"}`}><div className="flex items-start gap-4"><div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-cyan-400/10"><Icon className="size-4 text-cyan-300" /></div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-2"><span className="font-semibold text-white">{record.post.author.displayName}</span><span className="text-xs text-slate-500">@{record.post.author.username}</span><Badge variant="outline" className="border-amber-300/20 text-xs capitalize text-amber-200">Synthetic preview</Badge></div><p className="mt-2 line-clamp-3 text-sm leading-6 text-slate-300">{record.post.content}</p>{record.note && <p className="mt-2 text-xs italic text-cyan-300/80">Note: {record.note}</p>}<div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-slate-500"><span className="flex items-center gap-1"><Heart className="size-3" />{record.post.likesCount}</span><span className="flex items-center gap-1"><MessageCircle className="size-3" />{record.post.commentsCount}</span><span className="flex items-center gap-1"><Share2 className="size-3" />{record.post.sharesCount}</span><span className="ml-auto">{record.createdAt}</span></div></div><span onClick={(event) => { event.stopPropagation(); setRecords((current) => current.filter((item) => item.id !== record.id)); }} className="rounded-lg p-2 text-slate-500 opacity-0 transition hover:bg-red-500/15 hover:text-red-300 group-hover:opacity-100"><Trash2 className="size-4" /></span></div></button>; })}</div>}</section><aside className="lg:sticky lg:top-6 lg:self-start">{selected ? <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected preview</p><div className="mt-4 flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 font-bold">{selected.post.author.displayName[0]}</div><div><p className="font-semibold">{selected.post.author.displayName}</p><p className="text-xs text-slate-500">@{selected.post.author.username}</p></div></div><p className="mt-5 text-sm leading-7 text-slate-300">{selected.post.content}</p>{selected.note && <div className="mt-5 rounded-xl border border-cyan-300/15 bg-cyan-300/[0.06] p-4"><p className="text-xs uppercase tracking-wider text-cyan-300">Preview note</p><p className="mt-2 text-sm leading-6 text-slate-300">{selected.note}</p></div>}<Button variant="outline" className="mt-5 w-full border-white/15 text-white hover:bg-white/10"><BookOpen className="mr-2 size-4" />Open source preview</Button></CardContent></Card> : <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><WifiOff className="size-5 text-slate-500" /><p className="mt-4 text-sm font-medium">Select a saved item</p><p className="mt-1 text-sm leading-6 text-slate-500">Details, notes, and source context will appear here.</p></CardContent></Card>}<div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-4"><div className="flex items-center gap-2 text-sm font-medium text-slate-200"><CircleAlert className="size-4 text-amber-300" />Sync boundary</div><p className="mt-2 text-xs leading-5 text-slate-500">Removing a preview changes this browser only. No server bookmark mutation is claimed.</p></div></aside></div>}</main></div>; }

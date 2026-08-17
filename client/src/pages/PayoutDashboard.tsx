@@ -1,201 +1,23 @@
-import { useState } from "react";
-import { DollarSign, TrendingUp, Clock, CheckCircle, XCircle, Zap, ArrowDownToLine, Wallet, BarChart3, Users, Star, AlertCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { trpc } from "@/lib/trpc";
-import { toast } from "sonner";
-import { Link } from "wouter";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowDownLeft, Banknote, Check, Clock3, Coins, CreditCard, FileCheck2, LockKeyhole, RefreshCw, ShieldCheck, TriangleAlert, WalletCards, WifiOff, Zap } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-const PAYOUT_HISTORY = [
-  { id: 1, amount: 1240.50, method: "Bank Transfer", status: "completed", date: "Jun 15", txId: "PAY-001" },
-  { id: 2, amount: 890.00,  method: "Crypto (SKY444)", status: "completed", date: "Jun 1",  txId: "PAY-002" },
-  { id: 3, amount: 2100.75, method: "Bank Transfer", status: "pending",   date: "Jun 18", txId: "PAY-003" },
-  { id: 4, amount: 450.00,  method: "Crypto (ETH)",   status: "failed",    date: "May 28", txId: "PAY-004" },
-];
-
-const EARNINGS_BREAKDOWN = [
-  { source: "Subscriptions", amount: 3840, pct: 52, color: "bg-purple-500" },
-  { source: "PPV Content",   amount: 1920, pct: 26, color: "bg-fuchsia-500" },
-  { source: "Tips",          amount: 1100, pct: 15, color: "bg-pink-500" },
-  { source: "Referrals",     amount: 520,  pct: 7,  color: "bg-rose-500" },
-];
-
-const STATUS_STYLES: Record<string, { icon: typeof CheckCircle; color: string; label: string }> = {
-  completed: { icon: CheckCircle, color: "text-green-400",  label: "Completed" },
-  pending:   { icon: Clock,       color: "text-yellow-400", label: "Pending"   },
-  failed:    { icon: XCircle,     color: "text-red-400",    label: "Failed"    },
-};
-
+type Method = "bank" | "crypto" | "provider";
+const history = [{ id: "fixture-payout-001", method: "Bank concept", amount: "$240.00 fixture", status: "Not submitted" }, { id: "fixture-payout-002", method: "Wallet concept", amount: "$85.00 fixture", status: "Not submitted" }, { id: "fixture-payout-003", method: "Provider concept", amount: "$120.00 fixture", status: "Not submitted" }];
 export default function PayoutDashboard() {
-  const [requestAmount, setRequestAmount] = useState("");
-  const [method, setMethod] = useState("bank");
-
-  const { data: earnings } = trpc.creator.earnings.useQuery(undefined, { retry: false });
-
-  const totalEarnings = 7380;
-  const availableBalance = 2840;
-  const pendingPayout = 2100.75;
-  const lifetimePayouts = 14200;
-
-  const handleRequestPayout = () => {
-    const amt = parseFloat(requestAmount);
-    if (!amt || amt < 50) { toast.error("Minimum payout is $50"); return; }
-    if (amt > availableBalance) { toast.error("Insufficient balance"); return; }
-    toast.success(`Payout of $${amt.toFixed(2)} requested via ${method === "bank" ? "Bank Transfer" : "Crypto"}`);
-    setRequestAmount("");
-  };
-
-  return (
-    <div className="min-h-screen bg-[#050308] text-white">
-      {/* Header */}
-      <div className="sticky top-0 z-40 bg-[#050308]/95 backdrop-blur border-b border-slate-800 px-4 py-3">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <DollarSign className="w-5 h-5 text-green-400" />
-            <span className="font-black text-white">Payout Dashboard</span>
-          </div>
-          <Link href="/creator-studio">
-            <Button size="sm" variant="outline" className="border-slate-700 text-slate-400 hover:text-white text-xs">
-              Creator Studio
-            </Button>
-          </Link>
-        </div>
-      </div>
-
-      <div className="max-w-5xl mx-auto px-4 py-6">
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {[
-            { label: "Available Balance", value: `$${availableBalance.toLocaleString()}`, icon: Wallet,       color: "text-green-400",  sub: "Ready to withdraw" },
-            { label: "This Month",        value: `$${totalEarnings.toLocaleString()}`,    icon: TrendingUp,   color: "text-purple-400", sub: "+23% vs last month" },
-            { label: "Pending Payout",    value: `$${pendingPayout.toFixed(2)}`,          icon: Clock,        color: "text-yellow-400", sub: "Processing 3-5 days" },
-            { label: "Lifetime Payouts",  value: `$${lifetimePayouts.toLocaleString()}`,  icon: CheckCircle,  color: "text-blue-400",   sub: "All time" },
-          ].map(({ label, value, icon: Icon, color, sub }) => (
-            <div key={label} className="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
-              <Icon className={`w-5 h-5 ${color} mb-2`} />
-              <p className="text-xl font-black text-white">{value}</p>
-              <p className="text-xs text-slate-400 font-medium">{label}</p>
-              <p className="text-[10px] text-slate-600 mt-0.5">{sub}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          {/* Request Payout */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-5">
-            <h2 className="font-bold text-white mb-4 flex items-center gap-2">
-              <ArrowDownToLine className="w-4 h-4 text-green-400" />
-              Request Payout
-            </h2>
-            <div className="space-y-3">
-              <div>
-                <label className="text-xs text-slate-400 mb-1 block">Amount (USD)</label>
-                <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                  <input
-                    type="number"
-                    value={requestAmount}
-                    onChange={e => setRequestAmount(e.target.value)}
-                    placeholder="0.00"
-                    className="w-full pl-9 pr-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder:text-slate-500 text-sm focus:outline-none focus:border-green-500"
-                  />
-                </div>
-                <p className="text-[10px] text-slate-600 mt-1">Available: ${availableBalance.toLocaleString()} · Min: $50</p>
-              </div>
-              <div>
-                <label className="text-xs text-slate-400 mb-1 block">Payout Method</label>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { id: "bank",   label: "Bank Transfer", sub: "3-5 days" },
-                    { id: "crypto", label: "Crypto (SKY444)", sub: "Instant" },
-                  ].map(m => (
-                    <button
-                      key={m.id}
-                      onClick={() => setMethod(m.id)}
-                      className={`p-2.5 rounded-lg border text-left transition-all ${method === m.id ? "border-green-500 bg-green-900/20" : "border-slate-700 hover:border-slate-600"}`}
-                    >
-                      <p className="text-xs font-semibold text-white">{m.label}</p>
-                      <p className="text-[10px] text-slate-500">{m.sub}</p>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <Button onClick={handleRequestPayout} className="w-full bg-green-600 hover:bg-green-500 text-white font-bold">
-                <Zap className="w-4 h-4 mr-2" />
-                Request Payout
-              </Button>
-            </div>
-          </div>
-
-          {/* Earnings breakdown */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-5">
-            <h2 className="font-bold text-white mb-4 flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-purple-400" />
-              Earnings Breakdown
-            </h2>
-            <div className="space-y-3">
-              {EARNINGS_BREAKDOWN.map(item => (
-                <div key={item.source}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs text-slate-400">{item.source}</span>
-                    <span className="text-xs font-semibold text-white">${item.amount.toLocaleString()} <span className="text-slate-500">({item.pct}%)</span></span>
-                  </div>
-                  <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                    <div className={`h-full ${item.color} rounded-full`} style={{ width: `${item.pct}%` }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 pt-4 border-t border-slate-800 flex items-center justify-between">
-              <span className="text-sm text-slate-400">Platform Fee (20%)</span>
-              <span className="text-sm font-semibold text-red-400">-${(totalEarnings * 0.2).toLocaleString()}</span>
-            </div>
-            <div className="flex items-center justify-between mt-1">
-              <span className="text-sm font-bold text-white">Net Earnings</span>
-              <span className="text-sm font-black text-green-400">${(totalEarnings * 0.8).toLocaleString()}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Payout History */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
-          <div className="p-4 border-b border-slate-800 flex items-center justify-between">
-            <h2 className="font-bold text-white flex items-center gap-2">
-              <Clock className="w-4 h-4 text-slate-400" />
-              Payout History
-            </h2>
-            <Badge className="bg-slate-800 text-slate-400 border-slate-700 text-xs">{PAYOUT_HISTORY.length} transactions</Badge>
-          </div>
-          <div className="divide-y divide-slate-800">
-            {PAYOUT_HISTORY.map(payout => {
-              const { icon: StatusIcon, color, label } = STATUS_STYLES[payout.status];
-              return (
-                <div key={payout.id} className="flex items-center gap-4 p-4 hover:bg-slate-800/30 transition-colors">
-                  <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center shrink-0">
-                    <StatusIcon className={`w-4 h-4 ${color}`} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-white">{payout.method}</p>
-                    <p className="text-xs text-slate-500">{payout.txId} · {payout.date}</p>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <p className="text-sm font-black text-white">${payout.amount.toFixed(2)}</p>
-                    <Badge className={`text-[9px] px-1.5 py-0.5 ${color} bg-transparent border-current`}>{label}</Badge>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Tax notice */}
-        <div className="mt-6 flex items-start gap-3 p-4 bg-yellow-900/10 border border-yellow-500/20 rounded-xl">
-          <AlertCircle className="w-4 h-4 text-yellow-400 shrink-0 mt-0.5" />
-          <p className="text-xs text-slate-400">
-            Earnings may be subject to tax reporting requirements. Creators earning over $600/year will receive a 1099-K form. Consult a tax professional for guidance.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+  const [gross, setGross] = useState("1200");
+  const [feeRate, setFeeRate] = useState("20");
+  const [method, setMethod] = useState<Method>("bank");
+  const [requested, setRequested] = useState(false);
+  const [acknowledged, setAcknowledged] = useState(false);
+  const [selectedHistory, setSelectedHistory] = useState(history[0].id);
+  const grossValue = Number(gross) || 0;
+  const feeValue = grossValue * ((Number(feeRate) || 0) / 100);
+  const localNet = Math.max(0, grossValue - feeValue);
+  const valid = grossValue > 0 && Number(feeRate) >= 0 && Number(feeRate) <= 100;
+  const reset = () => { setGross("1200"); setFeeRate("20"); setMethod("bank"); setRequested(false); setAcknowledged(false); setSelectedHistory(history[0].id); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={WalletCards} eyebrow="PayoutDashboard · Earnings preview" title="Model payout readiness without inventing a balance." description="Explore local earning assumptions, fee arithmetic, payout-method concepts, request intent, and synthetic history. No account balance, earnings record, payout rail, transfer, wallet, tax document, or settlement is verified." badge="Payout preview"><div className="flex flex-wrap gap-2"><Button disabled={!valid || !acknowledged} onClick={() => setRequested(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Zap className="mr-2 size-4" />{requested ? "Request blocked" : "Request payout intent"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset worksheet</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Gross fixture", value: `$${grossValue.toFixed(2)}`, hint: "Local assumption", icon: Coins, tone: "cyan" }, { label: "Fee fixture", value: `$${feeValue.toFixed(2)}`, hint: `${feeRate || 0}% local math`, icon: FileCheck2, tone: "violet" }, { label: "Net fixture", value: `$${localNet.toFixed(2)}`, hint: "Not payable", icon: ArrowDownLeft, tone: "amber" }, { label: "Transfer", value: "Off", hint: "No payout rail", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Payout evidence boundary"><strong>This worksheet does not show a real payout balance.</strong> Gross earnings, fees, net amount, payout method, minimum threshold, transaction ID, transfer status, wallet address, bank account, tax form, or settlement are local assumptions or fixtures only. No money is available or moved.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.85fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Payout worksheet</p><h2 className="mt-2 text-3xl font-black">Model the request</h2><div className="mt-6 grid gap-4 sm:grid-cols-2"><label className="text-sm text-slate-400">Gross earnings assumption<input value={gross} onChange={(e) => { setGross(e.target.value); setRequested(false); }} inputMode="decimal" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-white outline-none focus:border-cyan-300/50" /></label><label className="text-sm text-slate-400">Platform fee assumption %<input value={feeRate} onChange={(e) => { setFeeRate(e.target.value); setRequested(false); }} inputMode="decimal" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-white outline-none focus:border-cyan-300/50" /></label></div><div className="mt-5 grid gap-3 sm:grid-cols-3">{[{ label: "Gross", value: `$${grossValue.toFixed(2)}` }, { label: "Fee", value: `-$${feeValue.toFixed(2)}` }, { label: "Local net", value: `$${localNet.toFixed(2)}` }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-4"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-xl font-black text-amber-200">{item.value}</p></div>)}</div><p className="mt-4 text-sm text-slate-500">Arithmetic is local and illustrative. It does not calculate a payable balance, tax, currency conversion, fees, or settlement.</p><p className="mt-5 text-sm font-semibold text-slate-300">Payout method concept</p><div className="mt-2 grid gap-3 sm:grid-cols-3">{([{ id: "bank", label: "Bank transfer", detail: "Timing unavailable", icon: Banknote }, { id: "crypto", label: "Crypto wallet", detail: "Network unavailable", icon: WalletCards }, { id: "provider", label: "Provider rail", detail: "Account unavailable", icon: CreditCard }] as const).map((item) => <button key={item.id} onClick={() => setMethod(item.id)} className={`rounded-xl border p-3 text-left ${method === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><item.icon className="size-4 text-cyan-300" /><p className="mt-3 text-sm font-semibold">{item.label}</p><p className="mt-1 text-xs text-slate-500">{item.detail}</p></button>)}</div><div className="mt-5 flex gap-3"><button aria-label="Acknowledge payout boundary" onClick={() => setAcknowledged(!acknowledged)} className={`flex size-5 shrink-0 items-center justify-center rounded border ${acknowledged ? "border-cyan-300 bg-cyan-300 text-slate-950" : "border-white/20"}`}>{acknowledged ? "✓" : ""}</button><p className="text-sm leading-6 text-slate-400">I understand this local request cannot move money or confirm earnings.</p></div><div className="mt-5 rounded-xl border border-rose-300/20 bg-rose-300/[0.06] p-4"><p className="text-sm leading-6 text-slate-300">{requested ? "Request intent recorded locally; submission remains blocked because no payout source or authoritative balance is available." : "Submission is blocked until a real payout rail, authenticated balance, ownership, compliance, and reconciliation evidence exist."}</p></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Earnings breakdown</p><h2 className="mt-2 text-2xl font-black">Local assumptions only</h2><div className="mt-5 space-y-3">{[{ label: "Marketplace concept", pct: 45 }, { label: "Creator concept", pct: 30 }, { label: "Referral concept", pct: 25 }].map((item) => <div key={item.label}><div className="flex justify-between text-sm"><span className="text-slate-400">{item.label}</span><span className="text-amber-200">{item.pct}%</span></div><div className="mt-2 h-2 rounded-full bg-white/10"><div className="h-full rounded-full bg-cyan-300/50" style={{ width: `${item.pct}%` }} /></div></div>)}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><TriangleAlert className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-300">Tax treatment, reporting thresholds, deductions, and forms vary by jurisdiction. This preview is not tax advice and does not generate a filing or form.</p></div></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Balance", value: "Unavailable" }, { label: "Minimum", value: "Unset" }, { label: "Account", value: "Not verified" }, { label: "Tax form", value: "Not issued" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Payout history fixtures</p><h2 className="mt-2 text-2xl font-black">No verified transfers</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{history.length} local rows</Badge></div><div className="mt-5 space-y-3">{history.map((item) => <button key={item.id} onClick={() => setSelectedHistory(item.id)} className={`flex w-full items-center gap-3 rounded-xl border p-4 text-left ${selectedHistory === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><Clock3 className="size-5 text-slate-500" /><div className="flex-1"><p className="font-semibold">{item.method}</p><p className="mt-1 text-xs text-slate-500">{item.id} · {item.amount}</p></div><Badge variant="outline" className="border-white/10 text-amber-200">{item.status}</Badge></button>)}</div><p className="mt-5 text-sm text-slate-500">Rows are synthetic and contain no transaction hash, provider receipt, bank trace, wallet signature, tax record, or settlement evidence.</p></CardContent></Card><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Production checklist</p><h2 className="mt-2 text-2xl font-black">Payouts must prove</h2><div className="mt-5 space-y-3">{["Authoritative earnings ledger, balance invariants, permissions, and reconciliation", "Verified ownership of bank/wallet/provider destination with address/network/decimal validation", "Minimums, fees, currency conversion, tax/compliance, sanctions/fraud, and consent", "Idempotent payout request, provider transfer ID, status, failure, retry, and settlement", "Receipts, audit, privacy, support, monitoring, and incident response"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake payout</h2><p className="mt-3 text-sm leading-6 text-slate-400">Editing assumptions or selecting a method changes local UI state only. It does not show a balance, submit a transfer, issue a receipt, calculate tax, or move money.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Earnings math is transparent", description: "Gross, fee, and net assumptions are editable and explicitly labeled local arithmetic.", icon: Coins, status: "Local worksheet" }, { title: "Methods stay unconnected", description: "Bank, wallet, and provider destinations expose missing evidence instead of fake transfer details.", icon: WalletCards, status: "Guardrail" }, { title: "History is synthetic", description: "Payout rows are fixtures without transaction hashes, receipts, balances, or settlement evidence.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

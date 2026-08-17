@@ -1,75 +1,21 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, ClipboardList, ExternalLink, LockKeyhole, MapPinOff, RefreshCw, Search, ShieldCheck, Truck, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
+type Tracking = { id: string; title: string; stage: string; detail: string; milestone: number; carrier: string; location: string };
+const RECORDS: Tracking[] = [
+  { id: "track-preview-001", title: "SKY / USD order concept", stage: "Awaiting source", detail: "No order, venue, or fulfillment event has been verified.", milestone: 1, carrier: "Not assigned", location: "Not sourced" },
+  { id: "track-preview-002", title: "Marketplace item concept", stage: "Draft", detail: "A local tracking shell is ready for a future fulfillment contract.", milestone: 0, carrier: "Not assigned", location: "Not sourced" },
+  { id: "track-preview-003", title: "Digital delivery concept", stage: "Blocked", detail: "No delivery, entitlement, or receipt service is connected.", milestone: 1, carrier: "Not applicable", location: "Not sourced" },
+];
+const milestones = ["Intent created", "Order accepted", "In fulfillment", "Delivered"];
 export default function OrderTracking() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>OrderTracking</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">OrderTracking</h1>
-            <p className="text-muted-foreground mt-2">Real-time order status and tracking</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState<Tracking | null>(null);
+  const [refreshed, setRefreshed] = useState(false);
+  const visible = useMemo(() => RECORDS.filter((item) => !query || `${item.title} ${item.id}`.toLowerCase().includes(query.toLowerCase())), [query]);
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Truck} eyebrow="OrderTracking · Fulfillment preview" title="Follow the state without inventing movement." description="Explore local tracking fixtures, milestone semantics, and missing carrier evidence. No live location, shipment, delivery, carrier, timestamp, or real-time status is claimed." badge="Tracking preview"><div className="flex flex-wrap gap-2"><Button onClick={() => { setRefreshed(true); setSelected(null); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />{refreshed ? "Preview refreshed" : "Refresh preview"}</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Tracking concepts", value: String(visible.length), hint: "Synthetic rows", icon: ClipboardList, tone: "cyan" }, { label: "Live location", value: "Off", hint: "No carrier feed", icon: MapPinOff, tone: "violet" }, { label: "Milestones", value: "4", hint: "Defined locally", icon: Check, tone: "amber" }, { label: "Delivery proof", value: "0", hint: "None verified", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Tracking evidence boundary"><strong>Every record and milestone is a local UX fixture.</strong> This view does not prove an order, carrier, package, location, fulfillment event, delivery, recipient, timestamp, signature, digital entitlement, refund, or completed settlement. Production tracking needs authorized order and carrier contracts with reconciled event evidence.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.85fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search tracking concepts…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="mt-5 space-y-3">{visible.length === 0 ? <div className="rounded-2xl border border-dashed border-white/10 p-8 text-center"><Truck className="mx-auto size-8 text-slate-600" /><p className="mt-3 font-semibold text-slate-300">No matching concepts</p><p className="mt-2 text-sm text-slate-500">Change the search to view local tracking fixtures.</p></div> : visible.map((item) => <button key={item.id} onClick={() => setSelected(item)} className={`w-full rounded-2xl border p-4 text-left transition ${selected?.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10 hover:border-white/20"}`}><div className="flex items-start justify-between gap-3"><div><p className="font-bold">{item.title}</p><p className="mt-1 text-sm text-slate-500">{item.id}</p></div><Badge variant="outline" className="border-white/10 text-amber-200">{item.stage}</Badge></div><p className="mt-3 text-sm text-slate-400">{item.detail}</p></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected record</p><h2 className="mt-2 text-2xl font-black">{selected.title}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{selected.stage}</Badge></div><p className="mt-3 text-sm leading-6 text-slate-400">{selected.detail}</p><div className="mt-5 space-y-3">{milestones.map((item, index) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><span className={`flex size-7 items-center justify-center rounded-full text-xs font-bold ${index <= selected.milestone ? "bg-cyan-300 text-slate-950" : "bg-white/10 text-slate-500"}`}>{index <= selected.milestone ? "✓" : index + 1}</span><span className={`flex-1 text-sm ${index <= selected.milestone ? "text-white" : "text-slate-500"}`}>{item}</span><span className="text-xs text-slate-500">{index <= selected.milestone ? "Preview state" : "Not evidenced"}</span></div>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Carrier", value: selected.carrier }, { label: "Location", value: selected.location }, { label: "Last update", value: "Not timestamped" }, { label: "Proof", value: "Unavailable" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-cyan-300/20 text-cyan-100/40">Open carrier unavailable</Button><Button disabled variant="outline" className="border-white/10 text-white/40"><ExternalLink className="mr-2 size-4" />Proof unavailable</Button></div></> : <div className="py-10 text-center"><Truck className="mx-auto size-10 text-slate-600" /><h2 className="mt-4 text-xl font-black">Select a tracking concept</h2><p className="mt-2 text-sm leading-6 text-slate-500">Milestones and detail remain local until a real order and carrier event contract is available.</p></div>}</CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Production checklist</p><h2 className="mt-2 text-2xl font-black">Tracking requires proof</h2><div className="mt-5 space-y-3">{["Authorized order, recipient, fulfillment, and privacy scope", "Carrier/webhook contract, event IDs, timestamps, signatures, and deduplication", "Location, delivery, recipient, digital entitlement, and proof-of-delivery semantics", "Failure, delay, cancellation, refund, dispute, reconciliation, and support state", "Monitoring, retention, audit trail, security, and incident response"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake movement</h2><p className="mt-3 text-sm leading-6 text-slate-400">Refreshing this preview changes local selection only. It never claims a carrier call, GPS update, shipment, delivery, or recipient event occurred.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Milestones are typed", description: "Draft, awaiting source, and blocked states distinguish UX from verified fulfillment.", icon: ClipboardList, status: "Local state" }, { title: "Location is off", description: "No live map, carrier, GPS, recipient, or timestamp is implied.", icon: MapPinOff, status: "Unavailable" }, { title: "Proof is gated", description: "Carrier links and delivery evidence remain disabled until contracts and receipts exist.", icon: WifiOff, status: "Guardrail" }]} /></main></div>;
 }

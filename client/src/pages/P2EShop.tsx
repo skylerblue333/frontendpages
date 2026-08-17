@@ -1,206 +1,30 @@
-/**
- * P2E Shop — Play-to-Earn item shop with SKY444 token purchases, NFT drops, and gear upgrades
- */
-import { useState } from "react";
-import { useLocation } from "wouter";
-import { ShoppingBag, Coins, Zap, Shield, Sword, Crown, Star, ChevronLeft, Filter, Sparkles, Lock } from "lucide-react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
-import { toast } from "sonner";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, Coins, Filter, Gamepad2, Gem, LockKeyhole, RefreshCw, Search, ShieldCheck, ShoppingBag, Sparkles, TriangleAlert, WalletCards, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
+type Category = "all" | "gear" | "boost" | "cosmetic" | "collectible";
 type Rarity = "common" | "rare" | "epic" | "legendary";
-
-interface ShopItem {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  rarity: Rarity;
-  category: string;
-  icon: string;
-  owned?: boolean;
-  limited?: boolean;
-  remaining?: number;
-}
-
-const RARITY_STYLES: Record<Rarity, string> = {
-  common: "border-white/20 bg-white/5",
-  rare: "border-blue-500/40 bg-blue-950/20",
-  epic: "border-purple-500/40 bg-purple-950/20",
-  legendary: "border-amber-500/40 bg-amber-950/20",
-};
-
-const RARITY_BADGE: Record<Rarity, string> = {
-  common: "text-gray-400 bg-gray-500/20",
-  rare: "text-blue-400 bg-blue-500/20",
-  epic: "text-purple-400 bg-purple-500/20",
-  legendary: "text-amber-400 bg-amber-500/20",
-};
-
-const SHOP_ITEMS: ShopItem[] = [
-  { id: 1, name: "Shadow Cloak", description: "Invisible to enemy scanners for 24h", price: 250, rarity: "epic", category: "gear", icon: "🌑" },
-  { id: 2, name: "XP Booster x2", description: "Double XP for 7 days", price: 100, rarity: "rare", category: "boost", icon: "⚡" },
-  { id: 3, name: "Legendary Sword", description: "+50% attack power in PvP battles", price: 1500, rarity: "legendary", category: "weapon", icon: "⚔️", limited: true, remaining: 7 },
-  { id: 4, name: "Sky Shield", description: "Blocks 3 attacks in clan wars", price: 400, rarity: "epic", category: "gear", icon: "🛡️" },
-  { id: 5, name: "Daily Spin Token", description: "Extra spin on the daily wheel", price: 50, rarity: "common", category: "boost", icon: "🎰" },
-  { id: 6, name: "Crown of Kings", description: "Display crown on your profile + 10% reward bonus", price: 2000, rarity: "legendary", category: "cosmetic", icon: "👑", limited: true, remaining: 3 },
-  { id: 7, name: "Stealth Boots", description: "Move undetected in clan territory", price: 350, rarity: "rare", category: "gear", icon: "👢" },
-  { id: 8, name: "Battle Pass Token", description: "Unlock one Battle Pass tier instantly", price: 200, rarity: "rare", category: "boost", icon: "🎫" },
-  { id: 9, name: "Neon Avatar Frame", description: "Animated neon border on your avatar", price: 150, rarity: "common", category: "cosmetic", icon: "🌈" },
-  { id: 10, name: "Oracle's Eye", description: "See enemy clan stats before declaring war", price: 800, rarity: "epic", category: "intel", icon: "🔮" },
-  { id: 11, name: "Chaos Gem", description: "Random legendary drop on next quest", price: 500, rarity: "epic", category: "boost", icon: "💎" },
-  { id: 12, name: "Sky Genesis NFT", description: "Exclusive genesis collection NFT — tradeable", price: 5000, rarity: "legendary", category: "nft", icon: "🌌", limited: true, remaining: 1 },
+type Item = { id: string; name: string; description: string; category: Exclude<Category, "all">; rarity: Rarity; price: string; limited: boolean; remaining: string; icon: string };
+const ITEMS: Item[] = [
+  { id: "starforge", name: "Starforge Visor", description: "A synthetic cosmetic concept for a future player inventory.", category: "cosmetic", rarity: "legendary", price: "2,400 SKY", limited: true, remaining: "Fixture stock", icon: "◈" },
+  { id: "shield-burst", name: "Shield Burst", description: "A gameplay boost concept with no active game entitlement attached.", category: "boost", rarity: "epic", price: "850 SKY", limited: false, remaining: "Not sourced", icon: "✦" },
+  { id: "skyblade", name: "Skyblade Kit", description: "A gear concept for a future player-to-earn loop.", category: "gear", rarity: "rare", price: "420 SKY", limited: false, remaining: "Not sourced", icon: "⚔" },
+  { id: "aurora", name: "Aurora Badge", description: "A collectible badge concept; ownership is not verified.", category: "collectible", rarity: "common", price: "120 SKY", limited: true, remaining: "Fixture stock", icon: "✧" },
+  { id: "nebula", name: "Nebula Trail", description: "A visual trail concept for a future cosmetic inventory.", category: "cosmetic", rarity: "epic", price: "1,100 SKY", limited: false, remaining: "Not sourced", icon: "✺" },
+  { id: "combo", name: "Combo Catalyst", description: "A boost concept with no rate, effect, or balance claim.", category: "boost", rarity: "rare", price: "300 SKY", limited: false, remaining: "Not sourced", icon: "⚡" },
 ];
-
-const CATEGORIES = ["all", "gear", "weapon", "boost", "cosmetic", "intel", "nft"];
-
+const rarityTone: Record<Rarity, string> = { common: "text-slate-300 border-slate-300/20", rare: "text-cyan-200 border-cyan-300/30", epic: "text-violet-200 border-violet-300/30", legendary: "text-amber-200 border-amber-300/30" };
 export default function P2EShop() {
-  const { user } = useAuth();
-  const [, navigate] = useLocation();
-  const [category, setCategory] = useState("all");
-  const [rarityFilter, setRarityFilter] = useState<"all" | Rarity>("all");
-  const [purchased, setPurchased] = useState<Set<number>>(new Set());
-
-  // Use staking stats for SKY444 balance display
-  const { data: stakingStats } = trpc.staking.stats.useQuery(undefined, { enabled: !!user });
-  const skyBalance = (stakingStats as any)?.userStaked ?? 1250;
-
-  const filtered = SHOP_ITEMS.filter(item => {
-    if (category !== "all" && item.category !== category) return false;
-    if (rarityFilter !== "all" && item.rarity !== rarityFilter) return false;
-    return true;
-  });
-
-  const handleBuy = (item: ShopItem) => {
-    if (!user) { toast.error("Sign in to purchase items"); return; }
-    if (skyBalance < item.price) {
-      toast.error(`Need ${item.price} SKY444 — you have ${skyBalance}`);
-      return;
-    }
-    setPurchased(prev => new Set([...prev, item.id]));
-    toast.success(`🎉 ${item.icon} ${item.name} purchased! Check your inventory.`);
-  };
-
-  return (
-    <div className="min-h-screen bg-[#050508] text-white">
-      {/* Hero */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-amber-950/40 via-[#050508] to-orange-950/30 py-12">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="glow-orb w-64 h-64 bg-amber-500/15 top-0 right-1/4" />
-          <div className="glow-orb w-48 h-48 bg-orange-500/10 bottom-0 left-1/4" />
-        </div>
-        <div className="container max-w-6xl mx-auto px-4 relative z-10">
-          <button onClick={() => navigate(-1 as any)} className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-white mb-4 transition-colors">
-            <ChevronLeft className="w-4 h-4" /> Back
-          </button>
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                  <ShoppingBag className="w-6 h-6 text-amber-400" />
-                </div>
-                <h1 className="text-4xl font-black rainbow-text">P2E Shop</h1>
-              </div>
-              <p className="text-muted-foreground metallic-shimmer">Spend SKY444 tokens on gear, boosts, NFTs, and cosmetics.</p>
-            </div>
-            {/* Wallet balance */}
-            <div className="hidden sm:flex items-center gap-3 px-4 py-3 rounded-xl border border-amber-500/30 bg-amber-950/20">
-              <Coins className="w-5 h-5 text-amber-400" />
-              <div>
-                <div className="text-xs text-muted-foreground">SKY444 Balance</div>
-                <div className="text-lg font-black text-amber-400">{skyBalance.toLocaleString()}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="container max-w-6xl mx-auto px-4 py-8">
-        {/* Filters */}
-        <div className="flex flex-wrap items-center gap-3 mb-6">
-          <div className="flex items-center gap-1">
-            <Filter className="w-4 h-4 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">Category:</span>
-          </div>
-          {CATEGORIES.map(c => (
-            <button
-              key={c}
-              onClick={() => setCategory(c)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition-colors ${
-                category === c ? "bg-amber-500/20 border border-amber-500/40 text-amber-300" : "bg-white/5 border border-white/10 text-muted-foreground hover:text-white"
-              }`}
-            >
-              {c}
-            </button>
-          ))}
-          <div className="w-px h-4 bg-white/10 mx-1" />
-          {(["all", "common", "rare", "epic", "legendary"] as const).map(r => (
-            <button
-              key={r}
-              onClick={() => setRarityFilter(r)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition-colors ${
-                rarityFilter === r ? "bg-purple-500/20 border border-purple-500/40 text-purple-300" : "bg-white/5 border border-white/10 text-muted-foreground hover:text-white"
-              }`}
-            >
-              {r}
-            </button>
-          ))}
-        </div>
-
-        {/* Item count */}
-        <div className="text-sm text-muted-foreground mb-4">{filtered.length} items</div>
-
-        {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filtered.map(item => {
-            const isPurchased = purchased.has(item.id);
-            return (
-              <div
-                key={item.id}
-                className={`relative rounded-xl border p-4 transition-all hover:scale-[1.02] ${RARITY_STYLES[item.rarity]}`}
-              >
-                {/* Limited badge */}
-                {item.limited && (
-                  <div className="absolute top-2 right-2 text-xs font-bold text-red-400 bg-red-500/20 border border-red-500/30 px-2 py-0.5 rounded-full">
-                    {item.remaining} left
-                  </div>
-                )}
-
-                {/* Icon */}
-                <div className="text-4xl mb-3 text-center">{item.icon}</div>
-
-                {/* Rarity badge */}
-                <div className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full mb-2 capitalize ${RARITY_BADGE[item.rarity]}`}>
-                  <Sparkles className="w-3 h-3" />
-                  {item.rarity}
-                </div>
-
-                <h3 className="text-sm font-bold text-white mb-1">{item.name}</h3>
-                <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{item.description}</p>
-
-                {/* Price + Buy */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <Coins className="w-4 h-4 text-amber-400" />
-                    <span className="text-sm font-black text-amber-400">{item.price.toLocaleString()}</span>
-                  </div>
-                  <button
-                    onClick={() => handleBuy(item)}
-                    disabled={isPurchased}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                      isPurchased
-                        ? "bg-green-500/20 border border-green-500/30 text-green-400 cursor-default"
-                        : "bg-amber-500/20 border border-amber-500/30 text-amber-300 hover:bg-amber-500/30 hover:scale-105 active:scale-95"
-                    }`}
-                  >
-                    {isPurchased ? "✓ Owned" : "Buy"}
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
+  const [category, setCategory] = useState<Category>("all");
+  const [rarity, setRarity] = useState<"all" | Rarity>("all");
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState<Item | null>(ITEMS[0]);
+  const [cart, setCart] = useState<string[]>([]);
+  const [saved, setSaved] = useState(false);
+  const filtered = useMemo(() => ITEMS.filter((item) => (category === "all" || item.category === category) && (rarity === "all" || item.rarity === rarity) && (!query || `${item.name} ${item.description}`.toLowerCase().includes(query.toLowerCase()))), [category, rarity, query]);
+  const reset = () => { setCategory("all"); setRarity("all"); setQuery(""); setSelected(ITEMS[0]); setCart([]); setSaved(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={ShoppingBag} eyebrow="P2EShop · Catalog preview" title="Collect the concepts without faking the economy." description="Browse synthetic gear, boosts, cosmetics, and collectible concepts with filters and local cart intent. No token balance, NFT ownership, inventory entitlement, stock count, payment, or purchase is verified." badge="P2E shop preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Cart intent saved locally" : `Save cart intent (${cart.length})`}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset catalog</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Concepts", value: String(filtered.length), hint: "Synthetic catalog", icon: Gamepad2, tone: "cyan" }, { label: "Cart intent", value: String(cart.length), hint: "Local only", icon: ShoppingBag, tone: "violet" }, { label: "Balance", value: "Unavailable", hint: "No wallet source", icon: WalletCards, tone: "amber" }, { label: "Ownership", value: "Unverified", hint: "No inventory", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="P2E economy evidence boundary"><strong>All catalog rows, prices, rarity, limited labels, and icons are fixtures for UX exploration.</strong> They do not prove SKY supply, wallet balances, token value, NFT ownership, inventory, scarcity, gameplay effect, market price, payment, delivery, or purchase success. A real P2E economy requires secure custody or wallet integration, chain/network validation, inventory contracts, item metadata, payment, entitlement, and reconciliation.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.85fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex flex-wrap items-center gap-3"><div className="relative min-w-52 flex-1"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search catalog concepts…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="flex items-center gap-2 text-xs text-slate-500"><Filter className="size-4" />Filters are local</div></div><div className="mt-5 flex flex-wrap gap-2">{(["all", "gear", "boost", "cosmetic", "collectible"] as Category[]).map((item) => <button key={item} onClick={() => setCategory(item)} className={`rounded-full border px-3 py-1.5 text-xs capitalize ${category === item ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500 hover:text-white"}`}>{item}</button>)}</div><div className="mt-3 flex flex-wrap gap-2">{(["all", "common", "rare", "epic", "legendary"] as const).map((item) => <button key={item} onClick={() => setRarity(item)} className={`rounded-full border px-3 py-1.5 text-xs capitalize ${rarity === item ? "border-violet-300/40 bg-violet-300/10 text-violet-200" : "border-white/10 text-slate-500 hover:text-white"}`}>{item}</button>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item)} className={`rounded-2xl border p-4 text-left transition ${selected?.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10 hover:border-white/20"}`}><div className="flex items-start justify-between gap-3"><span className="text-3xl text-amber-200">{item.icon}</span>{item.limited && <Badge variant="outline" className="border-rose-300/30 text-rose-200">Limited fixture</Badge>}</div><div className="mt-3 flex items-center gap-2"><Badge variant="outline" className={rarityTone[item.rarity]}>{item.rarity}</Badge><span className="text-xs capitalize text-slate-500">{item.category}</span></div><h3 className="mt-3 font-bold">{item.name}</h3><p className="mt-2 text-sm leading-5 text-slate-400">{item.description}</p><div className="mt-4 flex items-center justify-between"><span className="font-semibold text-amber-200">{item.price}</span><span className="text-xs text-slate-500">{item.remaining}</span></div></button>)}</div>{filtered.length === 0 && <div className="mt-5 rounded-2xl border border-dashed border-white/10 p-8 text-center"><Gem className="mx-auto size-8 text-slate-600" /><p className="mt-3 font-semibold text-slate-300">No matching concepts</p><p className="mt-2 text-sm text-slate-500">Change the category, rarity, or search filter.</p></div>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected concept</p><h2 className="mt-2 text-3xl font-black">{selected.name}</h2></div><span className="text-4xl text-amber-200">{selected.icon}</span></div><p className="mt-3 leading-6 text-slate-400">{selected.description}</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Category", value: selected.category }, { label: "Rarity", value: selected.rarity }, { label: "Price", value: selected.price }, { label: "Stock", value: selected.remaining }, { label: "Wallet", value: "Not connected" }, { label: "Ownership", value: "Not verified" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold capitalize text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 flex flex-wrap gap-2"><Button onClick={() => setCart((items) => items.includes(selected.id) ? items.filter((id) => id !== selected.id) : [...items, selected.id])} variant="outline" className="border-cyan-300/30 bg-cyan-300/[0.06] text-cyan-100 hover:bg-cyan-300/10">{cart.includes(selected.id) ? "Remove cart intent" : "Add cart intent"}</Button><Button disabled className="bg-amber-300/20 text-amber-100/40">Buy unavailable</Button></div></> : <div className="py-10 text-center"><Gem className="mx-auto size-10 text-slate-600" /><p className="mt-4 font-semibold text-slate-300">Select a catalog concept</p></div>}</CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Production checklist</p><h2 className="mt-2 text-2xl font-black">What a real P2E shop must prove</h2><div className="mt-5 space-y-3">{["Wallet/custody, network, address, balance, token decimals, and transaction validation", "Authoritative item metadata, rarity, inventory, scarcity, gameplay effect, and ownership", "Price source, payment authorization, fees, slippage, idempotency, and receipt", "Entitlement delivery, chain confirmation, failed/replaced transactions, and reconciliation", "Fraud controls, privacy, support, audits, incident response, and no-investment boundary"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake economy</h2><p className="mt-3 text-sm leading-6 text-slate-400">Adding a cart intent changes local state only. It does not debit SKY, mint an NFT, grant an item, reduce stock, or claim ownership.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Catalog is playable", description: "Filters, selection, rarity, limited labels, and cart intent make the shop useful without backend claims.", icon: Sparkles, status: "Verified locally" }, { title: "Balance is unavailable", description: "No token amount, price value, wallet, ownership, or scarcity is presented as verified.", icon: WalletCards, status: "Guardrail" }, { title: "Purchases are blocked", description: "No payment, mint, entitlement, inventory, or transaction success is fabricated.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

@@ -1,75 +1,27 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { BookOpenCheck, Check, ClipboardList, Download, FileText, Lightbulb, LockKeyhole, RefreshCw, Search, ShieldCheck, TriangleAlert, Users, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
+type Segment = "Explorer" | "Builder" | "Operator";
+const segments: Record<Segment, { summary: string; needs: string[]; objections: string[]; message: string; confidence: string }> = {
+  Explorer: { summary: "Early-stage learner exploring the ecosystem.", needs: ["Clear orientation", "Safe experimentation", "Plain-language explanations"], objections: ["Unclear evidence", "Too many surfaces", "Fear of hidden cost"], message: "Start with a transparent guided preview.", confidence: "Hypothesis" },
+  Builder: { summary: "Hands-on creator shaping a project or workflow.", needs: ["Composable tools", "Feedback loops", "Exportable work"], objections: ["Integration effort", "Unstable contracts", "Missing ownership"], message: "Prototype with visible boundaries and reusable artifacts.", confidence: "Hypothesis" },
+  Operator: { summary: "Responsible for repeatable delivery and governance.", needs: ["Observability", "Controls", "Auditability"], objections: ["Unverified claims", "Access risk", "Poor rollback"], message: "Operate from measured evidence and explicit controls.", confidence: "Hypothesis" },
+};
 export default function PersonaBuilder() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>PersonaBuilder</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">PersonaBuilder</h1>
-            <p className="text-muted-foreground mt-2">Create buyer personas</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [segment, setSegment] = useState<Segment>("Explorer");
+  const [search, setSearch] = useState("");
+  const [notes, setNotes] = useState("");
+  const [source, setSource] = useState("");
+  const [checked, setChecked] = useState<string[]>([]);
+  const [exported, setExported] = useState(false);
+  const selected = segments[segment];
+  const allItems = [...selected.needs, ...selected.objections];
+  const visibleItems = useMemo(() => allItems.filter((item) => !search || item.toLowerCase().includes(search.toLowerCase())), [allItems, search]);
+  const toggle = (item: string) => setChecked((items) => items.includes(item) ? items.filter((value) => value !== item) : [...items, item]);
+  const reset = () => { setSegment("Explorer"); setSearch(""); setNotes(""); setSource(""); setChecked([]); setExported(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Users} eyebrow="PersonaBuilder · Research preview" title="Shape a persona hypothesis without inventing a customer." description="Explore local segment concepts, needs, objections, messaging, evidence sources, and research tasks. No user profile, survey, analytics, conversion, market-size, demographic, or validated customer insight is connected." badge="Persona preview"><div className="flex flex-wrap gap-2"><Button disabled={checked.length === 0} onClick={() => setExported(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Download className="mr-2 size-4" />{exported ? "Export intent saved" : "Save export intent"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset persona</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Segments", value: "3", hint: "Local concepts", icon: Users, tone: "cyan" }, { label: "Selected", value: segment, hint: "Hypothesis", icon: Lightbulb, tone: "violet" }, { label: "Research tasks", value: String(checked.length), hint: "Local checklist", icon: ClipboardList, tone: "amber" }, { label: "Customer source", value: "Off", hint: "No analytics", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Persona evidence boundary"><strong>This is a research-planning worksheet, not customer truth.</strong> Segment names, needs, objections, messages, confidence labels, and research tasks are local hypotheses. They do not represent real users, market research, demographics, buying behavior, conversion, retention, revenue, or validated product-market fit.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Persona concepts</p><h2 className="mt-2 text-2xl font-black">Choose a hypothesis</h2><div className="mt-5 space-y-2">{(Object.keys(segments) as Segment[]).map((item) => <button key={item} onClick={() => { setSegment(item); setChecked([]); setExported(false); }} className={`w-full rounded-xl border p-4 text-left ${segment === item ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-center justify-between"><p className="font-semibold">{item}</p><Badge variant="outline" className="border-white/10 text-amber-200">{segments[item].confidence}</Badge></div><p className="mt-2 text-sm leading-5 text-slate-500">{segments[item].summary}</p></button>)}</div><div className="relative mt-6"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search needs or objections…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><TriangleAlert className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-300">Validate every hypothesis with representative interviews, behavior evidence, accessibility checks, and privacy-safe research before treating it as a customer insight.</p></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">{segment} hypothesis</p><h2 className="mt-2 text-2xl font-black">Needs and objections</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">{selected.confidence}</Badge></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{visibleItems.length === 0 ? <div className="sm:col-span-2 rounded-xl border border-dashed border-white/15 p-8 text-center"><p className="font-semibold">No concepts match</p><p className="mt-2 text-sm text-slate-500">Change the local search query.</p></div> : visibleItems.map((item) => <button key={item} onClick={() => toggle(item)} className={`rounded-xl border p-4 text-left ${checked.includes(item) ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start gap-3"><span className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border ${checked.includes(item) ? "border-cyan-300 bg-cyan-300 text-slate-950" : "border-white/20 text-transparent"}`}><Check className="size-3" /></span><div><p className="font-semibold">{item}</p><p className="mt-1 text-xs text-slate-500">{selected.needs.includes(item) ? "Need hypothesis" : "Objection hypothesis"}</p></div></div></button>)}</div><div className="mt-6 rounded-xl border border-white/10 p-4"><p className="text-xs text-slate-500">Candidate message</p><p className="mt-2 text-lg font-black text-cyan-100">{selected.message}</p><p className="mt-2 text-sm text-slate-500">This copy is a draft hypothesis, not tested messaging or a performance claim.</p></div><div className="mt-6 grid gap-4 sm:grid-cols-2"><label className="text-sm text-slate-400">Evidence source label<input value={source} onChange={(e) => setSource(e.target.value)} placeholder="e.g. interview batch, event name" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-white outline-none focus:border-cyan-300/50" /></label><label className="text-sm text-slate-400">Research note<textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="What should be validated?" rows={3} className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/20 p-3 text-white outline-none focus:border-cyan-300/50" /></label></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Research checklist</p><h2 className="mt-2 text-2xl font-black">Persona must prove</h2><div className="mt-5 space-y-3">{["Recruit representative participants with consent and documented inclusion criteria", "Separate observed behavior, verbatim evidence, interpretation, and hypothesis", "Check segment stability across contexts, accessibility needs, geography, and lifecycle", "Avoid sensitive-data collection; define retention, redaction, access, and deletion", "Validate messaging and decisions with reproducible evidence rather than invented metrics"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake customer</h2><p className="mt-3 text-sm leading-6 text-slate-400">Selecting a segment, checking a concept, adding notes, or saving export intent changes local state only. It does not create a customer, collect analytics, validate demand, or produce a market claim.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Three persona paths preserved", description: "Explorer, Builder, and Operator hypotheses remain selectable with distinct needs and objections.", icon: Users, status: "Local concepts" }, { title: "Evidence fields are ready", description: "Source labels and research notes make the next validation step visible without pretending it happened.", icon: FileText, status: "Planning" }, { title: "Customer data is off", description: "No profile, analytics, demographic, conversion, retention, or market evidence is fabricated.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

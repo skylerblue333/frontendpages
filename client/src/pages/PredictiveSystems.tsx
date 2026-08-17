@@ -1,219 +1,25 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { PageHeader } from "@/components/PageHeader";
-import { toast } from "sonner";
-import { TrendingUp, TrendingDown, AlertTriangle, Users, DollarSign, Activity, RefreshCw, Eye, Zap } from "lucide-react";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Activity, AlertTriangle, BarChart3, Check, ChevronRight, Clock3, Database, FileWarning, Gauge, LockKeyhole, RefreshCw, Search, ServerCog, ShieldAlert, SlidersHorizontal, TrendingDown, TrendingUp, WifiOff, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-const CHURN_DATA = [
-  { day: "Mon", risk: 12, predicted: 8 },
-  { day: "Tue", risk: 15, predicted: 11 },
-  { day: "Wed", risk: 9, predicted: 7 },
-  { day: "Thu", risk: 22, predicted: 18 },
-  { day: "Fri", risk: 18, predicted: 15 },
-  { day: "Sat", risk: 7, predicted: 6 },
-  { day: "Sun", risk: 10, predicted: 9 },
+type System = { id: string; name: string; purpose: string; state: string; source: string; cadence: string; owner: string };
+const systems: System[] = [
+  { id: "signals", name: "Signal monitoring", purpose: "Define which trusted signals a system would observe and how freshness should be checked.", state: "Design only", source: "No connector", cadence: "Unconfigured", owner: "Unassigned" },
+  { id: "trends", name: "Trend forecasting", purpose: "Explore trend and seasonality requirements without rendering unsupported future values.", state: "Blocked", source: "No model", cadence: "Unavailable", owner: "Unassigned" },
+  { id: "revenue", name: "Revenue-risk review", purpose: "Document a human review workflow for customer or revenue risk without fabricating amounts or probabilities.", state: "Design only", source: "No billing source", cadence: "Unconfigured", owner: "Unassigned" },
 ];
-
-const TREND_DATA = [
-  { hour: "00", score: 45 },
-  { hour: "04", score: 32 },
-  { hour: "08", score: 78 },
-  { hour: "12", score: 95 },
-  { hour: "16", score: 88 },
-  { hour: "20", score: 72 },
-  { hour: "23", score: 61 },
-];
-
-const REVENUE_RISK = [
-  { segment: "Premium", risk: "low", mrr: 48200, churnProb: 0.03, action: "Upsell to Scalable" },
-  { segment: "Creator", risk: "medium", mrr: 22100, churnProb: 0.12, action: "Engagement campaign" },
-  { segment: "Free", risk: "high", mrr: 0, churnProb: 0.34, action: "Conversion push" },
-  { segment: "Scalable", risk: "low", mrr: 91000, churnProb: 0.01, action: "Expand seats" },
-];
-
+const checklist = ["Authenticated operator and least-privilege access", "Source contract, freshness, lineage, and data-quality checks", "Versioned model, run history, evaluation, calibration, and drift", "Alert routing, deduplication, acknowledgement, escalation, and audit", "Human approval, rollback, incident response, and safe offline behavior"];
 export default function PredictiveSystems() {
-  const [activeModel, setActiveModel] = useState<"churn" | "trends" | "revenue">("churn");
-  const { data: platformStats } = trpc.platform.stats.useQuery();
-
-  return (
-    <div className="container py-8 max-w-6xl animate-page-in">
-      <PageHeader
-        backHref="/memory-system"
-        icon={TrendingUp}
-        title="Predictive Systems"
-        subtitle="Phase 9 — Churn prediction, trend forecasting, revenue risk analysis"
-      />
-
-      {/* Model selector */}
-      <div className="flex gap-2 mb-6">
-        {(["churn", "trends", "revenue"] as const).map(model => (
-          <button
-            key={model}
-            onClick={() => setActiveModel(model)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-colors ${
-              activeModel === model ? "bg-primary text-primary-foreground" : "bg-secondary/50 hover:bg-secondary text-muted-foreground"
-            }`}
-          >
-            {model === "churn" ? "Churn Prediction" : model === "trends" ? "Trend Forecasting" : "Revenue Risk"}
-          </button>
-        ))}
-      </div>
-
-      {/* Churn Prediction */}
-      {activeModel === "churn" && (
-        <div className="space-y-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { label: "At-Risk Users", value: "247", change: "+12", bad: true, icon: Users },
-              { label: "Predicted Churn", value: "3.2%", change: "-0.4%", bad: false, icon: TrendingDown },
-              { label: "Saved This Week", value: "89", change: "+23", bad: false, icon: Zap },
-              { label: "Model Accuracy", value: "94.1%", change: "+0.3%", bad: false, icon: Activity },
-            ].map(stat => (
-              <div key={stat.label} className="card p-4">
-                <stat.icon className="w-5 h-5 text-muted-foreground mb-2" />
-                <div className="text-2xl font-bold">{stat.value}</div>
-                <div className="text-xs text-muted-foreground">{stat.label}</div>
-                <div className={`text-xs mt-1 font-medium ${stat.bad ? "text-red-400" : "text-green-400"}`}>{stat.change} vs last week</div>
-              </div>
-            ))}
-          </div>
-
-          <div className="card p-6">
-            <h3 className="font-semibold mb-4">Daily Churn Risk vs Prediction</h3>
-            <ResponsiveContainer width="100%" height={240}>
-              <AreaChart data={CHURN_DATA}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="day" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }} />
-                <Area type="monotone" dataKey="risk" stroke="#ef4444" fill="#ef444420" name="Actual Risk" />
-                <Area type="monotone" dataKey="predicted" stroke="#3b82f6" fill="#3b82f620" name="Predicted" />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-
-          <div className="card p-6">
-            <h3 className="font-semibold mb-4">Top Churn Signals</h3>
-            <div className="space-y-3">
-              {[
-                { signal: "No login in 7+ days", weight: 0.89, users: 134 },
-                { signal: "Subscription expiring in 3 days", weight: 0.76, users: 67 },
-                { signal: "Zero posts in 14 days", weight: 0.71, users: 89 },
-                { signal: "Failed payment attempt", weight: 0.94, users: 23 },
-              ].map(s => (
-                <div key={s.signal} className="flex items-center gap-3">
-                  <div className="flex-1">
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>{s.signal}</span>
-                      <span className="text-muted-foreground">{s.users} users</span>
-                    </div>
-                    <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                      <div className="h-full bg-red-500 rounded-full" style={{ width: `${s.weight * 100}%` }} />
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => toast.success(`Intervention triggered for ${s.users} users`)}
-                    className="text-xs bg-primary/20 text-primary px-2 py-1 rounded-lg hover:bg-primary/30 transition-colors shrink-0"
-                  >
-                    Intervene
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Trend Forecasting */}
-      {activeModel === "trends" && (
-        <div className="space-y-6">
-          <div className="card p-6">
-            <h3 className="font-semibold mb-4">Trending Score by Hour (Next 24h Forecast)</h3>
-            <ResponsiveContainer width="100%" height={240}>
-              <BarChart data={TREND_DATA}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="hour" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }} />
-                <Bar dataKey="score" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} name="Trend Score" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="card p-5">
-              <h3 className="font-semibold mb-3 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-green-400" />
-                Predicted Rising Topics
-              </h3>
-              <div className="space-y-2">
-                {["#SKY444Mining", "#TRUMPToken", "#DeFiYield", "#AIAgents", "#Web3Social"].map((tag, i) => (
-                  <div key={tag} className="flex items-center justify-between">
-                    <span className="text-sm text-primary">{tag}</span>
-                    <span className="text-xs text-green-400">+{(85 - i * 12)}% predicted</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="card p-5">
-              <h3 className="font-semibold mb-3 flex items-center gap-2">
-                <TrendingDown className="w-4 h-4 text-red-400" />
-                Predicted Declining Topics
-              </h3>
-              <div className="space-y-2">
-                {["#NFTFlip", "#MetaverseLand", "#PlayToEarn", "#ICOSeason", "#DogeCoin"].map((tag, i) => (
-                  <div key={tag} className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">{tag}</span>
-                    <span className="text-xs text-red-400">-{(42 + i * 8)}% predicted</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Revenue Risk */}
-      {activeModel === "revenue" && (
-        <div className="space-y-4">
-          {REVENUE_RISK.map(seg => (
-            <div key={seg.segment} className="card p-5">
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <div className="font-semibold">{seg.segment} Segment</div>
-                  <div className="text-sm text-muted-foreground">MRR: ${seg.mrr.toLocaleString()}</div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                    seg.risk === "low" ? "bg-green-500/20 text-green-400" :
-                    seg.risk === "medium" ? "bg-yellow-500/20 text-yellow-400" :
-                    "bg-red-500/20 text-red-400"
-                  }`}>
-                    {seg.risk} risk
-                  </span>
-                  <button
-                    onClick={() => toast.success(`Action triggered: ${seg.action}`)}
-                    className="text-xs bg-primary/20 text-primary px-3 py-1 rounded-lg hover:bg-primary/30 transition-colors"
-                  >
-                    {seg.action}
-                  </button>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-muted-foreground">Churn probability:</span>
-                <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
-                  <div
-                    className={`h-full rounded-full ${seg.risk === "low" ? "bg-green-500" : seg.risk === "medium" ? "bg-yellow-500" : "bg-red-500"}`}
-                    style={{ width: `${seg.churnProb * 100}%` }}
-                  />
-                </div>
-                <span className="text-xs font-medium">{(seg.churnProb * 100).toFixed(0)}%</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  const [selectedId, setSelectedId] = useState(systems[0].id);
+  const [query, setQuery] = useState("");
+  const [cadence, setCadence] = useState("Manual review");
+  const [saved, setSaved] = useState(false);
+  const [showConfig, setShowConfig] = useState(false);
+  const visible = useMemo(() => systems.filter((item) => `${item.name} ${item.purpose} ${item.state}`.toLowerCase().includes(query.toLowerCase())), [query]);
+  const selected = systems.find((item) => item.id === selectedId) ?? systems[0];
+  const reset = () => { setSelectedId(systems[0].id); setQuery(""); setCadence("Manual review"); setSaved(false); setShowConfig(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={ServerCog} eyebrow="PredictiveSystems · Operations preview" title="Design a safe system before it starts sending alerts or taking action." description="Review signal monitoring, trend forecasting, and revenue-risk concepts as operational designs. Source connections, model runs, alert delivery, user counts, financial values, probabilities, interventions, and automated actions are intentionally unavailable." badge="Systems readiness"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Design saved locally" : "Save design locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset system</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "System concepts", value: String(systems.length), hint: "Local designs", icon: ServerCog, tone: "cyan" }, { label: "Data sources", value: "0", hint: "No connectors", icon: Database, tone: "violet" }, { label: "Alerts", value: "Off", hint: "No delivery path", icon: AlertTriangle, tone: "amber" }, { label: "Actions", value: "Blocked", hint: "Human review required", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Predictive systems evidence boundary"><strong>This is an operations design preview, not a running predictive system.</strong> No signal is being ingested, no future value or risk score is calculated, no customer/user/revenue statistic is verified, no alert is delivered, and no intervention or automated action is executed. Local controls document intent only.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">System modes</p><h2 className="mt-2 text-2xl font-black">Choose an operating concept</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">Design only</Badge></div><div className="relative mt-5"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search system concepts…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="mt-4 space-y-3">{visible.map((item) => <button key={item.id} onClick={() => setSelectedId(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start gap-3"><Activity className={`mt-1 size-5 ${item.state === "Blocked" ? "text-amber-200" : "text-cyan-200"}`} /><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{item.name}</p><Badge variant="outline" className="border-white/10 text-slate-400">{item.state}</Badge></div><p className="mt-2 text-sm leading-5 text-slate-500">{item.purpose}</p><div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-400"><span>{item.source}</span><span>·</span><span>{item.cadence}</span></div></div><ChevronRight className="size-4 text-slate-600" /></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">System detail</p><h2 className="mt-2 text-2xl font-black">{selected.name}</h2><p className="mt-2 text-sm text-slate-500">{selected.purpose}</p></div><Button aria-label="Toggle system configuration" onClick={() => setShowConfig((value) => !value)} variant="outline" className="border-white/10 text-slate-300"><SlidersHorizontal className="size-4" /></Button></div><div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{[{ label: "State", value: selected.state }, { label: "Source", value: selected.source }, { label: "Cadence", value: selected.cadence }, { label: "Owner", value: selected.owner }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div>{showConfig && <div className="mt-5 rounded-xl border border-violet-300/20 bg-violet-300/[0.06] p-4"><p className="text-sm font-semibold text-violet-100">Review cadence intent</p><select value={cadence} onChange={(event) => setCadence(event.target.value)} className="mt-3 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white outline-none"><option>Manual review</option><option>Daily review</option><option>Weekly review</option><option>Event-driven review</option></select><p className="mt-2 text-xs text-slate-500">{cadence} is a local workflow preference; it does not schedule a job or deliver an alert.</p></div>}<div className="mt-6 rounded-2xl border border-amber-300/25 bg-amber-300/[0.06] p-5"><div className="flex items-start gap-3"><LockKeyhole className="mt-0.5 size-5 shrink-0 text-amber-200" /><div><p className="font-semibold text-amber-100">Operations are blocked</p><p className="mt-2 text-sm leading-6 text-slate-400">There is no source connector, model endpoint, alert channel, schedule, owner, acknowledgement store, or action approval path. The UI will not imply a running system.</p><Button disabled className="mt-4 bg-slate-700 text-slate-400"><Activity className="mr-2 size-4" />Start system unavailable</Button></div></div></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Signal workspace</p><h2 className="mt-2 text-2xl font-black">Operational view</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">No live signals</Badge></div><div className="mt-5 flex h-52 items-center justify-center rounded-2xl border border-dashed border-white/15 bg-black/15"><div className="text-center"><BarChart3 className="mx-auto size-10 text-slate-600" /><p className="mt-3 text-sm font-semibold text-slate-300">No operational chart rendered</p><p className="mt-2 max-w-sm text-xs leading-5 text-slate-500">Trend values, churn probability, MRR, audience counts, and alert volumes are intentionally absent because no verified source is connected.</p></div></div><div className="mt-4 grid gap-3 sm:grid-cols-3">{[{ label: "Trend", value: "Unavailable", icon: TrendingUp }, { label: "Risk", value: "Unmeasured", icon: Gauge }, { label: "Freshness", value: "Unknown", icon: Clock3 }].map(({ label, value, icon: Icon }) => <div key={label} className="rounded-xl border border-white/10 p-3"><Icon className="size-4 text-slate-500" /><p className="mt-3 text-xs text-slate-500">{label}</p><p className="mt-1 text-sm font-semibold text-amber-200">{value}</p></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Readiness gates</p><h2 className="mt-2 text-2xl font-black">What must be evidenced</h2><div className="mt-5 space-y-3">{checklist.map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><FileWarning className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Modes preserved", description: "Signal monitoring, trend forecasting, and revenue-risk review remain selectable and inspectable as design concepts.", icon: ServerCog, status: "Local design" }, { title: "No fake operations", description: "No alerts, users, MRR, churn probability, rising topics, declining topics, or intervention result is asserted.", icon: ShieldAlert, status: "Guardrail" }, { title: "Safe fallback", description: "The empty operational view explains why charts and actions are unavailable instead of showing misleading values.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

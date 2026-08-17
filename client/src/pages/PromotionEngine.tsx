@@ -1,74 +1,21 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { BarChart3, Check, FileText, Filter, LockKeyhole, Megaphone, RefreshCw, Search, ShieldAlert, Target, Users, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+type Campaign = { id: number; name: string; objective: string; channel: string; status: string; audience: string; detail: string };
+const initial: Campaign[] = [{ id: 1, name: "HopeAI research preview", objective: "Education", channel: "Owned concept", status: "Draft", audience: "Unspecified", detail: "Explain the evidence boundary for a local AI concept." }, { id: 2, name: "SkySchool launch concept", objective: "Awareness", channel: "Community concept", status: "Review", audience: "Unspecified", detail: "Invite review of a learning experience without claiming adoption." }, { id: 3, name: "Creator marketplace note", objective: "Discovery", channel: "Unpublished", status: "Blocked", audience: "Unspecified", detail: "Document what a governed promotion workflow would need." }];
 export default function PromotionEngine() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>PromotionEngine</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">PromotionEngine</h1>
-            <p className="text-muted-foreground mt-2">Create promotions</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [campaigns, setCampaigns] = useState(initial);
+  const [query, setQuery] = useState("");
+  const [objective, setObjective] = useState("All objectives");
+  const [selected, setSelected] = useState(1);
+  const [saved, setSaved] = useState(false);
+  const [showGates, setShowGates] = useState(false);
+  const filtered = useMemo(() => campaigns.filter((item) => `${item.name} ${item.detail}`.toLowerCase().includes(query.toLowerCase()) && (objective === "All objectives" || item.objective === objective)), [campaigns, objective, query]);
+  const selectedCampaign = campaigns.find((item) => item.id === selected) ?? campaigns[0];
+  const create = () => { const id = Math.max(...campaigns.map((item) => item.id), 0) + 1; const item: Campaign = { id, name: `Local campaign concept ${id}`, objective: "Awareness", channel: "Unpublished", status: "Draft", audience: "Unspecified", detail: "A local campaign concept awaiting evidence and governance." }; setCampaigns((current) => [...current, item]); setSelected(id); };
+  const reset = () => { setCampaigns(initial); setQuery(""); setObjective("All objectives"); setSelected(1); setSaved(false); setShowGates(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Megaphone} eyebrow="PromotionEngine · Campaign preview" title="Plan promotion without inventing an audience." description="Explore local campaign concepts with search, objectives, channels, audience intent, creative notes, budget posture, conversion, review, and launch gates. No reach, spend, targeting, attribution, performance, user, or promotion outcome is measured." badge="Promotion workspace"><div className="flex flex-wrap gap-2"><Button onClick={create} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Megaphone className="mr-2 size-4" />New local campaign</Button><Button onClick={() => setSaved(true)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Check className="mr-2 size-4" />{saved ? "Plan saved locally" : "Save plan locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Hide gates" : "Review promotion gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset plans</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Campaigns", value: `${campaigns.length} local`, hint: "Not launched", icon: Megaphone, tone: "cyan" }, { label: "Audience", value: "Unspecified", hint: "No targeting source", icon: Users, tone: "violet" }, { label: "Spend", value: "Unpublished", hint: "No payment source", icon: BarChart3, tone: "amber" }, { label: "Performance", value: "Unmeasured", hint: "No attribution", icon: Target, tone: "slate" }]} /><ScreenPreviewBanner title="Promotion evidence boundary"><strong>This is a local campaign-planning preview, not an ad platform.</strong> Campaigns, objectives, audience intent, channels, budget posture, creative notes, conversion, and saved state are browser concepts. No reach, spend, user targeting, impression, click, conversion, revenue, attribution, consent, or live promotion is persisted.</ScreenPreviewBanner><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex flex-wrap items-center gap-3"><div className="relative min-w-64 flex-1"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local campaigns" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><Filter className="size-4 text-slate-500" />{["All objectives", "Education", "Awareness", "Discovery"].map((item) => <button key={item} onClick={() => setObjective(item)} className={`rounded-lg border px-3 py-2 text-xs ${objective === item ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-6 grid gap-4 md:grid-cols-3">{filtered.map((campaign) => <button key={campaign.id} onClick={() => setSelected(campaign.id)} className={`rounded-2xl border p-5 text-left ${selected === campaign.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><h2 className="font-black">{campaign.name}</h2><Badge variant="outline" className="border-amber-300/20 text-amber-200">{campaign.status}</Badge></div><p className="mt-3 text-sm leading-6 text-slate-400">{campaign.detail}</p><div className="mt-5 flex flex-wrap gap-2"><Badge variant="outline" className="border-white/10 text-slate-500">{campaign.objective}</Badge><Badge variant="outline" className="border-white/10 text-slate-500">{campaign.channel}</Badge></div></button>)}{filtered.length === 0 && <div className="col-span-full rounded-2xl border border-dashed border-white/10 p-12 text-center text-slate-500">No local campaigns match this search.</div>}</div></CardContent></Card><section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected campaign</p><h2 className="mt-2 text-2xl font-black">{selectedCampaign.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{selectedCampaign.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Objective", value: selectedCampaign.objective }, { label: "Channel", value: selectedCampaign.channel }, { label: "Audience", value: selectedCampaign.audience }, { label: "Budget", value: "Unpublished" }, { label: "Creative", value: "Draft" }, { label: "Conversion", value: "Unmeasured" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Launch unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Publish creative unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No promotion claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A local campaign does not prove audience consent, targeting eligibility, reach, spend, performance, attribution, or a live placement.</p></div>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Promotion gates</p><h2 className="mt-2 text-2xl font-black">What a real promotion system must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Authenticated advertiser, role, budget owner, and workspace authorization", "Audience consent, targeting policy, exclusion, frequency, and regional rules", "Creative rights, moderation, claims review, accessibility, and disclosures", "Spend, billing, tax, refunds, limits, pacing, and payment reconciliation", "Impressions, clicks, conversions, attribution, experiment design, and data freshness", "Pause, rollback, audit, support, privacy, and incident handling"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Promotion surface preserved", description: "Campaign search, objectives, channels, audience intent, creative, budget, conversion, selected detail, local creation, save/reset, and launch gates remain interactive.", icon: Megaphone, status: "Local campaign" }, { title: "No ad theater", description: "Users, reach, spend, targeting, impressions, clicks, conversions, revenue, attribution, and live promotion are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Consent before distribution", description: "Real promotion needs authorization, audience safeguards, claims review, billing, privacy, measurement, rollback, and support.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
 }

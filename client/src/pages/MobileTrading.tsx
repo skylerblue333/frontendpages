@@ -1,74 +1,21 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowDownUp, Check, CircleAlert, LockKeyhole, RefreshCw, Search, Shield, ShoppingCart, TrendingUp, Wallet, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const PAIRS = [{ pair: "SKY / USDC", asset: "SKY", quote: "USDC", market: "Preview only", note: "No current price or liquidity source." }, { pair: "ETH / USDC", asset: "ETH", quote: "USDC", market: "Unavailable", note: "Network and wallet are not connected." }, { pair: "BTC / USDC", asset: "BTC", quote: "USDC", market: "Not sourced", note: "No order book or settlement contract." }, { pair: "SOL / USDC", asset: "SOL", quote: "USDC", market: "Preview only", note: "Use for form and risk-state review." }];
+const GATES = ["Wallet ownership and balance", "Market price and order-book source", "Quote freshness and slippage", "Approval, signing, and nonce safety", "Order submission, fill, settlement, and history"];
 
 export default function MobileTrading() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>MobileTrading</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">MobileTrading</h1>
-            <p className="text-muted-foreground mt-2">Mobile trading</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState(PAIRS[0].pair);
+  const [side, setSide] = useState<"buy" | "sell">("buy");
+  const [amount, setAmount] = useState("100");
+  const [slippage, setSlippage] = useState("0.5");
+  const [saved, setSaved] = useState(false);
+  const pair = PAIRS.find((item) => item.pair === selected) ?? PAIRS[0];
+  const visible = useMemo(() => PAIRS.filter((item) => `${item.pair} ${item.asset} ${item.quote}`.toLowerCase().includes(query.toLowerCase())), [query]);
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={TrendingUp} eyebrow="Mobile trading · Execution" title="Shape the trade intent before claiming the order." description="Explore synthetic trading pairs, buy/sell intent, amount and slippage inputs, quote-unavailable messaging, and execution-readiness gates. No current price, balance, quote, approval, order, fill, settlement, custody, or financial advice is asserted." badge="Trading preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Intent saved locally" : "Save trade intent"}</Button><Button onClick={() => { setQuery(""); setSelected(PAIRS[0].pair); setSide("buy"); setAmount("100"); setSlippage("0.5"); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset trade</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Pairs", value: String(PAIRS.length), hint: "Synthetic catalog", icon: ArrowDownUp }, { label: "Wallet", value: "Off", hint: "No balance source", icon: Wallet, tone: "amber" }, { label: "Quote", value: "Off", hint: "No price feed", icon: TrendingUp, tone: "slate" }, { label: "Execution", value: "Blocked", hint: "No signing or settlement", icon: LockKeyhole, tone: "violet" }]} /><ScreenPreviewBanner title="MobileTrading evidence boundary"><strong>Pair selectors, side, amount, slippage, selected state, and readiness gates are trade-intent fixtures—not market data, balances, quotes, approvals, orders, fills, settlement, custody, or financial guidance.</strong> Production trading requires validated networks, price and order-book provenance, wallet ownership, signing, nonce and replay safety, order lifecycle, reconciliation, limits, monitoring, and risk disclosures.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search trading pairs" className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-5 space-y-3">{visible.map((item) => <button key={item.pair} onClick={() => { setSelected(item.pair); setSaved(false); }} className={`w-full rounded-2xl border p-4 text-left ${selected === item.pair ? "border-cyan-300/40 bg-cyan-300/[0.07]" : "border-white/10 bg-black/10"}`}><div className="flex items-start justify-between gap-3"><div><h2 className="font-black">{item.pair}</h2><p className="mt-1 text-xs text-slate-500">{item.asset} against {item.quote}</p></div><Badge variant="outline" className="border-amber-300/20 text-[10px] text-amber-200">{item.market}</Badge></div><p className="mt-3 text-xs leading-5 text-slate-500">{item.note}</p></button>)}{visible.length === 0 && <div className="p-8 text-center text-slate-500">No pairs match this search.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Selected pair</p><h2 className="mt-2 text-3xl font-black">{pair.pair}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{pair.market}</Badge></div><div className="mt-5 flex gap-2"><button onClick={() => setSide("buy")} className={`flex-1 rounded-xl border p-3 text-sm ${side === "buy" ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-500"}`}>Buy {pair.asset}</button><button onClick={() => setSide("sell")} className={`flex-1 rounded-xl border p-3 text-sm ${side === "sell" ? "border-violet-300/40 bg-violet-300/[0.1] text-violet-200" : "border-white/10 text-slate-500"}`}>Sell {pair.asset}</button></div><label className="mt-5 block"><span className="text-xs text-slate-500">{side === "buy" ? "Spend" : "Sell"} amount ({side === "buy" ? pair.quote : pair.asset})</span><input value={amount} onChange={(event) => { setAmount(event.target.value); setSaved(false); }} inputMode="decimal" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white" /></label><label className="mt-4 block"><span className="text-xs text-slate-500">Max slippage (%)</span><input value={slippage} onChange={(event) => { setSlippage(event.target.value); setSaved(false); }} inputMode="decimal" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white" /></label><div className="mt-5 rounded-2xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 text-amber-200"><CircleAlert className="size-4" /><span className="font-semibold">Quote unavailable</span></div><p className="mt-2 text-sm leading-6 text-slate-400">No price, liquidity, fee, or route is sourced for this local intent. The form does not estimate proceeds or returns.</p></div><Button disabled className="mt-5 w-full bg-violet-500 text-white/40"><ShoppingCart className="mr-2 size-4" />{side === "buy" ? "Buy" : "Sell"} unavailable</Button></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Execution readiness</p><h2 className="mt-2 text-2xl font-black">Required before submission</h2><div className="mt-5 space-y-3">{GATES.map((gate) => <div key={gate} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{gate}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><Shield className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake trade</h2><p className="mt-3 text-sm leading-6 text-slate-400">The form stores local intent only. No wallet, approval, signature, order ID, fill, transaction hash, settlement, or portfolio update is created.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A pair is not a market", description: "Synthetic pairs preserve mobile trading UX without current price, liquidity, or balance claims.", icon: ArrowDownUp, status: "Guardrail" }, { title: "Signing needs custody boundaries", description: "Wallet ownership, approvals, nonce safety, and transaction status need tested infrastructure.", icon: Shield, status: "Required" }, { title: "No fake execution", description: "Trade intent remains editable while quote, submit, fill, and settlement stay unavailable.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

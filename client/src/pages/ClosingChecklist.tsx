@@ -1,75 +1,29 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { AlertTriangle, Check, CheckCircle2, ClipboardCheck, FileCheck2, Flag, LockKeyhole, Search, ShieldCheck, TimerReset, UserCheck, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatePanel, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const TASKS = [
+  { id: "scope", label: "Confirm scope and owner", group: "Governance", note: "Local checklist item" },
+  { id: "evidence", label: "Attach evidence index", group: "Evidence", note: "No document was uploaded" },
+  { id: "qa", label: "Review QA and open issues", group: "Quality", note: "No issue tracker connected" },
+  { id: "security", label: "Review security sign-off", group: "Risk", note: "No approval service connected" },
+  { id: "rollback", label: "Confirm rollback plan", group: "Operations", note: "Local reminder only" },
+  { id: "handoff", label: "Prepare owner handoff", group: "Operations", note: "No notification was sent" },
+];
+const GROUPS = ["All", "Governance", "Evidence", "Quality", "Risk", "Operations"];
 
 export default function ClosingChecklist() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [group, setGroup] = useState("All");
+  const [query, setQuery] = useState("");
+  const [checked, setChecked] = useState<string[]>([]);
+  const [saved, setSaved] = useState(false);
+  const visibleTasks = useMemo(() => TASKS.filter((task) => (group === "All" || task.group === group) && `${task.label} ${task.group}`.toLowerCase().includes(query.toLowerCase())), [group, query]);
+  const toggle = (id: string) => { setChecked((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]); setSaved(false); };
+  const completion = Math.round((checked.length / TASKS.length) * 100);
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>ClosingChecklist</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">ClosingChecklist</h1>
-            <p className="text-muted-foreground mt-2">Closing tasks</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Flag} eyebrow="Operations · Closing checklist" title="Close the loop without pretending it is closed." description="Work through a local closeout checklist, inspect evidence gates, and make unresolved responsibilities visible. This screen does not approve a release, settle a transaction, sign a contract, certify compliance, or send a handoff." badge="Preview closeout"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><ClipboardCheck className="mr-2 size-4" />Save local checklist</Button><Button onClick={() => { setChecked([]); setSaved(false); setGroup("All"); setQuery(""); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><TimerReset className="mr-2 size-4" />Reset checklist</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Tasks", value: String(TASKS.length), hint: "Local checklist", icon: ClipboardCheck }, { label: "Complete", value: `${completion}%`, hint: "Local state only", icon: CheckCircle2, tone: "violet" }, { label: "Approvals", value: "Off", hint: "No sign-off service", icon: UserCheck, tone: "amber" }, { label: "Settlement", value: "Blocked", hint: "No transaction changed", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Closeout evidence boundary"><strong>A checked box, completion percentage, evidence label, approval badge, or handoff task is not proof of a completed release, settlement, compliance review, signature, security approval, or owner notification.</strong> Production closeout requires authoritative records, approvers, immutable audit history, separation of duties, evidence retention, rollback readiness, and explicit finalization.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Local closeout board</p><h2 className="mt-2 text-2xl font-black">Evidence-led checklist</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Synthetic state</Badge></div><div className="mt-6 flex flex-wrap gap-2">{GROUPS.map((item) => <button key={item} onClick={() => setGroup(item)} className={`rounded-xl border px-3 py-2 text-sm ${group === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-400"}`}>{item}</button>)}</div><div className="relative mt-5"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search checklist tasks" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-5 space-y-3">{visibleTasks.map((task) => { const done = checked.includes(task.id); return <button key={task.id} onClick={() => toggle(task.id)} className={`flex w-full items-center gap-3 rounded-xl border p-4 text-left transition ${done ? "border-emerald-300/30 bg-emerald-300/[0.06]" : "border-white/10 bg-black/15 hover:border-cyan-300/30"}`}><div className={`flex size-9 items-center justify-center rounded-xl ${done ? "bg-emerald-300/15 text-emerald-200" : "bg-white/5 text-slate-500"}`}>{done ? <Check className="size-4" /> : <span className="text-sm font-black">{TASKS.findIndex((item) => item.id === task.id) + 1}</span>}</div><div className="flex-1"><p className={`font-semibold ${done ? "text-emerald-100" : "text-white"}`}>{task.label}</p><p className="mt-1 text-xs text-slate-500">{task.group} · {task.note}</p></div><span className={`text-xs ${done ? "text-emerald-200" : "text-amber-200"}`}>{done ? "Locally checked" : "Needs review"}</span></button>; })}{visibleTasks.length === 0 && <ScreenStatePanel type="empty" title="No checklist match" description="Try another task or group. No external records were searched." />}</div>{saved && <div className="mt-5 flex items-center gap-2 text-sm text-cyan-200"><CheckCircle2 className="size-4" />Local checklist saved; no closeout action was executed.</div>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><ShieldCheck className="size-5 text-violet-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Finalization gates</p><h2 className="mt-1 text-2xl font-black">What still needs proof</h2></div></div><div className="mt-6 space-y-3">{["Named accountable owner", "Independent approval", "Immutable evidence trail", "Rollback or remediation path", "Compliance retention policy", "Explicit final transaction state"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div><div className="mt-5 rounded-xl border border-red-300/20 bg-red-300/[0.05] p-4"><div className="flex items-center gap-2 font-semibold text-red-200"><AlertTriangle className="size-4" />No finalization action</div><p className="mt-2 text-sm leading-6 text-slate-400">This screen cannot close a deal, release a deployment, settle funds, sign a document, certify compliance, or notify an owner.</p></div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Checklist is not evidence", description: "A local check records intent only; authoritative evidence must come from the system of record.", icon: FileCheck2, status: "Guardrail" }, { title: "Approval needs identity", description: "Final decisions require scoped approvers, separation of duties, and an auditable event trail.", icon: UserCheck, status: "Required" }, { title: "Never fake closure", description: "The preview keeps unresolved settlement, signature, compliance, and notification states visible.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

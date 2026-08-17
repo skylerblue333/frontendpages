@@ -1,98 +1,46 @@
-import React, { useState } from 'react';
-import { trpc } from '@/lib/trpc';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
+import { useMemo, useState } from "react";
+import { Activity, Bot, BriefcaseBusiness, CheckCircle2, Code2, Gavel, Search, Sparkles, Users, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatePanel, ScreenStatGrid } from "@/components/ScreenExperience";
+
+type AgentType = { id: string; name: string; icon: typeof Bot; description: string; color: string; focus: string };
+const AGENT_TYPES: AgentType[] = [
+  { id: "research", name: "Research Agent", icon: Search, description: "Collect sources, compare findings, and turn open questions into a reviewable brief.", color: "from-blue-500/20 to-cyan-500/10", focus: "Evidence and synthesis" },
+  { id: "trading", name: "Trading Agent", icon: BriefcaseBusiness, description: "Prepare market-watch workflows without placing orders or claiming financial outcomes.", color: "from-emerald-500/20 to-cyan-500/10", focus: "Signals and review" },
+  { id: "creator", name: "Creator Agent", icon: Sparkles, description: "Plan campaigns, drafts, assets, and publishing checklists for human review.", color: "from-fuchsia-500/20 to-purple-500/10", focus: "Ideas and production" },
+  { id: "governance", name: "Governance Agent", icon: Gavel, description: "Organize proposals, decisions, and audit-ready notes without autonomous authority.", color: "from-amber-500/20 to-orange-500/10", focus: "Rules and accountability" },
+  { id: "developer", name: "Developer Agent", icon: Code2, description: "Break engineering work into tasks, tests, and reviewable implementation steps.", color: "from-indigo-500/20 to-blue-500/10", focus: "Build and validate" },
+];
+
+function readRecord(value: unknown): Record<string, unknown> { return value && typeof value === "object" ? value as Record<string, unknown> : {}; }
 
 export default function AIAgentEconomy() {
-  const { data: goals, isLoading } = trpc.enterprise.freeWill.goals.useQuery();
-  const { data: actionLog = [] } = trpc.enterprise.freeWill.actionLog.useQuery({});
   const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const previewGoals = [{ id: "research-brief", name: "Research brief workflow", status: "Preview" }, { id: "release-review", name: "Release review workflow", status: "Preview" }];
+  const previewActivity = [{ id: "activity-1", title: "Reviewable task prepared", description: "Preview event: human approval is required before execution." }, { id: "activity-2", title: "Evidence checklist attached", description: "Preview event: outputs remain inspectable and auditable." }];
+  const filteredTypes = useMemo(() => AGENT_TYPES.filter((agent) => `${agent.name} ${agent.description} ${agent.focus}`.toLowerCase().includes(query.toLowerCase())), [query]);
+  const selected = AGENT_TYPES.find((agent) => agent.id === selectedAgent);
+  const liveGoals: unknown[] = [];
+  const liveLog: unknown[] = [];
+  const isLoading = false;
+  const hasIntegrationError = false;
 
-
-  const agentTypes = [
-    { id: 'research', name: 'Research Agent', icon: '🔬', color: 'bg-blue-500' },
-    { id: 'trading', name: 'Trading Agent', icon: '📈', color: 'bg-green-500' },
-    { id: 'creator', name: 'Creator Agent', icon: '🎨', color: 'bg-purple-500' },
-    { id: 'governance', name: 'Governance Agent', icon: '⚖️', color: 'bg-amber-500' },
-    { id: 'developer', name: 'Developer Agent', icon: '💻', color: 'bg-indigo-500' },
-  ];
-
-  if (isLoading) return <Spinner />;
-
-  return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold mb-2">AGENT CITY</h1>
-          <p className="text-gray-400">Your autonomous AI workforce — earning on your behalf</p>
-        </div>
-
-        {/* Agent Marketplace */}
-        <div className="grid grid-cols-5 gap-4 mb-12">
-          {agentTypes.map((type) => (
-            <Card key={type.id} className="bg-gray-900 border-gray-800 p-6 cursor-pointer hover:border-cyan-500 transition" onClick={() => setSelectedAgent(type.id)}>
-              <div className="text-4xl mb-3">{type.icon}</div>
-              <h3 className="font-bold text-lg">{type.name}</h3>
-              <p className="text-sm text-gray-400 mt-2">Deploy & earn</p>
-            </Card>
-          ))}
-        </div>
-
-        {/* Active Agents Grid */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">ACTIVE AGENTS ({goals?.length || 0})</h2>
-          <div className="grid grid-cols-3 gap-6">
-            {goals?.map((agent: any) => (
-              <Card key={agent.id} className="bg-gray-900 border-gray-800 p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-bold text-lg">{agent.name}</h3>
-                  <Badge className={agent.status === 'working' ? 'bg-green-500' : 'bg-gray-600'}>{agent.status}</Badge>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Level</span>
-                    <span className="font-bold">{agent.level}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Tasks Today</span>
-                    <span className="font-bold text-cyan-400">{agent.tasksToday}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Earned Today</span>
-                    <span className="font-bold text-yellow-400">+{agent.earnedToday} SKY</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Efficiency</span>
-                    <span className="font-bold">{agent.efficiency}%</span>
-                  </div>
-                </div>
-                <Button className="w-full mt-4 bg-cyan-600 hover:bg-cyan-700">View Activity</Button>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* Task Queue */}
-        <div>
-          <h2 className="text-2xl font-bold mb-6">TASK QUEUE ({actionLog?.length || 0})</h2>
-          <div className="space-y-3">
-            {actionLog?.slice(0, 5).map((task: any) => (
-              <Card key={task.id} className="bg-gray-900 border-gray-800 p-4 flex items-center justify-between">
-                <div>
-                  <h4 className="font-bold">{task.title}</h4>
-                  <p className="text-sm text-gray-400">{task.description}</p>
-                </div>
-                <div className="text-right">
-                  <Badge className="bg-purple-600 mb-2">{task.reward} SKY</Badge>
-                  <p className="text-xs text-gray-400">{task.assignedAgents} agents</p>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  return <div className="min-h-screen bg-[#070a16] text-white">
+    <ScreenHero icon={Bot} eyebrow="AI & Automation · Agent City" title="Design a workforce you can review." description="Explore agent archetypes, inspect their responsibilities, and turn goals into accountable workflows. Autonomous execution, rewards, and financial outcomes remain disabled until their services and permissions are verified." badge="Integration review">
+      <div className="flex flex-wrap gap-2"><Button onClick={() => setSelectedAgent("research")} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Sparkles className="mr-2 size-4" />Explore an agent</Button><Button variant="outline" onClick={() => document.getElementById("agent-catalog")?.scrollIntoView({ behavior: "smooth" })} className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Users className="mr-2 size-4" />Browse catalog</Button></div>
+    </ScreenHero>
+    <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+      <ScreenStatGrid items={[{ label: "Agent archetypes", value: String(AGENT_TYPES.length), hint: "Reviewable workflow patterns", icon: Bot }, { label: "Connected goals", value: "Preview", hint: "Example workflows only", icon: CheckCircle2, tone: "violet" }, { label: "Activity events", value: "Preview", hint: "No live activity claimed", icon: Activity, tone: "amber" }, { label: "Execution mode", value: "Review first", hint: "No autonomous financial action", icon: Gavel, tone: "slate" }]} />
+      <ScreenPreviewBanner title="What is real in this screen">The catalog, search, detail selection, safety boundary, and local interaction states are available for UX review. Goals and activity use the configured backend when it responds. No SKY balances, earnings, rewards, task success, or autonomous execution are invented in the preview.</ScreenPreviewBanner>
+      <ScreenStatePanel type="unavailable" title="Live agent activity is not connected" description="The catalog and preview workflows are available for UX review. Real goals, activity, execution, rewards, and earnings will appear only after a verified backend contract is connected." />
+      <section id="agent-catalog" className="space-y-4"><div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Explore</p><h2 className="mt-1 text-2xl font-bold">Agent archetype catalog</h2><p className="mt-1 text-sm text-slate-400">Choose a role to inspect its responsibilities, guardrails, and future integration needs.</p></div><div className="relative w-full sm:max-w-xs"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" aria-hidden="true" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search agents" aria-label="Search agent archetypes" className="border-white/10 bg-white/5 pl-9 text-white placeholder:text-slate-500" /></div></div><div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{filteredTypes.map((agent) => { const Icon = agent.icon; return <Card key={agent.id} className={`border-white/10 bg-gradient-to-br ${agent.color} transition hover:-translate-y-0.5 hover:border-cyan-300/40`}><CardContent className="flex h-full flex-col p-5"><div className="flex items-start justify-between"><div className="flex size-11 items-center justify-center rounded-2xl bg-black/20 text-cyan-200"><Icon className="size-5" /></div><Badge variant="outline" className="border-white/15 bg-black/10 text-slate-300">Preview</Badge></div><h3 className="mt-4 text-lg font-semibold">{agent.name}</h3><p className="mt-2 flex-1 text-sm leading-6 text-slate-300">{agent.description}</p><div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4"><span className="text-xs text-slate-400">Focus: {agent.focus}</span><Button size="sm" onClick={() => setSelectedAgent(agent.id)} className="bg-white/10 text-white hover:bg-white/20">Inspect</Button></div></CardContent></Card>; })}</div>{filteredTypes.length === 0 && <ScreenStatePanel type="empty" title="No agent archetypes match" description="Try a different search term to explore the available workflow patterns." />}</section>
+      {selected && <Card className="border-cyan-300/20 bg-cyan-300/[0.04]" aria-live="polite"><CardContent className="p-6"><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected role</p><h2 className="mt-1 text-2xl font-bold">{selected.name}</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">{selected.description}</p></div><Button variant="ghost" size="icon" onClick={() => setSelectedAgent(null)} aria-label="Close selected agent" className="text-slate-400 hover:text-white"><X className="size-5" /></Button></div><div className="mt-5 grid gap-3 md:grid-cols-3"><div className="rounded-xl border border-white/10 bg-black/15 p-4"><p className="text-xs text-slate-400">Next step</p><p className="mt-1 font-medium">Define a reviewable goal</p></div><div className="rounded-xl border border-white/10 bg-black/15 p-4"><p className="text-xs text-slate-400">Guardrail</p><p className="mt-1 font-medium">Human approval before action</p></div><div className="rounded-xl border border-white/10 bg-black/15 p-4"><p className="text-xs text-slate-400">Integration</p><p className="mt-1 font-medium">Service contract required</p></div></div></CardContent></Card>}
+      <section className="space-y-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Operations</p><h2 className="mt-1 text-2xl font-bold">Goals and activity</h2><p className="mt-1 text-sm text-slate-400">Service-backed data appears here when the configured integration responds.</p></div>      <div className="grid gap-4 lg:grid-cols-2"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex items-center justify-between"><h3 className="font-semibold">Example goals</h3><Badge variant="outline" className="border-amber-300/30 text-amber-200">Preview</Badge></div><div className="mt-4 space-y-3">{previewGoals.map((goal) => <div key={goal.id} className="rounded-xl border border-white/10 bg-black/15 p-4"><div className="flex items-center justify-between gap-3"><span className="font-medium">{goal.name}</span><Badge variant="outline" className="border-white/15 text-slate-300">{goal.status}</Badge></div><p className="mt-2 text-sm text-slate-400">Example workflow for a future connected goal.</p></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex items-center justify-between"><h3 className="font-semibold">Example activity</h3><Badge variant="outline" className="border-amber-300/30 text-amber-200">Preview</Badge></div><div className="mt-4 space-y-3">{previewActivity.map((entry) => <div key={entry.id} className="rounded-xl border border-white/10 bg-black/15 p-4"><p className="font-medium">{entry.title}</p><p className="mt-1 text-sm text-slate-400">{entry.description}</p></div>)}</div></CardContent></Card></div></section>
+      <ScreenFeatureGrid features={[{ title: "Human approval", description: "Keep agent actions reviewable and require explicit authorization before side effects.", icon: CheckCircle2, status: "Required" }, { title: "Audit trail", description: "Record goal changes, prompts, outputs, and action results with privacy-safe structured events.", icon: Activity, status: "Prepared" }, { title: "Financial safety", description: "Trading, rewards, and earnings remain disabled until data, custody, and transaction contracts are proven.", icon: Gavel, status: "Guardrail" }]} />
+    </main>
+  </div>;
 }

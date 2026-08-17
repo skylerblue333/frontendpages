@@ -1,75 +1,30 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, ClipboardCheck, FileText, FolderPlus, Gavel, LockKeyhole, RefreshCw, Search, Settings, ShieldCheck, TriangleAlert, Users, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
+type Category = "Security" | "Privacy" | "Operations" | "Community";
+type Policy = { id: string; title: string; category: Category; summary: string; version: string; state: "Draft" | "Review" | "Needs owner"; owner: string };
+const seed: Policy[] = [
+  { id: "policy-001", title: "Access review standard", category: "Security", summary: "Local control concept for periodic access review and evidence capture.", version: "0.1", state: "Review", owner: "Unassigned" },
+  { id: "policy-002", title: "Data handling guide", category: "Privacy", summary: "Local guidance concept for collection, retention, deletion, and minimization.", version: "0.1", state: "Draft", owner: "Unassigned" },
+  { id: "policy-003", title: "Incident response plan", category: "Operations", summary: "Local runbook concept for detection, escalation, communication, and recovery.", version: "0.1", state: "Needs owner", owner: "Unassigned" },
+  { id: "policy-004", title: "Community conduct code", category: "Community", summary: "Local moderation and safety concept requiring review and appeal design.", version: "0.1", state: "Draft", owner: "Unassigned" },
+];
+const categories: Array<Category | "All"> = ["All", "Security", "Privacy", "Operations", "Community"];
 export default function PolicyManagement() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>PolicyManagement</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">PolicyManagement</h1>
-            <p className="text-muted-foreground mt-2">Company policies and procedures</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [category, setCategory] = useState<Category | "All">("All");
+  const [query, setQuery] = useState("");
+  const [policies, setPolicies] = useState(seed);
+  const [selected, setSelected] = useState(seed[0]);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [checks, setChecks] = useState<string[]>([]);
+  const [saved, setSaved] = useState(false);
+  const visible = useMemo(() => policies.filter((item) => (category === "All" || item.category === category) && (!query || `${item.title} ${item.summary} ${item.state}`.toLowerCase().includes(query.toLowerCase()))), [category, policies, query]);
+  const createIntent = () => { const item: Policy = { id: `local-${policies.length + 1}`, title: "Untitled local policy", category: "Operations", summary: "Local policy drafting intent; no authority attached.", version: "0.1", state: "Draft", owner: "Unassigned" }; setPolicies((items) => [item, ...items]); setSelected(item); setSaved(false); };
+  const reset = () => { setCategory("All"); setQuery(""); setPolicies(seed); setSelected(seed[0]); setSettingsOpen(false); setChecks([]); setSaved(false); };
+  const toggle = (item: string) => setChecks((items) => items.includes(item) ? items.filter((value) => value !== item) : [...items, item]);
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Gavel} eyebrow="PolicyManagement · Governance preview" title="Draft governance without pretending a policy is approved." description="Explore policy categories, search, version and review states, ownership gaps, approval checklists, and local drafting intent. No server authority, legal review, organization membership, acknowledgment record, enforcement system, or compliance certification is connected." badge="Policy preview"><div className="flex flex-wrap gap-2"><Button onClick={createIntent} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><FolderPlus className="mr-2 size-4" />New local policy</Button><Button onClick={() => setSaved(true)} disabled={visible.length === 0} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Check className="mr-2 size-4" />{saved ? "View saved locally" : "Save review view"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset policies</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Policies", value: String(policies.length), hint: "Local drafts", icon: FileText, tone: "cyan" }, { label: "Visible", value: String(visible.length), hint: "Local filters", icon: Search, tone: "violet" }, { label: "Approved", value: "0", hint: "No authority", icon: Gavel, tone: "amber" }, { label: "Owner", value: "Unset", hint: "No assignment", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Policy evidence boundary"><strong>This is not an approved policy registry or legal/compliance system.</strong> Policy titles, categories, versions, owners, review states, checklists, and save intent are local drafting data. They do not create obligations, grant authority, prove consent, establish compliance, provide legal advice, or enforce behavior. No organization or identity source is connected.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><div className="relative flex-1"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local policies…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><Button aria-label="Toggle policy settings" onClick={() => setSettingsOpen(!settingsOpen)} variant="outline" className="border-white/10 text-slate-300 hover:bg-white/10"><Settings className="size-4" /></Button></div>{settingsOpen && <div className="mt-4 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><p className="font-semibold">Local policy settings</p><p className="mt-2 text-sm leading-6 text-slate-400">Retention, notification, jurisdiction, legal review, and enforcement settings are preview-only. Nothing is persisted or applied.</p></div>}<p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Policy categories</p><div className="mt-3 flex flex-wrap gap-2">{categories.map((item) => <button key={item} onClick={() => setCategory(item)} className={`rounded-lg border px-3 py-2 text-xs ${category === item ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><TriangleAlert className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-300">A draft policy needs jurisdiction, owner, scope, effective date, approval, communication, acknowledgment, enforcement, and review evidence before it can be relied upon.</p></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Policy library</p><h2 className="mt-2 text-2xl font-black">{category === "All" ? "All local policies" : category}</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">{visible.length} visible</Badge></div><div className="mt-5 space-y-3">{visible.length === 0 ? <div className="rounded-xl border border-dashed border-white/15 p-8 text-center"><FileText className="mx-auto size-7 text-slate-500" /><p className="mt-3 font-semibold">No local policies match</p><p className="mt-2 text-sm text-slate-500">Create a local draft or change the filters.</p></div> : visible.map((item) => <button key={item.id} onClick={() => setSelected(item)} className={`w-full rounded-xl border p-4 text-left ${selected.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10"><FileText className="size-5 text-cyan-200" /></div><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{item.title}</p><Badge variant="outline" className="border-white/10 text-slate-400">{item.category}</Badge><Badge variant="outline" className="border-white/10 text-amber-200">{item.state}</Badge></div><p className="mt-2 text-sm leading-5 text-slate-500">{item.summary}</p><p className="mt-2 text-xs text-slate-600">Version {item.version} · Owner {item.owner}</p></div></div></button>)}</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Selected policy</p><h2 className="mt-2 text-2xl font-black">{selected.title}</h2><p className="mt-3 text-sm leading-6 text-slate-400">{selected.summary}</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Category", value: selected.category }, { label: "Version", value: selected.version }, { label: "State", value: selected.state }, { label: "Owner", value: selected.owner }, { label: "Effective date", value: "Unset" }, { label: "Approval", value: "Unavailable" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><p className="mt-5 text-sm leading-6 text-slate-500">No jurisdiction, legal review, approval, acknowledgment, enforcement, or organization record exists.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Review checklist</p><h2 className="mt-2 text-2xl font-black">Evidence before reliance</h2><div className="mt-5 space-y-2">{["Owner and scope", "Jurisdiction and legal review", "Security and privacy review", "Communication and acknowledgment", "Enforcement and appeal", "Effective date and revision history"].map((item) => <button key={item} onClick={() => toggle(item)} className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left ${checks.includes(item) ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><span className="flex size-5 items-center justify-center rounded border border-white/20">{checks.includes(item) ? "✓" : ""}</span><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></button>)}</div><Button disabled={checks.length === 0} className="mt-5 w-full bg-cyan-300 text-slate-950 hover:bg-cyan-200"><ClipboardCheck className="mr-2 size-4" />{checks.length}/6 local checks selected</Button></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Governance checklist</p><h2 className="mt-2 text-2xl font-black">Policy management must prove</h2><div className="mt-5 space-y-3">{["Authenticated roles, organization scope, policy ownership, delegated approval, and immutable audit events", "Legal/privacy/security review, jurisdiction, data classification, retention, and user rights", "Versioning, effective dates, communication, acknowledgment, exceptions, appeals, and enforcement", "Evidence that policy is implemented in code, configuration, training, monitoring, and support", "Tests for draft/review/approval/rejection/expiry, concurrency, rollback, and access control"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake authority</h2><p className="mt-3 text-sm leading-6 text-slate-400">Searching, creating, selecting, checking, or saving a policy view changes local browser state only. It does not approve policy, provide legal advice, change permissions, notify users, enforce behavior, or certify compliance.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Governance surface preserved", description: "Categories, search, drafting, version/state metadata, settings, selection, and review checks remain interactive.", icon: Gavel, status: "Local governance" }, { title: "Authority is unavailable", description: "Ownership, approval, acknowledgment, enforcement, and organization records remain off.", icon: Users, status: "Guardrail" }, { title: "No compliance claim", description: "No legal advice, certification, policy acceptance, or control effectiveness is fabricated.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

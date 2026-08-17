@@ -1,75 +1,11 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Calculator as CalculatorIcon, Check, Clock3, Divide, FileText, History, Info, Minus, Percent, Plus, RefreshCw, Sigma, Sparkles, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-export default function Calculator() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Calculator</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">Calculator</h1>
-            <p className="text-muted-foreground mt-2">Advanced calculator</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+const OPERATORS = [{ value: "+", label: "Add", icon: Plus }, { value: "-", label: "Subtract", icon: Minus }, { value: "×", label: "Multiply", icon: X }, { value: "÷", label: "Divide", icon: Divide }];
+const number = (value: string) => { const parsed = Number(value); return Number.isFinite(parsed) ? parsed : null; };
+export default function Calculator() { const [mode, setMode] = useState("Arithmetic"); const [left, setLeft] = useState("120"); const [right, setRight] = useState("25"); const [operator, setOperator] = useState("+"); const [precision, setPrecision] = useState("2"); const [history, setHistory] = useState<string[]>([]); const leftNumber = number(left); const rightNumber = number(right); const result = useMemo(() => { if (leftNumber === null || rightNumber === null) return null; if (mode === "Percentage") return (leftNumber * rightNumber) / 100; if (mode === "Ratio") return rightNumber === 0 ? null : leftNumber / rightNumber; if (operator === "+") return leftNumber + rightNumber; if (operator === "-") return leftNumber - rightNumber; if (operator === "×") return leftNumber * rightNumber; return rightNumber === 0 ? null : leftNumber / rightNumber; }, [leftNumber, rightNumber, mode, operator]); const formatted = result === null ? "—" : result.toLocaleString(undefined, { maximumFractionDigits: Number(precision) || 0 }); const calculate = () => { if (result === null) return; const expression = mode === "Percentage" ? `${left}% of ${right}` : mode === "Ratio" ? `${left} ÷ ${right}` : `${left} ${operator} ${right}`; setHistory((current) => [`${expression} = ${formatted}`, ...current].slice(0, 5)); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={CalculatorIcon} eyebrow="Utilities · Transparent Calculation" title="Show the arithmetic, not a mysterious answer." description="Use explicit inputs, choose a calculation mode, inspect precision, and keep a local history. This utility does not fetch market prices, convert real currencies, recommend financial decisions, or save results to an account." badge="Preview calculator"><div className="flex flex-wrap gap-2"><Button onClick={calculate} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Sigma className="mr-2 size-4" />Add to local history</Button><Button onClick={() => { setLeft("0"); setRight("0"); setHistory([]); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Mode", value: mode, hint: "Explicit formula", icon: CalculatorIcon }, { label: "Result", value: formatted, hint: "Local arithmetic", icon: Sigma, tone: "violet" }, { label: "Precision", value: `${precision} decimals`, hint: "Display only", icon: Percent, tone: "cyan" }, { label: "History", value: String(history.length), hint: "Local entries", icon: History, tone: "slate" }]} /><ScreenPreviewBanner title="Calculation evidence boundary">The result is computed from values entered in this browser session. It is not a financial quote, market conversion, tax calculation, investment recommendation, billing amount, or account record. External rates and jurisdiction-specific formulas require an explicit, verified data source.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex flex-wrap gap-2">{["Arithmetic", "Percentage", "Ratio"].map((item) => <button key={item} onClick={() => setMode(item)} className={`rounded-xl border px-4 py-2 text-sm ${mode === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-400"}`}>{item}</button>)}</div><div className="mt-6 grid gap-4 sm:grid-cols-[1fr_auto_1fr]"><div><label className="mb-2 block text-sm text-slate-300" htmlFor="left-value">{mode === "Percentage" ? "Percent" : "First value"}</label><Input id="left-value" value={left} onChange={(event) => setLeft(event.target.value)} inputMode="decimal" className="border-white/10 bg-black/20 text-white" /></div>{mode === "Arithmetic" && <div className="flex items-end gap-1 pb-1">{OPERATORS.map(({ value, label, icon: Icon }) => <button key={value} aria-label={label} onClick={() => setOperator(value)} className={`flex size-9 items-center justify-center rounded-lg border ${operator === value ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500"}`}><Icon className="size-4" /></button>)}</div>}{mode !== "Arithmetic" && <div className="flex items-end justify-center pb-3 text-slate-500">{mode === "Percentage" ? <Percent className="size-5" /> : <Divide className="size-5" />}</div>}<div><label className="mb-2 block text-sm text-slate-300" htmlFor="right-value">{mode === "Percentage" ? "Of value" : "Second value"}</label><Input id="right-value" value={right} onChange={(event) => setRight(event.target.value)} inputMode="decimal" className="border-white/10 bg-black/20 text-white" /></div></div><div className="mt-6 rounded-2xl border border-cyan-300/20 bg-cyan-300/[0.06] p-6 text-center"><p className="text-xs uppercase tracking-[0.2em] text-cyan-300">Transparent result</p><p className="mt-3 text-4xl font-black text-cyan-100">{formatted}</p><p className="mt-3 font-mono text-sm text-slate-400">{mode === "Percentage" ? `${left}% × ${right} ÷ 100` : mode === "Ratio" ? `${left} ÷ ${right}` : `${left} ${operator} ${right}`}</p>{result === null && <p className="mt-2 text-xs text-rose-300">Enter numeric values; division by zero is not defined.</p>}</div><div className="mt-6 flex items-center justify-between gap-4"><div><p className="text-sm font-semibold">Display precision</p><p className="text-xs text-slate-500">Formatting only; underlying result is not persisted.</p></div><select value={precision} onChange={(event) => setPrecision(event.target.value)} className="rounded-md border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"><option value="0">0 decimals</option><option value="2">2 decimals</option><option value="4">4 decimals</option><option value="8">8 decimals</option></select></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Local history</p><h2 className="mt-1 text-2xl font-black">Recent calculations</h2></div><History className="size-5 text-cyan-300" /></div><div className="mt-5 space-y-2">{history.map((entry, index) => <div key={`${entry}-${index}`} className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/15 p-4"><Clock3 className="size-4 text-slate-500" /><span className="flex-1 font-mono text-sm text-slate-300">{entry}</span><Badge variant="outline" className="border-white/10 text-slate-500">Local</Badge></div>)}{history.length === 0 && <div className="rounded-xl border border-dashed border-white/15 p-8 text-center"><FileText className="mx-auto size-6 text-slate-500" /><p className="mt-3 text-sm text-slate-400">No history yet.</p><p className="mt-1 text-xs text-slate-500">Run a calculation to create a local entry.</p></div>}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 text-sm font-medium text-amber-200"><Info className="size-4" />No external data</div><p className="mt-2 text-sm leading-6 text-slate-300">Currency conversion, market rates, tax rules, and account-linked values are not included.</p></div></CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Plus className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Formula is visible</h3><p className="mt-2 text-sm leading-6 text-slate-400">Users can inspect the exact operation and values behind the result.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Sparkles className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Modes stay explicit</h3><p className="mt-2 text-sm leading-6 text-slate-400">Percentage and ratio calculations use clearly named semantics instead of hidden assumptions.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Info className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">Utility is not advice</h3><p className="mt-2 text-sm leading-6 text-slate-400">Arithmetic does not become a recommendation, forecast, quote, or decision.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Input-driven", description: "The useful state comes from explicit values, an explicit operator, and a visible formula.", icon: CalculatorIcon, status: "Ready" }, { title: "Precision is presentation", description: "Decimal formatting changes what is shown, not what an external system knows or owes.", icon: Sigma, status: "Pattern" }, { title: "No fake rates", description: "Real conversions require a source, timestamp, units, and a clear freshness boundary.", icon: Info, status: "Guardrail" }]} /></main></div>; }

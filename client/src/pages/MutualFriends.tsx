@@ -1,89 +1,23 @@
-import { Users } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, CircleUserRound, Heart, Link2, LockKeyhole, MessageCircle, RefreshCw, Search, ShieldCheck, Users, UserRoundPlus, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const PATHS = [{ name: "Avery North", relation: "Shared interest", bridge: "Creator tools", detail: "A synthetic relationship path for testing mutual discovery language." }, { name: "Rin Sol", relation: "Shared space", bridge: "Learning design", detail: "A local concept for consent-aware friend-of-friend presentation." }, { name: "Mika Vale", relation: "Shared activity", bridge: "Game communities", detail: "A synthetic card with no real account or graph edge behind it." }, { name: "Noor Fields", relation: "Shared topic", bridge: "AI research", detail: "An example relationship path for privacy and visibility review." }];
+const RELATIONS = ["All", "Shared interest", "Shared space", "Shared activity", "Shared topic"];
 
 export default function MutualFriends() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={Users} title="Mutual Friends" subtitle="Fully functional mutual friends page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Mutual Friends</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Users className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Users className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Users className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
+  const [query, setQuery] = useState("");
+  const [relation, setRelation] = useState("All");
+  const [selected, setSelected] = useState(PATHS[0].name);
+  const [shortlist, setShortlist] = useState<string[]>([]);
+  const [consentNote, setConsentNote] = useState("");
+  const [saved, setSaved] = useState(false);
+  const path = PATHS.find((item) => item.name === selected) ?? PATHS[0];
+  const visible = useMemo(() => PATHS.filter((item) => (relation === "All" || item.relation === relation) && `${item.name} ${item.relation} ${item.bridge} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [query, relation]);
+  const toggle = (name: string) => { setShortlist((current) => current.includes(name) ? current.filter((item) => item !== name) : [...current, name]); setSaved(false); };
+  const reset = () => { setQuery(""); setRelation("All"); setSelected(PATHS[0].name); setShortlist([]); setConsentNote(""); setSaved(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Users} eyebrow="MutualFriends · Relationship planning" title="Show the bridge without inventing the friendship." description="Explore synthetic mutual-path cards, relationship-type filters, local shortlist state, and consent planning. No real friend graph, mutual-friend count, identity, relationship, contact availability, notification, or message delivery is asserted." badge="Mutual-path preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Plan saved locally" : "Save friend-path plan"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset paths</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Paths", value: String(PATHS.length), hint: "Synthetic cards", icon: Link2 }, { label: "Shortlist", value: String(shortlist.length), hint: "Local only", icon: Heart, tone: "violet" }, { label: "Mutual count", value: "Off", hint: "No graph source", icon: Users, tone: "amber" }, { label: "Message", value: "Blocked", hint: "No delivery", icon: MessageCircle, tone: "slate" }]} /><ScreenPreviewBanner title="MutualFriends evidence boundary"><strong>Path labels, bridge topics, names, and shortlist state are synthetic relationship fixtures—not real friends, mutual-friend counts, verified identity, social-graph data, availability, recommendation, notification, or messaging.</strong> Production friend discovery requires consent, provenance, visibility rules, block/report controls, abuse prevention, and an auditable relationship lifecycle.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search synthetic friend paths" className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 flex gap-2 overflow-x-auto">{RELATIONS.map((item) => <button key={item} onClick={() => setRelation(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${relation === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-5 space-y-3">{visible.map((item) => <div key={item.name} className={`rounded-2xl border p-4 ${selected === item.name ? "border-cyan-300/40 bg-cyan-300/[0.07]" : "border-white/10 bg-black/10"}`}><button onClick={() => { setSelected(item.name); setSaved(false); }} className="w-full text-left"><div className="flex items-start gap-3"><div className="flex size-10 items-center justify-center rounded-full bg-violet-300/10 text-violet-200"><CircleUserRound className="size-5" /></div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center justify-between gap-2"><h2 className="font-black">{item.name}</h2><Badge variant="outline" className="border-amber-300/20 text-[10px] text-amber-200">{item.relation}</Badge></div><p className="mt-1 text-xs text-cyan-200">Bridge: {item.bridge}</p><p className="mt-2 text-sm text-slate-400">{item.detail}</p></div></div></button><div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3"><span className="text-xs text-slate-500">Synthetic path</span><button onClick={() => toggle(item.name)} className={`rounded-lg p-2 ${shortlist.includes(item.name) ? "bg-cyan-300/15 text-cyan-200" : "text-slate-500 hover:bg-white/10"}`} aria-label={`Toggle ${item.name} shortlist`}><Heart className={`size-4 ${shortlist.includes(item.name) ? "fill-current" : ""}`} /></button></div></div>)}{visible.length === 0 && <div className="p-8 text-center text-slate-500">No synthetic paths match this view.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Selected path</p><h2 className="mt-2 text-3xl font-black">{path.name}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{path.relation}</Badge></div><p className="mt-4 text-slate-400">{path.detail}</p><div className="mt-5 flex items-center gap-3 rounded-2xl border border-white/10 bg-black/20 p-5"><div className="flex size-11 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-200"><Link2 className="size-5" /></div><div><p className="font-black">Shared bridge: {path.bridge}</p><p className="text-xs text-slate-500">Local concept, not a verified friend edge</p></div></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Relationship", value: path.relation }, { label: "Bridge", value: path.bridge }, { label: "Identity", value: "Synthetic" }, { label: "Mutual count", value: "Unavailable" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><textarea value={consentNote} onChange={(event) => { setConsentNote(event.target.value); setSaved(false); }} placeholder="Write a local consent or visibility note…" className="mt-5 min-h-24 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-slate-500" /><div className="mt-4 flex gap-2"><Button onClick={() => toggle(path.name)} className="bg-violet-500 text-white hover:bg-violet-400"><UserRoundPlus className="mr-2 size-4" />{shortlist.includes(path.name) ? "Remove from shortlist" : "Shortlist locally"}</Button><Button disabled variant="outline" className="border-white/10 text-white/40"><MessageCircle className="mr-2 size-4" />Message unavailable</Button></div><div className="mt-4 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />No friend identity, graph edge, count, contact detail, or message request is exposed by this preview.</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Friend-path readiness</p><h2 className="mt-2 text-2xl font-black">Required before mutuality claims</h2><div className="mt-5 space-y-3">{["Consented identity and relationship provenance", "Visibility, privacy, block, and report controls", "Verified graph edge and mutuality calculation", "Abuse prevention, moderation, and rate limits", "Message delivery, notification, retention, and support"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><Users className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake mutuals</h2><p className="mt-3 text-sm leading-6 text-slate-400">The planner does not reveal real friends, infer a relationship, count mutuals, expose contacts, or send an invite.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A bridge is not a friend", description: "Synthetic relationship paths preserve discovery UX without identity or graph claims.", icon: Link2, status: "Guardrail" }, { title: "Visibility needs consent", description: "Friend-of-friend data needs explicit privacy, provenance, block/report, and abuse controls.", icon: LockKeyhole, status: "Required" }, { title: "No fake invite", description: "Shortlist and consent notes remain local while notification and message delivery stay unavailable.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

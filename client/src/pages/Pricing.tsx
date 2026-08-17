@@ -1,141 +1,28 @@
-import React from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, ChevronDown, Clock3, CreditCard, HelpCircle, LockKeyhole, Mail, RefreshCw, ShieldAlert, Sparkles, Star, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
+type Tier = { name: string; price: string; period?: string; description: string; features: string[]; state: string };
+const tiers: Tier[] = [
+  { name: "Citizen", price: "Not published", description: "Baseline access concept for exploring the ecosystem.", features: ["Digital Twin concept", "Memory Graph concept", "HOPE AI Companion concept", "Community access concept", "Basic analytics concept", "Two-agent limit concept"], state: "Preview" },
+  { name: "Builder", price: "Not published", period: "/month concept", description: "Creator-oriented access concept with expanded tools.", features: ["Everything in Citizen concept", "Creator tools concept", "Ten-agent limit concept", "Advanced Memory Graph concept", "Startup generator concept", "Revenue sharing rules unverified", "Priority support concept"], state: "Preview" },
+  { name: "Scalable", price: "Contact concept", description: "Team and integration access concept for governed scale.", features: ["Everything in Builder concept", "Unlimited-agent requirement", "API access requirement", "Custom integration requirement", "Account-management requirement", "Revenue sharing rules unverified", "SLA support requirement"], state: "Unavailable" },
+];
+const faqs = [
+  ["Can I upgrade or downgrade anytime?", "Not verified. A real answer requires subscription lifecycle, proration, cancellation, entitlement, and effective-date rules."],
+  ["What payment methods do you accept?", "Not configured. Payment methods, supported regions, tax, currency, and processor are not connected."],
+  ["Is there a free trial for paid plans?", "Not published. A trial would require eligibility, consent, billing authorization, expiration, and conversion behavior."],
+  ["What does revenue sharing mean?", "Not defined. Any revenue-sharing statement requires a legal/business rule, calculation source, reporting, and payout process."],
+];
 export default function Pricing() {
-  const tiers = [
-    {
-      name: 'Citizen',
-      price: 'Free',
-      description: 'Start your journey',
-      features: [
-        'Digital Twin',
-        'Memory Graph (basic)',
-        'HOPE AI Companion',
-        'Community Access',
-        'Basic Analytics',
-        'Max 2 AI Agents',
-      ],
-      cta: 'Get Started',
-      highlighted: false,
-    },
-    {
-      name: 'Builder',
-      price: '$9.99',
-      period: '/month',
-      description: 'Create & earn',
-      features: [
-        'Everything in Citizen',
-        'Creator Tools',
-        'Max 10 AI Agents',
-        'Advanced Memory Graph',
-        'Startup Generator',
-        'Revenue Sharing (5%)',
-        'Priority Support',
-      ],
-      cta: 'Start Free Trial',
-      highlighted: true,
-    },
-    {
-      name: 'Scalable',
-      price: 'Custom',
-      description: 'Scale your impact',
-      features: [
-        'Everything in Builder',
-        'Unlimited AI Agents',
-        'API Access',
-        'Custom Integrations',
-        'Dedicated Account Manager',
-        'Revenue Sharing (10%)',
-        'SLA Support',
-      ],
-      cta: 'Contact Sales',
-      highlighted: false,
-    },
-  ];
-
-  return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold mb-4">Simple, Transparent Pricing</h1>
-          <p className="text-xl text-gray-400">Choose the plan that fits your journey</p>
-        </div>
-
-        <div className="grid grid-cols-3 gap-8 mb-16">
-          {tiers.map((tier) => (
-            <Card
-              key={tier.name}
-              className={`p-8 flex flex-col ${
-                tier.highlighted
-                  ? 'bg-gradient-to-b from-cyan-900 to-gray-900 border-cyan-500 ring-2 ring-cyan-500'
-                  : 'bg-gray-900 border-gray-800'
-              }`}
-            >
-              {tier.highlighted && (
-                <Badge className="w-fit mb-4 bg-cyan-600">Most Popular</Badge>
-              )}
-              <h3 className="text-2xl font-bold mb-2">{tier.name}</h3>
-              <p className="text-gray-400 text-sm mb-6">{tier.description}</p>
-
-              <div className="mb-6">
-                <span className="text-4xl font-bold">{tier.price}</span>
-                {tier.period && <span className="text-gray-400">{tier.period}</span>}
-              </div>
-
-              <Button
-                className={`w-full mb-8 ${
-                  tier.highlighted
-                    ? 'bg-cyan-600 hover:bg-cyan-700'
-                    : 'bg-gray-700 hover:bg-gray-600'
-                }`}
-              >
-                {tier.cta}
-              </Button>
-
-              <div className="space-y-4 flex-1">
-                {tier.features.map((feature) => (
-                  <div key={feature} className="flex items-start">
-                    <span className="text-cyan-400 mr-3">✓</span>
-                    <span className="text-sm">{feature}</span>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          ))}
-        </div>
-
-        {/* FAQ */}
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold mb-8 text-center">Frequently Asked Questions</h2>
-          <div className="space-y-6">
-            {[
-              {
-                q: 'Can I upgrade or downgrade anytime?',
-                a: 'Yes, you can change your plan at any time. Changes take effect immediately.',
-              },
-              {
-                q: 'What payment methods do you accept?',
-                a: 'We accept all major credit cards, PayPal, and SKY444 tokens.',
-              },
-              {
-                q: 'Is there a free trial for paid plans?',
-                a: 'Yes, all paid plans include a 14-day free trial. No credit card required.',
-              },
-              {
-                q: 'What does Revenue Sharing mean?',
-                a: 'Earn a percentage of revenue generated by your AI agents, creators, or apps.',
-              },
-            ].map((item, i) => (
-              <Card key={i} className="bg-gray-900 border-gray-800 p-6">
-                <h4 className="font-bold mb-2">{item.q}</h4>
-                <p className="text-gray-400">{item.a}</p>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  const [billing, setBilling] = useState("Monthly concept");
+  const [selected, setSelected] = useState(tiers[1].name);
+  const [saved, setSaved] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const selectedTier = useMemo(() => tiers.find((item) => item.name === selected) ?? tiers[1], [selected]);
+  const reset = () => { setBilling("Monthly concept"); setSelected(tiers[1].name); setSaved(false); setOpenFaq(0); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Sparkles} eyebrow="Pricing · Plan comparison preview" title="Compare product value before pricing is allowed to become a promise." description="Review plan concepts, feature grouping, billing cadence intent, and FAQ requirements. Published prices, payment methods, trials, revenue sharing, subscriptions, entitlements, and support levels are intentionally not asserted." badge="Pricing preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Interest saved locally" : "Save plan interest"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset comparison</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Plan concepts", value: String(tiers.length), hint: "Local comparison", icon: Star, tone: "cyan" }, { label: "Prices", value: "Unpublished", hint: "No billing catalog", icon: CreditCard, tone: "violet" }, { label: "Entitlements", value: "Unknown", hint: "No account check", icon: LockKeyhole, tone: "amber" }, { label: "Checkout", value: "Off", hint: "No payment path", icon: ShieldAlert, tone: "slate" }]} /><ScreenPreviewBanner title="Pricing evidence boundary"><strong>These are plan concepts, not offers or prices.</strong> The page does not claim availability, payment acceptance, trial eligibility, subscription status, revenue share, support level, entitlement, upgrade, downgrade, refund, or tax treatment. No billing or payment provider is contacted.</ScreenPreviewBanner><section><div className="mb-5 flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Plan comparison</p><h2 className="mt-2 text-2xl font-black">Choose a positioning concept</h2></div><label className="text-sm text-slate-400">Cadence intent<select value={billing} onChange={(event) => setBilling(event.target.value)} className="ml-2 rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-white outline-none"><option>Monthly concept</option><option>Annual concept</option><option>Custom concept</option></select></label></div><div className="grid gap-5 lg:grid-cols-3">{tiers.map((tier) => <button key={tier.name} onClick={() => setSelected(tier.name)} className={`text-left ${selected === tier.name ? "rounded-2xl ring-2 ring-cyan-300/50" : ""}`}><Card className={`h-full border-white/10 bg-white/[0.04] ${selected === tier.name ? "border-cyan-300/40 bg-cyan-300/[0.05]" : ""}`}><CardContent className="flex h-full flex-col p-6">{tier.name === "Builder" && <Badge className="mb-4 w-fit bg-cyan-300 text-slate-950">Positioning highlight</Badge>}<div className="flex items-start justify-between gap-3"><div><h3 className="text-2xl font-black">{tier.name}</h3><p className="mt-2 text-sm text-slate-500">{tier.description}</p></div><Badge variant="outline" className="border-white/10 text-amber-200">{tier.state}</Badge></div><div className="mt-6"><span className="text-2xl font-black text-amber-100">{tier.price}</span>{tier.period && <span className="ml-1 text-sm text-slate-500">{tier.period}</span>}</div><Button disabled className="mt-5 w-full bg-slate-700 text-slate-400">{tier.name === "Scalable" ? "Contact unavailable" : "Select unavailable"}</Button><div className="mt-6 flex-1 space-y-3">{tier.features.map((feature) => <div key={feature} className="flex items-start gap-2 text-sm text-slate-300"><Check className="mt-0.5 size-4 shrink-0 text-cyan-200" /><span>{feature}</span></div>)}</div></CardContent></Card></button>)}</div></section><section className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected concept</p><h2 className="mt-2 text-2xl font-black">{selectedTier.name}</h2><div className="mt-5 space-y-3">{[{ label: "Cadence", value: billing }, { label: "Price", value: selectedTier.price }, { label: "Checkout", value: "Unavailable" }, { label: "Subscription", value: "Unverified" }, { label: "Entitlement", value: "Not granted" }, { label: "Support", value: "Unverified" }].map((item) => <div key={item.label} className="flex items-center justify-between gap-3 rounded-xl border border-white/10 p-3"><span className="text-sm text-slate-400">{item.label}</span><span className="text-sm font-semibold text-amber-200">{item.value}</span></div>)}</div><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><LockKeyhole className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-400">The selected plan is a comparison state only; it cannot grant access or initiate a purchase.</p></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">FAQ readiness</p><h2 className="mt-2 text-2xl font-black">Answers require policy</h2><div className="mt-5 space-y-3">{faqs.map(([question, answer], index) => <div key={question} className="rounded-xl border border-white/10"><button onClick={() => setOpenFaq(openFaq === index ? null : index)} className="flex w-full items-center gap-3 p-4 text-left"><HelpCircle className="size-4 text-cyan-200" /><span className="flex-1 text-sm font-semibold">{question}</span><ChevronDown className={`size-4 text-slate-500 transition ${openFaq === index ? "rotate-180" : ""}`} /></button>{openFaq === index && <p className="border-t border-white/10 px-4 py-4 text-sm leading-6 text-slate-400">{answer}</p>}</div>)}</div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Comparison surface preserved", description: "Plan concepts, features, selected detail, cadence intent, FAQ disclosure, local interest, and reset remain interactive.", icon: Star, status: "Local comparison" }, { title: "No fabricated commercial claims", description: "Prices, trials, payment methods, revenue sharing, support, subscriptions, entitlements, and tax are not presented as facts.", icon: ShieldAlert, status: "Guardrail" }, { title: "Billing requires proof", description: "A real offer needs catalog versioning, checkout, payment, entitlement, cancellation, refund, and authorization enforcement.", icon: LockKeyhole, status: "Required" }]} /></main></div>;
 }

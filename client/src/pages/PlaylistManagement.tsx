@@ -1,89 +1,45 @@
-import { List } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Clock3, Download, GripVertical, List, LockKeyhole, Music2, Play, RefreshCw, Search, ShieldCheck, Trash2, TriangleAlert, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
+type Track = { id: string; title: string; creator: string; duration: number; category: string };
+const seed: Track[] = [
+  { id: "track-001", title: "Launch Sequence", creator: "Skyline concept", duration: 184, category: "Focus" },
+  { id: "track-002", title: "Neon Current", creator: "Blue Hour concept", duration: 212, category: "Electronic" },
+  { id: "track-003", title: "Quiet Orbit", creator: "Cloudline concept", duration: 156, category: "Ambient" },
+  { id: "track-004", title: "Signal Garden", creator: "Northstar concept", duration: 198, category: "Discovery" },
+];
+const lists = ["Work session", "Discovery queue", "Saved concepts"];
+const formatTime = (value: number) => `${Math.floor(value / 60)}:${String(value % 60).padStart(2, "0")}`;
 export default function PlaylistManagement() {
+  const [list, setList] = useState(lists[0]);
+  const [tracks, setTracks] = useState(seed);
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState(seed[0]);
+  const [playing, setPlaying] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
+  const filtered = useMemo(() => tracks.filter((item) => !query || `${item.title} ${item.creator} ${item.category}`.toLowerCase().includes(query.toLowerCase())), [query, tracks]);
+  const duration = tracks.reduce((sum, item) => sum + item.duration, 0);
+  const reset = () => { setList(lists[0]); setTracks(seed); setQuery(""); setSelected(seed[0]); setPlaying(null); setSaved(false); };
+  const removeSelected = () => { const next = tracks.filter((item) => item.id !== selected.id); setTracks(next); setSelected(next[0] ?? seed[0]); setSaved(false); };
   return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={List} title="Playlist Management" subtitle="Fully functional playlist management page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Playlist Management</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <List className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <List className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <List className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
+    <div className="min-h-screen bg-[#070a16] text-white">
+      <ScreenHero icon={List} eyebrow="PlaylistManagement · Media preview" title="Curate a queue without pretending media is streaming." description="Explore local playlist concepts, search, selection, reorder intent, duration arithmetic, and metadata. No media provider, audio stream, account library, play event, recommendation, or analytics source is connected." badge="Playlist preview">
+        <div className="flex flex-wrap gap-2"><Button disabled={tracks.length === 0} onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Download className="mr-2 size-4" />{saved ? "Queue saved locally" : "Save queue intent"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset playlist</Button></div>
+      </ScreenHero>
+      <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+        <ScreenStatGrid items={[{ label: "Tracks", value: String(tracks.length), hint: "Local fixtures", icon: Music2, tone: "cyan" }, { label: "Duration", value: formatTime(duration), hint: "Local arithmetic", icon: Clock3, tone: "violet" }, { label: "Playlist", value: list, hint: "Local selection", icon: List, tone: "amber" }, { label: "Stream", value: "Off", hint: "No media source", icon: WifiOff, tone: "slate" }]} />
+        <ScreenPreviewBanner title="Playlist evidence boundary"><strong>This is not a media player or account library.</strong> Track titles, creators, categories, durations, queue order, play state, and save intent are local fixtures. No media is streamed, no play is counted, no library is changed, and no engagement or recommendation claim is verified.</ScreenPreviewBanner>
+        <section className="grid gap-6 lg:grid-cols-[0.82fr_1fr]">
+          <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Playlist concepts</p><h2 className="mt-2 text-2xl font-black">Choose a local queue</h2><div className="mt-5 space-y-2">{lists.map((item) => <button key={item} onClick={() => setList(item)} className={`w-full rounded-xl border p-4 text-left ${list === item ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-center justify-between"><p className="font-semibold">{item}</p><Badge variant="outline" className="border-white/10 text-amber-200">Local</Badge></div><p className="mt-2 text-sm text-slate-500">{item === "Work session" ? "Focus and ambient concepts" : item === "Discovery queue" ? "Unsorted exploration concepts" : "Local keep-list"}</p></button>)}</div><div className="relative mt-6"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local tracks…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><TriangleAlert className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-300">Reordering or selecting a fixture changes browser state only. A real playlist requires provider ownership, media rights, persistence, and playback evidence.</p></div></div></CardContent></Card>
+          <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Queue editor</p><h2 className="mt-2 text-2xl font-black">{list}</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">{filtered.length} visible</Badge></div><div className="mt-5 space-y-3">{filtered.length === 0 ? <div className="rounded-xl border border-dashed border-white/15 p-8 text-center"><p className="font-semibold">No local tracks match</p><p className="mt-2 text-sm text-slate-500">Change the local search query.</p></div> : filtered.map((item, index) => <div key={item.id} className={`flex items-center gap-3 rounded-xl border p-4 ${selected.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><GripVertical className="size-4 text-slate-600" /><button onClick={() => setSelected(item)} className="flex flex-1 items-center gap-3 text-left"><div className="flex size-9 items-center justify-center rounded-xl bg-cyan-300/10"><Music2 className="size-4 text-cyan-200" /></div><div><p className="font-semibold">{index + 1}. {item.title}</p><p className="mt-1 text-xs text-slate-500">{item.creator} · {item.category} · {formatTime(item.duration)}</p></div></button><button aria-label={`Preview ${item.title}`} onClick={() => setPlaying(playing === item.id ? null : item.id)} className={`flex size-8 items-center justify-center rounded-lg ${playing === item.id ? "bg-cyan-300 text-slate-950" : "bg-white/10 text-slate-400"}`}><Play className="size-3" /></button></div>)}</div><div className="mt-5 flex flex-wrap gap-2"><Button onClick={removeSelected} disabled={tracks.length === 0} variant="outline" className="border-rose-300/20 text-rose-200 hover:bg-rose-300/10"><Trash2 className="mr-2 size-4" />Remove local item</Button><Button disabled variant="outline" className="border-white/10 text-white/40">Sync provider unavailable</Button></div></CardContent></Card>
+        </section>
+        <section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Selected metadata</p><h2 className="mt-2 text-2xl font-black">{selected.title}</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Creator", value: selected.creator }, { label: "Category", value: selected.category }, { label: "Duration", value: formatTime(selected.duration) }, { label: "Source", value: "Local fixture" }, { label: "Playback", value: playing === selected.id ? "Local preview state" : "Not playing" }, { label: "Rights", value: "Not verified" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><p className="mt-5 text-sm leading-6 text-slate-500">No file, stream URL, license, creator account, play receipt, or persistent library record exists.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake playback</h2><p className="mt-3 text-sm leading-6 text-slate-400">Selecting, previewing, removing, or saving a local track changes UI state only. It does not stream media, download a file, alter a library, count a play, or produce analytics.</p></CardContent></Card></section>
+        <section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Production checklist</p><h2 className="mt-2 text-2xl font-black">Playlist management must prove</h2><div className="mt-5 space-y-3">{["Authenticated library, playlist ownership, collaboration roles, persistence, and conflict resolution", "Provider/media rights, file or stream integrity, licensing, regional restrictions, and takedown controls", "Playback pipeline, buffering/errors, duration metadata, progress, retries, and accessibility", "Search/recommendation events, privacy-safe analytics, consent, retention, and user controls", "Tests for reorder, duplicate, delete, offline, sync conflict, provider outage, and recovery"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Playlist surface preserved", description: "Queue selection, search, item selection, play intent, duration math, and removal remain interactive.", icon: List, status: "Local queue" }, { title: "Media rights are explicit", description: "Source, rights, streaming, and persistence fields remain unavailable rather than implied.", icon: ShieldCheck, status: "Guardrail" }, { title: "Analytics are off", description: "No play, listener, engagement, recommendation, or completion claim is fabricated.", icon: WifiOff, status: "Unavailable" }]} /></section>
+      </main>
     </div>
   );
 }

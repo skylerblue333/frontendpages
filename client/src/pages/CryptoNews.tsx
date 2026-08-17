@@ -1,89 +1,20 @@
-import { Newspaper } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Bookmark, CalendarDays, Check, Clock3, ExternalLink, FileText, Filter, Newspaper, RefreshCw, Search, ShieldAlert, Sparkles, TrendingUp, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const STORIES = [{ id: "s1", title: "How to evaluate a new token project", topic: "Research", time: "Editorial draft", summary: "A checklist for contracts, custody, documentation, and risk disclosures before relying on a token claim.", accent: "from-violet-500 to-fuchsia-500" }, { id: "s2", title: "Bridge safety is more than a route", topic: "Security", time: "Editorial draft", summary: "Why chain IDs, allowlists, signatures, replay protection, monitoring, and recovery belong in every bridge review.", accent: "from-cyan-500 to-blue-500" }, { id: "s3", title: "Reading market charts without false certainty", topic: "Education", time: "Editorial draft", summary: "A neutral guide to freshness, provenance, units, time windows, and the limits of chart-based conclusions.", accent: "from-amber-400 to-orange-500" }, { id: "s4", title: "Custody questions for wallet design", topic: "Wallets", time: "Editorial draft", summary: "Questions around signing, recovery, permissions, support, and what a UI must not imply about custody.", accent: "from-emerald-400 to-teal-500" }, { id: "s5", title: "Staking terms that need evidence", topic: "DeFi", time: "Editorial draft", summary: "How to separate reward scenarios from verified validator, lockup, contract, and payout records.", accent: "from-blue-500 to-indigo-500" }, { id: "s6", title: "Governance design and voting power", topic: "Governance", time: "Editorial draft", summary: "A product-planning view of proposals, quorum, delegation, execution, and transparent audit history.", accent: "from-rose-500 to-pink-500" }];
+const TOPICS = ["All", "Research", "Security", "Education", "Wallets", "DeFi", "Governance"];
 
 export default function CryptoNews() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={Newspaper} title="Crypto News" subtitle="Fully functional crypto news page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Crypto News</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Newspaper className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Newspaper className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Newspaper className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
+  const [query, setQuery] = useState("");
+  const [topic, setTopic] = useState("All");
+  const [selected, setSelected] = useState(STORIES[0].id);
+  const [saved, setSaved] = useState<string[]>([]);
+  const current = STORIES.find((story) => story.id === selected) ?? STORIES[0];
+  const stories = useMemo(() => STORIES.filter((story) => (topic === "All" || story.topic === topic) && `${story.title} ${story.summary} ${story.topic}`.toLowerCase().includes(query.toLowerCase())), [query, topic]);
+  const toggleSaved = (id: string) => setSaved((items) => items.includes(id) ? items.filter((item) => item !== id) : [...items, id]);
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Newspaper} eyebrow="Crypto editorial · News" title="Build context without pretending it is a live feed." description="Browse deterministic editorial drafts, topic filters, search, saved-story state, and source-readiness notes. No current headline, price impact, market alert, author attribution, live feed, or financial guidance is asserted." badge="Editorial preview"><div className="flex flex-wrap gap-2"><Button onClick={() => toggleSaved(current.id)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Bookmark className="mr-2 size-4" />{saved.includes(current.id) ? "Saved locally" : "Save current story"}</Button><Button onClick={() => { setQuery(""); setTopic("All"); setSelected(STORIES[0].id); setSaved([]); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset reading view</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Draft stories", value: String(STORIES.length), hint: "Local editorial set", icon: FileText }, { label: "Topics", value: String(TOPICS.length - 1), hint: "Local filters", icon: Filter, tone: "violet" }, { label: "Live feed", value: "Off", hint: "No provider connected", icon: WifiOff, tone: "amber" }, { label: "Price impact", value: "Off", hint: "No market attribution", icon: TrendingUp, tone: "slate" }]} /><ScreenPreviewBanner title="News evidence boundary"><strong>Story titles, timestamps, topics, source labels, summaries, and market-context language are deterministic editorial fixtures—not current news, live reporting, verified authorship, market-moving information, price impact, or financial advice.</strong> A production news surface requires source contracts, timestamps, provenance, author identity, correction history, moderation, licensing, freshness, and clear editorial disclosures.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex flex-col gap-3 sm:flex-row"><div className="relative flex-1"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search editorial drafts" className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white placeholder:text-slate-500" /></div><div className="flex gap-2 overflow-x-auto">{TOPICS.map((item) => <button key={item} onClick={() => setTopic(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${topic === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div></div><div className="mt-5 space-y-3">{stories.map((story) => <button key={story.id} onClick={() => setSelected(story.id)} className={`w-full rounded-2xl border p-4 text-left ${selected === story.id ? "border-cyan-300/40 bg-cyan-300/[0.07]" : "border-white/10 bg-black/10"}`}><div className="flex items-start gap-3"><div className={`flex size-11 items-center justify-center rounded-xl bg-gradient-to-br ${story.accent} text-slate-950`}><Newspaper className="size-5" /></div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center justify-between gap-2"><h2 className="font-black">{story.title}</h2><Badge variant="outline" className="border-amber-300/20 text-[10px] text-amber-200">{story.topic}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-400">{story.summary}</p><p className="mt-2 flex items-center gap-2 text-xs text-slate-500"><Clock3 className="size-3" />{story.time} · local sample</p></div></div></button>)}{stories.length === 0 && <div className="p-10 text-center text-slate-500">No editorial drafts match this view.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Article preview</p><h2 className="mt-2 text-2xl font-black">{current.title}</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Draft</Badge></div><div className={`mt-5 h-24 rounded-2xl bg-gradient-to-br ${current.accent} p-5 text-slate-950`}><p className="text-xs font-black uppercase tracking-[0.2em]">{current.topic} · local editorial</p><p className="mt-3 text-lg font-black">Context before conclusion.</p></div><p className="mt-5 text-sm leading-7 text-slate-300">{current.summary}</p><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 font-semibold text-amber-200"><ShieldAlert className="size-4" />Source required before publication</div><p className="mt-2 text-sm leading-6 text-slate-400">No author, publisher, date, URL, quote, market feed, or correction record is attached to this draft. It cannot be treated as current information.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button onClick={() => toggleSaved(current.id)} variant="outline" className="border-white/15 text-white">{saved.includes(current.id) ? <><Check className="mr-2 size-4" />Saved locally</> : <><Bookmark className="mr-2 size-4" />Save draft</>}</Button><Button variant="outline" disabled className="border-white/10 text-slate-500"><ExternalLink className="mr-2 size-4" />Open source unavailable</Button></div></CardContent></Card></section><section className="grid gap-4 md:grid-cols-3">{[{ title: "Freshness matters", description: "A story needs an authoritative timestamp, provider, and refresh policy before it can be called current.", icon: CalendarDays }, { title: "Attribution matters", description: "Authors, publishers, licenses, corrections, and quotes need provenance before publication.", icon: FileText }, { title: "No price impact", description: "Editorial context must not imply trading advice, market certainty, or a causal price effect.", icon: WifiOff }].map((item) => <Card key={item.title} className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><item.icon className="size-5 text-cyan-300" /><h2 className="mt-4 font-black">{item.title}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{item.description}</p></CardContent></Card>)}</section><ScreenFeatureGrid features={[{ title: "A headline is not a live feed", description: "Local editorial cards cannot establish currentness, provider freshness, or news completeness.", icon: WifiOff, status: "Guardrail" }, { title: "Market context needs sourcing", description: "Price, volume, impact, and financial claims require authoritative feeds and careful disclosures.", icon: TrendingUp, status: "Required" }, { title: "No fake attribution", description: "The preview preserves reading and discovery utility without inventing authors, sources, quotes, or publication status.", icon: FileText, status: "Unavailable" }]} /></main></div>;
 }

@@ -1,25 +1,19 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { Accessibility, CheckCircle2, Eye, Keyboard, Languages, Monitor, MousePointer2, Pause, Play, RotateCcw, Settings2, Shield, Sparkles, Sun, Volume2, Wand2, Zap } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-export default function AccessibilitySettings() {
-  const [state, setState] = useState(false);
+type Setting = { id: string; name: string; description: string; category: "Display" | "Motion" | "Input" | "Content"; defaultValue: string };
+const SETTINGS: Setting[] = [
+  { id: "contrast", name: "High contrast", description: "Increase separation between foreground, borders, and backgrounds.", category: "Display", defaultValue: "Off" },
+  { id: "text", name: "Larger text", description: "Preview a larger typography scale for reading and navigation.", category: "Display", defaultValue: "Default" },
+  { id: "motion", name: "Reduce motion", description: "Minimize non-essential transitions, parallax, and animated feedback.", category: "Motion", defaultValue: "Off" },
+  { id: "keyboard", name: "Keyboard focus", description: "Keep a visible focus ring and predictable tab order for interactive controls.", category: "Input", defaultValue: "Visible" },
+  { id: "captions", name: "Captions and transcripts", description: "Prefer text alternatives for audio and spoken media where available.", category: "Content", defaultValue: "Preferred" },
+  { id: "announce", name: "Status announcements", description: "Expose loading, success, and failure changes to assistive technology.", category: "Content", defaultValue: "Enabled" },
+];
+const CATEGORIES = ["All", "Display", "Motion", "Input", "Content"];
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-black p-4">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-8">AccessibilitySettings</h1>
-        <p className="text-slate-400 mb-8">accessibility settings</p>
-        
-        <Card className="bg-slate-900 border-slate-800 p-8">
-          <div className="space-y-6">
-            <p className="text-slate-300">Content for AccessibilitySettings page</p>
-            <Button onClick={() => setState(!state)}>
-              {state ? "Deactivate" : "Activate"}
-            </Button>
-          </div>
-        </Card>
-      </div>
-    </div>
-  );
-}
+export default function AccessibilitySettings() { const [category, setCategory] = useState("All"); const [enabled, setEnabled] = useState<Record<string, boolean>>({}); const [preview, setPreview] = useState(false); const [announcement, setAnnouncement] = useState("No preference change has been applied."); const visible = useMemo(() => SETTINGS.filter((setting) => category === "All" || setting.category === category), [category]); const toggle = (setting: Setting) => { const next = !enabled[setting.id]; setEnabled((current) => ({ ...current, [setting.id]: next })); setAnnouncement(`${setting.name} preview ${next ? "enabled" : "disabled"}. This local preview is not yet synced to an account.`); }; const reset = () => { setEnabled({}); setPreview(false); setAnnouncement("Accessibility preview reset."); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Accessibility} eyebrow="Settings · Accessibility" title="Make every surface easier to use." description="Preview display, motion, input, and content preferences with visible feedback. This page demonstrates local controls; it does not claim saved account preferences, device-level changes, or assistive-technology support beyond the rendered surface." badge="Accessibility workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setPreview((value) => !value)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200">{preview ? <><Pause className="mr-2 size-4" />Exit preview</> : <><Play className="mr-2 size-4" />Preview changes</>}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RotateCcw className="mr-2 size-4" />Reset local state</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Controls", value: String(SETTINGS.length), hint: "Display and interaction previews", icon: Settings2 }, { label: "Local changes", value: String(Object.values(enabled).filter(Boolean).length), hint: "Not synced to an account", icon: CheckCircle2, tone: "violet" }, { label: "Focus", value: "Visible", hint: "Keyboard-first baseline", icon: Keyboard, tone: "amber" }, { label: "Persistence", value: "Unverified", hint: "No account preference store", icon: Shield, tone: "slate" }]} /><ScreenPreviewBanner title="Accessibility honesty boundary">These controls update the local preview and live status message. They do not change browser settings, guarantee compatibility with every assistive technology, or persist to a user account until a verified preference service exists.</ScreenPreviewBanner><section className={`rounded-2xl border border-white/10 bg-white/[0.04] p-5 ${preview ? "ring-2 ring-cyan-300/30" : ""}`}><div className="mb-5 flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Preference preview</p><h2 className="mt-1 text-2xl font-bold">Choose a more comfortable interface</h2></div><Badge variant="outline" className="border-cyan-300/20 text-cyan-200">{preview ? "Preview active" : "Preview idle"}</Badge></div><div className="mb-5 flex gap-2 overflow-x-auto pb-1">{CATEGORIES.map((item) => <Button key={item} size="sm" variant={category === item ? "default" : "outline"} onClick={() => setCategory(item)} className={category === item ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "border-white/15 bg-white/5 text-slate-300 hover:bg-white/10"}>{item}</Button>)}</div><div className="grid gap-4 md:grid-cols-2">{visible.map((setting) => <button key={setting.id} onClick={() => toggle(setting)} className={`rounded-2xl border p-5 text-left transition ${enabled[setting.id] ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`} aria-pressed={Boolean(enabled[setting.id])}><div className="flex items-start justify-between gap-4"><div className="flex size-10 items-center justify-center rounded-xl bg-violet-300/10"><Accessibility className="size-5 text-violet-200" /></div><Badge variant="outline" className={enabled[setting.id] ? "border-emerald-300/20 text-emerald-200" : "border-white/15 text-slate-400"}>{enabled[setting.id] ? "Preview on" : setting.defaultValue}</Badge></div><h3 className="mt-4 font-semibold">{setting.name}</h3><p className="mt-2 text-sm leading-6 text-slate-400">{setting.description}</p><p className="mt-4 text-xs uppercase tracking-wider text-slate-500">{setting.category}</p></button>)}</div><div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4" role="status" aria-live="polite"><div className="flex items-center gap-2 font-medium text-cyan-200"><Volume2 className="size-4" />Live status message</div><p className="mt-2 text-sm leading-6 text-slate-300">{announcement}</p></div></section><ScreenFeatureGrid features={[{ title: "Keyboard-first", description: "Maintain visible focus, semantic controls, logical tab order, and skip paths across the product.", icon: Keyboard, status: "Required" }, { title: "Respect motion preferences", description: "Pair local motion controls with reduced-motion CSS and avoid essential information in animation.", icon: MousePointer2, status: "Required" }, { title: "No unsupported guarantees", description: "Accessibility claims need testing evidence across browsers, devices, content, and assistive technologies.", icon: Shield, status: "Guardrail" }]} /></main></div>; }

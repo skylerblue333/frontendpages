@@ -1,75 +1,12 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Activity, BarChart3, Check, Filter, Funnel, Info, MousePointerClick, RefreshCw, ShieldAlert, Target, TrendingUp, UsersRound, WifiOff } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-export default function CampaignAnalytics() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>CampaignAnalytics</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">CampaignAnalytics</h1>
-            <p className="text-muted-foreground mt-2">Campaign performance</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+type Channel = { name: string; objective: string; state: string; note: string; synthetic: boolean };
+const CHANNELS: Channel[] = [{ name: "Community preview", objective: "Awareness", state: "Synthetic sample", note: "No impression, reach, or engagement source connected.", synthetic: true }, { name: "Newsletter preview", objective: "Consideration", state: "Unverified", note: "No send, open, click, or consent record connected.", synthetic: true }, { name: "Partner preview", objective: "Conversion", state: "Unverified", note: "No attribution, order, or revenue source connected.", synthetic: true }];
+const FUNNEL = ["Awareness", "Consideration", "Conversion", "Retention"];
+export default function CampaignAnalytics() { const [query, setQuery] = useState(""); const [funnel, setFunnel] = useState("Awareness"); const [window, setWindow] = useState("Illustrative window"); const [saved, setSaved] = useState(false); const visible = useMemo(() => CHANNELS.filter((channel) => `${channel.name} ${channel.objective} ${channel.state}`.toLowerCase().includes(query.toLowerCase())), [query]); return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={BarChart3} eyebrow="Growth · Campaign Measurement" title="Measure the question before presenting the number." description="Explore a synthetic campaign measurement plan, funnel context, channel dimensions, and attribution requirements. This page does not ingest ad platforms, report live reach, calculate conversion, recognize revenue, or claim campaign performance." badge="Preview analytics lab"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />Save local view</Button><Button onClick={() => { setQuery(""); setFunnel("Awareness"); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset filters</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Channels", value: String(visible.length), hint: "Synthetic dimensions", icon: Activity }, { label: "Funnel", value: funnel, hint: "Selected question", icon: Funnel, tone: "violet" }, { label: "Attribution", value: "Undefined", hint: "No event source", icon: Target, tone: "amber" }, { label: "Live data", value: "Unavailable", hint: "No analytics connector", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Campaign measurement boundary">A campaign label is not an impression, reach, click, conversion, customer, or revenue record. Reliable analytics require event definitions, consent, source timestamps, deduplication, identity rules, attribution windows, spend data, currency, and reconciled outcomes.</ScreenPreviewBanner><section className="flex flex-wrap items-center gap-2"><span className="mr-2 text-sm text-slate-400">Funnel question</span>{FUNNEL.map((item) => <button key={item} onClick={() => setFunnel(item)} className={`rounded-xl border px-4 py-2 text-sm ${funnel === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-400"}`}>{item}</button>)}</section><section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex flex-col gap-3 sm:flex-row"><div className="relative flex-1"><BarChart3 className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search synthetic channels" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><select value={window} onChange={(event) => setWindow(event.target.value)} className="rounded-md border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"><option>Illustrative window</option><option>Last 7 days · unavailable</option><option>Last 30 days · unavailable</option></select></div><div className="mt-5 space-y-3">{visible.map((channel) => <div key={channel.name} className="rounded-xl border border-white/10 bg-black/15 p-4"><div className="flex items-start gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10"><MousePointerClick className="size-5 text-cyan-300" /></div><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{channel.name}</p><Badge variant="outline" className="border-amber-300/20 text-amber-200">{channel.state}</Badge></div><p className="mt-1 text-xs text-slate-500">Objective: {channel.objective} · {channel.synthetic ? "Synthetic record" : "Unverified"}</p><p className="mt-3 text-sm leading-6 text-slate-400">{channel.note}</p></div></div></div>)}{visible.length === 0 && <p className="py-8 text-center text-sm text-slate-500">No synthetic channels match this view.</p>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Funnel className="size-5 text-violet-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Measurement design</p><h2 className="mt-1 text-2xl font-black">{funnel}</h2></div></div><div className="mt-6 space-y-3">{[{ label: "Event definition", value: "Required" }, { label: "Source timestamp", value: "Unavailable" }, { label: "Identity and consent", value: "Required" }, { label: "Attribution window", value: "Undefined" }, { label: "Revenue reconciliation", value: "Unavailable" }].map((item) => <div key={item.label} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-3"><Info className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item.label}</span><span className="text-xs text-amber-200">{item.value}</span></div>)}</div>{saved && <div className="mt-6 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><p className="font-semibold text-cyan-200">Local analytics view saved</p><p className="mt-1 text-sm text-slate-400">No campaign data was queried and no metric was published.</p></div>}</CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><TrendingUp className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Denominator first</h3><p className="mt-2 text-sm leading-6 text-slate-400">A percentage needs a defined population, event, window, source, and exclusion rule.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><UsersRound className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Reach is not people</h3><p className="mt-2 text-sm leading-6 text-slate-400">Platform estimates, unique users, consented identities, and customers are different measurements.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><ShieldAlert className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">No fake attribution</h3><p className="mt-2 text-sm leading-6 text-slate-400">A campaign card cannot prove causality, conversion, revenue, or return on spend.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Question before chart", description: "Select the funnel question before deciding which events and denominators belong in a view.", icon: Funnel, status: "Pattern" }, { title: "Attribution is a choice", description: "First touch, last touch, multi-touch, and incrementality answer different questions.", icon: Target, status: "Required" }, { title: "No fake live metrics", description: "Without a source connector and defined measurement window, campaign performance remains unavailable.", icon: WifiOff, status: "Guardrail" }]} /></main></div>; }

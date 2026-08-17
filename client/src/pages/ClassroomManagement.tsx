@@ -1,75 +1,32 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
+import { useMemo, useState } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { BookOpen, Check, ClipboardCheck, GraduationCap, Info, LayoutList, LockKeyhole, Plus, RefreshCw, Search, Settings2, Users, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatePanel, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const LEARNERS = [
+  { id: "a", name: "Avery Chen", track: "Foundations of Web", status: "Preview learner", next: "Module 2 · Accessible layout" },
+  { id: "b", name: "Jordan Ellis", track: "Data Storytelling", status: "Preview learner", next: "Module 1 · Evidence map" },
+  { id: "c", name: "Mina Okafor", track: "Creative Systems", status: "Preview learner", next: "Module 3 · Prototype critique" },
+  { id: "d", name: "Theo Rivera", track: "Foundations of Web", status: "Preview learner", next: "Module 1 · Semantic HTML" },
+];
+const MODULES = ["Orientation", "Foundations", "Practice lab", "Critique", "Capstone"];
 
 export default function ClassroomManagement() {
   const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [tab, setTab] = useState("Overview");
+  const [query, setQuery] = useState("");
+  const [module, setModule] = useState(MODULES[1]);
+  const [saved, setSaved] = useState(false);
+  const [courseName, setCourseName] = useState("");
+  const filteredLearners = useMemo(() => LEARNERS.filter((learner) => `${learner.name} ${learner.track}`.toLowerCase().includes(query.toLowerCase())), [query]);
 
   if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>ClassroomManagement</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    return <div className="min-h-screen bg-[#070a16] px-4 py-16 text-white"><div className="mx-auto max-w-xl"><ScreenHero icon={LockKeyhole} eyebrow="Education · Classroom management" title="A clear workspace for course operations." description="Sign in to review classroom planning controls. Until identity and permissions are available, no roster, attendance, grades, or learner record is shown." badge="Authentication required" /><div className="mt-8"><ScreenStatePanel type="auth" title="Classroom access is protected" description="A production classroom needs authenticated instructors, scoped roles, and institution-level authorization before exposing learner data or assessment actions." /></div></div></div>;
   }
 
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">ClassroomManagement</h1>
-            <p className="text-muted-foreground mt-2">Manage students</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={GraduationCap} eyebrow="Education · Classroom management" title="Turn a course outline into a teachable rhythm." description="Review a synthetic learner cohort, shape a local module plan, and inspect the controls a production classroom would need. This screen does not connect to a roster, LMS, gradebook, attendance system, or live classroom." badge="Preview operations"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><ClipboardCheck className="mr-2 size-4" />Save local plan</Button><Button onClick={() => { setSaved(false); setTab("Overview"); setQuery(""); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset workspace</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Learners", value: String(LEARNERS.length), hint: "Synthetic records", icon: Users }, { label: "Modules", value: String(MODULES.length), hint: "Local outline", icon: LayoutList, tone: "violet" }, { label: "Gradebook", value: "Off", hint: "No assessment service", icon: WifiOff, tone: "amber" }, { label: "Sync", value: "Blocked", hint: "No LMS connection", icon: Settings2, tone: "slate" }]} /><ScreenPreviewBanner title="Education evidence boundary"><strong>Preview learner names, tracks, module labels, completion bars, or teacher controls are not proof of real enrollment, attendance, grades, progress, instructor identity, certification, or LMS synchronization.</strong> Production use requires scoped authorization, consent, roster provenance, assessment rules, audit logs, privacy controls, retention policy, and safe failure states.</ScreenPreviewBanner><section className="flex flex-wrap gap-2" aria-label="Classroom sections">{["Overview", "Learners", "Plan"].map((item) => <button key={item} onClick={() => setTab(item)} className={`rounded-xl border px-4 py-2 text-sm ${tab === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-400"}`}>{item}</button>)}</section>{tab === "Overview" && <section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Local teaching board</p><h2 className="mt-2 text-2xl font-black">Weekly classroom pulse</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Synthetic</Badge></div><div className="mt-6 grid gap-3 sm:grid-cols-3">{[{ label: "Ready", value: "2", note: "Local preview" }, { label: "Needs review", value: "1", note: "No grade inferred" }, { label: "Not started", value: "1", note: "No attendance inferred" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 bg-black/15 p-4"><p className="text-sm text-slate-400">{item.label}</p><p className="mt-2 text-2xl font-black text-white">{item.value}</p><p className="mt-1 text-xs text-slate-500">{item.note}</p></div>)}</div><div className="mt-6 space-y-3">{MODULES.slice(0, 4).map((item, index) => <button key={item} onClick={() => { setModule(item); setTab("Plan"); setSaved(false); }} className="flex w-full items-center gap-3 rounded-xl border border-white/10 bg-black/15 p-4 text-left transition hover:border-cyan-300/30"><div className={`flex size-9 items-center justify-center rounded-xl ${index < 2 ? "bg-cyan-300/10 text-cyan-200" : "bg-white/5 text-slate-400"}`}><span className="text-sm font-black">{index + 1}</span></div><div className="flex-1"><p className="font-semibold">{item}</p><p className="mt-1 text-xs text-slate-500">Local curriculum placeholder · no live assignment</p></div><span className="text-xs text-amber-200">{index < 2 ? "Drafted" : "Needs plan"}</span></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><BookOpen className="size-5 text-violet-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Instructor checklist</p><h2 className="mt-1 text-2xl font-black">Before publishing</h2></div></div><div className="mt-6 space-y-3">{["Define learning objective", "Attach accessible materials", "Set formative practice", "Write assessment rubric", "Confirm learner consent", "Review privacy and retention"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><Info className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-200">No publishing action</p><p className="mt-2 text-sm leading-6 text-slate-400">This preview cannot publish a course, notify learners, assign work, record completion, or issue a certificate.</p></div></CardContent></Card></section>}{tab === "Learners" && <section className="space-y-5"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex flex-col gap-3 sm:flex-row sm:items-center"><div className="relative flex-1"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search synthetic learner or track" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><Button variant="outline" className="border-white/15 text-white"><Settings2 className="mr-2 size-4" />Roster rules</Button></div></CardContent></Card><div className="grid gap-4 md:grid-cols-2">{filteredLearners.map((learner) => <Card key={learner.id} className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex items-start justify-between gap-3"><div className="flex size-11 items-center justify-center rounded-2xl bg-cyan-300/10 text-cyan-200"><Users className="size-5" /></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{learner.status}</Badge></div><h2 className="mt-4 text-lg font-black">{learner.name}</h2><p className="mt-1 text-sm text-cyan-200">{learner.track}</p><p className="mt-4 text-sm leading-6 text-slate-400">Next local checkpoint: {learner.next}</p><div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4 text-xs"><span className="text-slate-500">Progress</span><span className="text-slate-400">Not connected</span></div></CardContent></Card>)}{filteredLearners.length === 0 && <ScreenStatePanel type="empty" title="No synthetic learner matches" description="Try a different name or track. No real roster was queried." />}</div></section>}{tab === "Plan" && <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Plus className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Local plan builder</p><h2 className="mt-1 text-2xl font-black">Shape a lesson sequence</h2></div></div><div className="mt-6 space-y-4"><div><label htmlFor="course-name" className="mb-2 block text-sm text-slate-300">Course label</label><Input id="course-name" value={courseName} onChange={(event) => { setCourseName(event.target.value); setSaved(false); }} placeholder="e.g. Design systems lab" className="border-white/10 bg-black/20 text-white placeholder:text-slate-500" /></div><div><p className="mb-2 text-sm text-slate-300">Active module</p><div className="flex flex-wrap gap-2">{MODULES.map((item) => <button key={item} onClick={() => { setModule(item); setSaved(false); }} className={`rounded-xl border px-3 py-2 text-sm ${module === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-400"}`}>{item}</button>)}</div></div><Button onClick={() => setSaved(Boolean(courseName.trim()))} disabled={!courseName.trim()} className="w-full bg-cyan-300 text-slate-950 hover:bg-cyan-200">Save local course plan</Button><p className="text-center text-xs text-slate-500">No course, assignment, grade, notification, or certification is created.</p>{saved && <div className="flex items-center gap-2 text-sm text-cyan-200"><Check className="size-4" />Local plan saved; no education record changed.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Selected sequence</p><h2 className="mt-2 text-3xl font-black">{module}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{courseName || "Untitled local course"} · preview only</p><div className="mt-6 space-y-3">{["Objective and context", "Accessible content", "Practice prompt", "Feedback rubric", "Completion rule"].map((item, index) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-4"><div className="flex size-8 items-center justify-center rounded-lg bg-violet-300/10 text-violet-200"><span className="text-xs font-black">{index + 1}</span></div><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Draft</span></div>)}</div></CardContent></Card></section>}<ScreenFeatureGrid features={[{ title: "Roster provenance first", description: "A classroom needs verified identity, scoped roles, consent, and a traceable source before learner records can be used.", icon: Users, status: "Required" }, { title: "Assessments need policy", description: "Completion, grades, certificates, and progress require explicit rules, auditability, and safe correction paths.", icon: ClipboardCheck, status: "Guardrail" }, { title: "Sync only with proof", description: "The preview does not imply an LMS, notification, attendance, gradebook, or live classroom integration.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

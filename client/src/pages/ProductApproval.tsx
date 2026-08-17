@@ -1,74 +1,20 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { useState as useLocalState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, ClipboardCheck, FileCheck2, LockKeyhole, RefreshCw, Search, ShieldAlert, TestTube2, UserRoundCheck, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+const products = [{ id: "prod-001", name: "SKYCOIN4444 Core", area: "Platform", status: "Evidence needed", owner: "Unassigned" }, { id: "prod-002", name: "HopeAI experiences", area: "AI", status: "Preview only", owner: "Unassigned" }, { id: "prod-003", name: "Crypto and wallet surfaces", area: "Financial", status: "High risk review", owner: "Unassigned" }];
+const gates = ["Product scope, owner, version, and release candidate", "Functional, integration, accessibility, performance, and security test evidence", "Authentication, authorization, data, privacy, and error-state review", "Financial/blockchain/AI claim verification and external integration status", "Rollback, observability, incident response, support, and change record"];
 export default function ProductApproval() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>ProductApproval</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">ProductApproval</h1>
-            <p className="text-muted-foreground mt-2">Product approval</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [query, setQuery] = useState("");
+  const [selectedId, setSelectedId] = useState(products[0].id);
+  const [decision, setDecision] = useState("Not decided");
+  const [saved, setSaved] = useState(false);
+  const [showEvidence, setShowEvidence] = useState(false);
+  const visible = useMemo(() => products.filter((item) => `${item.name} ${item.area} ${item.status}`.toLowerCase().includes(query.toLowerCase())), [query]);
+  const selected = products.find((item) => item.id === selectedId) ?? products[0];
+  const reset = () => { setQuery(""); setSelectedId(products[0].id); setDecision("Not decided"); setSaved(false); setShowEvidence(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={ClipboardCheck} eyebrow="ProductApproval · Release-readiness preview" title="Review evidence before a product becomes a promise." description="Inspect local product candidates, decision states, evidence gates, and release notes. No approval is recorded, no reviewer identity is verified, no compliance/security certification is asserted, and no deployment or public release is triggered." badge="Governance workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Review saved locally" : "Save review locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset review</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Candidates", value: String(products.length), hint: "Local concepts", icon: ClipboardCheck, tone: "cyan" }, { label: "Approved", value: "0", hint: "No sign-off source", icon: LockKeyhole, tone: "violet" }, { label: "Evidence", value: "Unverified", hint: "No test ledger", icon: FileCheck2, tone: "amber" }, { label: "Release", value: "Blocked", hint: "No deployment action", icon: ShieldAlert, tone: "slate" }]} /><ScreenPreviewBanner title="Approval evidence boundary"><strong>This is a local release-readiness worksheet, not an approval system.</strong> Product names, areas, statuses, owners, decision labels, and gates are browser-state concepts. No reviewer, test result, audit event, certification, compliance status, deployment, customer release, or business outcome is verified or recorded.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Candidates</p><h2 className="mt-2 text-2xl font-black">Choose a review scope</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">Local</Badge></div><div className="relative mt-5"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search products…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="mt-4 space-y-3">{visible.map((item) => <button key={item.id} onClick={() => setSelectedId(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start gap-3"><TestTube2 className="mt-1 size-5 text-cyan-200" /><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{item.name}</p><Badge variant="outline" className="border-white/10 text-slate-400">{item.status}</Badge></div><p className="mt-2 text-sm text-slate-500">{item.area} · Owner {item.owner}</p></div></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Review detail</p><h2 className="mt-2 text-2xl font-black">{selected.name}</h2><p className="mt-2 text-sm text-slate-500">{selected.area} · {selected.status}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{decision}</Badge></div><div className="mt-6 grid gap-3 sm:grid-cols-3"><div className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">Owner</p><p className="mt-2 text-sm font-semibold text-amber-200">{selected.owner}</p></div><div className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">Evidence</p><p className="mt-2 text-sm font-semibold text-amber-200">Unverified</p></div><div className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">Release</p><p className="mt-2 text-sm font-semibold text-amber-200">Blocked</p></div></div><div className="mt-6 flex flex-wrap gap-2"><Button onClick={() => setDecision("Needs evidence")} variant="outline" className="border-white/10 text-slate-300">Needs evidence</Button><Button onClick={() => setDecision("Hold")} variant="outline" className="border-white/10 text-slate-300">Hold</Button><Button onClick={() => setDecision("Not decided")} variant="outline" className="border-white/10 text-slate-300">Reset decision</Button></div><div className="mt-6 rounded-2xl border border-amber-300/25 bg-amber-300/[0.06] p-5"><div className="flex items-start gap-3"><LockKeyhole className="mt-0.5 size-5 shrink-0 text-amber-200" /><div><p className="font-semibold text-amber-100">Approval is not available</p><p className="mt-2 text-sm leading-6 text-slate-400">Local decision labels do not authorize release, establish compliance, confirm security, or replace a governed approval record.</p></div></div></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Evidence checklist</p><h2 className="mt-2 text-2xl font-black">Required before sign-off</h2></div><Button onClick={() => setShowEvidence((value) => !value)} variant="outline" className="border-white/10 text-slate-300">{showEvidence ? <X className="size-4" /> : <UserRoundCheck className="size-4" />}</Button></div><div className="mt-5 space-y-3">{gates.map((gate) => <div key={gate} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><FileCheck2 className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{gate}</span><span className="text-xs text-amber-200">Required</span></div>)}</div>{showEvidence && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.05] p-4 text-sm leading-6 text-slate-400">The checklist is a planning surface. No artifact upload, test execution, reviewer signature, audit event, or deployment gate is performed here.</div>}</CardContent></Card><ScreenFeatureGrid features={[{ title: "Approval surface preserved", description: "Candidate search, selected detail, decision labels, evidence checklist, local save/reset, and review disclosure remain interactive.", icon: ClipboardCheck, status: "Local governance" }, { title: "No release theater", description: "Test results, security/compliance claims, reviewer identity, certification, deployment, and customer release are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before approval", description: "Real sign-off requires authenticated roles, artifacts, testing, audit, rollback, observability, and support ownership.", icon: LockKeyhole, status: "Blocked" }]} /></section></main></div>;
 }

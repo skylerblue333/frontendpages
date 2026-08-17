@@ -1,130 +1,19 @@
-import { Bot, TrendingUp, Zap, BarChart3, Shield, Activity } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Activity, BarChart3, Bot, CheckCircle2, ChevronRight, Database, Gauge, LockKeyhole, Play, Shield, SlidersHorizontal, Sparkles, TrendingUp, Wallet, Zap } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { trpc } from "@/lib/trpc";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
 
-const tradingFeatures = [
-  {
-    icon: Bot,
-    title: "AI Signal Engine",
-    description: "Machine learning models analyze market patterns and generate high-confidence trading signals in real-time.",
-    status: "Active",
-  },
-  {
-    icon: TrendingUp,
-    title: "Automated Strategies",
-    description: "Deploy pre-built or custom trading strategies that execute automatically based on AI recommendations.",
-    status: "Active",
-  },
-  {
-    icon: BarChart3,
-    title: "Portfolio Analytics",
-    description: "Deep portfolio analysis with risk scoring, correlation mapping, and performance attribution.",
-    status: "Active",
-  },
-  {
-    icon: Shield,
-    title: "Risk Management",
-    description: "Automated stop-loss, position sizing, and exposure limits protect your capital around the clock.",
-    status: "Active",
-  },
-  {
-    icon: Zap,
-    title: "Flash Execution",
-    description: "Sub-second trade execution with smart order routing across multiple liquidity pools.",
-    status: "Active",
-  },
-  {
-    icon: Activity,
-    title: "Market Intelligence",
-    description: "Real-time sentiment analysis, whale tracking, and on-chain metrics for informed decisions.",
-    status: "Active",
-  },
+const CAPABILITIES = [
+  { title: "Signal research", description: "Frame a question and specify source, timeframe, and uncertainty before a signal can be considered.", icon: Bot, status: "Contract required" },
+  { title: "Strategy planning", description: "Document entry, exit, sizing, and invalidation rules without submitting an order.", icon: SlidersHorizontal, status: "Available" },
+  { title: "Portfolio context", description: "Prepare allocation and correlation questions for a verified portfolio data service.", icon: BarChart3, status: "Data required" },
+  { title: "Risk controls", description: "Review exposure limits, stop conditions, approval gates, and rollback expectations.", icon: Shield, status: "Required" },
+  { title: "Execution boundary", description: "Keep wallet connection, signing, routing, and transaction status behind explicit contracts.", icon: Wallet, status: "Disabled" },
+  { title: "Market intelligence", description: "Show freshness, provenance, and source limitations before presenting market context.", icon: Database, status: "Data required" },
 ];
+const STRATEGIES = ["Trend context", "Mean-reversion research", "DCA planning", "Liquidity risk review", "Volatility scenario"];
 
-const performanceMetrics = [
-  { label: "Win Rate", value: "67.3%", color: "text-cyber-green" },
-  { label: "Avg Return", value: "+4.2%", color: "text-primary" },
-  { label: "Sharpe Ratio", value: "2.14", color: "text-cyber-purple" },
-  { label: "Max Drawdown", value: "-8.7%", color: "text-cyber-orange" },
-];
-
-export default function AITrading() {
-  // Real AI trading analysis from LLM backend
-  const { data: tokenMetrics } = trpc.token.metrics.useQuery();
-
-  return (
-    <div className="min-h-screen">
-      {/* Header */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 cyber-grid opacity-20" />
-        <div className="absolute inset-0 bg-gradient-to-b from-cyber-blue/5 to-transparent" />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/5 mb-6">
-              <Bot className="h-3 w-3 text-blue-400" />
-              <span className="text-xs font-mono text-blue-400">AI-POWERED</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              AI <span className="text-primary">Trading</span> Engine
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Advanced machine learning algorithms power automated trading strategies with institutional-grade risk management.
-            </p>
-          </div>
-
-          {/* Performance Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
-            {performanceMetrics.map((metric) => (
-              <div key={metric.label} className="stat-card text-center">
-                <div className={`text-2xl font-bold font-mono ${metric.color}`}>{metric.value}</div>
-                <div className="text-xs text-muted-foreground mt-1">{metric.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="pb-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-6">Trading Capabilities</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tradingFeatures.map((feature) => {
-              const Icon = feature.icon;
-              return (
-                <div key={feature.title} className="stat-card">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
-                      <Icon className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold">{feature.title}</h3>
-                      <span className="text-xs text-purple-400 font-mono">{feature.status}</span>
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{feature.description}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="pb-24">
-        <div className="container mx-auto px-4">
-          <div className="stat-card cyber-glow text-center py-12 px-8 max-w-2xl mx-auto">
-            <Bot className="h-12 w-12 text-primary mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-3">Start AI Trading</h2>
-            <p className="text-muted-foreground mb-6">
-              Connect your wallet and let our AI engine optimize your portfolio with automated strategies.
-            </p>
-            <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-8">
-              Launch Trading Dashboard
-            </Button>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-}
+export default function AITrading() { const [strategy, setStrategy] = useState(STRATEGIES[0]); const [asset, setAsset] = useState(""); const [prepared, setPrepared] = useState(false); const [active, setActive] = useState("overview"); const question = useMemo(() => asset.trim() ? `${strategy} for ${asset.trim()}` : strategy, [asset, strategy]); return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Bot} eyebrow="AI & Automation · Trading" title="Plan market research before money moves." description="Explore an evidence-first trading workspace with strategy planning, risk controls, data provenance, and explicit signing boundaries. No prices, signals, returns, portfolio balances, or orders are fabricated." badge="Preview trading lab"><div className="flex flex-wrap gap-2"><Button onClick={() => setPrepared(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Play className="mr-2 size-4" />Prepare review</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><LockKeyhole className="mr-2 size-4" />Trading disabled</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Capabilities", value: String(CAPABILITIES.length), hint: "Reviewable product surfaces", icon: Sparkles }, { label: "Market data", value: "Not connected", hint: "No live prices or signals", icon: Database, tone: "violet" }, { label: "Execution", value: "Disabled", hint: "No order or wallet side effect", icon: LockKeyhole, tone: "amber" }, { label: "Risk gate", value: "Required", hint: "Human review before action", icon: Shield, tone: "slate" }]} /><ScreenPreviewBanner title="Financial safety boundary">The strategy selector, asset input, risk-control cards, data-provenance state, and review preparation are available for UX review. The screen does not provide investment advice, predict returns, claim win rates, display token prices, connect a wallet, submit an order, or imply automated portfolio optimization.</ScreenPreviewBanner><section><div className="mb-5 flex flex-wrap gap-2 rounded-xl border border-white/10 bg-white/[0.04] p-2">{[["overview", "Overview"], ["strategy", "Strategy planner"], ["risk", "Risk controls"], ["data", "Data status"]].map(([value, label]) => <Button key={value} size="sm" variant={active === value ? "default" : "outline"} onClick={() => setActive(value)} className={active === value ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "border-white/15 bg-white/5 text-slate-300 hover:bg-white/10"}>{label}</Button>)}</div>{active === "overview" && <><div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{CAPABILITIES.map((capability) => { const Icon = capability.icon; return <Card key={capability.title} className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex items-start justify-between gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-200"><Icon className="size-5" /></div><Badge variant="outline" className={capability.status === "Disabled" ? "border-amber-300/20 text-amber-200" : "border-white/15 text-slate-400"}>{capability.status}</Badge></div><h3 className="mt-4 font-semibold">{capability.title}</h3><p className="mt-2 text-sm leading-6 text-slate-400">{capability.description}</p></CardContent></Card>; })}</div></>}{active === "strategy" && <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Research brief</p><h2 className="mt-1 text-2xl font-bold">Prepare a strategy question</h2><label className="mt-5 block text-sm text-slate-300" htmlFor="asset">Asset or market scope</label><Input id="asset" value={asset} onChange={(event) => { setAsset(event.target.value); setPrepared(false); }} placeholder="Example: an asset symbol or sector" className="mt-2 border-white/10 bg-black/20 text-white placeholder:text-slate-500" /><p className="mt-5 text-sm text-slate-300">Choose a research frame</p><div className="mt-2 space-y-2">{STRATEGIES.map((item) => <button key={item} onClick={() => { setStrategy(item); setPrepared(false); }} className={`w-full rounded-lg border p-3 text-left text-sm transition ${strategy === item ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100" : "border-white/10 bg-black/15 text-slate-400 hover:bg-white/[0.05]"}`}>{item}</button>)}</div><Button onClick={() => setPrepared(true)} className="mt-5 w-full bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Sparkles className="mr-2 size-4" />Prepare analysis request</Button></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex items-center gap-2"><TrendingUp className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Review preview</p><h2 className="mt-1 text-xl font-bold">{question}</h2></div></div><div className="mt-5 space-y-3">{["Source and freshness", "Assumptions and invalidation", "Risk and suitability context", "Human approval before action"].map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4 text-sm text-slate-300"><CheckCircle2 className="size-4 text-emerald-300" />{item}</div>)}</div>{prepared && <div className="mt-5 rounded-xl border border-emerald-300/20 bg-emerald-300/[0.06] p-4"><div className="font-medium text-emerald-200">Analysis request prepared for review</div><p className="mt-2 text-sm leading-6 text-slate-300">No market response, signal, return, or trade instruction is produced. Connect a verified data and analysis contract before showing results.</p></div>}</CardContent></Card></div>}{active === "risk" && <div className="grid gap-4 md:grid-cols-2">{["Position sizing", "Maximum exposure", "Stop and invalidation rules", "Liquidity and slippage", "Counterparty and custody", "Approval and rollback"].map((item) => <Card key={item} className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Gauge className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">{item}</h3><p className="mt-2 text-sm leading-6 text-slate-400">Configure and validate this control with a verified portfolio or trading contract. Preview status is informational only.</p><Badge variant="outline" className="mt-4 border-amber-300/20 text-amber-200">Not connected</Badge></CardContent></Card>)}</div>}{active === "data" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><ScreenStatePanel type="unavailable" title="Market data is unavailable" description="No price feed, order book, on-chain indexer, portfolio balance, or trading provider is connected to this screen. This is intentional: the UI will not invent financial values or pretend a trade succeeded." /><div className="mt-5 grid gap-3 md:grid-cols-3">{["Source provenance", "Timestamp and freshness", "Failure and stale-data state"].map((item) => <div key={item} className="rounded-xl border border-white/10 bg-black/15 p-4 text-sm text-slate-300"><Database className="size-4 text-violet-300" /><p className="mt-3">{item}</p><p className="mt-1 text-xs text-slate-500">Contract required</p></div>)}</div></CardContent></Card>}</section><ScreenFeatureGrid features={[{ title: "No fabricated performance", description: "Win rate, Sharpe ratio, returns, drawdown, and other metrics appear only with evidence.", icon: BarChart3, status: "Guardrail" }, { title: "Review before execution", description: "Every external action requires identity, permissions, signing, confirmation, and status verification.", icon: Shield, status: "Required" }, { title: "Data-first UI", description: "Make source, freshness, failure, and stale-data states visible before any conclusion.", icon: Database, status: "Required" }]} /></main></div>; }

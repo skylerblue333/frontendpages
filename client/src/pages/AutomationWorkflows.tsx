@@ -1,210 +1,27 @@
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useMemo, useState } from "react";
+import { AlertTriangle, ArrowRight, Bot, CheckCircle2, Clock3, Filter, GitBranch, Heart, LockKeyhole, Mail, Play, Plus, Search, Settings, Shield, Sparkles, Users, Workflow, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Zap, Plus, Play, Pause, Settings, ArrowRight, CheckCircle2,
-  DollarSign, Heart, Users, Bell, Bot, Shield, Flame, Clock,
-  Lock, Unlock, Star, MessageSquare, TrendingUp, RefreshCw,
-} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
 
-type Workflow = {
-  id: string;
-  name: string;
-  trigger: string;
-  action: string;
-  status: "active" | "paused" | "draft";
-  runs: number;
-  lastRun: string;
-  category: string;
-};
-
-const WORKFLOWS: Workflow[] = [
-  { id: "wf-1", name: "Tip → Unlock Premium Content", trigger: "User tips $5+", action: "Unlock premium post for 30 days", status: "active", runs: 1240, lastRun: "2m ago", category: "monetization" },
-  { id: "wf-2", name: "New Subscriber → Welcome DM", trigger: "User subscribes", action: "Send personalized welcome DM via Hope AI", status: "active", runs: 847, lastRun: "5m ago", category: "engagement" },
-  { id: "wf-3", name: "High Engagement → Boost Post", trigger: "Post gets 100+ likes in 1hr", action: "Auto-boost post to trending feed", status: "active", runs: 234, lastRun: "18m ago", category: "growth" },
-  { id: "wf-4", name: "Fraud Alert → Auto-Freeze", trigger: "Fraud score > 0.85", action: "Freeze account + notify admin", status: "active", runs: 12, lastRun: "2h ago", category: "security" },
-  { id: "wf-5", name: "Stake → Reward Notification", trigger: "User stakes SKY444", action: "Send reward projection + badge", status: "active", runs: 560, lastRun: "8m ago", category: "crypto" },
-  { id: "wf-6", name: "Inactivity → Re-engagement", trigger: "User inactive 7 days", action: "Send Hope AI personalized nudge", status: "paused", runs: 89, lastRun: "1d ago", category: "retention" },
-  { id: "wf-7", name: "PPV Purchase → Thank You", trigger: "User buys PPV content", action: "Send thank you + recommend similar content", status: "active", runs: 320, lastRun: "12m ago", category: "monetization" },
-  { id: "wf-8", name: "New Post → AI Moderation", trigger: "Post created", action: "Run AI moderation check + auto-approve/flag", status: "active", runs: 12400, lastRun: "30s ago", category: "security" },
-  { id: "wf-9", name: "Charity Goal Reached → Announce", trigger: "Campaign hits 100%", action: "Post announcement + notify all donors", status: "draft", runs: 0, lastRun: "Never", category: "charity" },
-  { id: "wf-10", name: "Low Balance → Top-up Prompt", trigger: "Wallet balance < $5", action: "Send low balance notification + deposit CTA", status: "paused", runs: 145, lastRun: "3h ago", category: "crypto" },
+type WorkflowItem = { id: string; name: string; category: string; trigger: string; action: string; status: "Draft" | "Review required" | "Execution unavailable" };
+const INITIAL_WORKFLOWS: WorkflowItem[] = [
+  { id: "tip", name: "Tip → Content access", category: "Monetization", trigger: "Payment event", action: "Apply access policy", status: "Review required" },
+  { id: "welcome", name: "Subscription → Welcome", category: "Engagement", trigger: "Subscription event", action: "Prepare message draft", status: "Execution unavailable" },
+  { id: "moderation", name: "New post → Moderation", category: "Safety", trigger: "Content event", action: "Queue human review", status: "Review required" },
+  { id: "security", name: "Risk signal → Escalation", category: "Security", trigger: "Verified risk event", action: "Create review task", status: "Execution unavailable" },
+  { id: "course", name: "Course completion → Certificate", category: "Education", trigger: "Completion record", action: "Prepare certificate draft", status: "Draft" },
 ];
-
 const TEMPLATES = [
-  { name: "Creator Monetization Pack", desc: "Tip unlocks, subscriber welcome, PPV thank you", count: 3, icon: DollarSign, color: "text-green-400" },
-  { name: "Growth Engine", desc: "Engagement boost, viral detection, trending push", count: 4, icon: TrendingUp, color: "text-purple-400" },
-  { name: "Security Shield", desc: "Fraud freeze, spam detection, bot blocking", count: 5, icon: Shield, color: "text-red-400" },
-  { name: "Retention Suite", desc: "Re-engagement, churn prevention, loyalty rewards", count: 4, icon: Heart, color: "text-pink-400" },
-  { name: "Crypto Automation", desc: "Stake rewards, price alerts, governance notifications", count: 6, icon: Zap, color: "text-yellow-400" },
-  { name: "AI Assistant Pack", desc: "Hope AI triggers, sentiment responses, smart replies", count: 3, icon: Bot, color: "text-cyan-400" },
+  { name: "Creator operations", desc: "Access, welcome, and content review patterns", icon: Users },
+  { name: "Safety review", desc: "Human moderation and escalation patterns", icon: Shield },
+  { name: "Education lifecycle", desc: "Course completion and certificate drafts", icon: GitBranch },
+  { name: "AI assistant", desc: "Prompt intake, review, and response preparation", icon: Bot },
+  { name: "Community care", desc: "Consent-first notifications and follow-up", icon: Heart },
+  { name: "Crypto safeguards", desc: "Risk review without automatic wallet actions", icon: LockKeyhole },
 ];
+const BUILDER_STEPS = ["Choose an event", "Add conditions", "Select a safe action", "Set owner and audit", "Test in a sandbox"];
 
-const categoryColors: Record<string, string> = {
-  monetization: "bg-green-500/20 text-green-300",
-  engagement: "bg-purple-500/20 text-purple-300",
-  growth: "bg-blue-500/20 text-blue-300",
-  security: "bg-red-500/20 text-red-300",
-  crypto: "bg-yellow-500/20 text-yellow-300",
-  retention: "bg-pink-500/20 text-pink-300",
-  charity: "bg-orange-500/20 text-orange-300",
-};
-
-const statusColors: Record<string, string> = {
-  active: "bg-green-500/20 text-green-300 border-green-500/30",
-  paused: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
-  draft: "bg-white/10 text-white/40 border-white/10",
-};
-
-export default function AutomationWorkflows() {
-  const [workflows, setWorkflows] = useState(WORKFLOWS);
-  const [activeTab, setActiveTab] = useState("workflows");
-
-  const toggleWorkflow = (id: string) => {
-    setWorkflows(prev => prev.map(w =>
-      w.id === id ? { ...w, status: w.status === "active" ? "paused" : "active" } : w
-    ));
-  };
-
-  const totalRuns = workflows.reduce((s, w) => s + w.runs, 0);
-  const activeCount = workflows.filter(w => w.status === "active").length;
-
-  return (
-    <div className="min-h-screen p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <div className="h-8 w-8 rounded-lg gradient-psychedelic flex items-center justify-center">
-              <Zap className="w-4 h-4 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold text-gradient">Automation Workflows</h1>
-          </div>
-          <p className="text-sm text-white/50">Visual rule builder — "if this happens → do that" for the entire platform</p>
-        </div>
-        <Button className="gradient-psychedelic text-white gap-2">
-          <Plus className="w-4 h-4" /> New Workflow
-        </Button>
-      </div>
-
-      {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { label: "Active Workflows", value: `${activeCount}/${workflows.length}`, icon: Zap, color: "text-green-400" },
-          { label: "Total Runs", value: totalRuns.toLocaleString(), icon: Play, color: "text-purple-400" },
-          { label: "Success Rate", value: "99.4%", icon: CheckCircle2, color: "text-cyan-400" },
-          { label: "Avg Latency", value: "120ms", icon: Clock, color: "text-yellow-400" },
-        ].map(kpi => (
-          <Card key={kpi.label} className="glass-card border-white/10">
-            <CardContent className="p-4">
-              <kpi.icon className={`w-5 h-5 ${kpi.color} mb-2`} />
-              <div className="text-2xl font-bold font-mono">{kpi.value}</div>
-              <div className="text-xs text-white/40 mt-1">{kpi.label}</div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-white/5 border border-white/10">
-          <TabsTrigger value="workflows">My Workflows</TabsTrigger>
-          <TabsTrigger value="templates">Templates</TabsTrigger>
-          <TabsTrigger value="builder">Builder</TabsTrigger>
-        </TabsList>
-
-        {/* Workflows */}
-        <TabsContent value="workflows" className="mt-4 space-y-3">
-          {workflows.map(wf => (
-            <Card key={wf.id} className="glass-card border-white/10 hover:border-white/20 transition-colors">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <Switch
-                    checked={wf.status === "active"}
-                    onCheckedChange={() => toggleWorkflow(wf.id)}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <span className="font-semibold text-sm">{wf.name}</span>
-                      <Badge className={`text-xs ${categoryColors[wf.category]}`}>{wf.category}</Badge>
-                      <Badge className={`text-xs border ${statusColors[wf.status]}`}>{wf.status}</Badge>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-white/40">
-                      <span className="bg-white/5 rounded px-1.5 py-0.5">{wf.trigger}</span>
-                      <ArrowRight className="w-3 h-3" />
-                      <span className="bg-white/5 rounded px-1.5 py-0.5">{wf.action}</span>
-                    </div>
-                  </div>
-                  <div className="text-right flex-shrink-0">
-                    <div className="text-sm font-mono font-bold">{wf.runs.toLocaleString()}</div>
-                    <div className="text-xs text-white/30">{wf.lastRun}</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </TabsContent>
-
-        {/* Templates */}
-        <TabsContent value="templates" className="mt-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {TEMPLATES.map(tpl => (
-              <Card key={tpl.name} className="glass-card border-white/10 hover:border-white/20 transition-colors cursor-pointer">
-                <CardContent className="p-4">
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center flex-shrink-0">
-                      <tpl.icon className={`w-5 h-5 ${tpl.color}`} />
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-semibold text-sm mb-1">{tpl.name}</div>
-                      <div className="text-xs text-white/40 mb-3">{tpl.desc}</div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-white/30">{tpl.count} workflows</span>
-                        <Button size="sm" className="h-6 text-xs gradient-psychedelic text-white border-0">
-                          Install Pack
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-
-        {/* Builder */}
-        <TabsContent value="builder" className="mt-4">
-          <Card className="glass-card border-white/10">
-            <CardContent className="p-8 text-center space-y-4">
-              <div className="w-16 h-16 rounded-full gradient-psychedelic flex items-center justify-center mx-auto">
-                <Zap className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-lg font-bold">Visual Workflow Builder</h3>
-              <p className="text-sm text-white/50 max-w-md mx-auto">
-                Drag-and-drop workflow builder. Connect triggers, conditions, and actions without code.
-                Supports all platform events: tips, posts, staking, fraud alerts, AI signals, and more.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <div className="flex items-center gap-2 bg-white/5 rounded-xl px-4 py-3">
-                  <Bell className="w-4 h-4 text-purple-400" />
-                  <span className="text-sm">Trigger</span>
-                  <ArrowRight className="w-4 h-4 text-white/30" />
-                  <Settings className="w-4 h-4 text-cyan-400" />
-                  <span className="text-sm">Condition</span>
-                  <ArrowRight className="w-4 h-4 text-white/30" />
-                  <Zap className="w-4 h-4 text-green-400" />
-                  <span className="text-sm">Action</span>
-                </div>
-              </div>
-              <Button className="gradient-psychedelic text-white gap-2">
-                <Plus className="w-4 h-4" /> Open Builder
-              </Button>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
-}
+export default function AutomationWorkflows() { const [workflows, setWorkflows] = useState(INITIAL_WORKFLOWS); const [active, setActive] = useState("workflows"); const [query, setQuery] = useState(""); const [selected, setSelected] = useState<WorkflowItem | null>(null); const [drafted, setDrafted] = useState(false); const visible = useMemo(() => workflows.filter((workflow) => `${workflow.name} ${workflow.category} ${workflow.trigger} ${workflow.action} ${workflow.status}`.toLowerCase().includes(query.toLowerCase())), [query, workflows]); const addWorkflow = () => { const draft = { id: `draft-${workflows.length + 1}`, name: `New workflow draft ${workflows.length + 1}`, category: "Uncategorized", trigger: "Choose event", action: "Choose action", status: "Draft" as const }; setWorkflows((current) => [draft, ...current]); setSelected(draft); setDrafted(true); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Workflow} eyebrow="Automation · Workflows" title="Automate responsibly, one verified step at a time." description="Explore workflow templates, trigger and action design, human approvals, audit requirements, and sandbox planning. This workspace does not run events, send messages, move money, mutate records, or claim run history." badge="Preview workflow console"><div className="flex flex-wrap gap-2"><Button onClick={addWorkflow} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Plus className="mr-2 size-4" />New local workflow</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Zap className="mr-2 size-4" />Execution unavailable</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Workflow templates", value: String(workflows.length), hint: "Synthetic planning records", icon: Workflow }, { label: "Live execution", value: "Unavailable", hint: "No event runner connected", icon: Play, tone: "amber" }, { label: "Builder gates", value: String(BUILDER_STEPS.length), hint: "Evidence before enablement", icon: GitBranch, tone: "violet" }, { label: "Side effects", value: "Blocked", hint: "No messages or mutations", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Automation evidence boundary">Workflow catalog, search, local draft creation, selected detail, template cards, builder steps, and unavailable run history are available for UX review. No workflow is enabled, no trigger fired, no message was sent, no account was frozen, no funds moved, and no success rate or run count is fabricated.</ScreenPreviewBanner><section><div className="mb-5 flex flex-wrap gap-2 rounded-xl border border-white/10 bg-white/[0.04] p-2">{[["workflows", "Workflow catalog"], ["templates", "Templates"], ["builder", "Builder"]].map(([value, label]) => <Button key={value} size="sm" variant={active === value ? "default" : "outline"} onClick={() => setActive(value)} className={active === value ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "border-white/15 bg-white/5 text-slate-300 hover:bg-white/10"}>{label}</Button>)}</div>{active === "workflows" && <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search workflows" aria-label="Search workflows" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visible.map((workflow) => <button key={workflow.id} onClick={() => { setSelected(workflow); setDrafted(false); }} className={`w-full rounded-xl border p-4 text-left transition ${selected?.id === workflow.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><Workflow className="size-4 text-cyan-300" /><span className="font-semibold">{workflow.name}</span><Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">{workflow.status}</Badge></div><p className="mt-2 text-xs uppercase tracking-wider text-slate-500">{workflow.category}</p><div className="mt-3 flex items-center gap-2 text-xs text-slate-400"><span className="rounded bg-white/5 px-2 py-1">{workflow.trigger}</span><ArrowRight className="size-3" /><span className="rounded bg-white/5 px-2 py-1">{workflow.action}</span></div></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No workflows match" description="Try another category, event, or action." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected workflow</p><h2 className="mt-1 text-2xl font-bold">{selected.name}</h2><p className="mt-2 text-sm text-slate-400">{selected.category}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><div className="mt-6 grid gap-3 sm:grid-cols-2"><div className="rounded-xl border border-white/10 bg-black/15 p-4"><p className="text-xs uppercase tracking-wider text-slate-500">Trigger</p><p className="mt-2 text-sm text-slate-200">{selected.trigger}</p><p className="mt-2 text-xs text-slate-500">Event schema and authentication required</p></div><div className="rounded-xl border border-white/10 bg-black/15 p-4"><p className="text-xs uppercase tracking-wider text-slate-500">Action</p><p className="mt-2 text-sm text-slate-200">{selected.action}</p><p className="mt-2 text-xs text-slate-500">Owner approval and side-effect policy required</p></div></div><div className="mt-6 space-y-3">{["Event source and schema", "Condition and idempotency", "Owner and permission", "Human approval", "Audit event", "Retry and failure state"].map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4 text-sm text-slate-300"><CheckCircle2 className="size-4 text-emerald-300" />{item}<Badge variant="outline" className="ml-auto border-white/10 text-slate-500">Required</Badge></div>)}</div>{drafted && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-cyan-200"><Sparkles className="size-4" />Local workflow draft created</div><p className="mt-2 text-sm leading-6 text-slate-300">This draft is not stored, enabled, triggered, or executed.</p></div>}</> : <ScreenStatePanel type="empty" title="Select a workflow" description="Inspect trigger, action, ownership, approval, audit, retry, and failure requirements." />}</CardContent></Card></div>}{active === "templates" && <div className="grid gap-4 md:grid-cols-2">{TEMPLATES.map((template) => { const Icon = template.icon; return <Card key={template.name} className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex items-start gap-3"><div className="flex size-11 items-center justify-center rounded-xl bg-violet-300/10"><Icon className="size-5 text-violet-200" /></div><div className="flex-1"><h3 className="font-semibold">{template.name}</h3><p className="mt-2 text-sm leading-6 text-slate-400">{template.desc}</p><Button size="sm" onClick={addWorkflow} className="mt-4 bg-white/10 text-white hover:bg-white/15"><Plus className="mr-2 size-3.5" />Use as local draft</Button></div></div></CardContent></Card>; })}</div>}{active === "builder" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><GitBranch className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Builder preview</p><h2 className="mt-1 text-2xl font-bold">Design the rule before you run it</h2></div></div><div className="mt-6 grid gap-3 md:grid-cols-5">{BUILDER_STEPS.map((step, index) => <div key={step} className="rounded-xl border border-white/10 bg-black/15 p-4"><div className="flex size-8 items-center justify-center rounded-lg bg-cyan-300/10 text-cyan-200">{index + 1}</div><p className="mt-4 text-sm font-medium text-slate-200">{step}</p><p className="mt-2 text-xs leading-5 text-slate-500">Evidence required</p></div>)}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-amber-200"><AlertTriangle className="size-4" />Sandbox only</div><p className="mt-2 text-sm leading-6 text-slate-300">Connect a verified event runner and isolated test environment before showing a run result. Never use a preview builder to mutate production data or move money.</p></div></CardContent></Card>}</section><ScreenFeatureGrid features={[{ title: "Explicit side effects", description: "Label every action, permission, approval, retry, and failure path before enablement.", icon: Shield, status: "Required" }, { title: "Human in the loop", description: "High-impact moderation, finance, identity, and access actions require review and audit.", icon: Users, status: "Required" }, { title: "No fake automation", description: "A workflow draft never fires, sends, freezes, pays, publishes, or claims a run history.", icon: AlertTriangle, status: "Guardrail" }]} /></main></div>; }

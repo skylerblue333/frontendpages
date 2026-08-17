@@ -1,74 +1,12 @@
 import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { AlertCircle, Check, CheckCircle2, ClipboardList, Eye, FileText, Fingerprint, Info, LockKeyhole, Mail, MessageSquare, ShieldAlert, ShieldCheck, UserRound, WifiOff, XCircle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-export default function CCPA() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+const RIGHTS = [{ title: "Know or access", description: "Ask what categories of personal information are collected, used, disclosed, or retained, subject to applicable scope and exceptions.", icon: Eye }, { title: "Delete", description: "Request deletion where applicable; retention, security, legal, and operational exceptions may affect the result.", icon: ShieldAlert }, { title: "Correct", description: "Request correction of inaccurate personal information when the workflow and applicable law support it.", icon: CheckCircle2 }, { title: "Opt out", description: "Explore sale, sharing, targeted advertising, or profiling controls where those categories apply to the service.", icon: LockKeyhole }];
+const REQUESTS = ["Access / know", "Delete", "Correct", "Opt out / limit use"];
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>CCPA</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">CCPA</h1>
-            <p className="text-muted-foreground mt-2">CCPA compliance</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+export default function CCPA() { const [request, setRequest] = useState(REQUESTS[0]); const [email, setEmail] = useState(""); const [resident, setResident] = useState("Not specified"); const [prepared, setPrepared] = useState(false); const [submitted, setSubmitted] = useState(false); const canPrepare = email.includes("@"); return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={ShieldCheck} eyebrow="Privacy · Rights Request Information" title="Make privacy choices legible before collecting identity data." description="Review common California privacy-rights concepts and prepare a local request draft. This page is informational and does not determine legal coverage, verify identity, submit a request, or promise a response or deadline." badge="Preview privacy-rights workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => { setPrepared(canPrepare); setSubmitted(false); }} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><ClipboardList className="mr-2 size-4" />Prepare local request</Button><Button onClick={() => { setEmail(""); setPrepared(false); setSubmitted(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><FileText className="mr-2 size-4" />Reset draft</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Rights explained", value: String(RIGHTS.length), hint: "Informational overview", icon: ShieldCheck }, { label: "Request type", value: request.split(" /")[0], hint: "Local selection", icon: ClipboardList, tone: "violet" }, { label: "Identity", value: "Unverified", hint: "No verification service", icon: Fingerprint, tone: "amber" }, { label: "Submission", value: "Unavailable", hint: "No privacy API connected", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Legal and privacy boundary">I’m an AI, not a lawyer—this interface is an informational product preview, not formal legal advice. CCPA/CPRA coverage, rights, exemptions, response periods, verification requirements, and business obligations depend on current law, jurisdiction, facts, and the organization’s role. Have qualified counsel review any consequential policy or request workflow.</ScreenPreviewBanner><section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">{RIGHTS.map(({ title, description, icon: Icon }) => <Card key={title} className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Icon className="size-5 text-cyan-300" /><h2 className="mt-3 font-semibold">{title}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{description}</p><Badge variant="outline" className="mt-4 border-white/10 text-slate-500">Review scope</Badge></CardContent></Card>)}</section><section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><UserRound className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Request draft</p><h2 className="mt-1 text-2xl font-black">Choose a privacy action</h2></div></div><div className="mt-6 space-y-5"><div><p className="mb-2 text-sm font-medium text-slate-300">Request type</p><div className="grid gap-2 sm:grid-cols-2">{REQUESTS.map((item) => <button key={item} onClick={() => { setRequest(item); setPrepared(false); setSubmitted(false); }} className={`rounded-xl border p-3 text-left text-sm transition ${request === item ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-200" : "border-white/10 bg-black/15 text-slate-400 hover:text-white"}`}>{item}</button>)}</div></div><div><p className="mb-2 text-sm font-medium text-slate-300">Potential jurisdiction context</p><div className="flex flex-wrap gap-2">{["California resident", "Not specified", "Organization / agent"].map((item) => <button key={item} onClick={() => setResident(item)} className={`rounded-lg border px-3 py-2 text-xs ${resident === item ? "border-violet-300/40 bg-violet-300/10 text-violet-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><p className="mt-2 text-xs leading-5 text-slate-500">A self-selected context does not establish legal coverage or eligibility.</p></div><div><label className="mb-2 block text-sm font-medium text-slate-300" htmlFor="privacy-email">Contact email for local draft</label><Input id="privacy-email" value={email} onChange={(event) => { setEmail(event.target.value); setPrepared(false); setSubmitted(false); }} placeholder="you@example.com" className="border-white/10 bg-black/20 text-white placeholder:text-slate-500" /><p className="mt-2 text-xs text-slate-500">Local input only. No email, request, or identity record is sent.</p></div></div></CardContent></Card><div className="space-y-6"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Fingerprint className="size-5 text-violet-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Verification boundary</p><h2 className="mt-1 text-xl font-bold">Identity must be handled carefully</h2></div></div><div className="mt-5 space-y-3">{["Collect only what is necessary", "Explain verification purpose", "Protect sensitive identifiers", "Offer an authorized-agent path", "Record receipt and status safely"].map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-3"><ShieldCheck className="size-4 text-cyan-300" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-amber-300/20 bg-amber-300/[0.05]"><CardContent className="p-6"><div className="flex items-center gap-3"><Info className="size-5 text-amber-300" /><div><h2 className="font-semibold text-amber-200">No deadline promise</h2><p className="mt-2 text-sm leading-6 text-slate-300">The interface does not calculate a legal response period or determine whether an exception applies. Those facts require current policy and qualified review.</p></div></div></CardContent></Card></div></section>{prepared && <Card className="border-cyan-300/20 bg-cyan-300/[0.06]"><CardContent className="flex flex-wrap items-center gap-3 p-5"><Check className="size-5 text-cyan-300" /><div><p className="font-semibold">Local privacy request draft prepared</p><p className="mt-1 text-sm text-slate-400">{request} · {resident} · contact captured locally only. No request was submitted.</p></div><Button onClick={() => setSubmitted(true)} variant="outline" className="ml-auto border-white/15 text-white">Preview submission state</Button></CardContent></Card>}{submitted && <Card className="border-amber-300/20 bg-amber-300/[0.06]"><CardContent className="flex items-center gap-3 p-5"><WifiOff className="size-5 text-amber-300" /><div><p className="font-semibold text-amber-200">Submission unavailable</p><p className="mt-1 text-sm text-slate-400">No identity check, privacy request, email, status record, or legal deadline was created.</p></div></CardContent></Card>}<ScreenFeatureGrid features={[{ title: "Rights need scope", description: "Explain a right without implying that every person, record, business, or jurisdiction qualifies automatically.", icon: ShieldCheck, status: "Pattern" }, { title: "Verification protects people", description: "Identity checks should minimize collection and support authorized-agent and correction paths.", icon: Fingerprint, status: "Required" }, { title: "No fake compliance", description: "A request draft is not a verified submission, legal determination, response, deletion, correction, or opt-out.", icon: ShieldAlert, status: "Guardrail" }]} /></main></div>; }

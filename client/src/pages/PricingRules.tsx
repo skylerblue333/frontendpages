@@ -1,74 +1,29 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, CircleDollarSign, FileCheck2, FlaskConical, LockKeyhole, Plus, RefreshCw, Search, Settings2, ShieldAlert, SlidersHorizontal, Tag, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
+type Rule = { id: string; name: string; condition: string; action: string; scope: string; status: string; effect: string };
+const initialRules: Rule[] = [
+  { id: "rule-001", name: "New-user welcome concept", condition: "Eligible cohort", action: "Apply welcome offer", scope: "Account concept", status: "Draft", effect: "Not calculated" },
+  { id: "rule-002", name: "Annual-plan positioning", condition: "Annual cadence", action: "Show annual comparison", scope: "Plan concept", status: "Review required", effect: "Not calculated" },
+  { id: "rule-003", name: "Regional tax handling", condition: "Customer region", action: "Resolve tax policy", scope: "Billing concept", status: "Blocked", effect: "No tax source" },
+];
+const priorities = ["Low", "Normal", "High", "Critical"];
 export default function PricingRules() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>PricingRules</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">PricingRules</h1>
-            <p className="text-muted-foreground mt-2">Dynamic pricing</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [rules, setRules] = useState(initialRules);
+  const [query, setQuery] = useState("");
+  const [selectedId, setSelectedId] = useState(initialRules[0].id);
+  const [condition, setCondition] = useState("Eligibility concept");
+  const [action, setAction] = useState("Show comparison");
+  const [priority, setPriority] = useState(priorities[1]);
+  const [saved, setSaved] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const visible = useMemo(() => rules.filter((item) => `${item.name} ${item.condition} ${item.action} ${item.scope}`.toLowerCase().includes(query.toLowerCase())), [rules, query]);
+  const selected = rules.find((item) => item.id === selectedId) ?? rules[0];
+  const addRule = () => { const id = `rule-${Date.now()}`; const next: Rule = { id, name: `Untitled ${priority.toLowerCase()} rule`, condition, action, scope: "Local draft", status: "Draft", effect: "Not calculated" }; setRules((items) => [next, ...items]); setSelectedId(id); setSaved(false); };
+  const reset = () => { setRules(initialRules); setQuery(""); setSelectedId(initialRules[0].id); setCondition("Eligibility concept"); setAction("Show comparison"); setPriority(priorities[1]); setSaved(false); setShowSettings(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={CircleDollarSign} eyebrow="PricingRules · Dynamic-pricing preview" title="Define pricing logic before it is allowed to affect a bill." description="Create and inspect local rule intents with conditions, actions, priority, scope, and dry-run posture. No price, discount, tax, eligibility, customer, payment, invoice, or entitlement is calculated or changed." badge="Rules studio"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Rules saved locally" : "Save rules locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset rules</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Rule intents", value: String(rules.length), hint: "Local drafts", icon: Tag, tone: "cyan" }, { label: "Live effects", value: "0", hint: "Dry-run only", icon: FlaskConical, tone: "violet" }, { label: "Prices", value: "Off", hint: "No calculation", icon: CircleDollarSign, tone: "amber" }, { label: "Billing writes", value: "Blocked", hint: "No payment path", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Dynamic-pricing evidence boundary"><strong>No pricing rule is active.</strong> Rule rows and builder controls are local design intent. No current price, customer segment, eligibility decision, discount, tax, invoice, payment, entitlement, or revenue result is produced. A safe engine needs authenticated policy ownership, versioning, conflict rules, dry runs, approval, idempotency, audit, and rollback.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1.18fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Rule builder</p><h2 className="mt-2 text-2xl font-black">Compose local intent</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">Dry run</Badge></div><div className="mt-5 grid gap-4"><label className="text-sm text-slate-400">Condition<select value={condition} onChange={(event) => setCondition(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white outline-none"><option>Eligibility concept</option><option>Plan cadence concept</option><option>Region concept</option><option>Usage threshold concept</option></select></label><label className="text-sm text-slate-400">Action<select value={action} onChange={(event) => setAction(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white outline-none"><option>Show comparison</option><option>Apply offer concept</option><option>Resolve policy concept</option><option>Require review</option></select></label><label className="text-sm text-slate-400">Priority<select value={priority} onChange={(event) => setPriority(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white outline-none">{priorities.map((item) => <option key={item}>{item}</option>)}</select></label></div><Button onClick={addRule} className="mt-5 w-full bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Plus className="mr-2 size-4" />Add local rule intent</Button>{showSettings && <div className="mt-5 rounded-xl border border-violet-300/20 bg-violet-300/[0.06] p-4"><p className="text-sm font-semibold text-violet-100">Settings are design intent only</p><p className="mt-2 text-sm leading-6 text-slate-400">Conflict resolution, effective dates, currency, tax, and rollout cannot be configured against a live catalog here.</p></div>}<Button onClick={() => setShowSettings((value) => !value)} variant="outline" className="mt-3 w-full border-white/10 text-slate-300"><Settings2 className="mr-2 size-4" />{showSettings ? "Hide settings boundary" : "Review settings boundary"}</Button></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Rules list</p><h2 className="mt-2 text-2xl font-black">Inspect local definitions</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">{visible.length} listed</Badge></div><div className="relative mt-5"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search rules…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="mt-4 space-y-3">{visible.map((item) => <button key={item.id} onClick={() => setSelectedId(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start gap-3"><SlidersHorizontal className="mt-1 size-5 text-cyan-200" /><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{item.name}</p><Badge variant="outline" className="border-white/10 text-slate-400">{item.status}</Badge></div><p className="mt-2 text-sm text-slate-500">{item.condition} → {item.action}</p><div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-400"><span>{item.scope}</span><span>·</span><span>{item.effect}</span></div></div></div></button>)}</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[0.82fr_1.18fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Selected rule</p><h2 className="mt-2 text-2xl font-black">{selected.name}</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Condition", value: selected.condition }, { label: "Action", value: selected.action }, { label: "Scope", value: selected.scope }, { label: "Priority", value: priority }, { label: "Effect", value: selected.effect }, { label: "Billing", value: "No write" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Production gates</p><h2 className="mt-2 text-2xl font-black">What the engine must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Authenticated policy owner and scoped permissions", "Versioned rules, conflict resolution, effective dates", "Currency, tax, market, region, and eligibility inputs", "Dry-run comparison against known fixtures", "Idempotency, audit, rollback, and invoice reconciliation", "Safe behavior when source or billing services fail"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><FileCheck2 className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Rule surface preserved", description: "Search, conditions, actions, priority, settings boundary, local add/save/reset, list, and selected detail remain interactive.", icon: SlidersHorizontal, status: "Local studio" }, { title: "No fake calculations", description: "Prices, discounts, taxes, eligibility, customer segments, invoices, payments, and revenue effects are not calculated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Dry run is the default", description: "No rule can affect a bill, entitlement, catalog, customer, or payment because no execution service is connected.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
 }

@@ -1,75 +1,17 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { CalendarClock, Check, CheckCircle2, ChevronRight, ClipboardCheck, ExternalLink, FileText, Globe2, History, LockKeyhole, Megaphone, MoreHorizontal, Play, Send, ShieldCheck, Sparkles, Timer, Users, WifiOff } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-export default function BlogPublisher() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+type Stage = "Draft" | "Review" | "Scheduled" | "Published";
+type Story = { id: string; title: string; excerpt: string; stage: Stage; owner: string; updated: string; readiness: string[] };
+const INITIAL_STORIES: Story[] = [
+  { id: "story-1", title: "Build with evidence, not assumptions", excerpt: "A product note about trustworthy claims and visible limitations.", stage: "Review", owner: "Synthetic author", updated: "2 hours ago", readiness: ["Body present", "Excerpt present", "Sources required"] },
+  { id: "story-2", title: "The anatomy of a useful preview", excerpt: "How a preview can be honest without becoming an empty fallback.", stage: "Draft", owner: "Synthetic author", updated: "Yesterday", readiness: ["Body present", "Approval required", "Image rights required"] },
+  { id: "story-3", title: "Release notes: evidence boundaries", excerpt: "A sample release note with clear integration status.", stage: "Scheduled", owner: "Synthetic author", updated: "Aug 22, 2026", readiness: ["Approval recorded", "Canonical URL pending", "Distribution unavailable"] },
+];
+const STAGES: Stage[] = ["Draft", "Review", "Scheduled", "Published"];
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>BlogPublisher</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">BlogPublisher</h1>
-            <p className="text-muted-foreground mt-2">Publish and schedule posts</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+export default function BlogPublisher() { const [stories, setStories] = useState(INITIAL_STORIES); const [selectedId, setSelectedId] = useState("story-1"); const [selectedChannel, setSelectedChannel] = useState("Web article"); const [prepared, setPrepared] = useState(false); const selected = stories.find((story) => story.id === selectedId) ?? stories[0]; const counts = useMemo(() => Object.fromEntries(STAGES.map((stage) => [stage, stories.filter((story) => story.stage === stage).length])), [stories]); const moveForward = () => { if (!selected) return; const index = STAGES.indexOf(selected.stage); if (index < 2) { const next = STAGES[index + 1]; setStories((current) => current.map((story) => story.id === selected.id ? { ...story, stage: next } : story)); setPrepared(false); } else setPrepared(true); }; const addStory = () => { const draft: Story = { id: `story-${stories.length + 1}`, title: `New editorial preview ${stories.length + 1}`, excerpt: "Local pipeline item. No public article exists.", stage: "Draft", owner: "Local preview", updated: "Now", readiness: ["Content required", "Approval required", "Canonical URL unavailable"] }; setStories((current) => [draft, ...current]); setSelectedId(draft.id); setPrepared(false); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Megaphone} eyebrow="Creator Tools · Editorial Operations" title="Move a story through review without pretending it is published." description="Stage editorial work, inspect readiness, prepare a schedule preview, and package channels. This page does not publish, schedule, index, notify, or distribute content." badge="Preview publishing pipeline"><div className="flex flex-wrap gap-2"><Button onClick={addStory} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><FileText className="mr-2 size-4" />New story</Button><Button onClick={moveForward} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><ChevronRight className="mr-2 size-4" />Advance preview</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Editorial queue", value: String(stories.length), hint: "Synthetic and local items", icon: FileText }, { label: "Ready to publish", value: "0", hint: "Approval and URL incomplete", icon: ClipboardCheck, tone: "amber" }, { label: "Scheduler", value: "Unavailable", hint: "No job runner connected", icon: WifiOff, tone: "violet" }, { label: "Distribution", value: "Not sent", hint: "No channels connected", icon: Send, tone: "slate" }]} /><ScreenPreviewBanner title="Publishing evidence boundary">The pipeline below is an interaction preview. A production publisher must verify author identity, approval, moderation, links, rights, canonical URL, schedule timezone, idempotent job execution, delivery receipts, rollback behavior, and analytics provenance before making a public claim.</ScreenPreviewBanner><section className="overflow-x-auto pb-2"><div className="grid min-w-[980px] grid-cols-4 gap-4">{STAGES.map((stage, index) => <div key={stage} className="rounded-2xl border border-white/10 bg-white/[0.035] p-3"><div className="flex items-center justify-between border-b border-white/10 px-2 pb-3"><div className="flex items-center gap-2"><span className="flex size-7 items-center justify-center rounded-full bg-cyan-300/10 text-xs font-bold text-cyan-200">{index + 1}</span><span className="font-semibold">{stage}</span></div><span className="text-xs text-slate-500">{counts[stage] as number}</span></div><div className="mt-3 space-y-3">{stories.filter((story) => story.stage === stage).map((story) => <button key={story.id} onClick={() => setSelectedId(story.id)} className={`w-full rounded-xl border p-4 text-left transition ${selectedId === story.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-start justify-between gap-2"><span className="text-sm font-semibold leading-5">{story.title}</span><MoreHorizontal className="size-4 shrink-0 text-slate-500" /></div><p className="mt-2 line-clamp-2 text-xs leading-5 text-slate-400">{story.excerpt}</p><div className="mt-3 flex items-center justify-between text-[11px] text-slate-500"><span>{story.owner}</span><span>{story.updated}</span></div></button>)}{stories.filter((story) => story.stage === stage).length === 0 && <div className="rounded-xl border border-dashed border-white/10 p-4 text-center text-xs text-slate-600">No items</div>}</div></div>)}</div></section><section className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected && <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected story · {selected.stage}</p><h2 className="mt-2 text-2xl font-bold">{selected.title}</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">{selected.excerpt}</p></div><Badge variant="outline" className="border-cyan-300/25 text-cyan-200">{selected.owner}</Badge></div><div className="mt-6 grid gap-3 sm:grid-cols-3">{selected.readiness.map((item) => <div key={item} className="rounded-lg border border-white/10 bg-black/15 p-4"><CheckCircle2 className="size-4 text-amber-200" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Evidence check</p></div>)}</div><div className="mt-6 flex flex-wrap gap-2"><Button onClick={moveForward} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200">{selected.stage === "Scheduled" ? <><Play className="mr-2 size-4" />Prepare publish preview</> : <><ChevronRight className="mr-2 size-4" />Move to next stage</>}</Button><Button variant="outline" className="border-white/15 text-white hover:bg-white/10"><History className="mr-2 size-4" />Revision history</Button></div>{prepared && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-amber-200"><WifiOff className="size-4" />Publish preview prepared, not executed</div><p className="mt-2 text-sm leading-6 text-slate-300">No public page, job, canonical URL, notification, feed entry, or delivery receipt was created.</p></div>}</>}</CardContent></Card><div className="space-y-6"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Schedule preview</p><h3 className="mt-1 text-xl font-bold">Channel packaging</h3></div><CalendarClock className="size-5 text-cyan-300" /></div><div className="mt-5 space-y-3"><button onClick={() => setSelectedChannel("Web article")} className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left ${selectedChannel === "Web article" ? "border-cyan-300/35 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15"}`}><Globe2 className="size-4 text-cyan-300" /><span className="flex-1 text-sm">Web article</span><span className="text-xs text-amber-200">URL required</span></button><button onClick={() => setSelectedChannel("Newsletter")} className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left ${selectedChannel === "Newsletter" ? "border-cyan-300/35 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15"}`}><Megaphone className="size-4 text-cyan-300" /><span className="flex-1 text-sm">Newsletter</span><span className="text-xs text-slate-500">Not connected</span></button><button onClick={() => setSelectedChannel("Social excerpt")} className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left ${selectedChannel === "Social excerpt" ? "border-cyan-300/35 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15"}`}><Sparkles className="size-4 text-cyan-300" /><span className="flex-1 text-sm">Social excerpt</span><span className="text-xs text-slate-500">Not connected</span></button></div><div className="mt-5 rounded-lg border border-white/10 bg-black/15 p-4"><div className="flex items-center gap-2 text-sm font-medium text-slate-200"><Timer className="size-4 text-amber-200" />{selectedChannel}</div><p className="mt-2 text-sm leading-6 text-slate-400">Timezone, approval, canonical URL, delivery receipt, and rollback policy are required before this channel can be scheduled.</p></div></CardContent></Card><Card className="border-amber-300/20 bg-amber-300/[0.06]"><CardContent className="p-5"><div className="flex items-center gap-2 font-medium text-amber-200"><LockKeyhole className="size-4" />No publish authority</div><p className="mt-2 text-sm leading-6 text-slate-300">This screen does not publish or distribute content. Any connected publishing action must be authenticated, confirmed, logged, and reversible.</p></CardContent></Card></div></section><ScreenFeatureGrid features={[{ title: "Pipeline, not a blank state", description: "Draft, review, scheduled, and published are distinct workflow stages with inspectable readiness.", icon: ClipboardCheck, status: "Ready" }, { title: "Package per channel", description: "Web, newsletter, and social outputs have different URL, consent, formatting, and delivery requirements.", icon: Globe2, status: "Ready" }, { title: "Approval before distribution", description: "Identity, moderation, revision history, rights, schedule timezone, and delivery evidence are required.", icon: ShieldCheck, status: "Guardrail" }]} /></main></div>; }

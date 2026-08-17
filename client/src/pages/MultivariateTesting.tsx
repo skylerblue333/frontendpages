@@ -1,74 +1,20 @@
 import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { BarChart3, Check, ChevronRight, FlaskConical, Gauge, LockKeyhole, RefreshCw, ShieldCheck, SlidersHorizontal, Sparkles, Target, Users, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const VARIANTS = [{ name: "Control", detail: "Existing experience baseline", accent: "Baseline", allocation: 50 }, { name: "Variant A", detail: "Primary headline and CTA concept", accent: "Copy", allocation: 25 }, { name: "Variant B", detail: "Visual hierarchy and proof concept", accent: "Layout", allocation: 25 }];
+const METRICS = ["Activation", "Task completion", "Retention", "Quality signal", "Support contacts"];
 
 export default function MultivariateTesting() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>MultivariateTesting</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">MultivariateTesting</h1>
-            <p className="text-muted-foreground mt-2">Multivariate testing</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [metric, setMetric] = useState(METRICS[0]);
+  const [allocations, setAllocations] = useState(VARIANTS.map((item) => item.allocation));
+  const [note, setNote] = useState("");
+  const [saved, setSaved] = useState(false);
+  const total = allocations.reduce((sum, value) => sum + value, 0);
+  const updateAllocation = (index: number, value: number) => { const next = allocations.map((item, itemIndex) => itemIndex === index ? value : item); setAllocations(next); setSaved(false); };
+  const reset = () => { setMetric(METRICS[0]); setAllocations(VARIANTS.map((item) => item.allocation)); setNote(""); setSaved(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={FlaskConical} eyebrow="MultivariateTesting · Experiment planning" title="Design the experiment before claiming a winner." description="Plan synthetic variants, choose one primary metric, inspect local allocation math, and review experiment guardrails. No live traffic, user cohort, conversion, confidence interval, causal effect, statistical significance, or production rollout is asserted." badge="Experiment preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Experiment saved locally" : "Save experiment plan"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset experiment</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Variants", value: String(VARIANTS.length), hint: "Synthetic concepts", icon: FlaskConical }, { label: "Primary metric", value: metric, hint: "Local selection", icon: Target, tone: "violet" }, { label: "Allocation", value: `${total}%`, hint: "Worksheet total", icon: SlidersHorizontal, tone: total === 100 ? "cyan" : "amber" }, { label: "Traffic", value: "Off", hint: "No cohort source", icon: Users, tone: "slate" }]} /><ScreenPreviewBanner title="MultivariateTesting evidence boundary"><strong>Variant names, metric labels, allocation math, and experiment guardrails are planning fixtures—not live users, traffic, conversion, statistical significance, causal impact, confidence, or a rollout recommendation.</strong> Production experimentation requires event definitions, randomization, exposure logging, privacy, sample-size planning, power analysis, sequential-testing policy, guardrails, and controlled deployment.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Experiment design</p><h2 className="mt-2 text-3xl font-black">Choose a primary metric</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">Local plan</Badge></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{METRICS.map((item) => <button key={item} onClick={() => { setMetric(item); setSaved(false); }} className={`rounded-xl border p-4 text-left ${metric === item ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/10"}`}><div className="flex items-center justify-between"><span className="font-semibold">{item}</span>{metric === item && <Check className="size-4 text-cyan-200" />}</div><p className="mt-2 text-xs text-slate-500">Definition required before measurement</p></button>)}</div><div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5"><div className="flex items-center justify-between"><div><p className="font-black">Allocation worksheet</p><p className="text-xs text-slate-500">Local percentages only</p></div><span className={`text-sm font-bold ${total === 100 ? "text-cyan-200" : "text-amber-200"}`}>{total}% total</span></div><div className="mt-5 space-y-5">{VARIANTS.map((variant, index) => <div key={variant.name}><div className="flex items-center justify-between text-sm"><span className="font-semibold">{variant.name}</span><span className="text-cyan-200">{allocations[index]}%</span></div><input type="range" min="0" max="100" value={allocations[index]} onChange={(event) => updateAllocation(index, Number(event.target.value))} className="mt-3 w-full accent-cyan-300" /></div>)}</div><p className="mt-4 text-xs leading-5 text-slate-500">A 100% total is a planning check, not proof of randomization, exposure, or valid traffic allocation.</p></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Variant board</p><h2 className="mt-2 text-3xl font-black">{metric}</h2><p className="mt-3 text-slate-400">Primary metric concept for a local experiment brief.</p><div className="mt-5 space-y-3">{VARIANTS.map((variant, index) => <div key={variant.name} className="rounded-2xl border border-white/10 bg-black/10 p-4"><div className="flex items-center justify-between"><div><p className="font-black">{variant.name}</p><p className="mt-1 text-xs text-cyan-200">{variant.accent} concept</p></div><Badge variant="outline" className="border-white/10 text-slate-400">{allocations[index]}%</Badge></div><p className="mt-3 text-sm text-slate-400">{variant.detail}</p></div>)}</div><textarea value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} placeholder="Write an experiment hypothesis or guardrail…" className="mt-5 min-h-28 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-slate-500" /><div className="mt-4 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />No users are assigned, exposed, measured, or identified by this preview.</div><Button disabled className="mt-5 w-full bg-white/10 text-white/40"><ChevronRight className="mr-2 size-4" />Launch unavailable</Button></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Experiment readiness</p><h2 className="mt-2 text-2xl font-black">Required before interpreting results</h2><div className="mt-5 space-y-3">{["Hypothesis, primary metric, and guardrail definitions", "Randomization, exposure, cohort, and exclusion rules", "Sample-size, power, stopping, and multiple-test policy", "Privacy, consent, event provenance, and retention", "Controlled rollout, rollback, and decision ownership"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><BarChart3 className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake winner</h2><p className="mt-3 text-sm leading-6 text-slate-400">This planner does not collect traffic, calculate significance, estimate causal impact, recommend a rollout, or change production.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A variant is not a result", description: "Synthetic concepts preserve experiment design UX without traffic, outcomes, or winner claims.", icon: FlaskConical, status: "Guardrail" }, { title: "Metrics need definitions", description: "Events, cohorts, exclusions, sample size, and guardrails must be explicit before analysis.", icon: Target, status: "Required" }, { title: "No fake rollout", description: "The preview does not assign users, measure performance, or deploy a variant.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

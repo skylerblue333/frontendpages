@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -51,12 +51,13 @@ const STATE_META: Record<EmotionalState, { emoji: string; color: string }> = {
 };
 
 export default function HopeAI() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [selectedTone, setSelectedTone] = useState<ToneMode | "auto">("auto");
   const [currentState, setCurrentState] = useState<EmotionalState>("neutral");
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [showTonePanel, setShowTonePanel] = useState(false);
   const [typingStartMs, setTypingStartMs] = useState<number | null>(null);
   const [charCount, setCharCount] = useState(0);
@@ -88,7 +89,7 @@ export default function HopeAI() {
   // Load chat history from DB on mount
   const { data: savedHistory } = trpc.hopeAI.getChatHistory.useQuery(
     { limit: 50, sessionId },
-    { staleTime: Infinity }
+    { staleTime: Infinity, enabled: Boolean(user) }
   );
 
   const saveMessage = trpc.hopeAI.saveChatMessage.useMutation();
@@ -123,11 +124,15 @@ export default function HopeAI() {
       };
       setMessages(prev => [...prev, msg]);
       setCurrentState(data.emotionalState as EmotionalState);
+      setErrorMessage("");
       setIsLoading(false);
       // Persist assistant message to DB
       saveMessage.mutate({ role: "assistant", content: data.message, tone: data.tone, emotionalState: data.emotionalState, sessionId });
     },
-    onError() { setIsLoading(false); },
+    onError() {
+      setIsLoading(false);
+      setErrorMessage("HopeAI is unavailable right now. Check the AI integration and try again.");
+    },
   });
 
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
@@ -156,6 +161,7 @@ export default function HopeAI() {
   };
 
   const handleSend = useCallback(() => {
+    if (!user) { setErrorMessage("Sign in to use HopeAI chat and save conversation history."); return; }
     if (!input.trim() || isLoading) return;
     const userMsg: Message = { id: crypto.randomUUID(), role: "user", content: input.trim(), ts: Date.now() };
     const history = messages.filter(m => m.role !== "assistant" || m.id !== "welcome").slice(-10).map(m => ({ role: m.role, content: m.content }));
@@ -192,7 +198,7 @@ export default function HopeAI() {
         lastEmotionalState: currentState,
       },
     });
-  }, [input, isLoading, messages, selectedTone, typingStartMs, charCount, backspaceCount, sessionStartMs, currentState]);
+  }, [input, isLoading, messages, selectedTone, typingStartMs, charCount, backspaceCount, sessionStartMs, currentState, user]);
 
   const sm = STATE_META[currentState];
   const activeTones = (Object.keys(TONE_META) as ToneMode[]);
@@ -338,14 +344,14 @@ export default function HopeAI() {
             ))}
           </div>
           <div>
-            <div className="flex items-center gap-1 text-[10px] text-white/20 mb-2"><BarChart2 className="w-3 h-3" />22 Analyzers Active</div>
+            <div className="flex items-center gap-1 text-[10px] text-white/30 mb-2"><BarChart2 className="w-3 h-3" />Signal summary</div>
             <div className="grid grid-cols-2 gap-1">
               {["Shadow Profile","Manipulation","Dark Patterns","Social Eng.","Sentiment","Identity Drift","Echo Chamber","Trauma","Addiction Loop","Gaslighting","Power Dynamic","Grief Stage","Loneliness","Rage Forecast","Imposter Syn.","Burnout","Decision Fatigue","Cognitive Load","Vulnerability","Deception","Emotional Labor","Autonomy Score"].map((n, i) => (
                 <div key={i} className="text-[9px] text-white/20 px-1.5 py-0.5 rounded bg-white/2 border border-white/3">{n}</div>
               ))}
             </div>
           </div>
-          <p className="text-[9px] text-white/15 leading-relaxed pt-2 border-t border-white/5">All analysis is local. Never stored or shared.</p>
+          <p className="text-[9px] text-white/30 leading-relaxed pt-2 border-t border-white/5">Signal summaries depend on the configured AI service. Do not treat them as a diagnosis.</p>
         </div>
       )}
 
@@ -393,6 +399,7 @@ export default function HopeAI() {
               )}
             </div>
           ))}
+          {errorMessage && <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200" role="alert">{errorMessage} <button type="button" className="ml-2 underline underline-offset-2" onClick={() => setErrorMessage("")}>Dismiss</button></div>}
           {isLoading && (
             <div className="flex gap-3">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-fuchsia-500 to-cyan-500 flex-shrink-0 flex items-center justify-center text-xs font-bold">H</div>
@@ -432,7 +439,7 @@ export default function HopeAI() {
             </Button>
           </div>
           <div className="flex items-center justify-between mt-2 px-1">
-            <p className="text-xs text-white/20">Enter to send · Shift+Enter for new line · Hope reads your signals</p>
+            <p className="text-xs text-white/30">Enter to send · Shift+Enter for a new line · AI responses depend on configured services</p>
 
           </div>
         </div>

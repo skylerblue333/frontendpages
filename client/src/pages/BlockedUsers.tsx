@@ -1,89 +1,16 @@
-import { Ban } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Ban, CheckCircle2, Clock3, EyeOff, FileCheck2, Flag, LockKeyhole, MessageSquareOff, MoreHorizontal, Plus, Search, Shield, UserRound, UserRoundCheck, WifiOff } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
 
-export default function BlockedUsers() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={Ban} title="Blocked Users" subtitle="Fully functional blocked users page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Blocked Users</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Ban className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Ban className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <Ban className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
-}
+type BlockedUser = { id: string; handle: string; reason: string; scope: string; blockedAt: string; source: string; status: "Synthetic record" | "Local preview" };
+const INITIAL_USERS: BlockedUser[] = [
+  { id: "u-1042", handle: "@aurora_sample", reason: "Repeated unsolicited messages", scope: "Messages only", blockedAt: "2026-08-14", source: "Synthetic moderation fixture", status: "Synthetic record" },
+  { id: "u-0981", handle: "@orbit_preview", reason: "Community safety review", scope: "Community and comments", blockedAt: "2026-08-11", source: "Synthetic moderation fixture", status: "Synthetic record" },
+  { id: "u-0734", handle: "@nimbus_demo", reason: "User-selected privacy block", scope: "All direct interactions", blockedAt: "2026-08-06", source: "Synthetic moderation fixture", status: "Synthetic record" },
+];
+
+export default function BlockedUsers() { const [users, setUsers] = useState(INITIAL_USERS); const [query, setQuery] = useState(""); const [selected, setSelected] = useState<BlockedUser | null>(null); const [unblocked, setUnblocked] = useState<string[]>([]); const [added, setAdded] = useState(false); const visible = useMemo(() => users.filter((user) => !unblocked.includes(user.id) && `${user.handle} ${user.reason} ${user.scope} ${user.source}`.toLowerCase().includes(query.toLowerCase())), [users, unblocked, query]); const addLocal = () => { const draft = { id: `local-${users.length + 1}`, handle: `@local_preview_${users.length + 1}`, reason: "Local preview block", scope: "Choose scope", blockedAt: "Not synced", source: "Created in this browser only", status: "Local preview" as const }; setUsers((current) => [draft, ...current]); setSelected(draft); setAdded(true); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Ban} eyebrow="Safety · Privacy Controls" title="Keep boundaries clear, reversible, and evidence-based." description="Review synthetic blocked-user records, scope controls, local block and unblock previews, and moderation requirements. No live account lookup, enforcement, notification, or synchronization is claimed." badge="Preview moderation workspace"><div className="flex flex-wrap gap-2"><Button onClick={addLocal} className="bg-fuchsia-300 text-slate-950 hover:bg-fuchsia-200"><Plus className="mr-2 size-4" />Add local block</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><LockKeyhole className="mr-2 size-4" />Privacy policy</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Visible records", value: String(visible.length), hint: "Synthetic and local previews", icon: UserRound }, { label: "Live directory", value: "Unavailable", hint: "No account lookup connected", icon: WifiOff, tone: "amber" }, { label: "Enforcement", value: "Not synced", hint: "No server-side block applied", icon: Shield, tone: "violet" }, { label: "Notifications", value: "Not sent", hint: "No user contact triggered", icon: MessageSquareOff, tone: "slate" }]} /><ScreenPreviewBanner title="Blocked-user evidence boundary">Records shown here are synthetic fixtures or local browser previews. A real moderation system must authenticate the actor, authorize scope, validate the target, persist an audit event, protect privacy, apply idempotent enforcement, and expose a reversible state. No live user profile, ban, message restriction, notification, or sync is fabricated.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search blocked-user previews" aria-label="Search blocked-user previews" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visible.map((user) => <button key={user.id} onClick={() => setSelected(user)} className={`w-full rounded-xl border p-4 text-left transition ${selected?.id === user.id ? "border-fuchsia-300/40 bg-fuchsia-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><UserRound className="size-4 text-fuchsia-300" /><span className="font-semibold">{user.handle}</span><Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">{user.status}</Badge></div><p className="mt-2 text-sm text-slate-300">{user.reason}</p><p className="mt-1 text-xs uppercase tracking-wider text-slate-500">{user.scope} · {user.blockedAt}</p></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No blocked-user previews match" description="Try another handle, reason, or scope." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-300">Selected record</p><h2 className="mt-1 text-2xl font-bold">{selected.handle}</h2><p className="mt-2 text-sm text-slate-400">{selected.reason}</p></div><Button variant="ghost" size="icon" className="text-slate-400"><MoreHorizontal className="size-5" /></Button></div><div className="mt-6 grid gap-3 sm:grid-cols-2"><div className="rounded-lg border border-white/10 bg-black/15 p-4"><p className="text-xs uppercase tracking-wider text-slate-500">Restriction scope</p><p className="mt-2 text-sm text-slate-200">{selected.scope}</p></div><div className="rounded-lg border border-white/10 bg-black/15 p-4"><p className="text-xs uppercase tracking-wider text-slate-500">Record source</p><p className="mt-2 text-sm text-slate-200">{selected.source}</p></div></div><div className="mt-6 flex flex-wrap gap-2"><Button onClick={() => { setUnblocked((current) => [...current, selected.id]); setSelected(null); }} variant="outline" className="border-emerald-300/20 text-emerald-200 hover:bg-emerald-300/10"><UserRoundCheck className="mr-2 size-4" />Preview unblock</Button><Button variant="outline" className="border-white/15 text-white hover:bg-white/10"><Flag className="mr-2 size-4" />Review policy</Button></div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-amber-200"><WifiOff className="size-4" />Server enforcement unavailable</div><p className="mt-2 text-sm leading-6 text-slate-300">This preview does not change an account, hide a message, send a notification, or write a moderation audit record.</p></div>{added && <div className="mt-5 rounded-xl border border-fuchsia-300/20 bg-fuchsia-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-fuchsia-200"><FileCheck2 className="size-4" />Local preview created</div><p className="mt-2 text-sm leading-6 text-slate-300">The record exists only in this browser session and is not synchronized to a user directory.</p></div>}</> : <ScreenStatePanel type="empty" title="Select a moderation record" description="Inspect scope, source, privacy, reversibility, and enforcement requirements." />}</CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Scoped restrictions", description: "A block should state whether it affects messages, comments, follows, profile visibility, or all direct interactions.", icon: EyeOff, status: "Required" }, { title: "Audit before action", description: "Authenticated actor, authorized scope, target validation, reason, idempotency, and reversible audit event are required.", icon: FileCheck2, status: "Required" }, { title: "Respect privacy", description: "Do not expose private profile details, moderation notes, or notification status without an authorized need.", icon: Shield, status: "Guardrail" }]} /></main></div>; }

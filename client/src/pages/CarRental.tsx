@@ -1,75 +1,12 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Car, Check, CircleDollarSign, Gauge, KeyRound, MapPin, RefreshCw, Search, ShieldAlert, Sparkles, UserRound, UsersRound, WifiOff } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-export default function CarRental() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>CarRental</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">CarRental</h1>
-            <p className="text-muted-foreground mt-2">Car rental</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+type Vehicle = { id: string; name: string; className: string; seats: number; daily: number; note: string };
+const VEHICLES: Vehicle[] = [{ id: "vehicle-preview-01", name: "Compact preview", className: "Compact", seats: 5, daily: 0, note: "Synthetic vehicle; inventory unconnected." }, { id: "vehicle-preview-02", name: "Electric preview", className: "Electric", seats: 5, daily: 0, note: "Synthetic vehicle; charging and range unverified." }, { id: "vehicle-preview-03", name: "Utility preview", className: "Utility", seats: 7, daily: 0, note: "Synthetic vehicle; availability and insurance unverified." }];
+export default function CarRental() { const [query, setQuery] = useState(""); const [pickup, setPickup] = useState("Pickup location not entered"); const [start, setStart] = useState("2026-09-01"); const [end, setEnd] = useState("2026-09-03"); const [selectedId, setSelectedId] = useState(VEHICLES[0].id); const [prepared, setPrepared] = useState(false); const visible = useMemo(() => VEHICLES.filter((vehicle) => `${vehicle.name} ${vehicle.className}`.toLowerCase().includes(query.toLowerCase())), [query]); const selected = visible.find((vehicle) => vehicle.id === selectedId) ?? visible[0]; const days = 3; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Car} eyebrow="Travel · Rental Planning" title="Compare the trip before a vehicle is reserved." description="Explore synthetic vehicle options, pickup and date inputs, selected-vehicle context, and an illustrative local quote. This page does not check inventory, validate a driver, charge payment, create a reservation, or promise pickup." badge="Preview rental workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setPrepared(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><KeyRound className="mr-2 size-4" />Prepare local rental plan</Button><Button onClick={() => { setPrepared(false); setQuery(""); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Vehicles", value: String(visible.length), hint: "Synthetic options", icon: Car }, { label: "Trip length", value: `${days} days`, hint: "Illustrative arithmetic", icon: Gauge, tone: "violet" }, { label: "Availability", value: "Unavailable", hint: "No fleet provider", icon: WifiOff, tone: "amber" }, { label: "Reservation", value: "Not created", hint: "No payment flow", icon: KeyRound, tone: "slate" }]} /><ScreenPreviewBanner title="Rental evidence boundary">A vehicle card is not a live offer. Real rental booking needs fleet inventory, location and hours, driver eligibility, license and age rules, insurance, taxes and fees, cancellation terms, payment authorization, reservation idempotency, and confirmed pickup state.</ScreenPreviewBanner><section className="grid gap-4 md:grid-cols-3"><div className="md:col-span-2"><div className="grid gap-4 sm:grid-cols-3"><div><label className="mb-2 block text-sm text-slate-300" htmlFor="pickup">Pickup location</label><Input id="pickup" value={pickup} onChange={(event) => { setPickup(event.target.value); setPrepared(false); }} className="border-white/10 bg-black/20 text-white" /></div><div><label className="mb-2 block text-sm text-slate-300" htmlFor="start">Start</label><Input id="start" value={start} onChange={(event) => { setStart(event.target.value); setPrepared(false); }} type="date" className="border-white/10 bg-black/20 text-white" /></div><div><label className="mb-2 block text-sm text-slate-300" htmlFor="end">Return</label><Input id="end" value={end} onChange={(event) => { setEnd(event.target.value); setPrepared(false); }} type="date" className="border-white/10 bg-black/20 text-white" /></div></div></div><div><label className="mb-2 block text-sm text-slate-300" htmlFor="vehicle-search">Search vehicles</label><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input id="vehicle-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Compact, electric..." className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div></div></section><section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Synthetic fleet preview</p><div className="mt-5 space-y-3">{visible.map((vehicle) => <button key={vehicle.id} onClick={() => { setSelectedId(vehicle.id); setPrepared(false); }} className={`w-full rounded-xl border p-4 text-left transition ${selected?.id === vehicle.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-3"><div className="flex size-11 items-center justify-center rounded-xl bg-cyan-300/10"><Car className="size-5 text-cyan-300" /></div><div className="flex-1"><p className="font-semibold">{vehicle.name}</p><p className="mt-1 text-xs text-slate-500">{vehicle.className} · {vehicle.seats} seats · Synthetic</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Unverified</Badge></div><p className="mt-3 text-xs text-slate-500">{vehicle.note}</p></button>)}{visible.length === 0 && <p className="py-8 text-center text-sm text-slate-500">No synthetic vehicles match this search.</p>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected vehicle</p><h2 className="mt-2 text-2xl font-black">{selected.name}</h2><p className="mt-2 text-sm text-slate-400">{selected.className} · {selected.seats} seats</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Preview</Badge></div><div className="mt-6 grid gap-3 sm:grid-cols-3"><Detail label="Daily rate" value="Unquoted" icon={CircleDollarSign} /><Detail label="Pickup" value="Unverified" icon={MapPin} /><Detail label="Driver" value="Unverified" icon={UserRound} /></div><div className="mt-6 rounded-xl border border-white/10 bg-black/15 p-4"><div className="flex items-center gap-2 text-sm font-medium"><Sparkles className="size-4 text-cyan-300" />Illustrative local quote</div><p className="mt-3 text-3xl font-black text-cyan-100">$0</p><p className="mt-1 text-xs text-slate-500">No price was supplied; this is not a quote or free rental.</p></div><div className="mt-5 space-y-2">{["Vehicle available for dates", "Driver eligibility verified", "Insurance and deposit confirmed", "Taxes and fees calculated", "Payment authorized", "Pickup confirmed"].map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-3"><ShieldAlert className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Unavailable</span></div>)}</div>{prepared && <div className="mt-6 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><p className="font-semibold text-cyan-200">Local rental plan prepared</p><p className="mt-1 text-sm text-slate-400">{selected.name} · {days} illustrative days · no reservation, payment, or fleet hold was created.</p></div>}</> : <p className="text-sm text-slate-500">Select a synthetic vehicle.</p>}</CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><MapPin className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Location matters</h3><p className="mt-2 text-sm leading-6 text-slate-400">A typed pickup location is not a branch, service area, opening-hours, or fleet-availability result.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><UsersRound className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Driver checks are real gates</h3><p className="mt-2 text-sm leading-6 text-slate-400">Age, license, insurance, deposit, and identity rules need a secure verified flow.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><WifiOff className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">No fake reservation</h3><p className="mt-2 text-sm leading-6 text-slate-400">A local plan is not a hold, booking, charge, confirmation, or pickup promise.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Compare before committing", description: "Make dates, location, vehicle class, and unresolved gates visible before payment or reservation.", icon: Car, status: "Pattern" }, { title: "Quote needs a source", description: "Price, taxes, fees, deposit, and insurance need timestamped provider facts.", icon: CircleDollarSign, status: "Required" }, { title: "No fake booking", description: "A synthetic vehicle is not inventory, a reservation, a charge, or a pickup confirmation.", icon: WifiOff, status: "Guardrail" }]} /></main></div>; }
+function Detail({ label, value, icon: Icon }: { label: string; value: string; icon: typeof Car }) { return <div className="rounded-lg border border-white/10 bg-black/15 p-4"><Icon className="size-4 text-slate-400" /><p className="mt-3 text-xs uppercase tracking-wider text-slate-500">{label}</p><p className="mt-1 text-sm text-slate-200">{value}</p></div>; }

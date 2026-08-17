@@ -1,75 +1,27 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { BarChart3, Check, CircleDollarSign, ClipboardList, Database, LockKeyhole, PieChart, RefreshCw, Search, ShieldAlert, SlidersHorizontal, Tags, WalletCards, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatePanel, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const CENTERS = [
+  { id: "product", name: "Product engineering", owner: "Synthetic owner", allocation: 35, driver: "Team effort" },
+  { id: "platform", name: "Platform operations", owner: "Synthetic owner", allocation: 25, driver: "Usage units" },
+  { id: "community", name: "Community programs", owner: "Synthetic owner", allocation: 20, driver: "Program share" },
+  { id: "learning", name: "Learning experiences", owner: "Synthetic owner", allocation: 20, driver: "Seat plan" },
+];
+const PERIODS = ["Current draft", "Next planning cycle", "Scenario B"];
 
 export default function CostAllocation() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [period, setPeriod] = useState(PERIODS[0]);
+  const [query, setQuery] = useState("");
+  const [centers, setCenters] = useState(CENTERS);
+  const [saved, setSaved] = useState(false);
+  const filtered = useMemo(() => centers.filter((center) => `${center.name} ${center.driver}`.toLowerCase().includes(query.toLowerCase())), [centers, query]);
+  const total = centers.reduce((sum, center) => sum + center.allocation, 0);
+  const adjust = (id: string, value: number) => { setCenters((current) => current.map((center) => center.id === id ? { ...center, allocation: value } : center)); setSaved(false); };
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>CostAllocation</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">CostAllocation</h1>
-            <p className="text-muted-foreground mt-2">Budget tracking and allocation</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={PieChart} eyebrow="Finance operations · Cost allocation" title="Model responsibility before assigning a bill." description="Explore synthetic cost centers, local percentage scenarios, and allocation drivers. This screen does not query cloud billing, calculate savings, charge a team, move money, or create a financial commitment." badge="Planning preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><ClipboardList className="mr-2 size-4" />Save local scenario</Button><Button onClick={() => { setCenters(CENTERS); setSaved(false); setPeriod(PERIODS[0]); setQuery(""); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset scenario</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Cost centers", value: String(CENTERS.length), hint: "Synthetic structure", icon: Tags }, { label: "Allocation", value: `${total}%`, hint: "Local scenario total", icon: BarChart3, tone: total === 100 ? "violet" : "amber" }, { label: "Billing source", value: "Off", hint: "No cloud data", icon: WifiOff, tone: "amber" }, { label: "Commitment", value: "None", hint: "No charge created", icon: WalletCards, tone: "slate" }]} /><ScreenPreviewBanner title="Financial evidence boundary"><strong>Percentages, cost-center names, drivers, and scenario totals are planning inputs, not actual spend, cloud usage, savings, chargebacks, invoices, budgets, or accounting records.</strong> Production allocation requires an authoritative billing source, currency and period rules, allocation methodology, reconciliation, permissions, approvals, audit history, and a clear correction path.</ScreenPreviewBanner><section className="flex flex-wrap gap-2" aria-label="Planning periods">{PERIODS.map((item) => <button key={item} onClick={() => { setPeriod(item); setSaved(false); }} className={`rounded-xl border px-4 py-2 text-sm ${period === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-400"}`}>{item}</button>)}</section><section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Local allocation model</p><h2 className="mt-2 text-2xl font-black">{period}</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Synthetic inputs</Badge></div><div className="relative mt-6"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search cost center or driver" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-5 space-y-4">{filtered.map((center) => <div key={center.id} className="rounded-xl border border-white/10 bg-black/15 p-4"><div className="flex items-start justify-between gap-3"><div><h3 className="font-semibold">{center.name}</h3><p className="mt-1 text-xs text-slate-500">{center.owner} · driver: {center.driver}</p></div><span className="text-lg font-black text-cyan-200">{center.allocation}%</span></div><input aria-label={`${center.name} allocation`} type="range" min="0" max="100" value={center.allocation} onChange={(event) => adjust(center.id, Number(event.target.value))} className="mt-4 w-full accent-cyan-300" /><div className="mt-2 flex justify-between text-xs text-slate-500"><span>0%</span><span>Local planning control</span><span>100%</span></div></div>)}{filtered.length === 0 && <ScreenStatePanel type="empty" title="No cost center matches" description="Try another name or driver. No billing source was queried." />}</div>{saved && <div className="mt-5 flex items-center gap-2 text-sm text-cyan-200"><Check className="size-4" />Local scenario saved; no billing or financial record changed.</div>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><SlidersHorizontal className="size-5 text-violet-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Review before allocation</p><h2 className="mt-1 text-2xl font-black">{total === 100 ? "Balanced scenario" : "Needs reconciliation"}</h2></div></div><div className="mt-6 rounded-2xl border border-white/10 bg-black/15 p-5 text-center"><p className="text-sm text-slate-400">Scenario total</p><p className={`mt-2 text-5xl font-black ${total === 100 ? "text-emerald-200" : "text-amber-200"}`}>{total}%</p><p className="mt-2 text-xs text-slate-500">Local percentages only · no currency assigned</p></div><div className="mt-6 space-y-3">{["Billing source and period", "Currency and tax treatment", "Allocation driver provenance", "Owner review and approval", "Reconciliation and correction", "Audit history and retention"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldAlert className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div><div className="mt-5 rounded-xl border border-red-300/20 bg-red-300/[0.05] p-4"><div className="flex items-center gap-2 font-semibold text-red-200"><LockKeyhole className="size-4" />No financial action</div><p className="mt-2 text-sm leading-6 text-slate-400">The local scenario cannot create a chargeback, invoice, budget commitment, savings claim, or payment.</p></div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Drivers need provenance", description: "Usage, seats, effort, and program share are only valid when their source and period are authoritative.", icon: Database, status: "Required" }, { title: "Scenario is not spend", description: "The UI preserves planning utility without inventing currencies, invoices, cloud bills, or savings measurements.", icon: CircleDollarSign, status: "Guardrail" }, { title: "Approval before commitment", description: "Any real allocation needs permissions, review, reconciliation, and an auditable financial event.", icon: ShieldAlert, status: "Unavailable" }]} /></main></div>;
 }

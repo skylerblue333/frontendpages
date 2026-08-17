@@ -1,89 +1,11 @@
-import { BarChart3 } from "lucide-react";
+import { useMemo, useState } from "react";
+import { BarChart3, Check, Database, FileSearch, Info, LineChart, RefreshCw, ShieldAlert, Sparkles, Table2, TrendingUp, WifiOff } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-export default function ChartAnalysis() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={BarChart3} title="Chart Analysis" subtitle="Fully functional chart analysis page with live data and real-time updates" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-card border border-border/50">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Chart Analysis</h2>
-            
-            {/* Feature Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <BarChart3 className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 1</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data and live updates</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <BarChart3 className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 2</h3>
-                  <p className="text-sm text-muted-foreground">Advanced analytics and insights</p>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/50 border border-border/30 hover:border-primary/50 transition-all cursor-pointer">
-                <div className="space-y-2">
-                  <BarChart3 className="w-6 h-6 text-primary" />
-                  <h3 className="font-semibold">Feature 3</h3>
-                  <p className="text-sm text-muted-foreground">Seamless integration and automation</p>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-4 flex-wrap pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                Get Started
-              </Button>
-              <Button variant="outline">
-                Learn More
-              </Button>
-              <Button variant="ghost">
-                Documentation
-              </Button>
-            </div>
-          </div>
-        </Card>
-        
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Users</p>
-              <p className="text-2xl font-bold">802K+</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Transactions</p>
-              <p className="text-2xl font-bold">2.4M</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Success Rate</p>
-              <p className="text-2xl font-bold">99.9%</p>
-            </div>
-          </Card>
-          <Card className="p-4 bg-card border border-border/50">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Response Time</p>
-              <p className="text-2xl font-bold">45ms</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
-}
+type Point = { period: string; value: number; note: string };
+const POINTS: Point[] = [{ period: "P1", value: 18, note: "Synthetic observation; no source or unit is attached." }, { period: "P2", value: 27, note: "Synthetic observation; change is descriptive only." }, { period: "P3", value: 22, note: "Synthetic observation; no causal conclusion is supported." }, { period: "P4", value: 34, note: "Synthetic observation; not a current or forecast value." }];
+const METRICS = ["Synthetic activity", "Conversion placeholder", "Response placeholder"];
+export default function ChartAnalysis() { const [metric, setMetric] = useState(METRICS[0]); const [window, setWindow] = useState("4 periods"); const [selected, setSelected] = useState(POINTS[1]); const [saved, setSaved] = useState(false); const max = Math.max(...POINTS.map((point) => point.value)); const mean = useMemo(() => POINTS.reduce((sum, point) => sum + point.value, 0) / POINTS.length, []); return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={BarChart3} eyebrow="Insights · Chart Interpretation" title="Read the chart without inventing the story." description="Explore a synthetic time series, inspect point-level notes, and review data-quality requirements. This page does not connect to analytics, predict outcomes, establish causation, or claim live metrics." badge="Preview analysis lab"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><FileSearch className="mr-2 size-4" />Save local analysis note</Button><Button onClick={() => { setMetric(METRICS[0]); setWindow("4 periods"); setSelected(POINTS[1]); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset analysis</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Metric", value: "Synthetic", hint: metric, icon: BarChart3 }, { label: "Window", value: window, hint: "Local selection", icon: Table2, tone: "violet" }, { label: "Mean", value: mean.toFixed(1), hint: "Preview arithmetic", icon: TrendingUp, tone: "amber" }, { label: "Source", value: "Unavailable", hint: "No analytics feed", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Chart evidence boundary">A plotted line is not proof of a dataset, trend, forecast, correlation, causation, KPI, conversion rate, response time, or business outcome. A trustworthy chart needs source, unit, population, sampling, time zone, missing-data handling, definitions, confidence limits, and a reproducible calculation.</ScreenPreviewBanner><section className="flex flex-wrap gap-2">{METRICS.map((item) => <button key={item} onClick={() => { setMetric(item); setSaved(false); }} className={`rounded-xl border px-4 py-2 text-sm ${metric === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-400"}`}>{item}</button>)}{["4 periods", "12 periods"].map((item) => <button key={item} onClick={() => { setWindow(item); setSaved(false); }} className={`rounded-xl border px-4 py-2 text-sm ${window === item ? "border-violet-300/40 bg-violet-300/[0.1] text-violet-200" : "border-white/10 text-slate-400"}`}>{item}</button>)}</section><section className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Synthetic chart</p><h2 className="mt-1 text-xl font-black">{metric}</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Illustrative</Badge></div><div className="mt-8 flex h-64 items-end gap-4 rounded-xl border border-white/10 bg-black/15 p-5">{POINTS.map((point) => <button key={point.period} onClick={() => setSelected(point)} className="group flex h-full flex-1 flex-col justify-end gap-2 text-center"><span className={`text-xs ${selected.period === point.period ? "text-cyan-200" : "text-slate-500"}`}>{point.value}</span><div className={`mx-auto w-full max-w-16 rounded-t-lg transition-all ${selected.period === point.period ? "bg-cyan-300" : "bg-cyan-300/30 group-hover:bg-cyan-300/60"}`} style={{ height: `${(point.value / max) * 78}%` }} /><span className="text-xs text-slate-500">{point.period}</span></button>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-3"><div className="rounded-lg border border-white/10 p-3"><p className="text-xs text-slate-500">Range</p><p className="mt-1 text-sm text-slate-200">16 units</p></div><div className="rounded-lg border border-white/10 p-3"><p className="text-xs text-slate-500">Arithmetic</p><p className="mt-1 text-sm text-slate-200">Mean = Σx / n</p></div><div className="rounded-lg border border-white/10 p-3"><p className="text-xs text-slate-500">Inference</p><p className="mt-1 text-sm text-amber-200">Not supported</p></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected point</p><h2 className="mt-2 text-3xl font-black">{selected.period}</h2><p className="mt-2 text-4xl font-black text-cyan-200">{selected.value}</p><p className="mt-1 text-sm text-slate-500">Synthetic units</p><p className="mt-6 text-sm leading-6 text-slate-300">{selected.note}</p><div className="mt-6 space-y-2">{["Dataset provenance", "Unit and denominator", "Population and sampling", "Missing-data policy", "Confidence or uncertainty", "Causal interpretation"].map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-3"><Info className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Unavailable</span></div>)}{saved && <div className="mt-4 flex items-center gap-2 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4 text-sm text-cyan-200"><Check className="size-4" />Local analysis note saved; no analytics record changed.</div>}</div></CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Database className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Source before styling</h3><p className="mt-2 text-sm leading-6 text-slate-400">A polished chart still needs a named dataset, unit, time range, and reproducible query.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><ShieldAlert className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Trend is not cause</h3><p className="mt-2 text-sm leading-6 text-slate-400">Movement between points cannot establish why something changed.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><WifiOff className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">No fake analytics</h3><p className="mt-2 text-sm leading-6 text-slate-400">Synthetic values are not live KPIs, forecasts, conversions, or performance claims.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Interpretation is scoped", description: "Keep description, comparison, forecast, and causal claims visibly separate.", icon: LineChart, status: "Pattern" }, { title: "Charts need provenance", description: "Source, unit, population, time zone, and missing-data rules belong beside the visual.", icon: Database, status: "Required" }, { title: "No fake trend", description: "An illustrative series is not a live metric, prediction, or outcome claim.", icon: WifiOff, status: "Guardrail" }]} /></main></div>; }

@@ -1,75 +1,18 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { BadgeDollarSign, CalendarDays, CheckCircle2, CreditCard, FileText, LockKeyhole, Receipt, Search, Settings2, Shield, WalletCards } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
 
-export default function BillingHistory() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+type Invoice = { id: string; label: string; period: string; status: "Preview record" | "Payment unavailable" | "Tax review"; description: string };
+const INVOICES: Invoice[] = [
+  { id: "invoice-1", label: "Workspace invoice template", period: "Monthly", status: "Preview record", description: "A sample invoice layout requiring a verified billing account, line items, tax rules, and payment provider response." },
+  { id: "invoice-2", label: "API usage invoice template", period: "Usage-based", status: "Payment unavailable", description: "A usage billing design requiring authoritative request metering, pricing version, credits, and idempotent settlement." },
+  { id: "invoice-3", label: "Creator marketplace invoice", period: "Per transaction", status: "Tax review", description: "A marketplace billing design requiring seller identity, payout policy, fees, refunds, and jurisdictional tax review." },
+];
+const REQUIREMENTS = ["Billing account and customer identity", "Pricing and tax version", "Line-item provenance", "Payment-provider status", "Refund and dispute path", "Invoice retention policy"];
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>BillingHistory</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">BillingHistory</h1>
-            <p className="text-muted-foreground mt-2">Payment history and transactions</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+export default function BillingHistory() { const [query, setQuery] = useState(""); const [invoices, setInvoices] = useState(INVOICES); const [selected, setSelected] = useState<Invoice | null>(null); const [activeView, setActiveView] = useState("invoices"); const [drafted, setDrafted] = useState(false); const visible = useMemo(() => invoices.filter((invoice) => `${invoice.label} ${invoice.period} ${invoice.status} ${invoice.description}`.toLowerCase().includes(query.toLowerCase())), [invoices, query]); const addInvoice = () => { const draft = { id: `draft-${invoices.length + 1}`, label: `Billing draft ${invoices.length + 1}`, period: "Define period", status: "Preview record" as const, description: "Local invoice placeholder; no amount, customer, payment, tax, or transaction was created." }; setInvoices((current) => [draft, ...current]); setSelected(draft); setDrafted(true); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Receipt} eyebrow="Finance · Billing" title="Make every billing record traceable before it is collectible." description="Explore invoice templates, subscription states, payment-method boundaries, tax and refund requirements, and local draft records. This page does not claim payments, balances, invoices, subscriptions, charges, refunds, or financial advice." badge="Preview billing workspace"><div className="flex flex-wrap gap-2"><Button onClick={addInvoice} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><FileText className="mr-2 size-4" />Add local invoice draft</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Settings2 className="mr-2 size-4" />Billing requirements</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Invoice templates", value: String(invoices.length), hint: "Synthetic billing records", icon: Receipt }, { label: "Live payment data", value: "Unavailable", hint: "No billing provider connected", icon: CreditCard, tone: "amber" }, { label: "Account balance", value: "Hidden", hint: "No ledger or wallet source", icon: WalletCards, tone: "violet" }, { label: "Tax status", value: "Review required", hint: "Jurisdiction and identity needed", icon: Shield, tone: "slate" }]} /><ScreenPreviewBanner title="Billing evidence boundary">Invoice templates, search, local draft creation, selected detail, subscription/payment-method states, tax requirements, and unavailable live billing data are available for UX review. No amount, currency balance, charge, invoice delivery, payment, refund, subscription, customer, or tax result is fabricated.</ScreenPreviewBanner><section><div className="mb-5 flex flex-wrap gap-2 rounded-xl border border-white/10 bg-white/[0.04] p-2">{[["invoices", "Invoices"], ["subscriptions", "Subscriptions"], ["methods", "Payment methods"]].map(([value, label]) => <Button key={value} size="sm" variant={activeView === value ? "default" : "outline"} onClick={() => setActiveView(value)} className={activeView === value ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "border-white/15 bg-white/5 text-slate-300 hover:bg-white/10"}>{label}</Button>)}</div>{activeView === "invoices" && <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search invoice templates" aria-label="Search invoice templates" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visible.map((invoice) => <button key={invoice.id} onClick={() => { setSelected(invoice); setDrafted(false); }} className={`w-full rounded-xl border p-4 text-left transition ${selected?.id === invoice.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><Receipt className="size-4 text-cyan-300" /><span className="font-semibold">{invoice.label}</span><Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">{invoice.status}</Badge></div><p className="mt-2 text-xs uppercase tracking-wider text-slate-500">{invoice.period}</p><p className="mt-2 text-sm leading-6 text-slate-400">{invoice.description}</p></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No invoice templates match" description="Try another period, status, or keyword." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected billing record</p><h2 className="mt-1 text-2xl font-bold">{selected.label}</h2><p className="mt-2 text-sm text-slate-400">{selected.period}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><p className="mt-5 text-sm leading-6 text-slate-300">{selected.description}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{REQUIREMENTS.map((item) => <div key={item} className="rounded-lg border border-white/10 bg-black/15 p-4"><CheckCircle2 className="size-4 text-emerald-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Evidence required</p></div>)}</div>{drafted && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-cyan-200"><Receipt className="size-4" />Local invoice draft prepared</div><p className="mt-2 text-sm leading-6 text-slate-300">No customer, amount, tax, payment, invoice number, or ledger entry was created.</p></div>}</> : <ScreenStatePanel type="empty" title="Select a billing record" description="Inspect identity, pricing, tax, payment, refund, dispute, and retention requirements." />}</CardContent></Card></div>}{activeView === "subscriptions" && <StateView icon={CalendarDays} title="Subscriptions are unavailable" description="Subscription status, billing period, renewal, cancellation, proration, and entitlement data require an authenticated billing contract." items={["Plan and price version", "Renewal and cancellation state", "Proration and refund policy", "Entitlement source", "Customer notice"]} />}{activeView === "methods" && <StateView icon={CreditCard} title="Payment methods are unavailable" description="No card, wallet, bank, processor, or payment token is stored or displayed in this preview." items={["Server-side tokenization", "Provider verification", "Step-up authentication", "Revocation and expiry", "No raw card data"]} />}</section><ScreenFeatureGrid features={[{ title: "Ledger before display", description: "Every billing amount must come from an authoritative, versioned ledger and provider response.", icon: BadgeDollarSign, status: "Required" }, { title: "Privacy by default", description: "Never expose payment tokens, raw card data, customer identifiers, or tax details in the client.", icon: LockKeyhole, status: "Required" }, { title: "No fake charges", description: "A local invoice draft is not a payment, invoice, subscription, refund, balance, or financial recommendation.", icon: Shield, status: "Guardrail" }]} /></main></div>; }
+function StateView({ icon: Icon, title, description, items }: { icon: typeof CalendarDays; title: string; description: string; items: string[] }) { return <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Icon className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Unavailable state</p><h2 className="mt-1 text-2xl font-bold">{title}</h2></div></div><p className="mt-4 max-w-3xl text-sm leading-6 text-slate-300">{description}</p><div className="mt-6 grid gap-3 md:grid-cols-3">{items.map((item) => <div key={item} className="rounded-lg border border-white/10 bg-black/15 p-4 text-sm text-slate-300"><CheckCircle2 className="size-4 text-emerald-300" /><p className="mt-3">{item}</p><p className="mt-1 text-xs text-slate-500">Required before live state</p></div>)}</div></CardContent></Card>; }

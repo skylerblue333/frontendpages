@@ -1,75 +1,24 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { BookOpen, Check, FileText, Folder, LockKeyhole, NotebookPen, Plus, RefreshCw, Search, ShieldCheck, Tag, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+
+const SEEDS = [{ id: "launch", title: "Launch questions", tag: "Planning", body: "Which claims need stronger evidence before the next review?\n\nCapture the source, owner, date, and decision gate." }, { id: "research", title: "Research scratchpad", tag: "Research", body: "Keep non-sensitive references and open questions here. This local workspace does not fetch or sync documents." }, { id: "reflection", title: "Weekly reflection", tag: "Personal", body: "What became clearer this week? What should remain labeled as a preview?" }, { id: "runbook", title: "Runbook prompts", tag: "Operations", body: "Confirm ownership, rollback, recovery, and evidence before changing a production workflow." }];
 
 export default function NotesApp() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>NotesApp</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">NotesApp</h1>
-            <p className="text-muted-foreground mt-2">Note taking</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [notes, setNotes] = useState(SEEDS);
+  const [selectedId, setSelectedId] = useState(SEEDS[0].id);
+  const [query, setQuery] = useState("");
+  const [tag, setTag] = useState("All");
+  const [saved, setSaved] = useState(false);
+  const [privateMode, setPrivateMode] = useState(true);
+  const selected = notes.find((note) => note.id === selectedId) ?? notes[0];
+  const tags = ["All", ...Array.from(new Set(notes.map((note) => note.tag)))];
+  const visible = useMemo(() => notes.filter((note) => (tag === "All" || note.tag === tag) && `${note.title} ${note.tag} ${note.body}`.toLowerCase().includes(query.toLowerCase())), [notes, query, tag]);
+  const updateSelected = (field: "title" | "body", value: string) => setNotes((current) => current.map((note) => note.id === selectedId ? { ...note, [field]: value } : note));
+  const createNote = () => { const id = `local-${Date.now()}`; setNotes((current) => [{ id, title: "Untitled local note", tag: "Draft", body: "Start writing a local note…" }, ...current]); setSelectedId(id); setSaved(false); };
+  const reset = () => { setNotes(SEEDS); setSelectedId(SEEDS[0].id); setQuery(""); setTag("All"); setSaved(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={NotebookPen} eyebrow="NotesApp · Local writing workspace" title="Capture the thought before promising the sync." description="Write, search, tag, and review local notes with explicit privacy and persistence boundaries. No account, cloud sync, collaboration, encryption service, autosave guarantee, search index, or backend record is claimed." badge="Notes preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Local draft marked saved" : "Mark local draft saved"}</Button><Button onClick={createNote} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Plus className="mr-2 size-4" />New local note</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Notes", value: String(notes.length), hint: "Local workspace", icon: FileText }, { label: "Selected", value: selected.tag, hint: selected.title, icon: Tag, tone: "violet" }, { label: "Privacy", value: privateMode ? "Local" : "Review", hint: "No sync", icon: LockKeyhole, tone: "cyan" }, { label: "Cloud", value: "Off", hint: "No backend record", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="NotesApp evidence boundary"><strong>Note titles, bodies, tags, filters, and local saved state are browser-workspace fixtures—not durable persistence, encrypted storage, account ownership, cloud sync, collaboration, search indexing, backup, retention, or deletion guarantees.</strong> Production notes require explicit storage, authentication, encryption, access controls, conflict resolution, autosave semantics, export/deletion, auditability, and support.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Search className="size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local notes" className="w-full bg-transparent text-white outline-none placeholder:text-slate-500" /></div><div className="mt-4 flex gap-2 overflow-x-auto">{tags.map((item) => <button key={item} onClick={() => setTag(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${tag === item ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-5 space-y-3">{visible.map((note) => <button key={note.id} onClick={() => setSelectedId(note.id)} className={`w-full rounded-2xl border p-4 text-left ${selectedId === note.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/10"}`}><div className="flex items-center gap-3"><Folder className="size-4 text-cyan-200" /><span className="flex-1 font-black">{note.title}</span><Badge variant="outline" className="border-white/10 text-[10px] text-slate-400">{note.tag}</Badge></div><p className="mt-2 line-clamp-2 text-sm text-slate-500">{note.body}</p></button>)}{visible.length === 0 && <p className="py-8 text-center text-slate-500">No local notes match.</p>}</div><div className="mt-5 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />Private mode is a local preference. Do not place passwords, tokens, seed phrases, or sensitive records into this preview.</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Editor</p><h2 className="mt-2 text-3xl font-black">{selected.title}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{saved ? "Marked locally" : "Unsaved local changes"}</Badge></div><input value={selected.title} onChange={(event) => { updateSelected("title", event.target.value); setSaved(false); }} className="mt-5 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-lg font-bold text-white" /><div className="mt-3 flex items-center gap-2 text-xs text-slate-500"><Tag className="size-3" />{selected.tag} · local note</div><textarea value={selected.body} onChange={(event) => { updateSelected("body", event.target.value); setSaved(false); }} className="mt-5 min-h-72 w-full rounded-xl border border-white/10 bg-black/20 p-4 text-sm leading-7 text-white" /><div className="mt-5 flex gap-2"><Button onClick={() => setSaved(true)} className="bg-violet-500 text-white hover:bg-violet-400"><Check className="mr-2 size-4" />Mark saved locally</Button><Button disabled variant="outline" className="border-white/10 text-white/40">Share unavailable</Button><Button disabled variant="outline" className="border-white/10 text-white/40">Export unavailable</Button></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Notes readiness</p><h2 className="mt-2 text-2xl font-black">Required before persistence claims</h2><div className="mt-5 space-y-3">{["Storage, account ownership, authentication, and conflict policy", "Encryption, key management, access controls, and sensitive-data handling", "Autosave, version history, offline behavior, and recovery", "Search indexing, sharing, collaboration, export, and deletion", "Auditability, retention, support, and incident response"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><FileText className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake persistence</h2><p className="mt-3 text-sm leading-6 text-slate-400">The editor changes local component state only. It does not create a durable record, sync, share, encrypt, index, back up, or delete data from a service.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A draft is not storage", description: "Editable notes preserve writing UX without account, cloud, encryption, or retention claims.", icon: NotebookPen, status: "Guardrail" }, { title: "Privacy needs design", description: "Secrets, access control, key management, export, deletion, and support need evidence.", icon: ShieldCheck, status: "Required" }, { title: "No fake sync", description: "The workspace makes no backend request and provides no collaboration, search index, or backup.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

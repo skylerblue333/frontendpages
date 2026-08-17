@@ -1,84 +1,30 @@
-import { TrendingUp } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { AlertTriangle, BarChart3, Check, Gauge, LockKeyhole, RefreshCw, Scale, ShieldCheck, TrendingDown, TrendingUp, WalletCards, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
+type Side = "Long" | "Short";
 export default function PerpetualFutures() {
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHeader icon={TrendingUp} title="Perpetual Futures" subtitle="Advanced perpetual futures with cutting-edge technology" />
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Content Area */}
-        <Card className="p-8 bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20">
-          <div className="space-y-6">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Perpetual Futures</h2>
-            
-            {/* Advanced Features */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
-                <div className="space-y-3">
-                  <TrendingUp className="w-8 h-8 text-primary" />
-                  <h3 className="font-bold text-lg">Advanced Analytics</h3>
-                  <p className="text-sm text-muted-foreground">Real-time data processing with AI insights</p>
-                  <Button size="sm" variant="outline" className="w-full">Explore</Button>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
-                <div className="space-y-3">
-                  <TrendingUp className="w-8 h-8 text-primary" />
-                  <h3 className="font-bold text-lg">Automation Engine</h3>
-                  <p className="text-sm text-muted-foreground">Autonomous operations with intelligent decision making</p>
-                  <Button size="sm" variant="outline" className="w-full">Configure</Button>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
-                <div className="space-y-3">
-                  <TrendingUp className="w-8 h-8 text-primary" />
-                  <h3 className="font-bold text-lg">Security First</h3>
-                  <p className="text-sm text-muted-foreground">Robust encryption and protection</p>
-                  <Button size="sm" variant="outline" className="w-full">Secure</Button>
-                </div>
-              </Card>
-            </div>
-            
-            {/* Performance Metrics */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
-              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
-                <p className="text-xs text-muted-foreground">Processing Speed</p>
-                <p className="text-2xl font-bold text-primary">99.9%</p>
-              </div>
-              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
-                <p className="text-xs text-muted-foreground">Uptime</p>
-                <p className="text-2xl font-bold text-primary">24/7</p>
-              </div>
-              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
-                <p className="text-xs text-muted-foreground">Latency</p>
-                <p className="text-2xl font-bold text-primary">&lt;50ms</p>
-              </div>
-              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
-                <p className="text-xs text-muted-foreground">Throughput</p>
-                <p className="text-2xl font-bold text-primary">10K+/s</p>
-              </div>
-            </div>
-            
-            {/* Action Section */}
-            <div className="flex gap-4 flex-wrap pt-6">
-              <Button size="lg" className="bg-primary hover:bg-primary/90">
-                Get Started Now
-              </Button>
-              <Button size="lg" variant="outline">
-                View Documentation
-              </Button>
-              <Button size="lg" variant="ghost">
-                Schedule Demo
-              </Button>
-            </div>
-          </div>
-        </Card>
-      </div>
-    </div>
-  );
+  const [side, setSide] = useState<Side>("Long");
+  const [quantity, setQuantity] = useState("1");
+  const [entry, setEntry] = useState("100");
+  const [mark, setMark] = useState("98");
+  const [stop, setStop] = useState("95");
+  const [leverage, setLeverage] = useState("5");
+  const [acknowledged, setAcknowledged] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const q = Number(quantity) || 0;
+  const e = Number(entry) || 0;
+  const m = Number(mark) || 0;
+  const s = Number(stop) || 0;
+  const lev = Math.max(1, Number(leverage) || 1);
+  const notional = q * e;
+  const markPnl = side === "Long" ? q * (m - e) : q * (e - m);
+  const stopPnl = side === "Long" ? q * (s - e) : q * (e - s);
+  const margin = notional / lev;
+  const valid = q > 0 && e > 0 && m > 0 && s > 0 && lev >= 1 && lev <= 100;
+  const reset = () => { setSide("Long"); setQuantity("1"); setEntry("100"); setMark("98"); setStop("95"); setLeverage("5"); setAcknowledged(false); setSaved(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={TrendingUp} eyebrow="PerpetualFutures · Learning preview" title="Study contract risk without connecting an exchange." description="Model local long/short assumptions, notional, margin, mark-to-market, and stop scenarios. No live price, funding, order book, position, liquidation engine, wallet, exchange, or trade is connected." badge="Derivatives preview"><div className="flex flex-wrap gap-2"><Button disabled={!valid || !acknowledged} onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Scenario saved locally" : "Save local scenario"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset scenario</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Side", value: side, hint: "Local scenario", icon: side === "Long" ? TrendingUp : TrendingDown, tone: "cyan" }, { label: "Notional", value: `$${notional.toFixed(2)}`, hint: "Local arithmetic", icon: Scale, tone: "violet" }, { label: "Margin", value: `$${margin.toFixed(2)}`, hint: `${lev}x assumption`, icon: WalletCards, tone: "amber" }, { label: "Exchange", value: "Off", hint: "No execution", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Perpetual-contract evidence boundary"><strong>This is an educational scenario worksheet, not trading advice or an exchange.</strong> Price, mark, notional, margin, PnL, leverage, funding, liquidation, fees, liquidity, balance, and risk values are local assumptions. No order, position, account, wallet, market, provider, or financial outcome is real or predicted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.85fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Scenario builder</p><h2 className="mt-2 text-3xl font-black">Model a contract concept</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">Local only</Badge></div><div className="mt-6 flex rounded-xl border border-white/10 bg-black/20 p-1">{(["Long", "Short"] as Side[]).map((item) => <button key={item} onClick={() => { setSide(item); setSaved(false); }} className={`flex-1 rounded-lg py-2 text-sm font-semibold ${side === item ? item === "Long" ? "bg-cyan-300 text-slate-950" : "bg-rose-300 text-slate-950" : "text-slate-400"}`}>{item}</button>)}</div><div className="mt-5 grid gap-4 sm:grid-cols-2">{([{ label: "Quantity", value: quantity, set: setQuantity }, { label: "Entry price assumption", value: entry, set: setEntry }, { label: "Mark price assumption", value: mark, set: setMark }, { label: "Stop price assumption", value: stop, set: setStop }, { label: "Leverage assumption", value: leverage, set: setLeverage }] as const).map((field) => <label key={field.label} className="text-sm text-slate-400">{field.label}<input value={field.value} onChange={(e) => { field.set(e.target.value); setSaved(false); }} inputMode="decimal" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-white outline-none focus:border-cyan-300/50" /></label>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-3">{[{ label: "Notional", value: `$${notional.toFixed(2)}` }, { label: "Mark PnL", value: `$${markPnl.toFixed(2)}` }, { label: "Stop PnL", value: `$${stopPnl.toFixed(2)}` }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-4"><p className="text-xs text-slate-500">{item.label}</p><p className={`mt-2 text-xl font-black ${item.value.startsWith("-") ? "text-rose-200" : "text-cyan-200"}`}>{item.value}</p></div>)}</div><p className="mt-4 text-sm leading-6 text-slate-500">Arithmetic excludes fees, funding, slippage, index/mark methodology, maintenance margin, cross/isolated rules, liquidation penalties, taxes, and currency conversion.</p><div className="mt-5 flex gap-3"><button aria-label="Acknowledge derivatives boundary" onClick={() => setAcknowledged(!acknowledged)} className={`flex size-5 shrink-0 items-center justify-center rounded border ${acknowledged ? "border-cyan-300 bg-cyan-300 text-slate-950" : "border-white/20"}`}>{acknowledged ? "✓" : ""}</button><p className="text-sm leading-6 text-slate-400">I understand this scenario is educational and cannot place a trade or predict an outcome.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled={!valid || !acknowledged} className="bg-cyan-300/20 text-cyan-100/40">Place order unavailable</Button><Button disabled variant="outline" className="border-white/10 text-white/40">Connect exchange unavailable</Button></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Risk lens</p><h2 className="mt-2 text-2xl font-black">What the math does not prove</h2><div className="mt-5 space-y-3">{[{ label: "Liquidation price", value: "Unavailable", detail: "Requires exchange maintenance-margin model." }, { label: "Funding rate", value: "Unavailable", detail: "Requires live market and funding source." }, { label: "Available margin", value: "Unavailable", detail: "Requires authoritative account balance." }, { label: "Execution price", value: "Unavailable", detail: "Requires order book and fill evidence." }, { label: "Fees / slippage", value: "Unavailable", detail: "Requires venue contract and execution." }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><div className="flex items-center justify-between gap-3"><p className="font-semibold">{item.label}</p><span className="text-xs text-amber-200">{item.value}</span></div><p className="mt-1 text-sm leading-5 text-slate-500">{item.detail}</p></div>)}</div><div className="mt-5 rounded-xl border border-rose-300/20 bg-rose-300/[0.06] p-4"><div className="flex gap-3"><AlertTriangle className="mt-0.5 size-5 shrink-0 text-rose-200" /><p className="text-sm leading-6 text-slate-300">Leverage can magnify losses. This preview is not individualized financial advice, a recommendation, or a guarantee of any result.</p></div></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Production checklist</p><h2 className="mt-2 text-2xl font-black">A real derivatives venue must prove</h2><div className="mt-5 space-y-3">{["Licensed/authorized venue, instrument metadata, index/mark methodology, funding, fees, and risk limits", "Authenticated account, balance, collateral, margin mode, leverage, and permission controls", "Validated order parameters, price bands, tick/lot sizes, order book, fills, and idempotency", "Liquidation/insurance/ADL/maintenance models with tested failure and dispute states", "Wallet custody, network/address/signature security, audit, privacy, support, monitoring, and incident response"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake trading</h2><p className="mt-3 text-sm leading-6 text-slate-400">Changing scenario inputs changes local arithmetic only. It does not quote a market, reserve margin, create a position, place an order, liquidate, settle, or prove profit.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Long/short concepts preserved", description: "Side, quantity, entry, mark, stop, and leverage assumptions remain interactive.", icon: TrendingUp, status: "Local scenario" }, { title: "Risk gaps are named", description: "Funding, liquidation, fees, slippage, liquidity, balance, and execution remain unavailable.", icon: ShieldCheck, status: "Guardrail" }, { title: "Exchange is off", description: "No live price, order book, account, wallet, position, order, or trade success is fabricated.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }

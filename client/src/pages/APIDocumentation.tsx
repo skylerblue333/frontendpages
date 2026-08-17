@@ -1,75 +1,17 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { BookOpen, CheckCircle2, FilePlus2, FolderOpen, LockKeyhole, Plus, Search, Settings, Shield, SlidersHorizontal, Users, Webhook } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
 
-export default function APIDocumentation() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+const DOCUMENTS = [
+  { id: "feedback", title: "Feedback API", summary: "Document list, create, and moderation-aware feedback contracts.", status: "Draft" },
+  { id: "roadmap", title: "Roadmap API", summary: "Describe visibility, ownership, pagination, and update authorization.", status: "Review" },
+  { id: "agents", title: "Agent workflows", summary: "Document request schemas, model provider metadata, and approval boundaries.", status: "Contract required" },
+  { id: "orders", title: "Orders API", summary: "Specify inventory, payment, idempotency, fulfillment, and failure states.", status: "Security review" },
+];
+const CHECKLIST = ["Schema and examples match backend implementation", "Authentication and authorization are explicit", "Errors, retries, idempotency, and rate limits are documented", "Secrets and personal data stay out of client examples"];
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>APIDocumentation</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">APIDocumentation</h1>
-            <p className="text-muted-foreground mt-2">API docs</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+export default function APIDocumentation() { const [query, setQuery] = useState(""); const [documents, setDocuments] = useState(DOCUMENTS); const [selected, setSelected] = useState(DOCUMENTS[0]); const [settingsOpen, setSettingsOpen] = useState(false); const visible = useMemo(() => documents.filter((document) => `${document.title} ${document.summary} ${document.status}`.toLowerCase().includes(query.toLowerCase())), [documents, query]); const createDraft = () => { const draft = { id: `draft-${documents.length + 1}`, title: `Untitled API draft ${documents.length - DOCUMENTS.length + 1}`, summary: "Local draft placeholder for a future verified contract.", status: "Draft" }; setDocuments((current) => [draft, ...current]); setSelected(draft); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={BookOpen} eyebrow="Developer Platform · Documentation" title="Turn API ideas into reviewable contracts." description="Create and inspect documentation drafts with search, collection status, schema checklists, and security boundaries. This workspace is useful before authentication and deployment are connected; it does not imply a live API documentation service." badge="Preview documentation workspace"><div className="flex flex-wrap gap-2"><Button onClick={createDraft} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Plus className="mr-2 size-4" />Create local draft</Button><Button onClick={() => setSettingsOpen((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Settings className="mr-2 size-4" />{settingsOpen ? "Close settings" : "Workspace settings"}</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Document drafts", value: String(documents.length), hint: "Local contract workspace", icon: FilePlus2 }, { label: "Review stages", value: "4", hint: "Draft, review, contract, security", icon: SlidersHorizontal, tone: "violet" }, { label: "Authentication", value: "Required", hint: "No sign-in bypass", icon: LockKeyhole, tone: "amber" }, { label: "Deployment", value: "Unverified", hint: "No live docs service claim", icon: Shield, tone: "slate" }]} /><ScreenPreviewBanner title="Documentation workspace boundary">The document collection, search, local draft creation, selected-document detail, settings state, contract checklist, and security guidance are available for UX review. No documentation service, API schema, deployment, SDK, webhook, quota, or production status is fabricated.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.75fr_1.25fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search documentation" aria-label="Search API documentation" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visible.map((document) => <button key={document.id} onClick={() => setSelected(document)} className={`w-full rounded-xl border p-4 text-left transition ${selected.id === document.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><FolderOpen className="size-4 text-cyan-300" /><span className="font-semibold">{document.title}</span><Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">{document.status}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-400">{document.summary}</p></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No documents match" description="Try another search term or create a local draft." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><div className="flex size-11 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-200"><BookOpen className="size-5" /></div><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected document</p><h2 className="mt-1 text-2xl font-bold">{selected.title}</h2></div><Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">{selected.status}</Badge></div><p className="mt-5 text-sm leading-6 text-slate-300">{selected.summary}</p><div className="mt-6 space-y-3">{CHECKLIST.map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4 text-sm text-slate-300"><CheckCircle2 className="size-4 text-emerald-300" />{item}</div>)}</div>{settingsOpen && <div className="mt-5 rounded-xl border border-violet-300/20 bg-violet-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-violet-200"><Settings className="size-4" />Workspace settings preview</div><p className="mt-2 text-sm leading-6 text-slate-300">Versioning, reviewer ownership, visibility, and publish permissions require an authenticated documentation contract.</p></div>}<div className="mt-6 flex flex-wrap gap-2"><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Webhook className="mr-2 size-4" />Webhook checklist</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><LockKeyhole className="mr-2 size-4" />Auth checklist</Button></div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Draft locally", description: "Create and inspect documentation structure without pretending it has been published.", icon: FilePlus2, status: "Available" }, { title: "Review ownership", description: "Require schema, security, and release owners before a contract becomes authoritative.", icon: Users, status: "Required" }, { title: "No sign-in bypass", description: "Keep publish, edit, and access controls behind real authentication and authorization.", icon: LockKeyhole, status: "Guardrail" }]} /></main></div>; }

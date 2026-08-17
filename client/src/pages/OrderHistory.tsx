@@ -1,183 +1,28 @@
-import { useState, useMemo, useCallback } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
-import { Button } from "@/components/ui/button";
+import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Progress } from "@/components/ui/progress";
-import { PageHeader } from "@/components/PageHeader";
-import { toast } from "sonner";
-import { getLoginUrl } from "@/const";
-import { Link } from "wouter";
-import {
-  Package, Search, CheckCircle, Clock, XCircle, Truck, ShoppingBag,
-  Star, RefreshCw, ChevronRight, DollarSign, Shield, AlertCircle,
-  Repeat, Download, MessageSquare
-} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ClipboardList, ExternalLink, FileCheck2, Filter, LockKeyhole, RefreshCw, Search, ShieldCheck, ShoppingBag, WifiOff } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
 
-const STATUS_CONFIG: Record<string, { label: string; color: string; progress: number }> = {
-  pending:    { label: "Pending",    color: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",  progress: 15 },
-  processing: { label: "Processing", color: "bg-blue-500/20 text-blue-400 border-blue-500/30",        progress: 40 },
-  shipped:    { label: "Shipped",    color: "bg-purple-500/20 text-purple-400 border-purple-500/30",  progress: 70 },
-  delivered:  { label: "Delivered",  color: "bg-green-500/20 text-green-400 border-green-500/30",     progress: 100 },
-  cancelled:  { label: "Cancelled",  color: "bg-red-500/20 text-red-400 border-red-500/30",           progress: 0 },
-  completed:  { label: "Completed",  color: "bg-green-500/20 text-green-400 border-green-500/30",     progress: 100 },
-};
-
-function OrderCard({ order }: { order: any }) {
-  const status = STATUS_CONFIG[order.status] || STATUS_CONFIG.pending;
-
-  return (
-    <div className="bg-[#0e0a1a] border border-white/5 hover:border-purple-500/20 rounded-2xl p-4 transition-all">
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20 flex items-center justify-center shrink-0">
-            <Package className="w-6 h-6 text-purple-400" />
-          </div>
-          <div>
-            <p className="text-white font-semibold text-sm">{order.listingTitle || "Marketplace Item"}</p>
-            <p className="text-slate-500 text-xs">Order #{order.id} · {new Date(order.createdAt).toLocaleDateString()}</p>
-          </div>
-        </div>
-        <Badge className={`text-[10px] ${status.color}`}>{status.label}</Badge>
-      </div>
-
-      {order.status !== "cancelled" && (
-        <div className="mb-3">
-          <Progress value={status.progress} className="h-1.5" />
-          <div className="flex justify-between text-[10px] text-slate-600 mt-1">
-            <span>Ordered</span><span>Processing</span><span>Shipped</span><span>Delivered</span>
-          </div>
-        </div>
-      )}
-
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3 text-xs text-slate-500">
-          <span className="flex items-center gap-1">
-            <DollarSign className="w-3 h-3" />
-            <span className="text-white font-bold">{Number(order.totalPrice || 0).toLocaleString()} SKY444</span>
-          </span>
-          {order.escrowStatus && (
-            <span className="flex items-center gap-1 text-cyan-400">
-              <Shield className="w-3 h-3" />Escrow: {order.escrowStatus}
-            </span>
-          )}
-        </div>
-        <div className="flex gap-2">
-          {(order.status === "delivered" || order.status === "completed") && (
-            <Button size="sm" variant="outline" className="h-7 text-xs border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10"
-              onClick={() => toast.success("Review submitted!")}>
-              <Star className="w-3 h-3 mr-1" />Review
-            </Button>
-          )}
-          <Button size="sm" variant="outline" className="h-7 text-xs border-white/10 text-slate-400"
-            onClick={() => toast.info("Invoice download coming soon")}>
-            <Download className="w-3 h-3 mr-1" />Invoice
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-}
+type Role = "buyer" | "seller";
+type Status = "draft" | "awaiting-source" | "blocked";
+type RecordItem = { id: string; role: Role; label: string; instrument: string; status: Status; amount: string; date: string; reason: string };
+const RECORDS: RecordItem[] = [
+  { id: "preview-001", role: "buyer", label: "Limit review", instrument: "SKY / USD", status: "draft", amount: "998.00 local", date: "Not timestamped", reason: "Synthetic review fixture; no order created." },
+  { id: "preview-002", role: "buyer", label: "Wallet transfer concept", instrument: "SKY", status: "awaiting-source", amount: "Amount unset", date: "Not timestamped", reason: "Wallet, balance, network, and transaction source unavailable." },
+  { id: "preview-003", role: "seller", label: "Marketplace listing concept", instrument: "Digital item", status: "blocked", amount: "Price unset", date: "Not timestamped", reason: "Seller order service and fulfillment state unavailable." },
+  { id: "preview-004", role: "seller", label: "Settlement review", instrument: "SKY / USD", status: "awaiting-source", amount: "Total unavailable", date: "Not timestamped", reason: "Venue, fee, authorization, and receipt contracts are required." },
+];
+const statusLabel: Record<Status, string> = { draft: "Draft", "awaiting-source": "Awaiting source", blocked: "Blocked" };
 
 export default function OrderHistory() {
-  
-  const [role, setRole] = useState<"buyer" | "seller">("buyer");
+  const [role, setRole] = useState<Role>("buyer");
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-
-  const { data: orders, isLoading, refetch } = trpc.marketplace.myOrders.useQuery(
-    { role },
-    { enabled: isAuthenticated }
-  );
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-[#07050f] flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <ShoppingBag className="w-16 h-16 text-slate-700 mx-auto" />
-          <h2 className="text-xl font-bold text-white">Sign in to view orders</h2>
-          <Button  className="bg-purple-500/20 text-purple-300 border border-purple-500/30">
-            Sign In
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  const filtered = (orders || []).filter((o: any) => {
-    const matchSearch = !search || (o.listingTitle || "").toLowerCase().includes(search.toLowerCase());
-    const matchStatus = statusFilter === "all" || o.status === statusFilter;
-    return matchSearch && matchStatus;
-  });
-
-  const stats = {
-    total: orders?.length || 0,
-    active: orders?.filter((o: any) => ["pending", "processing", "shipped"].includes(o.status)).length || 0,
-    completed: orders?.filter((o: any) => ["completed", "delivered"].includes(o.status)).length || 0,
-    totalSpent: orders?.reduce((s: number, o: any) => s + Number(o.totalPrice || 0), 0) || 0,
-  };
-
-  return (
-    <div className="min-h-screen bg-[#07050f] text-white p-4">
-      <div className="max-w-4xl mx-auto space-y-6">
-        <PageHeader icon={ShoppingBag} title="Order History" subtitle="Track your marketplace purchases and sales" backHref="/marketplace" />
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
-            { label: "Total Orders", value: stats.total, color: "text-white" },
-            { label: "Active", value: stats.active, color: "text-yellow-400" },
-            { label: "Completed", value: stats.completed, color: "text-green-400" },
-            { label: "Total Spent", value: `${(stats.totalSpent / 1000).toFixed(1)}K SKY`, color: "text-purple-400" },
-          ].map(stat => (
-            <div key={stat.label} className="bg-[#0e0a1a] border border-white/5 rounded-xl p-3">
-              <p className={`text-xl font-black ${stat.color}`}>{stat.value}</p>
-              <p className="text-xs text-slate-500">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="flex flex-wrap gap-3">
-          <div className="flex gap-1 bg-white/5 rounded-xl p-1">
-            {(["buyer", "seller"] as const).map(r => (
-              <button key={r} onClick={() => setRole(r)}
-                className={`px-4 py-1.5 rounded-lg text-sm font-medium capitalize transition-all ${role === r ? "bg-purple-500/20 text-purple-300 border border-purple-500/30" : "text-slate-500 hover:text-slate-300"}`}>
-                {r === "buyer" ? "My Purchases" : "My Sales"}
-              </button>
-            ))}
-          </div>
-          <div className="relative flex-1 min-w-48">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-            <Input value={search} onChange={e => setSearch(e.target.value)}
-              placeholder="Search orders..." className="pl-9 bg-white/5 border-white/10 text-white h-9" />
-          </div>
-          <Button size="sm" variant="outline" className="border-white/10 text-slate-400 h-9" onClick={() => refetch()}>
-            <RefreshCw className="w-3.5 h-3.5" />
-          </Button>
-        </div>
-
-        {isLoading ? (
-          <div className="space-y-3">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="bg-[#0e0a1a] border border-white/5 rounded-2xl p-4 animate-pulse h-24" />
-            ))}
-          </div>
-        ) : filtered.length === 0 ? (
-          <div className="text-center py-16">
-            <Package className="w-16 h-16 text-slate-700 mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-slate-400 mb-2">{orders?.length === 0 ? "No orders yet" : "No matching orders"}</h3>
-            {orders?.length === 0 && (
-              <Link href="/marketplace">
-                <Button className="mt-3 bg-purple-500/20 text-purple-300 border border-purple-500/30">Browse Marketplace</Button>
-              </Link>
-            )}
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {filtered.map((order: any) => <OrderCard key={order.id} order={order} />)}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  const [status, setStatus] = useState<"all" | Status>("all");
+  const [selected, setSelected] = useState<RecordItem | null>(null);
+  const [refreshed, setRefreshed] = useState(false);
+  const filtered = useMemo(() => RECORDS.filter((item) => item.role === role && (!search || `${item.label} ${item.instrument}`.toLowerCase().includes(search.toLowerCase())) && (status === "all" || item.status === status)), [role, search, status]);
+  const reset = () => { setSearch(""); setStatus("all"); setSelected(null); setRefreshed(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={ShoppingBag} eyebrow="OrderHistory · Record preview" title="Trace order concepts without inventing a transaction." description="Explore local buyer and seller record fixtures, filter by status, and inspect what evidence a real history service would need. No record below is a database order, fill, payment, balance, or settlement." badge="History preview"><div className="flex flex-wrap gap-2"><Button onClick={() => { setRefreshed(true); setSelected(null); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />{refreshed ? "Preview refreshed" : "Refresh preview"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">Reset filters</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Visible concepts", value: String(filtered.length), hint: "Synthetic records", icon: ClipboardList, tone: "cyan" }, { label: "Role", value: role === "buyer" ? "Buyer" : "Seller", hint: "Local filter", icon: ShoppingBag, tone: "violet" }, { label: "Source", value: "Off", hint: "No order API", icon: WifiOff, tone: "amber" }, { label: "Receipts", value: "0", hint: "None verified", icon: FileCheck2, tone: "slate" }]} /><ScreenPreviewBanner title="Order-history evidence boundary"><strong>These rows are synthetic UX fixtures only.</strong> They do not prove an authenticated user, marketplace order, payment, wallet balance, venue, transaction hash, timestamp, delivery, seller, buyer, fill, refund, or completed settlement. A real history view must be populated from an authorized, reconciled backend contract.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex flex-wrap items-center gap-3"><div className="flex rounded-xl border border-white/10 bg-black/20 p-1">{(["buyer", "seller"] as Role[]).map((item) => <button key={item} onClick={() => { setRole(item); setSelected(null); }} className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${role === item ? "bg-cyan-300 text-slate-950" : "text-slate-400 hover:text-white"}`}>{item === "buyer" ? "My purchases" : "My sales"}</button>)}</div><div className="relative min-w-52 flex-1"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search local concepts…" className="w-full rounded-xl border border-white/10 bg-black/20 py-2.5 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div></div><div className="mt-5 flex flex-wrap gap-2"><Filter className="mr-1 size-4 text-slate-500" />{(["all", "draft", "awaiting-source", "blocked"] as const).map((item) => <button key={item} onClick={() => setStatus(item)} className={`rounded-full border px-3 py-1 text-xs ${status === item ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500 hover:text-white"}`}>{item === "all" ? "All statuses" : statusLabel[item]}</button>)}</div><div className="mt-5 space-y-3">{filtered.length === 0 ? <div className="rounded-2xl border border-dashed border-white/10 p-8 text-center"><ClipboardList className="mx-auto size-8 text-slate-600" /><p className="mt-3 font-semibold text-slate-300">No matching preview records</p><p className="mt-2 text-sm text-slate-500">Change the role, search term, or status filter.</p></div> : filtered.map((item) => <button key={item.id} onClick={() => setSelected(item)} className={`w-full rounded-2xl border p-4 text-left transition ${selected?.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10 bg-black/10 hover:border-white/20"}`}><div className="flex flex-wrap items-start justify-between gap-3"><div><div className="flex items-center gap-2"><p className="font-bold text-white">{item.label}</p><Badge variant="outline" className="border-white/10 text-slate-400">{statusLabel[item.status]}</Badge></div><p className="mt-1 text-sm text-slate-400">{item.instrument} · {item.id}</p></div><div className="text-right"><p className="font-semibold text-cyan-200">{item.amount}</p><p className="mt-1 text-xs text-slate-500">{item.date}</p></div></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Record detail</p>{selected ? <><h2 className="mt-2 text-2xl font-black">{selected.label}</h2><p className="mt-2 text-slate-400">{selected.reason}</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Record ID", value: selected.id }, { label: "Role", value: selected.role }, { label: "Instrument", value: selected.instrument }, { label: "Status", value: statusLabel[selected.status] }, { label: "Amount", value: selected.amount }, { label: "Timestamp", value: selected.date }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-cyan-300/20 text-cyan-100/40">Open receipt unavailable</Button><Button disabled variant="outline" className="border-white/10 text-white/40"><ExternalLink className="mr-2 size-4" />View transaction unavailable</Button></div></> : <div className="py-10 text-center"><ClipboardList className="mx-auto size-10 text-slate-600" /><h2 className="mt-4 text-xl font-black">Select a record concept</h2><p className="mt-2 text-sm leading-6 text-slate-500">Details stay local until an authenticated history contract can prove ownership, status, timestamps, and receipts.</p></div>}</CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Production checklist</p><h2 className="mt-2 text-2xl font-black">What history needs to prove</h2><div className="mt-5 space-y-3">{["Authenticated buyer/seller scope and authorization", "Typed order, payment, inventory, fulfillment, refund, and settlement states", "Server timestamps, immutable IDs, pagination, sorting, and reconciliation", "Receipt, transaction, cancellation, dispute, and failure evidence", "Privacy controls, audit trail, retention policy, support, and incident response"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake history</h2><p className="mt-3 text-sm leading-6 text-slate-400">Refreshing this preview only changes local state. It never claims a remote query succeeded or that a marketplace record exists.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Buyer and seller preserved", description: "The role switch remains useful while making the backend boundary explicit.", icon: ShoppingBag, status: "Local filter" }, { title: "Search and status are real", description: "Filtering operates over typed synthetic records with empty-state feedback.", icon: Search, status: "Verified locally" }, { title: "Receipts stay unavailable", description: "No invoice, transaction, delivery, refund, payment, or settlement is fabricated.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
 }
