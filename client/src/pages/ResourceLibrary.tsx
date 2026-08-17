@@ -1,75 +1,13 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { BookOpen, Check, Download, FileText, Filter, FolderOpen, LockKeyhole, RefreshCw, Search, ShieldAlert, Share2, X } from "lucide-react";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+const resources = [{ id: 1, name: "Frontend patterns guide", category: "Engineering", detail: "A local document concept awaiting file provenance, version history, access policy, content review, and storage evidence.", state: "Preview only" }, { id: 2, name: "Learning pathway pack", category: "Education", detail: "A learning-resource concept requiring course ownership, curriculum mapping, learner privacy, and publication controls.", state: "Needs evidence" }, { id: 3, name: "Community playbook", category: "Community", detail: "A community-resource concept that must not imply endorsement, availability, freshness, or user access.", state: "Unmeasured" }, { id: 4, name: "Operations checklist", category: "Operations", detail: "An operations-resource concept requiring approved authors, change review, retention, and audit ownership.", state: "Blocked" }];
 export default function ResourceLibrary() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>ResourceLibrary</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">ResourceLibrary</h1>
-            <p className="text-muted-foreground mt-2">Course materials</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [query, setQuery] = useState(""); const [category, setCategory] = useState("All"); const [selected, setSelected] = useState(1); const [access, setAccess] = useState("Access review needed"); const [version, setVersion] = useState("Version unavailable"); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false);
+  const categories = ["All", ...Array.from(new Set(resources.map((item) => item.category)))]; const filtered = useMemo(() => resources.filter((item) => (category === "All" || item.category === category) && `${item.name} ${item.category} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [category, query]); const resource = resources.find((item) => item.id === selected) ?? resources[0];
+  const reset = () => { setQuery(""); setCategory("All"); setSelected(1); setAccess("Access review needed"); setVersion("Version unavailable"); setSaved(false); setShowGates(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={BookOpen} eyebrow="ResourceLibrary · Catalog preview" title="Prove the resource before sharing a file." description="Explore local resource concepts with search, collections, metadata, access, categories, tags, previews, downloads, sharing, versions, privacy, audit, save, reset, and evidence gates. No live file, user, permission, storage, download, or publication is connected." badge="Resource workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "View saved locally" : "Save catalog locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review library gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset catalog</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Resources", value: `${resources.length} local`, hint: "No file source", icon: BookOpen, tone: "cyan" }, { label: "Collections", value: "Unavailable", hint: "No catalog source", icon: FolderOpen, tone: "violet" }, { label: "Access", value: "Review needed", hint: "No permission source", icon: LockKeyhole, tone: "amber" }, { label: "Versions", value: "Unavailable", hint: "No history source", icon: FileText, tone: "slate" }]} /><ScreenPreviewBanner title="Resource evidence boundary"><strong>This is a local catalog preview, not evidence that files, collections, permissions, versions, or downloads exist.</strong> Resource cards, metadata, tags, previews, downloads, sharing, access, saved state, and audit gates are browser concepts. No file, author, user, timestamp, storage object, permission, publication, or download is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local resource concepts" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-4 flex flex-wrap gap-2">{categories.map((entry) => <Button key={entry} onClick={() => setCategory(entry)} size="sm" variant="outline" className={category === entry ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100" : "border-white/10 text-slate-400"}><Filter className="mr-1 size-3" />{entry}</Button>)}</div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.state}</Badge></div><div className="mt-4"><Badge variant="outline" className="border-white/10 text-slate-500">{item.category}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected resource concept</p><h2 className="mt-2 text-2xl font-black">{resource.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{resource.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Category", value: resource.category }, { label: "State", value: resource.state }, { label: "File", value: "Unavailable" }, { label: "Access", value: access }, { label: "Version", value: version }, { label: "Metadata", value: "Unverified" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2"><label className="text-sm text-slate-400">Access posture<select value={access} onChange={(event) => setAccess(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Access review needed</option><option>Private-by-default intent</option><option>Authenticated-only intent</option><option>Public-preview intent</option></select></label><label className="text-sm text-slate-400">Version posture<select value={version} onChange={(event) => setVersion(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Version unavailable</option><option>Draft-version intent</option><option>Current-version intent</option><option>Archived-version intent</option></select></label></div><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><FolderOpen className="mx-auto size-8 text-slate-600" /><p className="mt-3 font-semibold">No resource files loaded</p><p className="mt-2 text-sm text-slate-500">Connect governed storage, metadata, author identity, access controls, version history, retention, and audit before previewing or sharing files.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Preview unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500"><Download className="mr-2 size-4" />Download unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500"><Share2 className="mr-2 size-4" />Share unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Publish unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No file or access claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A local catalog concept does not prove a file exists, is current, is safe, is accessible, or has been downloaded or published.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Library gates</p><h2 className="mt-2 text-2xl font-black">What a real resource library must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["File provenance, checksum, type, size, version, author, ownership, storage, backup, and tenant boundaries", "Metadata, taxonomy, tags, search, indexing, language, accessibility, preview safety, and freshness", "User identity, roles, permissions, consent, privacy, minors, sensitive content, sharing, and revocation", "Downloads, exports, watermarking, redaction, malware scanning, retention, deletion, and audit", "Publication, licensing, copyright, attribution, moderation, appeals, support, and user-visible status", "Recovery, rollback, availability, replication, incident response, localization, and operational monitoring"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Library surface preserved", description: "Resources, search, collections, metadata, access, categories, tags, previews, downloads, sharing, versions, privacy, audit, save/reset, and gates remain interactive.", icon: BookOpen, status: "Local concepts" }, { title: "No file theater", description: "Files, users, permissions, storage, versions, downloads, publication, and access outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before sharing", description: "Real libraries need provenance, safe storage, identity, permission policy, privacy, retention, and audit.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
 }
