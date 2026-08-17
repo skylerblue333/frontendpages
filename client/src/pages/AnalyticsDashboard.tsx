@@ -1,329 +1,339 @@
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { LineChart, Line, BarChart, Bar, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Activity, AlertTriangle, TrendingUp, Database, Zap, Shield } from 'lucide-react';
+import { useState } from "react";
+import {
+  Activity,
+  AlertTriangle,
+  BarChart3,
+  Database,
+  Gauge,
+  LineChart,
+  LockKeyhole,
+  RotateCcw,
+  Server,
+  ShieldCheck,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+
+type MetricState = "Unavailable" | "Review" | "Planned";
+type MetricFixture = {
+  id: string;
+  label: string;
+  state: MetricState;
+  description: string;
+};
+type Window = "1h" | "24h" | "7d" | "30d";
+const metrics: MetricFixture[] = [
+  {
+    id: "api",
+    label: "API performance",
+    state: "Unavailable",
+    description:
+      "No request telemetry, latency sample, error-rate source, or throughput stream is connected.",
+  },
+  {
+    id: "database",
+    label: "Database performance",
+    state: "Unavailable",
+    description:
+      "No database probe, query sample, connection metric, or freshness guarantee is available.",
+  },
+  {
+    id: "cache",
+    label: "Cache performance",
+    state: "Review",
+    description:
+      "Cache hit, miss, eviction, and freshness metrics require a documented observability contract.",
+  },
+  {
+    id: "engines",
+    label: "Ecosystem engine health",
+    state: "Planned",
+    description:
+      "No verified engine registry, health check, incident state, or service owner is connected.",
+  },
+];
+const windows: Window[] = ["1h", "24h", "7d", "30d"];
+const icons = {
+  api: Activity,
+  database: Database,
+  cache: Gauge,
+  engines: Server,
+} as const;
 
 export default function AnalyticsDashboard() {
-  const [timeRange, setTimeRange] = useState('24h');
-
-  // API Performance Data
-  const apiPerformanceData = [
-    { time: '00:00', latency: 145, errorRate: 0.02, throughput: 850 },
-    { time: '04:00', latency: 162, errorRate: 0.03, throughput: 720 },
-    { time: '08:00', latency: 178, errorRate: 0.05, throughput: 1200 },
-    { time: '12:00', latency: 156, errorRate: 0.02, throughput: 1450 },
-    { time: '16:00', latency: 189, errorRate: 0.04, throughput: 1320 },
-    { time: '20:00', latency: 142, errorRate: 0.01, throughput: 980 },
-    { time: '24:00', latency: 138, errorRate: 0.02, throughput: 850 },
-  ];
-
-  // Database Performance
-  const dbPerformanceData = [
-    { metric: 'Query Time (ms)', value: 78, target: 100, status: 'good' },
-    { metric: 'Connection Pool', value: 18, target: 20, status: 'good' },
-    { metric: 'Slow Queries/min', value: 2, target: 10, status: 'good' },
-    { metric: 'Replication Lag (ms)', value: 12, target: 50, status: 'good' },
-  ];
-
-  // Cache Performance
-  const cacheData = [
-    { name: 'Hit', value: 87, fill: '#10b981' },
-    { name: 'Miss', value: 13, fill: '#ef4444' },
-  ];
-
-  // System Resources
-  const systemResourcesData = [
-    { time: '00:00', cpu: 45, memory: 62, disk: 58 },
-    { time: '04:00', cpu: 38, memory: 58, disk: 58 },
-    { time: '08:00', cpu: 72, memory: 78, disk: 59 },
-    { time: '12:00', cpu: 65, memory: 72, disk: 59 },
-    { time: '16:00', cpu: 58, memory: 68, disk: 60 },
-    { time: '20:00', cpu: 42, memory: 61, disk: 60 },
-    { time: '24:00', cpu: 35, memory: 55, disk: 60 },
-  ];
-
-  // Engine Health Status
-  const engineHealth = [
-    { name: 'Feedback', uptime: 99.98, requests: 12450, errors: 2, avgLatency: 145 },
-    { name: 'Roadmap', uptime: 99.95, requests: 8320, errors: 4, avgLatency: 152 },
-    { name: 'Agents', uptime: 99.92, requests: 5680, errors: 5, avgLatency: 178 },
-    { name: 'Competitors', uptime: 99.87, requests: 3240, errors: 4, avgLatency: 198 },
-    { name: 'Behavioral', uptime: 99.93, requests: 7890, errors: 5, avgLatency: 165 },
-    { name: 'Experiments', uptime: 99.91, requests: 6120, errors: 6, avgLatency: 172 },
-    { name: 'Narratives', uptime: 99.89, requests: 4560, errors: 5, avgLatency: 185 },
-    { name: 'Connectors', uptime: 99.94, requests: 9870, errors: 6, avgLatency: 142 },
-    { name: 'ProductBrain', uptime: 99.96, requests: 5430, errors: 2, avgLatency: 138 },
-    { name: 'Simulator', uptime: 99.88, requests: 2340, errors: 3, avgLatency: 215 },
-  ];
-
-  // Error Distribution
-  const errorDistribution = [
-    { name: '4xx Client', value: 28, fill: '#f59e0b' },
-    { name: '5xx Server', value: 8, fill: '#ef4444' },
-    { name: 'Timeout', value: 4, fill: '#8b5cf6' },
-  ];
-
-  // Key Metrics
-  const keyMetrics = [
-    {
-      title: 'API Response Time (p95)',
-      value: '145ms',
-      target: '<200ms',
-      status: 'good',
-      icon: Zap,
-    },
-    {
-      title: 'Error Rate',
-      value: '0.02%',
-      target: '<0.1%',
-      status: 'good',
-      icon: AlertTriangle,
-    },
-    {
-      title: 'Cache Hit Rate',
-      value: '87%',
-      target: '>80%',
-      status: 'good',
-      icon: Activity,
-    },
-    {
-      title: 'System Uptime',
-      value: '99.2%',
-      target: '99.9%',
-      status: 'warning',
-      icon: Shield,
-    },
-  ];
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'good':
-        return 'bg-green-500/10 text-green-700 border-green-200';
-      case 'warning':
-        return 'bg-yellow-500/10 text-yellow-700 border-yellow-200';
-      case 'critical':
-        return 'bg-red-500/10 text-red-700 border-red-200';
-      default:
-        return 'bg-gray-500/10 text-gray-700 border-gray-200';
-    }
+  const [window, setWindow] = useState<Window>("24h");
+  const [selectedId, setSelectedId] = useState("api");
+  const [status, setStatus] = useState(
+    "Analytics unavailable. Showing local observability fixtures only."
+  );
+  const selected =
+    metrics.find(metric => metric.id === selectedId) ?? metrics[0];
+  const reset = () => {
+    setWindow("24h");
+    setSelectedId("api");
+    setStatus(
+      "Analytics preview reset locally. No telemetry, event, identity, query, probe, alert, or report state changed."
+    );
   };
-
+  const blocked = (action: string) =>
+    setStatus(
+      `${action} is unavailable locally. No telemetry, event, identity, query, probe, export, alert, or report request was started.`
+    );
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="space-y-2">
-          <h1 className="text-4xl font-bold text-white">Ecosystem Analytics</h1>
-          <p className="text-gray-400">Real-time monitoring of all 10 strategic engines</p>
-        </div>
-
-        {/* Time Range Selector */}
-        <div className="flex gap-2">
-          {['1h', '24h', '7d', '30d'].map(range => (
-            <button
-              key={range}
-              onClick={() => setTimeRange(range)}
-              className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                timeRange === range
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-slate-800 text-gray-300 hover:bg-slate-700'
-              }`}
-            >
-              {range}
-            </button>
-          ))}
-        </div>
-
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {keyMetrics.map((metric, idx) => {
-            const Icon = metric.icon;
-            return (
-              <Card key={idx} className="bg-slate-800/50 border-slate-700">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-sm font-medium text-gray-300">{metric.title}</CardTitle>
-                    <Icon className="w-4 h-4 text-purple-400" />
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <div className="text-2xl font-bold text-white">{metric.value}</div>
-                    <div className={`inline-block px-2 py-1 rounded text-xs font-medium ${getStatusColor(metric.status)}`}>
-                      Target: {metric.target}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-
-        {/* API Performance */}
-        <Card className="bg-slate-800/50 border-slate-700">
-          <CardHeader>
-            <CardTitle className="text-white">API Performance</CardTitle>
-            <CardDescription>Response time, error rate, and throughput</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={apiPerformanceData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
-                <XAxis dataKey="time" stroke="#94a3b8" />
-                <YAxis stroke="#94a3b8" />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569' }}
-                  labelStyle={{ color: '#e2e8f0' }}
-                />
-                <Legend />
-                <Line type="monotone" dataKey="latency" stroke="#8b5cf6" name="Latency (ms)" />
-                <Line type="monotone" dataKey="throughput" stroke="#10b981" name="Throughput (req/s)" />
-              </LineChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Database Performance */}
-          <Card className="bg-slate-800/50 border-slate-700">
-            <CardHeader>
-              <CardTitle className="text-white">Database Performance</CardTitle>
-              <CardDescription>Key database metrics</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {dbPerformanceData.map((item, idx) => (
-                  <div key={idx} className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-300">{item.metric}</span>
-                      <span className="text-white font-medium">{item.value} / {item.target}</span>
-                    </div>
-                    <div className="w-full bg-slate-700 rounded-full h-2">
-                      <div
-                        className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full"
-                        style={{ width: `${(item.value / item.target) * 100}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Cache Performance */}
-          <Card className="bg-slate-800/50 border-slate-700">
-            <CardHeader>
-              <CardTitle className="text-white">Cache Performance</CardTitle>
-              <CardDescription>Hit/miss ratio</CardDescription>
-            </CardHeader>
-            <CardContent className="flex justify-center">
-              <ResponsiveContainer width="100%" height={200}>
-                <PieChart>
-                  <Pie data={cacheData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} dataKey="value">
-                    {cacheData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
-                    ))}
-                  </Pie>
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569' }}
-                    labelStyle={{ color: '#e2e8f0' }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* System Resources */}
-        <Card className="bg-slate-800/50 border-slate-700">
-          <CardHeader>
-            <CardTitle className="text-white">System Resources</CardTitle>
-            <CardDescription>CPU, memory, and disk usage</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={systemResourcesData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
-                <XAxis dataKey="time" stroke="#94a3b8" />
-                <YAxis stroke="#94a3b8" />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569' }}
-                  labelStyle={{ color: '#e2e8f0' }}
-                />
-                <Legend />
-                <Area type="monotone" dataKey="cpu" stackId="1" stroke="#f59e0b" fill="#f59e0b" name="CPU %" />
-                <Area type="monotone" dataKey="memory" stackId="1" stroke="#8b5cf6" fill="#8b5cf6" name="Memory %" />
-                <Area type="monotone" dataKey="disk" stackId="1" stroke="#ef4444" fill="#ef4444" name="Disk %" />
-              </AreaChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Engine Health */}
-        <Card className="bg-slate-800/50 border-slate-700">
-          <CardHeader>
-            <CardTitle className="text-white">Engine Health Status</CardTitle>
-            <CardDescription>All 10 strategic engines</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-slate-700">
-                    <th className="text-left py-3 px-4 text-gray-300">Engine</th>
-                    <th className="text-left py-3 px-4 text-gray-300">Uptime</th>
-                    <th className="text-left py-3 px-4 text-gray-300">Requests</th>
-                    <th className="text-left py-3 px-4 text-gray-300">Errors</th>
-                    <th className="text-left py-3 px-4 text-gray-300">Avg Latency</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {engineHealth.map((engine, idx) => (
-                    <tr key={idx} className="border-b border-slate-700 hover:bg-slate-700/50">
-                      <td className="py-3 px-4 text-white font-medium">{engine.name}</td>
-                      <td className="py-3 px-4">
-                        <Badge variant={engine.uptime > 99.9 ? 'default' : 'secondary'}>
-                          {engine.uptime}%
-                        </Badge>
-                      </td>
-                      <td className="py-3 px-4 text-gray-300">{engine.requests.toLocaleString()}</td>
-                      <td className="py-3 px-4">
-                        <span className={engine.errors > 5 ? 'text-red-400' : 'text-green-400'}>
-                          {engine.errors}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-gray-300">{engine.avgLatency}ms</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+    <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-950 to-black px-4 py-8 text-white sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
+        <header className="flex flex-col gap-5 border-b border-slate-800 pb-8 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex gap-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-violet-400/25 bg-violet-400/10 text-violet-200">
+              <BarChart3 aria-hidden="true" className="h-6 w-6" />
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Error Distribution */}
-        <Card className="bg-slate-800/50 border-slate-700">
-          <CardHeader>
-            <CardTitle className="text-white">Error Distribution</CardTitle>
-            <CardDescription>Last 24 hours</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={errorDistribution}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
-                <XAxis dataKey="name" stroke="#94a3b8" />
-                <YAxis stroke="#94a3b8" />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569' }}
-                  labelStyle={{ color: '#e2e8f0' }}
+            <div>
+              <div className="mb-2 flex flex-wrap items-center gap-2">
+                <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                  Analytics dashboard
+                </h1>
+                <span className="rounded-full border border-violet-400/20 bg-violet-400/10 px-2.5 py-1 text-xs font-medium text-violet-200">
+                  Local preview
+                </span>
+              </div>
+              <p className="max-w-3xl text-sm leading-6 text-slate-400">
+                Review observability concepts without live telemetry, user
+                tracking, event collection, performance claims, or reporting
+                side effects.
+              </p>
+            </div>
+          </div>
+          <Button
+            aria-label="Reset analytics dashboard preview"
+            className="self-start border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800 hover:text-white"
+            onClick={reset}
+            variant="outline"
+          >
+            <RotateCcw aria-hidden="true" className="mr-2 h-4 w-4" />
+            Reset preview
+          </Button>
+        </header>
+        <section
+          className="mt-8 rounded-xl border border-amber-400/20 bg-amber-400/[0.07] p-4 text-sm text-slate-300"
+          role="note"
+        >
+          <div className="flex gap-3">
+            <AlertTriangle
+              aria-hidden="true"
+              className="mt-0.5 h-5 w-5 shrink-0 text-amber-200"
+            />
+            <p>
+              <strong className="font-semibold text-amber-100">
+                Analytics unavailable.
+              </strong>{" "}
+              No telemetry source, event schema, identity context, database
+              probe, API monitor, metric registry, or reporting pipeline is
+              connected. The dashboard below is a local interface preview.
+            </p>
+          </div>
+        </section>
+        <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_330px]">
+          <div className="space-y-6">
+            <Card className="border-slate-800 bg-slate-900/75 p-6 shadow-2xl shadow-black/20 sm:p-8">
+              <div className="flex flex-col gap-4 border-b border-slate-800 pb-6 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold text-white">
+                    Metric windows
+                  </h2>
+                  <p className="mt-1 text-sm text-slate-400">
+                    Time-window controls only update local preview context.
+                  </p>
+                </div>
+                <div
+                  aria-label="Select local analytics time window"
+                  className="flex flex-wrap gap-2"
+                  role="group"
+                >
+                  {windows.map(item => (
+                    <Button
+                      aria-pressed={window === item}
+                      className={
+                        window === item
+                          ? "bg-violet-500 text-white hover:bg-violet-400"
+                          : "border-slate-700 bg-slate-950 text-slate-400 hover:bg-slate-800 hover:text-white"
+                      }
+                      key={item}
+                      onClick={() => {
+                        setWindow(item);
+                        setStatus(
+                          `${item} analytics window selected locally. No time-range query was made.`
+                        );
+                      }}
+                      size="sm"
+                      variant={window === item ? "default" : "outline"}
+                    >
+                      {item}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                {metrics.map(metric => {
+                  const Icon =
+                    icons[metric.id as keyof typeof icons] ?? Activity;
+                  return (
+                    <button
+                      aria-pressed={selectedId === metric.id}
+                      className={`rounded-xl border p-5 text-left transition-colors ${selectedId === metric.id ? "border-violet-400/35 bg-violet-400/10" : "border-slate-800 bg-slate-950/60 hover:border-slate-600"}`}
+                      key={metric.id}
+                      onClick={() => {
+                        setSelectedId(metric.id);
+                        setStatus(
+                          `${metric.label} selected for local metric review.`
+                        );
+                      }}
+                      type="button"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 bg-slate-900 text-violet-200">
+                          <Icon aria-hidden="true" className="h-4 w-4" />
+                        </div>
+                        <span className="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-400">
+                          {metric.state}
+                        </span>
+                      </div>
+                      <p className="mt-5 font-medium text-slate-200">
+                        {metric.label}
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-slate-400">
+                        {metric.description}
+                      </p>
+                      <p className="mt-4 text-xs text-slate-600">
+                        {window} window · value unavailable
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+              <p
+                aria-live="polite"
+                className="mt-6 rounded-lg border border-slate-800 bg-slate-950/60 p-3 text-sm leading-6 text-slate-400"
+              >
+                {status}
+              </p>
+            </Card>
+            <Card className="border-slate-800 bg-slate-900/75 p-6 sm:p-8">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h2 className="text-xl font-semibold text-white">
+                    {selected.label}
+                  </h2>
+                  <p className="mt-1 text-sm text-violet-200">
+                    Selected local observability fixture
+                  </p>
+                </div>
+                <LineChart
+                  aria-hidden="true"
+                  className="h-6 w-6 text-violet-200"
                 />
-                <Bar dataKey="value" fill="#8b5cf6" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+              </div>
+              <div className="mt-6 rounded-xl border border-dashed border-slate-700 bg-slate-950/60 p-8 text-center">
+                <LineChart
+                  aria-hidden="true"
+                  className="mx-auto h-9 w-9 text-slate-600"
+                />
+                <p className="mt-3 font-medium text-slate-300">
+                  No verified data to chart
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-500">
+                  A chart would require a source, metric definition, aggregation
+                  window, freshness indicator, and access policy. None is
+                  connected for this preview.
+                </p>
+              </div>
+              <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                <div className="rounded-lg border border-slate-800 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-slate-500">
+                    Value
+                  </p>
+                  <p className="mt-2 text-sm text-slate-300">Unavailable</p>
+                </div>
+                <div className="rounded-lg border border-slate-800 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-slate-500">
+                    Freshness
+                  </p>
+                  <p className="mt-2 text-sm text-slate-300">Unknown</p>
+                </div>
+                <div className="rounded-lg border border-slate-800 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-slate-500">
+                    Window
+                  </p>
+                  <p className="mt-2 text-sm text-slate-300">{window}</p>
+                </div>
+              </div>
+            </Card>
+          </div>
+          <aside className="space-y-6">
+            <Card className="border-slate-800 bg-slate-900/75 p-6">
+              <div className="flex gap-3">
+                <LockKeyhole
+                  aria-hidden="true"
+                  className="mt-0.5 h-5 w-5 shrink-0 text-cyan-200"
+                />
+                <div>
+                  <p className="text-sm font-semibold text-slate-200">
+                    Data boundary
+                  </p>
+                  <p className="mt-3 text-sm leading-6 text-slate-400">
+                    No user identity, event, session, conversion, revenue, API,
+                    database, cache, or engine telemetry is available. No value
+                    is estimated.
+                  </p>
+                </div>
+              </div>
+            </Card>
+            <Card className="border-slate-800 bg-slate-900/75 p-6">
+              <div className="flex gap-3">
+                <ShieldCheck
+                  aria-hidden="true"
+                  className="mt-0.5 h-5 w-5 shrink-0 text-emerald-200"
+                />
+                <div>
+                  <p className="text-sm font-semibold text-slate-200">
+                    Reporting posture
+                  </p>
+                  <p className="mt-3 text-sm leading-6 text-slate-400">
+                    Export, alerts, targets, dashboards, and reports remain
+                    unavailable until provenance, consent, retention, access,
+                    and freshness contracts are defined.
+                  </p>
+                </div>
+              </div>
+              <div className="mt-5 grid gap-2 sm:grid-cols-3">
+                <Button
+                  className="border-slate-700 text-slate-300 hover:bg-slate-800"
+                  onClick={() => blocked("Export")}
+                  size="sm"
+                  variant="outline"
+                >
+                  Export unavailable
+                </Button>
+                <Button
+                  className="border-slate-700 text-slate-300 hover:bg-slate-800"
+                  onClick={() => blocked("Alerting")}
+                  size="sm"
+                  variant="outline"
+                >
+                  Alerts unavailable
+                </Button>
+                <Button
+                  className="border-slate-700 text-slate-300 hover:bg-slate-800"
+                  onClick={() => blocked("Reporting")}
+                  size="sm"
+                  variant="outline"
+                >
+                  Reports unavailable
+                </Button>
+              </div>
+            </Card>
+          </aside>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
