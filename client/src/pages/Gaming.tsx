@@ -1,314 +1,68 @@
-import { Link } from "wouter";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
-import { Gamepad2, Trophy, Zap, Users, Star, Play, TrendingUp, Coins, Target, Sword, Crown, Shield } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useMemo, useState } from "react";
+import { Gamepad2, Search, ShieldAlert, Trophy, Users, Swords, Spade, TrendingUp, Blocks, Target, Star, Info, LockKeyhole } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { EmptyState } from "@/components/EmptyState";
+import { PageHeader } from "@/components/PageHeader";
 
-const GAME_CATEGORIES = [
-  { id: "battle", name: "Battle Arena", icon: Sword, color: "oklch(0.72 0.28 20)", desc: "PvP combat for SKY444 prizes", href: "/arcade" },
-  { id: "crash", name: "Crash", icon: TrendingUp, color: "oklch(0.72 0.28 20)", desc: "Ride the multiplier — cash out before crash!", href: "/game/crash" },
-  { id: "slots", name: "Slots", icon: Star, color: "oklch(0.72 0.28 70)", desc: "Spin the reels for SKY444 jackpots", href: "/game/slots" },
-  { id: "blackjack", name: "Blackjack", icon: Crown, color: "oklch(0.72 0.28 160)", desc: "Beat the dealer — Split, Double Down", href: "/game/blackjack" },
-  { id: "quiz", name: "Crypto Quiz", icon: Zap, color: "oklch(0.72 0.28 70)", desc: "Test your Web3 knowledge", href: "/games/crypto-quiz" },
-  { id: "tap", name: "Token Tap", icon: Coins, color: "oklch(0.72 0.28 305)", desc: "Tap to earn SKY444", href: "/games/token-tap" },
-  { id: "build", name: "Block Builder", icon: Shield, color: "oklch(0.72 0.28 160)", desc: "Build your DeFi empire", href: "/games/block-builder" },
-  { id: "quest", name: "Quest Board", icon: Target, color: "oklch(0.72 0.28 220)", desc: "Daily & weekly missions", href: "/games/quest-board" },
-  { id: "tournament", name: "Tournaments", icon: Trophy, color: "oklch(0.80 0.18 70)", desc: "Compete for prize pools", href: "/tournaments" },
-];
+const GAMES = [
+  { id: "chess", name: "Chess", category: "Strategy / Board", description: "Turn-based strategy with rules, match history, and future multiplayer support.", icon: Swords },
+  { id: "checkers", name: "Checkers", category: "Strategy / Board", description: "A classic board-game foundation prepared for practice and competitive modes.", icon: Swords },
+  { id: "go", name: "Go", category: "Strategy / Board", description: "A deep territory game with extensible board and match-state architecture.", icon: Blocks },
+  { id: "backgammon", name: "Backgammon", category: "Strategy / Board", description: "A turn-based board experience with future lobby and match-history slots.", icon: Blocks },
+  { id: "blackjack", name: "Blackjack", category: "Card", description: "Card-game interface prepared for practice mode; wagering requires separate reviewed infrastructure.", icon: Spade },
+  { id: "holdem", name: "Texas Hold'em", category: "Card", description: "Multiplayer card-game extension point with no live table or payout claims.", icon: Spade },
+  { id: "baccarat", name: "Baccarat", category: "Card", description: "Practice-oriented card-game slot; regulated wagering is not enabled.", icon: Spade },
+  { id: "caribbean-stud", name: "Caribbean Stud", category: "Card", description: "Card-game extension point with responsible-play and rules sections prepared.", icon: Spade },
+  { id: "crash", name: "Crash", category: "Chance / Prediction", description: "Simulation or practice mode only until chance-game and payout infrastructure is reviewed.", icon: TrendingUp },
+  { id: "high-low", name: "High-Low", category: "Chance / Prediction", description: "Prediction-game extension point without live odds, rewards, or payouts.", icon: TrendingUp },
+  { id: "plinko", name: "Plinko", category: "Chance / Prediction", description: "Chance-game catalog entry with no simulated result presented as financial activity.", icon: Target },
+  { id: "mines", name: "Mines", category: "Chance / Prediction", description: "Practice-mode slot pending a verified game engine and responsible-play controls.", icon: Target },
+  { id: "roulette", name: "Roulette", category: "Chance / Prediction", description: "Roulette interface slot; wagering and payout systems are not connected.", icon: Target },
+  { id: "asteroids", name: "Asteroids", category: "Arcade", description: "Arcade-game slot prepared for score, achievement, and tournament extension points.", icon: Gamepad2 },
+  { id: "cyber-runner", name: "Cyber Runner", category: "Arcade", description: "Arcade-game catalog entry with no live leaderboards or rewards claimed.", icon: Gamepad2 },
+  { id: "block-puzzle", name: "Block Puzzle", category: "Arcade", description: "Puzzle-game extension point for scores, progress, and practice sessions.", icon: Blocks },
+  { id: "grid-fighter", name: "Grid Fighter", category: "Arcade", description: "Arcade combat slot with multiplayer and spectator capabilities reserved for later integration.", icon: Swords },
+  { id: "slots", name: "Slots-style game", category: "Additional", description: "Entertainment-game slot; jackpots, prizes, and payouts are not enabled.", icon: Star },
+  { id: "cluster-match", name: "Match / Cluster", category: "Additional", description: "Puzzle extension point with no fake rewards or completed results.", icon: Star },
+  { id: "tournament-arcade", name: "Tournament Arcade", category: "Additional", description: "Tournament hub extension point for verified scores, rules, and player history.", icon: Trophy },
+] as const;
+
+const CATEGORIES = ["All", ...Array.from(new Set(GAMES.map((game) => game.category)))];
 
 export default function Gaming() {
-  const { user } = useAuth();
-  const { data: tournaments, isLoading: tournamentsLoading } = trpc.gamefi.tournaments.useQuery();
-  const { data: quests } = trpc.gamefi.quests.useQuery();
-  const { data: leaderboard } = trpc.gamefi.leaderboard.useQuery({ type: "global", limit: 10 });
-  const { data: seasonPass } = trpc.gamefi.seasonPass.useQuery();
-  const { data: platformStats } = trpc.platform.stats.useQuery();
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("All");
+  const filteredGames = useMemo(() => GAMES.filter((game) => {
+    const matchesCategory = category === "All" || game.category === category;
+    const normalized = `${game.name} ${game.category} ${game.description}`.toLowerCase();
+    return matchesCategory && normalized.includes(query.toLowerCase());
+  }), [category, query]);
 
   return (
-    <div className="min-h-screen" style={{ background: 'oklch(0.07 0.025 270)' }}>
-      {/* ═══ CINEMATIC GAMING HERO ═══ */}
-      <div className="hero-cinematic border-b border-slate-800/60" style={{ minHeight: 300 }}>
-        <div className="absolute inset-0 cyber-grid opacity-30" />
-        <div className="glow-orb glow-orb-purple w-80 h-80 -top-10 left-1/4 animate-hero-float" />
-        <div className="glow-orb w-64 h-64 top-0 right-10 animate-hero-float" style={{ background: 'oklch(0.55 0.28 145 / 0.20)', animationDelay: '3s' }} />
-        <div className="relative z-10 max-w-6xl mx-auto px-4 py-12">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, oklch(0.55 0.28 145), oklch(0.72 0.28 305))' }}>
-              <Gamepad2 className="w-7 h-7 text-white" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-4xl font-black text-rainbow">SKY444 Gaming Hub</h1>
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-500/15 border border-green-500/30">
-                  <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                  <span className="text-[10px] text-green-400 font-bold">P2E LIVE</span>
-                </div>
-              </div>
-              <p className="text-sm mt-1 desc-metallic">Play games, complete quests, and earn real SKY444 tokens.</p>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
-            {[
-              { icon: Users,  value: platformStats?.totalUsers || 0, label: 'Players',      color: 'text-purple-400', bg: 'bg-purple-500/10 border-purple-500/20' },
-              { icon: Trophy, value: tournaments?.length || 0,        label: 'Tournaments', color: 'text-amber-400',  bg: 'bg-amber-500/10 border-amber-500/20' },
-              { icon: Target, value: quests?.length || 0,             label: 'Quests',      color: 'text-green-400',  bg: 'bg-green-500/10 border-green-500/20' },
-              { icon: Coins,  value: '∞',                             label: 'SKY444 Prizes',color: 'text-cyan-400',   bg: 'bg-cyan-500/10 border-cyan-500/20' },
-            ].map(stat => {
-              const Icon = stat.icon;
-              return (
-                <div key={stat.label} className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${stat.bg}`}>
-                  <Icon className={`w-5 h-5 ${stat.color} shrink-0`} />
-                  <div>
-                    <div className={`text-lg font-black stat-number ${stat.color}`}>{typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}</div>
-                    <div className="text-[10px] text-slate-500">{stat.label}</div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-background text-foreground">
+      <div className="border-b border-border/70 bg-card/60"><div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8"><PageHeader icon={Gamepad2} title="Gaming Hub" subtitle="A catalog foundation for strategy, card, chance, arcade, and tournament experiences." badge="Catalog mode" badgeVariant="outline" actions={<Button variant="outline" size="sm" disabled><Users className="mr-2 size-4" /> Live players unavailable</Button>} /></div></div>
 
-      <div className="max-w-6xl mx-auto px-4 py-8 space-y-10">
-        {/* Game Categories */}
-        <section>
-          <h2 className="text-xl font-bold text-rainbow-slow mb-4 flex items-center gap-2 section-header-neon">
-            <Gamepad2 className="w-5 h-5 icon-rainbow" />
-            Choose Your Game
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {GAME_CATEGORIES.map(cat => {
-              const Icon = cat.icon;
-              return (
-                <Link key={cat.id} href={cat.href}>
-                  <div
-                    className="p-5 rounded-2xl cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.98] group"
-                    style={{
-                      background: 'oklch(0.11 0.025 270)',
-                      border: `1px solid ${cat.color}33`,
-                      boxShadow: `0 0 20px ${cat.color}11`,
-                    }}
-                  >
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: `${cat.color}22` }}>
-                      <Icon className="w-5 h-5" style={{ color: cat.color }} />
-                    </div>
-                    <h3 className="font-semibold text-white text-sm mb-1">{cat.name}</h3>
-                    <p className="text-xs" style={{ color: 'oklch(0.50 0.020 275)' }}>{cat.desc}</p>
-                    <div className="mt-3 flex items-center gap-1 text-xs font-medium" style={{ color: cat.color }}>
-                      <Play className="w-3 h-3" />
-                      Play Now
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
+      <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
+        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Gaming status">
+          {[
+            { label: "Game catalog", value: `${GAMES.length}`, hint: "Extensible entries in this screen", icon: <Gamepad2 className="size-4" /> },
+            { label: "Live players", value: "Unavailable", hint: "Realtime service required", icon: <Users className="size-4" /> },
+            { label: "Leaderboards", value: "Not configured", hint: "Verified score service required", icon: <Trophy className="size-4" /> },
+            { label: "Rewards", value: "Disabled", hint: "No real payout or token success is shown", icon: <LockKeyhole className="size-4" /> },
+          ].map((item) => <Card key={item.label} className="border-border/70 bg-card/80"><CardContent className="space-y-3 p-5"><div className="flex items-center justify-between text-muted-foreground"><span className="text-sm">{item.label}</span><span aria-hidden="true">{item.icon}</span></div><p className="text-xl font-semibold">{item.value}</p><p className="text-xs leading-5 text-muted-foreground">{item.hint}</p></CardContent></Card>)}
         </section>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {/* Tournaments */}
-          <div className="md:col-span-2 space-y-4">
-            <h2 className="text-xl font-bold text-rainbow-slow flex items-center gap-2 section-header-neon">
-              <Trophy className="w-5 h-5 icon-rainbow" />
-              Live Tournaments
-            </h2>
-            {tournamentsLoading ? (
-              <div className="space-y-3">
-                {[1,2,3].map(i => (
-                  <div key={i} className="h-20 rounded-2xl animate-pulse" style={{ background: 'oklch(0.13 0.025 270)' }} />
-                ))}
-              </div>
-            ) : !tournaments || tournaments.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12 rounded-2xl" style={{ background: 'oklch(0.11 0.025 270)', border: '1px solid oklch(0.18 0.025 270)' }}>
-                <Trophy className="w-10 h-10 mb-3 opacity-30" style={{ color: 'oklch(0.80 0.18 70)' }} />
-                <p className="text-white font-medium mb-1">No Active Tournaments</p>
-                <p className="text-sm" style={{ color: 'oklch(0.50 0.020 275)' }}>Check back soon for upcoming events</p>
-                {user && (
-                  <Link href="/tournaments">
-                    <Button size="sm" className="mt-4" style={{ background: 'oklch(0.80 0.18 70)', color: 'black' }}>
-                      Create Tournament
-                    </Button>
-                  </Link>
-                )}
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {tournaments.slice(0, 5).map((t: any) => (
-                  <Link key={t.id} href={`/tournaments/${t.id}`}>
-                    <div
-                      className="p-4 rounded-2xl cursor-pointer transition-all hover:opacity-90"
-                      style={{ background: 'oklch(0.11 0.025 270)', border: '1px solid oklch(0.18 0.025 270)' }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-semibold text-white text-sm">{t.name}</span>
-                            <Badge className="text-[10px] px-1.5 py-0" style={{
-                              background: t.status === 'active' ? 'oklch(0.72 0.28 160 / 0.20)' : 'oklch(0.80 0.18 70 / 0.20)',
-                              color: t.status === 'active' ? 'oklch(0.72 0.28 160)' : 'oklch(0.80 0.18 70)',
-                              border: 'none',
-                            }}>
-                              {t.status === 'active' ? '● Live' : 'Upcoming'}
-                            </Badge>
-                          </div>
-                          <div className="flex items-center gap-3 text-xs" style={{ color: 'oklch(0.50 0.020 275)' }}>
-                            <span className="flex items-center gap-1">
-                              <Users className="w-3 h-3" />
-                              {t.currentParticipants || 0}/{t.maxParticipants} players
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Coins className="w-3 h-3" />
-                              {t.prizePool || 0} SKY444
-                            </span>
-                          </div>
-                        </div>
-                        <Button size="sm" style={{ background: 'oklch(0.72 0.28 305 / 0.15)', color: 'oklch(0.85 0.25 305)', border: 'none' }}>
-                          Join
-                        </Button>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-                <Link href="/tournaments">
-                  <Button variant="ghost" className="w-full text-sm" style={{ color: 'oklch(0.72 0.28 305)' }}>
-                    View All Tournaments →
-                  </Button>
-                </Link>
-              </div>
-            )}
+        <Card className="border-border/70 bg-card/80"><CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-start"><div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-300" aria-hidden="true"><ShieldAlert className="size-5" /></div><div><h2 className="font-semibold">Gaming safety boundary</h2><p className="mt-1 text-sm leading-6 text-muted-foreground">The catalog does not claim live multiplayer, real rewards, jackpots, blockchain scoring, or completed matches. Chance-based and crypto-enabled games require reviewed game logic, responsible-play controls, wallet/network validation, transaction status, and appropriate regulatory and payment infrastructure.</p></div></CardContent></Card>
 
-            {/* Active Quests */}
-            <h2 className="text-xl font-bold text-rainbow-slow flex items-center gap-2 pt-2 section-header-neon">
-              <Target className="w-5 h-5 icon-rainbow" />
-              Active Quests
-            </h2>
-            {!quests || quests.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-8 rounded-2xl" style={{ background: 'oklch(0.11 0.025 270)', border: '1px solid oklch(0.18 0.025 270)' }}>
-                <Target className="w-8 h-8 mb-2 opacity-30" style={{ color: 'oklch(0.72 0.28 160)' }} />
-                <p className="text-sm" style={{ color: 'oklch(0.50 0.020 275)' }}>No active quests right now</p>
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {quests.slice(0, 4).map((q: any) => (
-                  <div
-                    key={q.id}
-                    className="flex items-center gap-3 p-3 rounded-xl"
-                    style={{ background: 'oklch(0.11 0.025 270)', border: '1px solid oklch(0.18 0.025 270)' }}
-                  >
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'oklch(0.72 0.28 160 / 0.15)' }}>
-                      <Target className="w-4 h-4" style={{ color: 'oklch(0.72 0.28 160)' }} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-white truncate">{q.name}</p>
-                      <p className="text-xs" style={{ color: 'oklch(0.50 0.020 275)' }}>{q.description || q.type}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xs font-bold" style={{ color: 'oklch(0.80 0.18 70)' }}>+{q.rewardXp || 0} XP</p>
-                      <p className="text-xs" style={{ color: 'oklch(0.50 0.020 275)' }}>{q.rewardTokens || 0} SKY444</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+        <section className="space-y-4" aria-labelledby="catalog-heading"><div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><h2 id="catalog-heading" className="text-xl font-semibold">Game catalog</h2><p className="mt-1 text-sm text-muted-foreground">Search and filter the future-ready catalog. Launch controls remain disabled until each game has a verified implementation.</p></div><div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row"><label className="relative"><span className="sr-only">Search games</span><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search games" className="pl-9 sm:w-56" /></label><label><span className="sr-only">Filter by category</span><select value={category} onChange={(event) => setCategory(event.target.value)} className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring sm:w-52">{CATEGORIES.map((item) => <option key={item}>{item}</option>)}</select></label></div></div>
+          {filteredGames.length === 0 ? <EmptyState title="No games match this filter" description="Try another search term or category." icon={<Search className="size-5" />} /> : <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{filteredGames.map((game) => { const Icon = game.icon; return <Card key={game.id} className="border-border/70 bg-card/80 transition-colors hover:border-primary/50"><CardContent className="flex h-full flex-col p-5"><div className="flex items-start justify-between gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary" aria-hidden="true"><Icon className="size-5" /></div><Badge variant="outline" className="border-amber-500/30 bg-amber-500/10 text-amber-300">Integration required</Badge></div><h3 className="mt-4 font-semibold">{game.name}</h3><p className="mt-1 text-xs font-medium text-muted-foreground">{game.category}</p><p className="mt-3 flex-1 text-sm leading-6 text-muted-foreground">{game.description}</p><Button className="mt-5 w-full" disabled title="Game integration required"><Gamepad2 className="mr-2 size-4" />Unavailable</Button></CardContent></Card>; })}</div>}
+        </section>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Season Pass */}
-            {seasonPass && seasonPass.season > 0 && (
-              <div className="p-4 rounded-2xl" style={{
-                background: 'linear-gradient(135deg, oklch(0.13 0.04 305) 0%, oklch(0.11 0.025 270) 100%)',
-                border: '1px solid oklch(0.72 0.28 305 / 0.25)',
-              }}>
-                <div className="flex items-center gap-2 mb-2">
-                  <Crown className="w-4 h-4" style={{ color: 'oklch(0.80 0.18 70)' }} />
-                  <span className="text-white text-sm font-bold">Season {seasonPass.season}</span>
-                  <Badge className="text-[10px]" style={{ background: 'oklch(0.80 0.18 70 / 0.20)', color: 'oklch(0.80 0.18 70)', border: 'none' }}>
-                    {seasonPass.endsIn}
-                  </Badge>
-                </div>
-                <p className="text-xs mb-3" style={{ color: 'oklch(0.50 0.020 275)' }}>{seasonPass.name}</p>
-                <div className="flex items-center justify-between text-xs mb-1">
-                  <span style={{ color: 'oklch(0.50 0.020 275)' }}>Progress</span>
-                  <span className="text-white">{seasonPass.currentTier}/{seasonPass.tiers} tiers</span>
-                </div>
-                <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'oklch(0.18 0.025 270)' }}>
-                  <div className="h-full rounded-full" style={{
-                    width: `${(seasonPass.currentTier / seasonPass.tiers) * 100}%`,
-                    background: 'oklch(0.72 0.28 305)',
-                  }} />
-                </div>
-              </div>
-            )}
-
-            {/* Leaderboard */}
-            <div>
-              <h3 className="text-base font-bold text-white mb-3 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4" style={{ color: 'oklch(0.72 0.28 305)' }} />
-                Top Players
-              </h3>
-              <div className="space-y-2">
-                {!leaderboard || leaderboard.length === 0 ? (
-                  <div className="text-center py-6 rounded-xl" style={{ background: 'oklch(0.11 0.025 270)', border: '1px solid oklch(0.18 0.025 270)' }}>
-                    <p className="text-xs" style={{ color: 'oklch(0.50 0.020 275)' }}>No players yet — be first!</p>
-                  </div>
-                ) : (
-                  leaderboard.slice(0, 8).map((p: any, i: number) => (
-                    <Link key={p.id} href={`/profile/${p.id}`}>
-                      <div
-                        className="flex items-center gap-2 p-2 rounded-xl cursor-pointer transition-colors hover:opacity-80"
-                        style={{ background: 'oklch(0.11 0.025 270)' }}
-                      >
-                        <span className="w-5 text-center text-xs font-bold" style={{
-                          color: i === 0 ? 'oklch(0.80 0.18 70)' : i === 1 ? 'oklch(0.75 0.02 270)' : i === 2 ? 'oklch(0.65 0.12 50)' : 'oklch(0.45 0.020 275)',
-                        }}>
-                          {i + 1}
-                        </span>
-                        <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white overflow-hidden" style={{ background: 'oklch(0.72 0.28 305 / 0.20)' }}>
-                          {p.avatar ? <img src={p.avatar} alt="" className="w-full h-full object-cover" /> : (p.displayName || p.name || "?")[0]}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium text-white truncate">{p.displayName || p.name || "Player"}</p>
-                        </div>
-                        <span className="text-xs font-bold" style={{ color: 'oklch(0.72 0.28 305)' }}>
-                          {(p.xp || 0).toLocaleString()} XP
-                        </span>
-                      </div>
-                    </Link>
-                  ))
-                )}
-                <Link href="/leaderboard">
-                  <Button variant="ghost" size="sm" className="w-full text-xs" style={{ color: 'oklch(0.72 0.28 305)' }}>
-                    Full Leaderboard →
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            {/* Quick Links */}
-            <div>
-              <h3 className="text-sm font-bold text-white mb-2">Quick Access</h3>
-              <div className="space-y-1">
-                {[
-                  { href: "/arcade", label: "🕹️ Arcade Games" },
-                  { href: "/tournaments", label: "🏆 Tournaments" },
-                  { href: "/leaderboard", label: "📊 Leaderboards" },
-                  { href: "/staking", label: "💎 Stake to Play" },
-                  { href: "/sky-school", label: "🎓 Sky School" },
-                ].map(link => (
-                  <Link key={link.href} href={link.href}>
-                    <div className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm cursor-pointer transition-colors hover:opacity-80" style={{ color: 'oklch(0.60 0.025 275)' }}>
-                      {link.label}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        <section className="grid gap-5 lg:grid-cols-3"><Card className="border-border/70 bg-card/80"><CardHeader><CardTitle className="text-base">Prepared extension points</CardTitle></CardHeader><CardContent className="space-y-3 text-sm text-muted-foreground"><div className="flex items-start gap-3"><Trophy className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" /><span>Rules, tutorials, scores, achievements, leaderboards, match history, and tournaments can attach to each game.</span></div><div className="flex items-start gap-3"><Users className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" /><span>Lobbies, invitations, friends, chat, spectators, and realtime player counts remain integration slots.</span></div></CardContent></Card><Card className="border-border/70 bg-card/80"><CardHeader><CardTitle className="text-base">Crypto-game boundary</CardTitle></CardHeader><CardContent className="text-sm leading-6 text-muted-foreground"><p>Wallet connection, supported asset, network, fees, signing, confirmation, and transaction reference must be verified before any crypto-enabled game can operate.</p></CardContent></Card><Card className="border-border/70 bg-card/80"><CardHeader><CardTitle className="text-base">Live tip</CardTitle></CardHeader><CardContent><div className="rounded-xl bg-primary/5 p-4 text-sm leading-6 text-muted-foreground"><Info className="mb-2 size-4 text-primary" aria-hidden="true" />Review rules and available modes before starting a game. Practice mode must never be presented as financial activity.</div></CardContent></Card></section>
+      </main>
     </div>
   );
 }
