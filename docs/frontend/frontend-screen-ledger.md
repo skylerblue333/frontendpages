@@ -7,7 +7,7 @@ This ledger follows the attached future-proof modernization instructions. A scre
 | 1 | Home | `/` | PARTIAL | Shared visual layer; evidence-based inventory messaging; responsive hero/category layout; honest integration labels | Full responsive/accessibility/action audit still required | `5040632` |
 | 2 | Dashboard | `/dashboard` | PARTIAL | OAuth-safe unauthenticated state; explicit unavailable-auth message; corrected admin-role condition; loading state | Full authenticated route and tRPC contract validation required | `e607aa8` |
 | 3 | Crypto Hub | `/crypto-hub` | PARTIAL | Auth-required state; integration-status dashboard; asset coverage selector; overview/mining/swap/stake/burn/history extension points; honest unavailable states; responsive tab layout | Current router has no token procedures; authenticated tab-state review requires real session/backend | `80e663e` |
-| 4 | Wallet | `/wallet` | QUEUED | Route references identified | Balance, transaction, custody, network, and authentication contracts pending | — |
+| 4 | Wallet | `/wallet` | PARTIAL | Auth-required state; wallet status cards; custody safety boundary; balance/address/send/swap capability slots; activity empty state; responsive crypto navigation; honest unavailable labels | Current router has no wallet procedures; authenticated wallet-state review requires real session/backend | Pending commit |
 | 5 | Exchange | `/exchange` | QUEUED | Priority identified | Real order, pricing, transaction, and failure-state contracts pending | — |
 | 6 | Portfolio | `/portfolio` | QUEUED | Route references identified | Real holdings, P&L, pricing, and export contracts pending | — |
 | 7 | Gaming Hub | `/gaming` | QUEUED | Future catalog architecture required | Must distinguish demo/practice mode from real-money or blockchain functionality | — |
@@ -35,6 +35,10 @@ This ledger follows the attached future-proof modernization instructions. A scre
 
 The shared frontend foundation includes `PageHeader`, `StatCard`, `EmptyState`, `PageSkeleton`, branded navigation, global focus and reduced-motion behavior, compatibility exports, and dependency-safe icon usage. The production Vite build currently succeeds. The full TypeScript check remains blocked by approximately 720 existing diagnostics, especially missing tRPC procedures, legacy persona APIs, chart-library drift, and implicit page-level types.
 
+## Wallet browser review
+
+The `/wallet` route renders successfully in the frontend-only preview. With OAuth unavailable, it presents a centered authentication-required card and an explicit configuration message. No balances, addresses, transactions, or send controls are exposed in the unauthenticated state, and no runtime error boundary appears.
+
 ## Current next screen
 
-**Wallet — `/wallet`**. The Crypto Hub screen was audited and modernized as a partial checkpoint; its missing token procedures are recorded as backend blockers rather than fabricated in the UI.
+**Exchange — `/exchange`**. Wallet was modernized as a partial checkpoint; its missing wallet procedures are recorded as backend blockers rather than fabricated in the UI.
