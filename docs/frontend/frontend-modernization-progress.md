@@ -7,11 +7,11 @@
 | Metric | Value |
 |---|---:|
 | Registered screens | 1,059 |
-| Verified modernized screens | 304 |
-| Remaining screens | 755 |
-| Latest screenshot | `quality-screens/304-rate-limit-dashboard.webp` |
-| Next registered route | `/rate-limit-error` |
-| Next component | `RateLimitError` |
+| Verified modernized screens | 305 |
+| Remaining screens | 754 |
+| Latest screenshot | `quality-screens/305-rate-limit-error.webp` |
+| Next registered route | `/rate-limiting` |
+| Next component | `RateLimiting` |
 
 ## Source-of-truth artifacts
 
@@ -34,6 +34,7 @@ Screens 297–302 were verified in the current continuation:
 | 302 | `/radio-button-form` | `quality-screens/302-radio-button-form.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 303 | `/rate-limit-config` | `quality-screens/303-rate-limit-config.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 304 | `/rate-limit-dashboard` | `quality-screens/304-rate-limit-dashboard.webp` | TypeScript diagnostics clean for target screen; production build passed |
+| 305 | `/rate-limit-error` | `quality-screens/305-rate-limit-error.webp` | TypeScript diagnostics clean for target screen; production build passed |
 
 ## Cross-chat operating rule
 
@@ -43,4 +44,4 @@ Before changing or reporting a screen, read this manifest and the registered inv
 
 Unverified backend, analytics, financial, blockchain, AI, user, operational, or security claims must remain clearly labeled as unavailable, unconnected, unmeasured, preview, placeholder, blocked, or local-only until engineering evidence exists.
 
-_Last synchronized: 2026-08-17; current verified count: 304 / 1,059._
+_Last synchronized: 2026-08-17; current verified count: 305 / 1,059._
