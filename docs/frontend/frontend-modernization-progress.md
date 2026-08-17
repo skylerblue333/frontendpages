@@ -7,11 +7,11 @@
 | Metric | Value |
 |---|---:|
 | Registered screens | 1,059 |
-| Verified modernized screens | 322 |
-| Remaining screens | 737 |
-| Latest screenshot | `quality-screens/322-recently-viewed.webp` |
-| Next registered route | `/refactoring-tools` |
-| Next component | `RefactoringTools` |
+| Verified modernized screens | 323 |
+| Remaining screens | 736 |
+| Latest screenshot | `quality-screens/323-refactoring-tools.webp` |
+| Next registered route | `/referrals` |
+| Next component | `Referrals` |
 
 ## Source-of-truth artifacts
 
@@ -52,6 +52,7 @@ Screens 297–302 were verified in the current continuation:
 | 320 | `/recommended-matches` | `quality-screens/320-recommended-matches.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 321 | `/reels` | `quality-screens/321-reels.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 322 | `/recently-viewed` | `quality-screens/322-recently-viewed.webp` | TypeScript diagnostics clean for target screen; production build passed; missing route repaired and registered |
+| 323 | `/refactoring-tools` | `quality-screens/323-refactoring-tools.webp` | TypeScript diagnostics clean for target screen; production build passed |
 
 ## Cross-chat operating rule
 
@@ -61,4 +62,4 @@ Before changing or reporting a screen, read this manifest and the registered inv
 
 Unverified backend, analytics, financial, blockchain, AI, user, operational, or security claims must remain clearly labeled as unavailable, unconnected, unmeasured, preview, placeholder, blocked, or local-only until engineering evidence exists.
 
-_Last synchronized: 2026-08-17; current verified count: 322 / 1,059._
+_Last synchronized: 2026-08-17; current verified count: 323 / 1,059._
