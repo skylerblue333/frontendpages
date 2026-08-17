@@ -7,11 +7,11 @@
 | Metric | Value |
 |---|---:|
 | Registered screens | 1,059 |
-| Verified modernized screens | 330 |
-| Remaining screens | 729 |
-| Latest screenshot | `quality-screens/330-report-user.webp` |
-| Next registered route | `/reports-dashboard` |
-| Next component | `ReportsDashboard` |
+| Verified modernized screens | 331 |
+| Remaining screens | 728 |
+| Latest screenshot | `quality-screens/331-reports-dashboard.webp` |
+| Next registered route | `/reputation` |
+| Next component | `Reputation` |
 
 ## Source-of-truth artifacts
 
@@ -60,6 +60,7 @@ Screens 297–302 were verified in the current continuation:
 | 328 | `/remote-access` | `quality-screens/328-remote-access.webp` | Target screen diagnostics clean; production build passed; missing route repaired and registered; unrelated baseline TypeScript errors remain in SignUpFlow, VoiceCommands, and Quiz |
 | 329 | `/report-dialog` | `quality-screens/329-report-dialog.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 330 | `/report-user` | `quality-screens/330-report-user.webp` | TypeScript diagnostics clean for target screen; production build passed |
+| 331 | `/reports-dashboard` | `quality-screens/331-reports-dashboard.webp` | TypeScript diagnostics clean for target screen; production build passed |
 
 ## Cross-chat operating rule
 
@@ -69,4 +70,4 @@ Before changing or reporting a screen, read this manifest and the registered inv
 
 Unverified backend, analytics, financial, blockchain, AI, user, operational, or security claims must remain clearly labeled as unavailable, unconnected, unmeasured, preview, placeholder, blocked, or local-only until engineering evidence exists.
 
-_Last synchronized: 2026-08-17; current verified count: 330 / 1,059._
+_Last synchronized: 2026-08-17; current verified count: 331 / 1,059._
