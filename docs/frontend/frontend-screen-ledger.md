@@ -9,7 +9,7 @@ This ledger follows the attached future-proof modernization instructions. A scre
 | 3 | Crypto Hub | `/crypto-hub` | PARTIAL | Auth-required state; integration-status dashboard; asset coverage selector; overview/mining/swap/stake/burn/history extension points; honest unavailable states; responsive tab layout | Current router has no token procedures; authenticated tab-state review requires real session/backend | `80e663e` |
 | 4 | Wallet | `/wallet` | PARTIAL | Auth-required state; wallet status cards; custody safety boundary; balance/address/send/swap capability slots; activity empty state; responsive crypto navigation; honest unavailable labels | Current router has no wallet procedures; authenticated wallet-state review requires real session/backend | Pending commit |
 | 5 | Exchange | `/crypto-exchange` | PARTIAL | Auth-required state; market/order/settlement status cards; trading safety boundary; markets/orders/fills/research capability slots; activity empty state; honest unavailable labels | `/exchange` is not registered; current router has no exchange procedures; authenticated exchange-state review requires real session/backend | Pending commit |
-| 6 | Portfolio | `/portfolio` | QUEUED | Route references identified | Real holdings, P&L, pricing, and export contracts pending | — |
+| 6 | Portfolio | `/portfolio` | PARTIAL | Auth-required state; portfolio status cards; data-boundary messaging; holdings/history tabs; empty states; prepared allocation/performance/alerts/export extension points; responsive layout | Current router has no portfolio procedures; authenticated portfolio-state review requires real session/backend | Pending commit |
 | 7 | Gaming Hub | `/gaming` | QUEUED | Future catalog architecture required | Must distinguish demo/practice mode from real-money or blockchain functionality | — |
 | 8 | Chess | route pending | QUEUED | Listed in attached gaming priority | Exact route and game-state backend contract pending | — |
 | 9 | Blackjack | route pending | QUEUED | Listed in attached gaming priority | Regulatory, wagering, payout, and demo-mode boundaries pending | — |
@@ -43,6 +43,10 @@ The `/wallet` route renders successfully in the frontend-only preview. With OAut
 
 The requested `/exchange` path is not registered and correctly renders the application 404 state. The actual registered route is `/crypto-exchange`; it renders the modernized authentication-required state and an explicit OAuth configuration message without a runtime error.
 
+## Portfolio browser review
+
+The `/portfolio` route renders successfully in the frontend-only preview. With OAuth unavailable, it presents a centered authentication-required card and an explicit configuration message. No holdings, prices, P&L, allocations, or history values are exposed in the unauthenticated state, and no runtime error boundary appears.
+
 ## Current next screen
 
-**Portfolio — `/portfolio`**. Exchange was modernized as a partial checkpoint at its actual registered route, `/crypto-exchange`; the requested `/exchange` alias remains unregistered and is not being presented as available.
+**Gaming Hub — `/gaming`**. Portfolio was modernized as a partial checkpoint; its missing portfolio data procedures are recorded as backend blockers rather than fabricated in the UI.
