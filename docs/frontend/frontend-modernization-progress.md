@@ -7,11 +7,11 @@
 | Metric | Value |
 |---|---:|
 | Registered screens | 1,059 |
-| Verified modernized screens | 310 |
-| Remaining screens | 749 |
-| Latest screenshot | `quality-screens/310-real-time-monitoring.webp` |
-| Next registered route | `/real-time-streaming` |
-| Next component | `RealTimeStreaming` |
+| Verified modernized screens | 311 |
+| Remaining screens | 748 |
+| Latest screenshot | `quality-screens/311-real-time-streaming.webp` |
+| Next registered route | `/real-time-analytics` |
+| Next component | `RealTimeAnalytics` |
 
 ## Source-of-truth artifacts
 
@@ -40,6 +40,7 @@ Screens 297–302 were verified in the current continuation:
 | 308 | `/read-receipts` | `quality-screens/308-read-receipts.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 309 | `/real-time-game-engine` | `quality-screens/309-real-time-game-engine.webp` | TypeScript diagnostics clean for target screen; production build passed |
 | 310 | `/real-time-monitoring` | `quality-screens/310-real-time-monitoring.webp` | TypeScript diagnostics clean for target screen; production build passed |
+| 311 | `/real-time-streaming` | `quality-screens/311-real-time-streaming.webp` | TypeScript diagnostics clean for target screen; production build passed |
 
 ## Cross-chat operating rule
 
@@ -49,4 +50,4 @@ Before changing or reporting a screen, read this manifest and the registered inv
 
 Unverified backend, analytics, financial, blockchain, AI, user, operational, or security claims must remain clearly labeled as unavailable, unconnected, unmeasured, preview, placeholder, blocked, or local-only until engineering evidence exists.
 
-_Last synchronized: 2026-08-17; current verified count: 310 / 1,059._
+_Last synchronized: 2026-08-17; current verified count: 311 / 1,059._
