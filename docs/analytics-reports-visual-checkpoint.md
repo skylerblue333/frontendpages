@@ -21,3 +21,13 @@ No report, metric, identity, source, recipient, schedule, export, query, notific
 - Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_14-39-56_1924.webp`
 - Blocked-export screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_14-40-03_3873.webp`
 - Route text capture: `/home/ubuntu/page_texts/localhost_5175_analytics-reports.md`
+
+
+## Current hardening checkpoint
+
+The route was re-verified after the current hardening pass. The layout now renders typed local report concepts with Draft, Review, and Unavailable lifecycle filters; explicit source/metric/freshness/recipient/schedule/export unavailable fields; and blocked Create and Export actions.
+
+Activating `Export unavailable` confirmed: `Export report is unavailable locally. No report, metric, identity, source, recipient, schedule, export, query, notification, or file operation was started.`
+
+Current initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_07-58-31_8451.webp`
+Current blocked-export screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_07-58-39_1534.webp`
