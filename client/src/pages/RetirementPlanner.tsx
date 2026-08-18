@@ -1,75 +1,12 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Calculator, Check, CircleDollarSign, LockKeyhole, RefreshCw, ShieldAlert, SlidersHorizontal, Target, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+const scenarios = [{ id: 1, name: "Baseline planning", detail: "A local scenario shell for income, spending, time horizon, inflation, and contribution assumptions.", state: "Unconfigured" }, { id: 2, name: "Flexible timeline", detail: "A scenario concept for comparing target dates and contribution patterns without forecasting a personal outcome.", state: "Preview" }, { id: 3, name: "Downside review", detail: "A risk-review concept requiring validated balances, returns, tax rules, jurisdiction, fees, and professional review.", state: "Blocked" }];
 export default function RetirementPlanner() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>RetirementPlanner</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">RetirementPlanner</h1>
-            <p className="text-muted-foreground mt-2">Retirement planning</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [selected, setSelected] = useState(1); const [age, setAge] = useState("Not configured"); const [horizon, setHorizon] = useState("Not configured"); const [inflation, setInflation] = useState("Assumption not configured"); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false); const scenario = scenarios.find((item) => item.id === selected) ?? scenarios[0];
+  const projectionBars = useMemo(() => [22, 30, 35, 44, 52, 58, 66, 74], [age, horizon, inflation]); const reset = () => { setSelected(1); setAge("Not configured"); setHorizon("Not configured"); setInflation("Assumption not configured"); setSaved(false); setShowGates(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Calculator} eyebrow="Retirement planning · Preview" title="Model the assumptions before trusting the projection." description="Explore a local retirement-planning scenario surface with timeline, age, inflation intent, illustrative projection, save/reset, and financial evidence gates. No personalized balance, return, tax, investment, insurance, or retirement outcome is calculated or recommended." badge="Planning workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Saved locally" : "Save scenario locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review financial gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset scenario</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Scenarios", value: `${scenarios.length} local`, hint: "No account source", icon: Target, tone: "cyan" }, { label: "Balance", value: "Unavailable", hint: "No financial source", icon: CircleDollarSign, tone: "violet" }, { label: "Projection", value: "Illustrative", hint: "Not a forecast", icon: Calculator, tone: "amber" }, { label: "Advice", value: "Not provided", hint: "Review required", icon: ShieldAlert, tone: "slate" }]} /><ScreenPreviewBanner title="Financial evidence boundary"><strong>This is an educational planning preview, not financial advice or a personalized retirement calculation.</strong> Scenarios, controls, illustrative bars, saved state, and review gates are local UX concepts. No balance, return, tax result, contribution recommendation, investment product, insurance outcome, retirement date, or financial claim is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Scenario library</p><h2 className="mt-2 text-2xl font-black">Choose a planning shell</h2><div className="mt-6 space-y-3">{scenarios.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-2 text-sm leading-6 text-slate-400">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.state}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected scenario</p><h2 className="mt-2 text-2xl font-black">{scenario.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{scenario.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-3"><label className="text-sm text-slate-400">Current age<select value={age} onChange={(event) => setAge(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Not configured</option><option>Intent: under 35</option><option>Intent: 35–54</option><option>Intent: 55+</option></select></label><label className="text-sm text-slate-400">Planning horizon<select value={horizon} onChange={(event) => setHorizon(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Not configured</option><option>Short horizon intent</option><option>Medium horizon intent</option><option>Long horizon intent</option></select></label><label className="text-sm text-slate-400">Inflation intent<select value={inflation} onChange={(event) => setInflation(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Assumption not configured</option><option>Low assumption intent</option><option>Moderate assumption intent</option><option>High assumption intent</option></select></label></div><div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5"><div className="flex items-center justify-between"><div><p className="font-semibold">Illustrative accumulation shape</p><p className="mt-1 text-xs text-slate-500">Decorative preview only · no currency or forecast</p></div><SlidersHorizontal className="size-4 text-slate-500" /></div><div className="mt-5 flex h-28 items-end gap-2">{projectionBars.map((height, index) => <div key={index} className="flex-1 rounded-t-md bg-gradient-to-t from-violet-400/60 to-cyan-300/60" style={{ height: `${height}%` }} aria-label="Illustrative projection bar" />)}</div><div className="mt-2 flex justify-between text-[10px] uppercase tracking-wider text-slate-600"><span>Today</span><span>Illustrative</span><span>Later</span></div></div><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Account balance", value: "Unavailable" }, { label: "Contribution", value: "Not configured" }, { label: "Return", value: "Not configured" }, { label: "Tax treatment", value: "Review needed" }, { label: "Fees", value: "Unavailable" }, { label: "Outcome", value: "Not calculated" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No personalized financial claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A planning shell and illustrative bars do not establish a safe contribution, investment return, tax result, retirement age, or required balance.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Financial planning gates</p><h2 className="mt-2 text-2xl font-black">What a real retirement planner must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["User-provided goals, balances, contributions, income, spending, horizon, dependents, and data provenance", "Jurisdiction, tax rules, account types, fees, inflation, currency, employer benefits, and policy versions", "Return methodology, volatility, sequence risk, scenarios, sensitivity, assumptions, and calculation reproducibility", "Privacy, security, authorization, encryption, deletion, export, audit, and sensitive financial-data controls", "Clear disclosures, suitability boundaries, professional review, conflicts, accessibility, localization, and support", "No transaction, investment, insurance, tax filing, account transfer, or financial recommendation without authorized evidence"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Planning surface preserved", description: "Scenarios, age and horizon intent, inflation intent, illustrative projection, balances, contributions, tax, fees, save/reset, and gates remain interactive.", icon: Calculator, status: "Educational preview" }, { title: "No advice theater", description: "Balances, returns, taxes, contributions, investment products, retirement dates, and required outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before advice", description: "Real planning needs trusted user data, jurisdictional rules, reproducible assumptions, privacy controls, and professional review.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
 }
