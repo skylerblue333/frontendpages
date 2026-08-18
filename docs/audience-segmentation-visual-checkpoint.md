@@ -21,3 +21,13 @@ No identity, consent, segment membership, audience count, targeting list, campai
 - Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_15-00-49_4356.webp`
 - Blocked-estimate screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_15-00-57_3483.webp`
 - Route text capture: `/home/ubuntu/page_texts/localhost_5175_audience-segmentation.md`
+
+
+## Current hardening checkpoint
+
+The route was re-verified after the current hardening pass. The layout now renders typed local segment concepts with Review, Planned, and Unavailable lifecycle filters; explicit channel/identity/consent/membership/count/targeting/export unavailable fields; and blocked Estimate and Export actions.
+
+Activating `Estimate unavailable` confirmed: `Estimate audience is unavailable locally. No identity, consent, segment membership, audience count, targeting list, campaign, export, notification, or marketing operation was started.`
+
+Current initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_08-07-02_2960.webp`
+Current blocked-estimate screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_08-07-10_2590.webp`
