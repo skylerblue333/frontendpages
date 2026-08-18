@@ -21,3 +21,13 @@ No alert, event, threshold, recipient, schedule, notification, webhook, email, p
 - Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_14-47-48_4310.webp`
 - Blocked-test screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_14-48-01_6274.webp`
 - Route text capture: `/home/ubuntu/page_texts/localhost_5175_alert-configuration.md`
+
+
+## Current hardening checkpoint
+
+The route was re-verified after the current hardening pass. The layout now renders typed local alert-policy concepts with Review, Unavailable, and Planned lifecycle filters; explicit source/threshold/recipient/schedule/delivery/incident unavailable fields; and blocked Create and Test actions.
+
+Activating `Create unavailable` confirmed: `Create alert is unavailable locally. No alert, event, threshold, recipient, schedule, notification, webhook, incident, or production configuration was started.`
+
+Current initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_07-54-47_9391.webp`
+Current blocked-create screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_07-54-55_9052.webp`
