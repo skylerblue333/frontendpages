@@ -1,29 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Activity, AlertTriangle, BarChart3, CalendarDays, Check, Database, Download, Filter, Gauge, LockKeyhole, RefreshCw, Search, ShieldAlert, SlidersHorizontal, Sparkles, TrendingUp, X, Zap } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-type Dataset = { id: string; name: string; description: string; rows: string; freshness: string; source: string; state: string };
-const datasets: Dataset[] = [
-  { id: "synthetic-demand", name: "Synthetic demand series", description: "Generated demo observations for exploring trend and seasonality concepts.", rows: "240 rows", freshness: "Static", source: "Local fixture", state: "Available" },
-  { id: "synthetic-engagement", name: "Synthetic engagement series", description: "Generated demo observations for comparing cohorts and retention concepts.", rows: "180 rows", freshness: "Static", source: "Local fixture", state: "Available" },
-  { id: "live-portfolio", name: "Live portfolio activity", description: "Would require an authenticated, permissioned market and portfolio data source.", rows: "Unknown", freshness: "Unavailable", source: "No connector", state: "Blocked" },
-];
-const metrics = ["Trend", "Seasonality", "Retention", "Volatility"];
-const segments = ["All observations", "New cohort", "Returning cohort", "High activity"];
 export default function PredictiveAnalytics() {
-  const [datasetId, setDatasetId] = useState(datasets[0].id);
-  const [metric, setMetric] = useState(metrics[0]);
-  const [segment, setSegment] = useState(segments[0]);
-  const [horizon, setHorizon] = useState("14");
-  const [confidence, setConfidence] = useState("80");
-  const [query, setQuery] = useState("");
-  const [showSettings, setShowSettings] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const dataset = datasets.find((item) => item.id === datasetId) ?? datasets[0];
-  const filtered = useMemo(() => datasets.filter((item) => `${item.name} ${item.description} ${item.source}`.toLowerCase().includes(query.toLowerCase())), [query]);
-  const reset = () => { setDatasetId(datasets[0].id); setMetric(metrics[0]); setSegment(segments[0]); setHorizon("14"); setConfidence("80"); setQuery(""); setShowSettings(false); setSaved(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={TrendingUp} eyebrow="PredictiveAnalytics · Forecasting preview" title="Explore assumptions before a forecast is allowed to exist." description="Configure a clearly labeled synthetic dataset, metric, segment, horizon, and confidence target. The workspace demonstrates analyst intent while keeping live data, trained models, accuracy, and decisions blocked until evidence-backed services are connected." badge="Forecasting worksheet"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Scenario saved locally" : "Save scenario locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset worksheet</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Dataset", value: dataset.state, hint: dataset.source, icon: Database, tone: dataset.state === "Available" ? "cyan" : "amber" }, { label: "Horizon", value: `${horizon}d`, hint: "Analyst assumption", icon: CalendarDays, tone: "violet" }, { label: "Confidence", value: `${confidence}%`, hint: "Target only", icon: Gauge, tone: "amber" }, { label: "Forecast", value: "Blocked", hint: "No model service", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Predictive analytics evidence boundary"><strong>No forecast is being generated.</strong> The selected synthetic fixtures are local demo data. No market, portfolio, account, behavioral, financial, or user data is queried; no model, accuracy, confidence interval, risk score, recommendation, automated action, or investment decision is produced. Forecasting remains blocked until a permissioned dataset, model version, evaluation set, drift policy, and review workflow are implemented.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Dataset registry</p><h2 className="mt-2 text-2xl font-black">Choose the evidence</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">{filtered.length} listed</Badge></div><div className="relative mt-5"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search datasets…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="mt-4 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setDatasetId(item.id)} className={`w-full rounded-xl border p-4 text-left ${dataset.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start gap-3"><Database className={`mt-1 size-5 ${item.state === "Available" ? "text-cyan-200" : "text-amber-200"}`} /><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{item.name}</p><Badge variant="outline" className="border-white/10 text-slate-400">{item.state}</Badge></div><p className="mt-2 text-sm leading-5 text-slate-500">{item.description}</p><div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-400"><span>{item.rows}</span><span>·</span><span>{item.freshness}</span><span>·</span><span>{item.source}</span></div></div></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Scenario builder</p><h2 className="mt-2 text-2xl font-black">{dataset.name}</h2><p className="mt-2 text-sm text-slate-500">{dataset.description}</p></div><Button aria-label="Toggle scenario settings" onClick={() => setShowSettings((value) => !value)} variant="outline" className="border-white/10 text-slate-300"><SlidersHorizontal className="size-4" /></Button></div><div className="mt-6 grid gap-3 sm:grid-cols-2"><label className="text-sm text-slate-400">Metric<select value={metric} onChange={(event) => setMetric(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white outline-none">{metrics.map((item) => <option key={item}>{item}</option>)}</select></label><label className="text-sm text-slate-400">Segment<select value={segment} onChange={(event) => setSegment(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white outline-none">{segments.map((item) => <option key={item}>{item}</option>)}</select></label><label className="text-sm text-slate-400">Horizon (days)<input value={horizon} onChange={(event) => setHorizon(event.target.value.replace(/[^0-9]/g, ""))} inputMode="numeric" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white outline-none" /></label><label className="text-sm text-slate-400">Target confidence<input value={confidence} onChange={(event) => setConfidence(event.target.value.replace(/[^0-9]/g, ""))} inputMode="numeric" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white outline-none" /></label></div>{showSettings && <div className="mt-5 rounded-xl border border-violet-300/20 bg-violet-300/[0.06] p-4"><p className="text-sm font-semibold text-violet-100">Settings are intent only</p><p className="mt-2 text-sm leading-6 text-slate-400">Horizon and confidence are scenario inputs. They do not calibrate a model, create an interval, or improve forecast reliability.</p></div>}<div className="mt-6 rounded-2xl border border-amber-300/25 bg-amber-300/[0.06] p-5"><div className="flex items-start gap-3"><LockKeyhole className="mt-0.5 size-5 shrink-0 text-amber-200" /><div><p className="font-semibold text-amber-100">Forecast generation is blocked</p><p className="mt-2 text-sm leading-6 text-slate-400">No model version, training run, feature pipeline, evaluation set, calibration, uncertainty interval, or decision policy is connected. This prevents an unsupported chart from looking like a real prediction.</p><Button disabled className="mt-4 bg-slate-700 text-slate-400"><Zap className="mr-2 size-4" />Generate forecast unavailable</Button></div></div></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Preview plot area</p><h2 className="mt-2 text-2xl font-black">{metric} · {segment}</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">No live series</Badge></div><div className="mt-5 flex h-56 items-center justify-center rounded-2xl border border-dashed border-white/15 bg-black/15"><div className="text-center"><BarChart3 className="mx-auto size-10 text-slate-600" /><p className="mt-3 text-sm font-semibold text-slate-300">Chart awaits a verified dataset</p><p className="mt-2 max-w-sm text-xs leading-5 text-slate-500">The plot is intentionally empty rather than displaying fabricated trend, seasonality, or confidence bands.</p></div></div><div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-500"><span className="rounded-lg border border-white/10 px-3 py-2">Dataset: {dataset.state}</span><span className="rounded-lg border border-white/10 px-3 py-2">Horizon: {horizon || "—"} days</span><span className="rounded-lg border border-white/10 px-3 py-2">Confidence target: {confidence || "—"}%</span></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Evidence ledger</p><h2 className="mt-2 text-2xl font-black">What must be true first</h2><div className="mt-5 space-y-3">{[{ label: "Permissioned dataset and freshness", icon: Database }, { label: "Versioned model and reproducible run", icon: Activity }, { label: "Backtest, calibration, drift, and bias evidence", icon: Gauge }, { label: "Human review and decision audit trail", icon: ShieldAlert }].map(({ label, icon: Icon }) => <div key={label} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><Icon className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{label}</span><span className="text-xs text-amber-200">Required</span></div>)}</div><div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.05] p-4"><div className="flex gap-3"><ShieldAlert className="mt-0.5 size-5 shrink-0 text-cyan-200" /><p className="text-sm leading-6 text-slate-300">Local scenario saving is the only available action. It proves a configured intent, not a prediction or recommendation.</p></div></div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Analyst controls preserved", description: "Dataset search, metric selection, segmentation, horizon, confidence target, settings, reset, and local save state are interactive.", icon: Filter, status: "Local worksheet" }, { title: "Live evidence is unavailable", description: "No account, portfolio, market, behavioral, financial, or external dataset is connected to this route.", icon: Database, status: "Source off" }, { title: "Decisions remain human", description: "No investment, risk, product, eligibility, or automated action is generated from the empty preview.", icon: LockKeyhole, status: "Guardrail" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>PredictiveAnalytics</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">PredictiveAnalytics</h1>
+            <p className="text-muted-foreground mt-2">Forecasting</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/mysql2';
 import mysql from 'mysql2/promise';
 import * as schema from '../drizzle/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, desc } from 'drizzle-orm';
 
 const poolConnection = mysql.createPool(process.env.DATABASE_URL as string);
 
@@ -14,19 +14,17 @@ export async function getDb() {
 // ============ USER HELPERS ============
 export async function getUserById(id: string) {
   try {
-    const user = await db.query.users.findFirst({ where: eq(schema.users.id, id) });
-    return user || { id, name: "User", email: "user@example.com", balance: 0 };
+    return (await db.query.users.findFirst({ where: eq(schema.users.id, id) })) ?? null;
   } catch (error) {
-    return { id, name: "User", email: "user@example.com", balance: 0 };
+    return null;
   }
 }
 
 export async function getUserByEmail(email: string) {
   try {
-    const user = await db.query.users.findFirst({ where: eq(schema.users.email, email) });
-    return user || { id: "1", name: "User", email, balance: 0 };
+    return (await db.query.users.findFirst({ where: eq(schema.users.email, email) })) ?? null;
   } catch (error) {
-    return { id: "1", name: "User", email, balance: 0 };
+    return null;
   }
 }
 
@@ -40,14 +38,13 @@ export async function upsertUser(data: any) {
       return data;
     }
   } catch (error) {
-    return data;
+    return null;
   }
 }
 
 export async function getUserByOpenId(openId: string) {
   try {
-    // Note: users table doesn't have openId field, using email as fallback
-    return await db.query.users.findFirst({ where: eq(schema.users.email, openId) });
+    return (await db.query.users.findFirst({ where: eq(schema.users.openId, openId) })) ?? null;
   } catch (error) {
     return null;
   }
@@ -75,7 +72,7 @@ export async function createUser(data: any) {
     await db.insert(schema.users).values(data);
     return data;
   } catch (error) {
-    return data;
+    return null;
   }
 }
 
@@ -91,7 +88,7 @@ export async function updateUserBalance(userId: string, amount: number) {
 // ============ POST HELPERS ============
 export async function getPosts(limit = 20, offset = 0) {
   try {
-    return await db.query.posts.findMany({ limit, offset });
+    return await db.query.posts.findMany({ limit, offset, orderBy: desc(schema.posts.createdAt) });
   } catch (error) {
     return [];
   }
@@ -107,11 +104,11 @@ export async function getPostsByUser(userId: string) {
 
 export async function createPost(userId: string, content: string, media?: string) {
   try {
-    const id = `post-${Date.now()}`;
+    const id = `post-${crypto.randomUUID()}`;
     await db.insert(schema.posts).values({ id, userId, content, media });
     return { id, userId, content, media };
   } catch (error) {
-    return { id: "1", userId, content, media };
+    return null;
   }
 }
 
@@ -140,7 +137,7 @@ export async function createProduct(data: any) {
     await db.insert(schema.products).values(data);
     return data;
   } catch (error) {
-    return data;
+    return null;
   }
 }
 
@@ -158,7 +155,7 @@ export async function createOrder(data: any) {
     await db.insert(schema.orders).values(data);
     return data;
   } catch (error) {
-    return data;
+    return null;
   }
 }
 
@@ -194,14 +191,19 @@ export async function createWallet(data: any) {
     await db.insert(schema.wallets).values(data);
     return data;
   } catch (error) {
-    return data;
+    return null;
   }
 }
 
 // ============ GENERIC HELPERS ============
-export async function getAllRecords(table: any) {
+type RelationalFindMany = {
+  findMany: () => Promise<unknown[]>;
+};
+
+export async function getAllRecords(table: keyof typeof db.query) {
   try {
-    return await db.query[table].findMany();
+    const query = db.query[table] as unknown as RelationalFindMany;
+    return await query.findMany();
   } catch (error) {
     return [];
   }

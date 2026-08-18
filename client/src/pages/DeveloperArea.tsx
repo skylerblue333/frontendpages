@@ -5,11 +5,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function DeveloperArea() {
   const [logs, setLogs] = useState<string[]>([]);
-  
+
   return (
     <div className="container py-8">
       <h1 className="text-4xl font-bold mb-8">🛠️ Developer Area</h1>
-      
+
       <Tabs defaultValue="dashboard" className="space-y-4">
         <TabsList>
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
@@ -17,7 +17,7 @@ export default function DeveloperArea() {
           <TabsTrigger value="logs">System Logs</TabsTrigger>
           <TabsTrigger value="metrics">Metrics</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="dashboard">
           <Card>
             <CardHeader>
@@ -61,7 +61,7 @@ export default function DeveloperArea() {
             </CardContent>
           </Card>
         </TabsContent>
-        
+
         <TabsContent value="agents">
           <Card>
             <CardHeader>
@@ -77,7 +77,7 @@ export default function DeveloperArea() {
             </CardContent>
           </Card>
         </TabsContent>
-        
+
         <TabsContent value="logs">
           <Card>
             <CardHeader>
@@ -94,7 +94,7 @@ export default function DeveloperArea() {
             </CardContent>
           </Card>
         </TabsContent>
-        
+
         <TabsContent value="metrics">
           <Card>
             <CardHeader>

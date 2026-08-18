@@ -1,21 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { BookOpen, Check, ClipboardCheck, Clock3, GraduationCap, LockKeyhole, PlayCircle, RefreshCw, Search, ShieldCheck, Sparkles, Trophy, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const COURSES = [{ title: "Foundations of Digital Systems", category: "Technology", progress: 42, lessons: 8, completed: 3, detail: "Synthetic course plan for systems thinking, interfaces, and operational boundaries." }, { title: "Creative Product Practice", category: "Design", progress: 68, lessons: 10, completed: 7, detail: "Local learning path concept for discovery, prototyping, and evidence-led iteration." }, { title: "Responsible AI Literacy", category: "AI", progress: 18, lessons: 12, completed: 2, detail: "A preview curriculum about model limits, privacy, evaluation, and safe use." }, { title: "Community Facilitation", category: "Community", progress: 100, lessons: 6, completed: 6, detail: "Synthetic completion state for planning reflection and facilitation skills." }];
-const FILTERS = ["All", "Technology", "Design", "AI", "Community"];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function MyLearning() {
-  const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState("All");
-  const [selected, setSelected] = useState(COURSES[0].title);
-  const [note, setNote] = useState("");
-  const [saved, setSaved] = useState(false);
-  const course = COURSES.find((item) => item.title === selected) ?? COURSES[0];
-  const visible = useMemo(() => COURSES.filter((item) => (filter === "All" || item.category === filter) && `${item.title} ${item.category} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [filter, query]);
-  const reset = () => { setQuery(""); setFilter("All"); setSelected(COURSES[0].title); setNote(""); setSaved(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={GraduationCap} eyebrow="MyLearning · Progress planning" title="Track the study path without inventing a credential." description="Explore synthetic course cards, local progress states, category filters, lesson planning, and reflection notes. No enrollment, grade, instructor record, LMS sync, completion verification, certificate, or learning outcome is asserted." badge="Learning preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Plan saved locally" : "Save study plan"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset learning</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Courses", value: String(COURSES.length), hint: "Synthetic paths", icon: BookOpen }, { label: "Current", value: `${course.progress}%`, hint: "Local progress state", icon: PlayCircle, tone: "cyan" }, { label: "Completed", value: String(COURSES.filter((item) => item.progress === 100).length), hint: "Unverified examples", icon: Trophy, tone: "violet" }, { label: "Credential", value: "Off", hint: "No certificate source", icon: GraduationCap, tone: "amber" }]} /><ScreenPreviewBanner title="MyLearning evidence boundary"><strong>Course titles, lesson counts, progress percentages, completion states, and notes are local learning-plan fixtures—not enrollment records, grades, instructor assessments, LMS events, verified completions, certificates, credits, or learning-outcome claims.</strong> Production learning requires authoritative course content, identity, enrollment, assessment, gradebook, progress events, privacy/retention, accessibility, instructor roles, and credential issuance.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search synthetic courses" className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 flex gap-2 overflow-x-auto">{FILTERS.map((item) => <button key={item} onClick={() => setFilter(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${filter === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-5 space-y-3">{visible.map((item) => <button key={item.title} onClick={() => { setSelected(item.title); setSaved(false); }} className={`w-full rounded-2xl border p-4 text-left ${selected === item.title ? "border-cyan-300/40 bg-cyan-300/[0.07]" : "border-white/10 bg-black/10"}`}><div className="flex items-start gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-violet-300/10 text-violet-200"><BookOpen className="size-5" /></div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center justify-between gap-2"><h2 className="font-black">{item.title}</h2><Badge variant="outline" className="border-amber-300/20 text-[10px] text-amber-200">{item.progress}%</Badge></div><p className="mt-1 text-xs text-cyan-200">{item.category} · {item.completed}/{item.lessons} lesson examples</p><div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-cyan-300" style={{ width: `${item.progress}%` }} /></div><p className="mt-2 text-sm text-slate-400">{item.detail}</p></div></div></button>)}{visible.length === 0 && <div className="p-8 text-center text-slate-500">No synthetic courses match this view.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Selected course</p><h2 className="mt-2 text-3xl font-black">{course.title}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{course.category}</Badge></div><p className="mt-4 text-slate-400">{course.detail}</p><div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-5"><div className="flex items-center justify-between"><div><p className="font-black">Local progress</p><p className="text-xs text-slate-500">No LMS event or instructor record</p></div><span className="text-2xl font-black text-cyan-200">{course.progress}%</span></div><div className="mt-4 h-3 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-gradient-to-r from-cyan-300 to-violet-400" style={{ width: `${course.progress}%` }} /></div><div className="mt-4 grid gap-3 sm:grid-cols-2">{[{ label: "Lessons", value: `${course.lessons} planned` }, { label: "Examples", value: `${course.completed} marked local` }, { label: "Assessment", value: "Not provided" }, { label: "Credential", value: "Unavailable" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></div><textarea value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} placeholder="Write a local reflection or next-study note…" className="mt-5 min-h-24 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-slate-500" /><div className="mt-4 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />No grade, credit, enrollment, instructor feedback, or certificate is created by this preview.</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Learning readiness</p><h2 className="mt-2 text-2xl font-black">Required before progress claims</h2><div className="mt-5 space-y-3">{["Authoritative course content and versioning", "Learner identity, enrollment, and consent", "Assessment, rubric, gradebook, and instructor roles", "Progress event provenance, sync, and recovery", "Credential rules, accessibility, privacy, retention, and support"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><ClipboardCheck className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake completion</h2><p className="mt-3 text-sm leading-6 text-slate-400">The progress bar demonstrates local UX and does not verify learning, award credit, issue a certificate, or sync with an LMS.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A progress bar is not a grade", description: "Synthetic progress preserves learner UX without assessment, completion, or outcome claims.", icon: PlayCircle, status: "Guardrail" }, { title: "Credentials need authority", description: "Course versions, identity, assessment, instructor approval, and credential rules need evidence.", icon: GraduationCap, status: "Required" }, { title: "No fake LMS sync", description: "Local notes and progress examples do not create enrollments, grades, credits, or certificates.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>MyLearning</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">MyLearning</h1>
+            <p className="text-muted-foreground mt-2">My courses and progress</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

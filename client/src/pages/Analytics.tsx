@@ -28,7 +28,7 @@ export default function Analytics() {
   return (
     <div className="container py-8 max-w-6xl animate-page-in">
       <PageHeader backHref="/dashboard" icon={BarChart3} title="Analytics Dashboard" subtitle="Platform-wide metrics: DAU/MAU, revenue, content performance, and growth trends" />
-      
+
       {/* KPI Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {[

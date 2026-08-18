@@ -7,13 +7,13 @@ export default function FlashLoans() {
   return (
     <div className="min-h-screen bg-background">
       <PageHeader icon={Zap} title="Flash Loans" subtitle="Advanced flash loans with cutting-edge technology" />
-      
+
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
         {/* Main Content Area */}
         <Card className="p-8 bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20">
           <div className="space-y-6">
             <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Flash Loans</h2>
-            
+
             {/* Advanced Features */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
@@ -24,7 +24,7 @@ export default function FlashLoans() {
                   <Button size="sm" variant="outline" className="w-full">Explore</Button>
                 </div>
               </Card>
-              
+
               <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
                 <div className="space-y-3">
                   <Zap className="w-8 h-8 text-primary" />
@@ -33,7 +33,7 @@ export default function FlashLoans() {
                   <Button size="sm" variant="outline" className="w-full">Configure</Button>
                 </div>
               </Card>
-              
+
               <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
                 <div className="space-y-3">
                   <Zap className="w-8 h-8 text-primary" />
@@ -43,7 +43,7 @@ export default function FlashLoans() {
                 </div>
               </Card>
             </div>
-            
+
             {/* Performance Metrics */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
               <div className="p-4 bg-background/50 rounded-lg border border-border/50">
@@ -63,7 +63,7 @@ export default function FlashLoans() {
                 <p className="text-2xl font-bold text-primary">10K+/s</p>
               </div>
             </div>
-            
+
             {/* Action Section */}
             <div className="flex gap-4 flex-wrap pt-6">
               <Button size="lg" className="bg-primary hover:bg-primary/90">

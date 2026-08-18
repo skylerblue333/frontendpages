@@ -1,18 +1,84 @@
-import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Eye, FileCheck2, LockKeyhole, Network, RefreshCw, ShieldAlert, SlidersHorizontal, Timer, UserRoundCheck, WifiOff, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const modes = ["Research only", "Private metadata review", "Protocol design"];
-const threatModels = ["Basic observer", "Network observer", "Compromised endpoint", "Not selected"];
+import { Card } from "@/components/ui/card";
+import { PageHeader } from "@/components/PageHeader";
+
 export default function PrivacyMixer() {
-  const [mode, setMode] = useState(modes[0]);
-  const [threat, setThreat] = useState(threatModels[3]);
-  const [pool, setPool] = useState("Conceptual pool");
-  const [delay, setDelay] = useState("Not configured");
-  const [saved, setSaved] = useState(false);
-  const [showReview, setShowReview] = useState(false);
-  const reset = () => { setMode(modes[0]); setThreat(threatModels[3]); setPool("Conceptual pool"); setDelay("Not configured"); setSaved(false); setShowReview(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Eye} eyebrow="PrivacyMixer · Privacy protocol preview" title="Study privacy design without pretending funds or identities are protected." description="Explore a local privacy configuration worksheet with mode, threat model, pool, and delay intent. No wallet, asset, private key, transaction, network route, anonymity set, cryptographic proof, or security guarantee is connected." badge="Privacy research"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><FileCheck2 className="mr-2 size-4" />{saved ? "Review saved locally" : "Save review locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset review</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Privacy modes", value: String(modes.length), hint: "Local concepts", icon: Eye, tone: "cyan" }, { label: "Assets", value: "0", hint: "No wallet source", icon: LockKeyhole, tone: "violet" }, { label: "Mixing", value: "Off", hint: "No protocol", icon: Network, tone: "amber" }, { label: "Guarantee", value: "None", hint: "Unverified", icon: ShieldAlert, tone: "slate" }]} /><ScreenPreviewBanner title="Privacy and mixing evidence boundary"><strong>No privacy operation is being performed.</strong> This screen does not receive funds, hold keys, create transactions, route network traffic, mix assets, alter metadata, prove anonymity, or guarantee security. Controls are a local research worksheet. Real privacy infrastructure requires reviewed cryptography, threat modeling, key custody, network design, abuse controls, compliance analysis, and independent audit.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Research controls</p><h2 className="mt-2 text-2xl font-black">Define the question</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">Offline</Badge></div><div className="mt-5 space-y-4"><label className="block text-sm text-slate-400">Mode<select value={mode} onChange={(event) => setMode(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white outline-none">{modes.map((item) => <option key={item}>{item}</option>)}</select></label><label className="block text-sm text-slate-400">Threat model<select value={threat} onChange={(event) => setThreat(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white outline-none">{threatModels.map((item) => <option key={item}>{item}</option>)}</select></label><label className="block text-sm text-slate-400">Pool concept<select value={pool} onChange={(event) => setPool(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white outline-none"><option>Conceptual pool</option><option>Not selected</option><option>Requires protocol review</option></select></label><label className="block text-sm text-slate-400">Delay intent<select value={delay} onChange={(event) => setDelay(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white outline-none"><option>Not configured</option><option>Short concept</option><option>Variable concept</option><option>Requires protocol review</option></select></label></div><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><ShieldAlert className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-400">These selections describe a research question. They do not create a privacy pool, configure a mixer, or change a transaction.</p></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Privacy posture</p><h2 className="mt-2 text-2xl font-black">{mode}</h2><p className="mt-2 text-sm text-slate-500">Threat model: {threat}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">No guarantee</Badge></div><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Wallet", value: "Not connected" }, { label: "Private keys", value: "Not requested" }, { label: "Funds", value: "Not received" }, { label: "Transaction", value: "Not created" }, { label: "Network route", value: "Unchanged" }, { label: "Anonymity", value: "Unmeasured" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-6 rounded-2xl border border-amber-300/25 bg-amber-300/[0.06] p-5"><div className="flex items-start gap-3"><LockKeyhole className="mt-0.5 size-5 shrink-0 text-amber-200" /><div><p className="font-semibold text-amber-100">Protocol operation is blocked</p><p className="mt-2 text-sm leading-6 text-slate-400">No wallet connection, custody layer, transaction builder, privacy protocol, node, relay, cryptographic library, or audited implementation is attached.</p><Button disabled className="mt-4 bg-slate-700 text-slate-400">Start privacy operation unavailable</Button></div></div></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Review summary</p><h2 className="mt-2 text-2xl font-black">Selected design intent</h2></div><Button onClick={() => setShowReview((value) => !value)} variant="outline" className="border-white/10 text-slate-300">{showReview ? <X className="size-4" /> : <SlidersHorizontal className="size-4" />}</Button></div><div className="mt-5 space-y-3">{[{ label: "Mode", value: mode, icon: Eye }, { label: "Threat model", value: threat, icon: UserRoundCheck }, { label: "Pool", value: pool, icon: Network }, { label: "Delay", value: delay, icon: Timer }].map(({ label, value, icon: Icon }) => <div key={label} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><Icon className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{label}</span><span className="text-xs text-amber-200">{value}</span></div>)}</div>{showReview && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.05] p-4 text-sm leading-6 text-slate-400">The local summary is not a security assessment, threat-model approval, protocol specification, or audit result.</div>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Security gates</p><h2 className="mt-2 text-2xl font-black">What privacy infrastructure must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Reviewed threat model and cryptographic design", "Secure key custody and transaction validation", "Network, relay, timing, metadata, and correlation analysis", "Abuse, sanctions, privacy, and legal policy review", "Independent audit, incident response, and safe failure", "Clear user warnings against irreversible or unsafe actions"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><FileCheck2 className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Privacy surface preserved", description: "Mode, threat model, pool, delay, summary, local save/reset, posture details, and security gates remain interactive.", icon: Eye, status: "Research worksheet" }, { title: "No custody theater", description: "No wallet, funds, private keys, transaction, network route, anonymity, or security guarantee is fabricated.", icon: LockKeyhole, status: "Protected" }, { title: "Audit before action", description: "Privacy infrastructure remains unavailable until cryptography, custody, network, abuse, legal, and independent-audit requirements are met.", icon: WifiOff, status: "Blocked" }]} /></main></div>;
+  return (
+    <div className="min-h-screen bg-background">
+      <PageHeader icon={Eye} title="Privacy Mixer" subtitle="Advanced privacy mixer with cutting-edge technology" />
+
+      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+        {/* Main Content Area */}
+        <Card className="p-8 bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20">
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Privacy Mixer</h2>
+
+            {/* Advanced Features */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <Eye className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Advanced Analytics</h3>
+                  <p className="text-sm text-muted-foreground">Real-time data processing with AI insights</p>
+                  <Button size="sm" variant="outline" className="w-full">Explore</Button>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <Eye className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Automation Engine</h3>
+                  <p className="text-sm text-muted-foreground">Autonomous operations with intelligent decision making</p>
+                  <Button size="sm" variant="outline" className="w-full">Configure</Button>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <Eye className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Security First</h3>
+                  <p className="text-sm text-muted-foreground">Robust encryption and protection</p>
+                  <Button size="sm" variant="outline" className="w-full">Secure</Button>
+                </div>
+              </Card>
+            </div>
+
+            {/* Performance Metrics */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Processing Speed</p>
+                <p className="text-2xl font-bold text-primary">99.9%</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Uptime</p>
+                <p className="text-2xl font-bold text-primary">24/7</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Latency</p>
+                <p className="text-2xl font-bold text-primary">&lt;50ms</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Throughput</p>
+                <p className="text-2xl font-bold text-primary">10K+/s</p>
+              </div>
+            </div>
+
+            {/* Action Section */}
+            <div className="flex gap-4 flex-wrap pt-6">
+              <Button size="lg" className="bg-primary hover:bg-primary/90">
+                Get Started Now
+              </Button>
+              <Button size="lg" variant="outline">
+                View Documentation
+              </Button>
+              <Button size="lg" variant="ghost">
+                Schedule Demo
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
 }

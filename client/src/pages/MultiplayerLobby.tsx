@@ -1,22 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Check, Gamepad2, Globe2, LockKeyhole, Network, Play, RefreshCw, Search, Settings2, ShieldCheck, Users, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const ROOMS = [{ name: "Skyline Scrimmage", game: "Arena tactics", mode: "Team", region: "Local preview", players: 3, max: 4, status: "Open", note: "A synthetic room for turn order and team setup." }, { name: "Orbit Relay", game: "Co-op puzzle", mode: "Co-op", region: "Local preview", players: 2, max: 4, status: "Open", note: "A practice lobby for cooperative role planning." }, { name: "Midnight Circuit", game: "Racing", mode: "Solo", region: "Local preview", players: 1, max: 8, status: "Practice", note: "A local room card for race settings and readiness." }, { name: "Lantern League", game: "Strategy", mode: "Ranked", region: "Unavailable", players: 0, max: 2, status: "Blocked", note: "Ranked matchmaking remains unavailable without a verified service." }];
-const MODES = ["All", "Team", "Co-op", "Solo", "Ranked"];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function MultiplayerLobby() {
-  const [query, setQuery] = useState("");
-  const [mode, setMode] = useState("All");
-  const [selected, setSelected] = useState(ROOMS[0].name);
-  const [joined, setJoined] = useState(false);
-  const [ready, setReady] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const room = ROOMS.find((item) => item.name === selected) ?? ROOMS[0];
-  const visible = useMemo(() => ROOMS.filter((item) => (mode === "All" || item.mode === mode) && `${item.name} ${item.game} ${item.mode} ${item.note}`.toLowerCase().includes(query.toLowerCase())), [mode, query]);
-  const reset = () => { setQuery(""); setMode("All"); setSelected(ROOMS[0].name); setJoined(false); setReady(false); setSaved(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Gamepad2} eyebrow="MultiplayerLobby · Room planning" title="Plan the room before claiming the match." description="Explore synthetic game rooms, mode filters, player-slot states, host settings, and local readiness interactions. No live players, matchmaking, presence, network session, chat, score, result, or reward is asserted." badge="Lobby preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Lobby plan saved locally" : "Save lobby plan"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset lobby</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Rooms", value: String(ROOMS.length), hint: "Synthetic room cards", icon: Gamepad2 }, { label: "Players", value: "Local", hint: "No live presence", icon: Users, tone: "violet" }, { label: "Matchmaking", value: "Off", hint: "No service attached", icon: Network, tone: "amber" }, { label: "Session", value: "Unset", hint: "No network room", icon: Globe2, tone: "slate" }]} /><ScreenPreviewBanner title="MultiplayerLobby evidence boundary"><strong>Room names, player counts, modes, region labels, and readiness controls are synthetic lobby fixtures—not live users, presence, matchmaking, network connectivity, chat, game state, score, result, ranking, or reward settlement.</strong> Production multiplayer requires authenticated presence, room lifecycle, authoritative game state, anti-cheat, reconnects, moderation, result verification, and support.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search synthetic rooms" className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 flex gap-2 overflow-x-auto">{MODES.map((item) => <button key={item} onClick={() => setMode(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${mode === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-5 space-y-3">{visible.map((item) => <button key={item.name} onClick={() => { setSelected(item.name); setJoined(false); setReady(false); setSaved(false); }} className={`w-full rounded-2xl border p-4 text-left ${selected === item.name ? "border-cyan-300/40 bg-cyan-300/[0.07]" : "border-white/10 bg-black/10"}`}><div className="flex items-start gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-violet-300/10 text-violet-200"><Gamepad2 className="size-5" /></div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center justify-between gap-2"><h2 className="font-black">{item.name}</h2><Badge variant="outline" className="border-amber-300/20 text-[10px] text-amber-200">{item.status}</Badge></div><p className="mt-1 text-xs text-cyan-200">{item.game} · {item.mode}</p><p className="mt-2 text-sm text-slate-400">{item.note}</p><div className="mt-3 flex items-center gap-2 text-xs text-slate-500"><Users className="size-3" />{item.players}/{item.max} local slots · {item.region}</div></div></div></button>)}{visible.length === 0 && <div className="p-8 text-center text-slate-500">No synthetic rooms match this view.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Selected room</p><h2 className="mt-2 text-3xl font-black">{room.name}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{room.mode}</Badge></div><p className="mt-4 text-slate-400">{room.note}</p><div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-5"><div className="flex items-center justify-between"><div><p className="font-black">Player slots</p><p className="text-xs text-slate-500">Local room planning only</p></div><span className="text-sm font-semibold text-cyan-200">{room.players + (joined ? 1 : 0)}/{room.max}</span></div><div className="mt-4 grid grid-cols-4 gap-2">{Array.from({ length: room.max }).map((_, index) => { const occupied = index < room.players || (joined && index === room.players); return <div key={index} className={`flex h-12 items-center justify-center rounded-xl border ${occupied ? "border-cyan-300/30 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-700"}`}><Users className="size-4" /></div>; })}</div></div><div className="mt-5 flex gap-2"><Button onClick={() => { setJoined((value) => !value); setReady(false); }} disabled={room.status === "Blocked" || room.players >= room.max} className="bg-violet-500 text-white hover:bg-violet-400"><Users className="mr-2 size-4" />{joined ? "Leave room" : "Join locally"}</Button><Button onClick={() => setReady((value) => !value)} disabled={!joined} variant="outline" className="border-white/10 text-white hover:bg-white/10"><Check className="mr-2 size-4" />{ready ? "Ready locally" : "Mark ready"}</Button></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Region", value: room.region }, { label: "Network", value: "Not connected" }, { label: "Chat", value: "Unavailable" }, { label: "Result", value: "Not created" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Room readiness</p><h2 className="mt-2 text-2xl font-black">Required before match start</h2><div className="mt-5 space-y-3">{["Authenticated player identity and presence", "Authoritative room and game-state service", "Reconnect, timeout, and disconnect handling", "Anti-cheat, moderation, and report flow", "Result verification, ranking, rewards, and support"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><Settings2 className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake match</h2><p className="mt-3 text-sm leading-6 text-slate-400">Local room actions do not create a network session, connect players, start a game, calculate a result, or grant a reward.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A room card is not presence", description: "Synthetic slots preserve lobby UX without live players, chat, matchmaking, or network claims.", icon: Users, status: "Guardrail" }, { title: "Game state needs authority", description: "A real match needs authoritative state, reconnects, anti-cheat, moderation, and result verification.", icon: Network, status: "Required" }, { title: "No fake start", description: "Local join and ready controls do not launch a session or claim an outcome.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>MultiplayerLobby</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">MultiplayerLobby</h1>
+            <p className="text-muted-foreground mt-2">Multiplayer games</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

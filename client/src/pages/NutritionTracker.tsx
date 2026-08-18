@@ -1,23 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Apple, Check, CircleHelp, FileCheck2, Filter, LockKeyhole, Plus, RefreshCw, Salad, Search, ShieldCheck, Utensils, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const FOODS = [{ id: "f1", name: "Citrus grain bowl", category: "Breakfast", detail: "Synthetic meal concept with no verified ingredients, calories, allergens, or nutrition database.", servings: 1 }, { id: "f2", name: "Garden lentil plate", category: "Lunch", detail: "Local planning card; nutrition values and dietary suitability are not sourced.", servings: 1 }, { id: "f3", name: "Roasted root vegetables", category: "Dinner", detail: "Synthetic dinner concept with no medical, weight, or treatment implication.", servings: 1 }, { id: "f4", name: "Trail mix idea", category: "Snack", detail: "Local snack prompt; ingredients, portions, allergens, and macros remain unknown.", servings: 1 }];
-const CATEGORIES = ["All", "Breakfast", "Lunch", "Dinner", "Snack"];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function NutritionTracker() {
-  const [foods, setFoods] = useState(FOODS);
-  const [category, setCategory] = useState("All");
-  const [query, setQuery] = useState("");
-  const [selectedId, setSelectedId] = useState(FOODS[0].id);
-  const [saved, setSaved] = useState(false);
-  const [note, setNote] = useState("");
-  const visible = useMemo(() => foods.filter((item) => (category === "All" || item.category === category) && `${item.name} ${item.category} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [category, foods, query]);
-  const selected = foods.find((item) => item.id === selectedId) ?? foods[0];
-  const updateServings = (delta: number) => setFoods((current) => current.map((item) => item.id === selectedId ? { ...item, servings: Math.max(0.5, Math.min(8, item.servings + delta)) } : item));
-  const reset = () => { setFoods(FOODS); setCategory("All"); setQuery(""); setSelectedId(FOODS[0].id); setSaved(false); setNote(""); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Salad} eyebrow="NutritionTracker · Reflection planner" title="Plan the meal without pretending to measure health." description="Review synthetic meal concepts, category filters, serving placeholders, and private reflection notes. No calorie database, macro calculation, dietary recommendation, allergy check, medical guidance, weight trend, health record, or account sync is claimed." badge="Nutrition preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Plan saved locally" : "Save plan locally"}</Button><Button onClick={() => setFoods((current) => [{ id: `local-${Date.now()}`, name: "New meal concept", category: "Snack", detail: "Describe a meal locally; values remain unverified.", servings: 1 }, ...current])} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Plus className="mr-2 size-4" />Add meal concept</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Meals", value: String(foods.length), hint: "Local concepts", icon: Utensils }, { label: "Planned", value: String(foods.filter((item) => item.servings > 0).length), hint: "Serving placeholders", icon: Salad, tone: "cyan" }, { label: "Calories", value: "—", hint: "Not sourced", icon: CircleHelp, tone: "amber" }, { label: "Health sync", value: "Off", hint: "No records", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="NutritionTracker evidence boundary"><strong>Meal names, categories, servings, empty nutrition values, and local notes are reflection fixtures—not calorie or macro measurements, dietary advice, allergen safety, medical care, weight management, health trends, verified food records, or a synced health account.</strong> Production nutrition tracking requires a verified food database, units and portions, allergen policy, localization, consent, privacy, health-data controls, clinical boundaries, corrections, export/deletion, and support.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Search className="size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local meal concepts" className="w-full bg-transparent text-white outline-none placeholder:text-slate-500" /></div><div className="mt-4 flex gap-2 overflow-x-auto">{CATEGORIES.map((item) => <button key={item} onClick={() => setCategory(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${category === item ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-5 space-y-3">{visible.map((item) => <button key={item.id} onClick={() => setSelectedId(item.id)} className={`w-full rounded-2xl border p-4 text-left ${selectedId === item.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/10"}`}><div className="flex items-center gap-3"><Apple className="size-4 text-cyan-200" /><div className="flex-1"><p className="font-black">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.category} · {item.servings} serving concept</p></div><Badge variant="outline" className="border-white/10 text-[10px] text-amber-200">Values unknown</Badge></div><p className="mt-3 text-sm text-slate-400">{item.detail}</p></button>)}{visible.length === 0 && <p className="py-8 text-center text-slate-500">No meal concepts match.</p>}</div><div className="mt-5 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />Do not enter medical details, allergies, diagnoses, or sensitive health information into this preview.</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Meal detail</p><h2 className="mt-2 text-3xl font-black">{selected.name}</h2><p className="mt-3 text-slate-400">{selected.detail}</p><div className="mt-5 rounded-2xl border border-violet-300/20 bg-violet-300/[0.05] p-5"><p className="text-xs uppercase tracking-[0.2em] text-violet-200">Serving planner</p><div className="mt-3 flex items-center justify-between"><Button onClick={() => updateServings(-0.5)} variant="outline" className="border-white/10 text-white">−</Button><span className="text-4xl font-black">{selected.servings}</span><Button onClick={() => updateServings(0.5)} variant="outline" className="border-white/10 text-white">+</Button></div><p className="mt-3 text-center text-xs text-slate-500">Local portion placeholder; no grams, calories, or nutrient calculation.</p></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Calories", value: "Not sourced" }, { label: "Macros", value: "Not calculated" }, { label: "Allergens", value: "Unknown" }, { label: "Dietary fit", value: "Not assessed" }, { label: "Health goal", value: "Not inferred" }, { label: "Sync", value: "Unavailable" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><textarea value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} placeholder="Write a private meal reflection…" className="mt-5 min-h-24 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-slate-500" /></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Wellbeing readiness</p><h2 className="mt-2 text-2xl font-black">Required before health claims</h2><div className="mt-5 space-y-3">{["Verified food sources, serving units, portions, locale, and corrections", "Allergen, dietary, cultural, and accessibility safeguards", "Consent, health-data privacy, account ownership, export, and deletion", "Clear boundary between reflection, nutrition information, medical care, and treatment", "Clinician/support escalation, uncertainty, errors, and incident response"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><FileCheck2 className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake health insight</h2><p className="mt-3 text-sm leading-6 text-slate-400">This planner changes local state only. It does not diagnose, recommend a diet, calculate nutrition, assess allergens, track weight, or sync health data.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A meal card is not nutrition data", description: "Synthetic concepts preserve planning UX without calorie, macro, allergen, or health claims.", icon: Salad, status: "Guardrail" }, { title: "Wellbeing needs care", description: "Sources, privacy, dietary safeguards, uncertainty, and clinical boundaries need evidence.", icon: ShieldCheck, status: "Required" }, { title: "No fake health sync", description: "The preview makes no food database, health-record, account, or recommendation request.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>NutritionTracker</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">NutritionTracker</h1>
+            <p className="text-muted-foreground mt-2">Food logging</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

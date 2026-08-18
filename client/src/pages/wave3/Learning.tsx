@@ -9,7 +9,7 @@ import { trpc } from '@/lib/trpc';
 import { toast } from 'sonner';
 
 const LearningPage: React.FC = () => {
-  
+
   const [activeTab, setActiveTab] = useState<'browse' | 'enrolled' | 'certificates'>('browse');
   const [searchQuery, setSearchQuery] = useState('');
 

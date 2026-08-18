@@ -1,17 +1,74 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Bell, Check, ChevronRight, Compass, Gamepad2, Home, LockKeyhole, MessageCircle, RefreshCw, Search, Settings, Smartphone, Sparkles, Wallet, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const MODULES = [{ title: "Home overview", category: "Navigation", description: "Compact entry point for local module discovery.", status: "Preview", icon: Home }, { title: "Explore", category: "Discovery", description: "Browse education, creator, and game surfaces without live ranking.", status: "Preview", icon: Compass }, { title: "HopeAI", category: "Assistant", description: "Conversation shell with no connected advice or account context.", status: "Not connected", icon: Sparkles }, { title: "Wallet", category: "Finance", description: "Keep balances, signing, prices, and transfers unavailable.", status: "Blocked", icon: Wallet }, { title: "Messages", category: "Social", description: "Show a safe empty state until account and notification contracts exist.", status: "Unavailable", icon: MessageCircle }, { title: "Games", category: "Gaming", description: "Link to local game concepts without player or reward claims.", status: "Preview", icon: Gamepad2 }];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function MobileHome() {
-  const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState(MODULES[0].title);
-  const [saved, setSaved] = useState(false);
-  const module = MODULES.find((item) => item.title === selected) ?? MODULES[0];
-  const modules = useMemo(() => MODULES.filter((item) => `${item.title} ${item.category} ${item.description}`.toLowerCase().includes(query.toLowerCase())), [query]);
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Home} eyebrow="Mobile home · Navigation" title="Make the home screen useful without inventing the account." description="Explore a responsive mobile home shell with searchable module cards, local selection, notification and device readiness, and safe finance boundaries. No account session, unread count, market feed, wallet balance, install package, or device action is claimed." badge="Mobile home preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Home plan saved locally" : "Save home plan"}</Button><Button onClick={() => { setQuery(""); setSelected(MODULES[0].title); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset home</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Modules", value: String(MODULES.length), hint: "Local navigation", icon: Home }, { label: "Account", value: "Off", hint: "No session attached", icon: LockKeyhole, tone: "amber" }, { label: "Notifications", value: "Off", hint: "No push provider", icon: Bell, tone: "slate" }, { label: "Wallet", value: "Blocked", hint: "No balance or signing", icon: Wallet, tone: "violet" }]} /><ScreenPreviewBanner title="MobileHome evidence boundary"><strong>Navigation labels, module cards, selected state, device mockup, notification status, and finance guardrails are local UX fixtures—not an authenticated home feed, unread count, personalized recommendation, current market view, wallet balance, installed app, or device action.</strong> Production mobile home requires account contracts, privacy, notification permissions, cache freshness, backend data provenance, secure storage, and release evidence.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search mobile modules" className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{modules.map((item) => <button key={item.title} onClick={() => { setSelected(item.title); setSaved(false); }} className={`rounded-2xl border p-4 text-left ${selected === item.title ? "border-cyan-300/40 bg-cyan-300/[0.07]" : "border-white/10 bg-black/10"}`}><div className="flex items-start justify-between gap-2"><div className="flex size-10 items-center justify-center rounded-xl bg-violet-300/10 text-violet-200"><item.icon className="size-5" /></div><Badge variant="outline" className="border-amber-300/20 text-[10px] text-amber-200">{item.status}</Badge></div><h2 className="mt-4 font-black">{item.title}</h2><p className="mt-1 text-xs text-cyan-200">{item.category}</p><p className="mt-2 text-xs leading-5 text-slate-500">{item.description}</p></button>)}{modules.length === 0 && <div className="p-8 text-center text-slate-500">No modules match this search.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Selected module</p><h2 className="mt-2 text-3xl font-black">{module.title}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{module.status}</Badge></div><p className="mt-4 text-slate-400">{module.description}</p><div className="mt-6 mx-auto max-w-[270px] rounded-[2rem] border-4 border-slate-700 bg-slate-950 p-3"><div className="rounded-[1.4rem] bg-gradient-to-b from-cyan-400/10 to-violet-400/10 p-4"><div className="flex items-center justify-between text-[10px] text-slate-500"><span>9:41</span><span>Home preview</span></div><div className="mt-6 flex items-center justify-between"><div><p className="text-[10px] text-slate-500">Welcome</p><p className="mt-1 text-sm font-black">Local visitor</p></div><div className="flex size-8 items-center justify-center rounded-full border border-white/10"><Settings className="size-3 text-slate-500" /></div></div><div className="mt-5 rounded-xl border border-white/10 bg-white/[0.05] p-3"><p className="text-xs font-semibold">{module.title}</p><p className="mt-1 text-[10px] text-slate-500">{module.status} · no account data</p></div><div className="mt-4 grid grid-cols-4 gap-1 text-center text-[9px] text-slate-500"><span>Home</span><span>Explore</span><span>Games</span><span>Profile</span></div></div></div><div className="mt-6 space-y-3">{[{ label: "Notification permission", value: "Not requested", icon: Bell }, { label: "Account session", value: "Unavailable", icon: LockKeyhole }, { label: "Market and wallet", value: "Blocked", icon: Wallet }].map((item) => <div key={item.label} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><item.icon className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item.label}</span><span className="text-xs text-amber-200">{item.value}</span></div>)}</div></CardContent></Card></section><section className="grid gap-4 md:grid-cols-3">{[{ title: "Home is not a feed", description: "A local shell cannot claim personalized recommendations, unread counts, or current activity.", icon: WifiOff }, { title: "Notifications need consent", description: "Push delivery needs permission, provider, preferences, quiet hours, and failure handling.", icon: Bell }, { title: "Finance stays blocked", description: "Wallet balances, prices, swaps, and signing require authenticated and auditable services.", icon: Wallet }].map((item) => <Card key={item.title} className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><item.icon className="size-5 text-cyan-300" /><h2 className="mt-4 font-black">{item.title}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{item.description}</p></CardContent></Card>)}</section><ScreenFeatureGrid features={[{ title: "A shell is not an account", description: "The mobile home preview preserves navigation without implying identity, social data, or personalized state.", icon: Smartphone, status: "Guardrail" }, { title: "Freshness must be visible", description: "Cached content needs timestamps and safe empty states before appearing current.", icon: WifiOff, status: "Required" }, { title: "No fake device action", description: "No push, install, balance, wallet, or notification action is exposed until its service is verified.", icon: LockKeyhole, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>MobileHome</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">MobileHome</h1>
+            <p className="text-muted-foreground mt-2">Mobile home screen</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

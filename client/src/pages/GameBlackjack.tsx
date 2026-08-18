@@ -56,7 +56,7 @@ export default function GameBlackjack() {
   const [splitHand, setSplitHand] = useState<Card[]>([]);
   const [phase, setPhase] = useState<GamePhase>("betting");
   const [bet, setBet] = useState("25");
-  const [balance, setBalance] = useState(1000); // local practice credits only
+  const [balance, setBalance] = useState(1000);
   const [result, setResult] = useState("");
   const [canDouble, setCanDouble] = useState(false);
   const [canSplit, setCanSplit] = useState(false);
@@ -184,10 +184,10 @@ export default function GameBlackjack() {
         setStats(s => ({ ...s, pushes: s.pushes + 1 }));
       } else {
         const winnings = betAmt * 2.5;
-        setResult(`Blackjack! +${winnings} practice credits`);
+        setResult(`Blackjack! +${winnings} SKY444`);
         setBalance(b => b + winnings);
         setStats(s => ({ ...s, wins: s.wins + 1 }));
-        toast.success(`Blackjack! +${winnings} practice credits`);
+        toast.success(`🃏 Blackjack! +${winnings} SKY444`);
       }
       setPhase("result");
     }
@@ -200,20 +200,20 @@ export default function GameBlackjack() {
     setDealerHand(revealedDh);
     let msg = "";
     if (pv > 21) {
-      msg = `Bust! Lost ${betAmt} practice credits`;
+      msg = `Bust! Lost ${betAmt} SKY444`;
       setStats(s => ({ ...s, losses: s.losses + 1 }));
     } else if (dv > 21 || pv > dv) {
       const win = betAmt * 2;
       setBalance(b => b + win);
-      msg = `You Win! +${win} practice credits`;
+      msg = `You Win! +${win} SKY444`;
       setStats(s => ({ ...s, wins: s.wins + 1 }));
-      toast.success(`+${win} practice credits`);
+      toast.success(`+${win} SKY444`);
     } else if (pv === dv) {
       setBalance(b => b + betAmt);
       msg = "Push — Bet returned";
       setStats(s => ({ ...s, pushes: s.pushes + 1 }));
     } else {
-      msg = `Dealer Wins. Lost ${betAmt} practice credits`;
+      msg = `Dealer Wins. Lost ${betAmt} SKY444`;
       setStats(s => ({ ...s, losses: s.losses + 1 }));
     }
     setResult(msg);
@@ -239,14 +239,14 @@ export default function GameBlackjack() {
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-6">
           <h1 className="text-4xl font-black bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">♠ BLACKJACK</h1>
-          <p className="text-slate-500 text-sm mt-1">Practice mode · Standard rules · Split · Double Down · No real-money wagering</p>
+          <p className="text-slate-500 text-sm mt-1">Standard Rules · Split · Double Down · SKY444 Chips</p>
         </div>
 
         {/* Stats */}
         <div className="flex gap-3 justify-center mb-4">
           <div className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-center">
-            <p className="text-xs text-slate-500">Practice credits</p>
-            <p className="text-yellow-400 font-bold">{balance.toFixed(0)}</p>
+            <p className="text-xs text-slate-500">Balance</p>
+            <p className="text-yellow-400 font-bold">{balance.toFixed(0)} SKY</p>
           </div>
           <div className="bg-green-500/10 border border-green-500/20 rounded-lg px-4 py-2 text-center">
             <p className="text-xs text-green-500">Wins</p>
@@ -302,7 +302,7 @@ export default function GameBlackjack() {
         {phase === "betting" && (
           <div className="space-y-3">
             <div>
-              <label className="text-xs text-slate-500 mb-1 block">Practice credits</label>
+              <label className="text-xs text-slate-500 mb-1 block">Bet Amount (SKY444)</label>
               <div className="flex gap-2">
                 <Input value={bet} onChange={e => setBet(e.target.value)} className="bg-white/5 border-white/10 text-white text-center font-bold" />
                 {[10,25,50,100,250].map(amt => (
@@ -333,7 +333,7 @@ export default function GameBlackjack() {
 
         <div className="mt-3 p-3 bg-yellow-500/5 border border-yellow-500/20 rounded-lg flex items-start gap-2">
           <AlertTriangle className="w-3.5 h-3.5 text-yellow-500 shrink-0 mt-0.5" />
-          <p className="text-[10px] text-yellow-600">Practice mode only. Credits have no monetary value, cannot be withdrawn or transferred, and do not represent a blockchain transaction. A production wagering implementation would require separate reviewed game, custody, payment, regulatory, and responsible-play infrastructure.</p>
+          <p className="text-[10px] text-yellow-600">Standard Blackjack rules. House edge ~0.5%. SKY444 is a platform token, not real currency. Play responsibly.</p>
         </div>
       </div>
     </div>

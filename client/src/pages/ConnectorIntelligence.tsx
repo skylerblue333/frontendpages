@@ -200,7 +200,7 @@ export default function ConnectorIntelligence() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                 <XAxis dataKey="time" stroke="#9ca3af" />
                 <YAxis stroke="#9ca3af" />
-                <Tooltip 
+                <Tooltip
                   contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
                   labelStyle={{ color: '#fff' }}
                 />
@@ -227,7 +227,7 @@ export default function ConnectorIntelligence() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                 <XAxis dataKey="connector" stroke="#9ca3af" />
                 <YAxis stroke="#9ca3af" />
-                <Tooltip 
+                <Tooltip
                   contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
                   labelStyle={{ color: '#fff' }}
                 />
@@ -262,7 +262,7 @@ export default function ConnectorIntelligence() {
                     <p className="text-xs text-gray-400">{connector.category}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge 
+                    <Badge
                       className={connector.health > 0.95 ? 'bg-green-900 text-green-300' : 'bg-yellow-900 text-yellow-300'}
                     >
                       {Math.round(connector.health * 100)}%

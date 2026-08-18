@@ -9,7 +9,7 @@ import { trpc } from '@/lib/trpc';
 import { toast } from 'sonner';
 
 const ProfilePage: React.FC = () => {
-  
+
   const [activeTab, setActiveTab] = useState<'view' | 'edit' | 'posts' | 'followers' | 'activity'>('view');
   const [name, setName] = useState(user?.name || '');
   const [bio, setBio] = useState('');

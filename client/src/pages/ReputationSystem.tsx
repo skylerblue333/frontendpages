@@ -1,13 +1,115 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Award, BarChart3, Check, Filter, Gavel, History, LockKeyhole, RefreshCw, Search, ShieldAlert, Star, UsersRound, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const areas = [{ id: 1, name: "Leaderboard governance", category: "Ranking", detail: "A local ranking-governance concept awaiting population, score provenance, fairness review, visibility rules, and appeal controls.", state: "Preview only" }, { id: 2, name: "Weighted signal model", category: "Scoring", detail: "A local scoring-model concept requiring validated inputs, normalization, bias testing, explainability, and high-impact review.", state: "Needs evidence" }, { id: 3, name: "Badge catalogue", category: "Badges", detail: "A badge-governance concept requiring eligibility evidence, identity boundaries, expiry, revocation, and user consent.", state: "Unmeasured" }, { id: 4, name: "Appeals and moderation", category: "Governance", detail: "A governance concept requiring reviewer ownership, conflicts, appeals, deletion, privacy, and auditable decisions.", state: "Blocked" }];
+/**
+ * ReputationSystem — Phase 9 Social Reputation Engine
+ * Creator scores, social proof, trust signals, leaderboards
+ */
+import { useState } from "react";
+import { Link } from "wouter";
+import { ArrowLeft, Star, TrendingUp, Award, Users, Zap, Shield } from "lucide-react";
+
+const TOP_CREATORS = [
+  { rank: 1, name: "skyler.eth", score: 9840, badge: "Elite Creator", change: "+120", avatar: "S" },
+  { rank: 2, name: "nova_builds", score: 9210, badge: "Top Builder", change: "+85", avatar: "N" },
+  { rank: 3, name: "crypto_alice", score: 8750, badge: "Verified Pro", change: "+64", avatar: "C" },
+  { rank: 4, name: "dev_marcus", score: 8120, badge: "Power User", change: "+42", avatar: "D" },
+  { rank: 5, name: "luna_creates", score: 7890, badge: "Rising Star", change: "+98", avatar: "L" },
+];
+
+const REPUTATION_FACTORS = [
+  { factor: "Content quality", weight: 25, icon: Star, color: "text-yellow-400" },
+  { factor: "Community engagement", weight: 20, icon: Users, color: "text-blue-400" },
+  { factor: "Transaction success", weight: 20, icon: Zap, color: "text-green-400" },
+  { factor: "Trust score", weight: 20, icon: Shield, color: "text-purple-400" },
+  { factor: "Creator earnings", weight: 15, icon: TrendingUp, color: "text-pink-400" },
+];
+
 export default function ReputationSystem() {
-  const [query, setQuery] = useState(""); const [category, setCategory] = useState("All"); const [selected, setSelected] = useState(1); const [model, setModel] = useState("Model not configured"); const [visibility, setVisibility] = useState("Visibility review needed"); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false);
-  const categories = ["All", ...Array.from(new Set(areas.map((item) => item.category)))]; const filtered = useMemo(() => areas.filter((item) => (category === "All" || item.category === category) && `${item.name} ${item.category} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [category, query]); const area = areas.find((item) => item.id === selected) ?? areas[0];
-  const reset = () => { setQuery(""); setCategory("All"); setSelected(1); setModel("Model not configured"); setVisibility("Visibility review needed"); setSaved(false); setShowGates(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Award} eyebrow="ReputationSystem · Governance preview" title="Govern the signal before it ranks a person." description="Explore local reputation-system areas with search, categories, leaderboard intent, weighted criteria, badges, reviews, appeals, moderation, privacy, audit, save, reset, and high-impact governance gates. No live users, scores, rankings, trust, earnings, social proof, or enforcement is connected." badge="Reputation system workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "View saved locally" : "Save system locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review governance gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset system</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Areas", value: `${areas.length} local`, hint: "No system source", icon: Award, tone: "cyan" }, { label: "Population", value: "Unavailable", hint: "No user source", icon: UsersRound, tone: "violet" }, { label: "Model", value: "Unconfigured", hint: "No scoring source", icon: BarChart3, tone: "amber" }, { label: "Appeals", value: "Unconnected", hint: "No governance source", icon: Gavel, tone: "slate" }]} /><ScreenPreviewBanner title="Reputation-system evidence boundary"><strong>This is a local governance preview, not evidence that a reputation system is operating or that anyone has been ranked, scored, badged, endorsed, or judged.</strong> System areas, leaderboard intent, weighted criteria, badges, reviews, appeals, moderation, privacy, saved state, and audit gates are browser concepts. No user, score, ranking, trust, earnings, social proof, or high-impact outcome is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local reputation-system areas" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-4 flex flex-wrap gap-2">{categories.map((entry) => <Button key={entry} onClick={() => setCategory(entry)} size="sm" variant="outline" className={category === entry ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100" : "border-white/10 text-slate-400"}><Filter className="mr-1 size-3" />{entry}</Button>)}</div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.state}</Badge></div><div className="mt-4"><Badge variant="outline" className="border-white/10 text-slate-500">{item.category}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected governance area</p><h2 className="mt-2 text-2xl font-black">{area.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{area.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Category", value: area.category }, { label: "State", value: area.state }, { label: "Population", value: "Unavailable" }, { label: "Model", value: model }, { label: "Visibility", value: visibility }, { label: "Appeals", value: "Unconnected" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2"><label className="text-sm text-slate-400">Model posture<select value={model} onChange={(event) => setModel(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Model not configured</option><option>Weighted-intent model</option><option>Rules-intent model</option><option>Review-only intent</option></select></label><label className="text-sm text-slate-400">Visibility posture<select value={visibility} onChange={(event) => setVisibility(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Visibility review needed</option><option>Private-by-default intent</option><option>Opt-in intent</option><option>Appeal-gated intent</option></select></label></div><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><BarChart3 className="mx-auto size-8 text-slate-600" /><p className="mt-3 font-semibold">No reputation-system evidence loaded</p><p className="mt-2 text-sm text-slate-500">Connect governed identity, criteria, data provenance, fairness tests, review ownership, appeals, privacy, and audit sources before exposing scores or badges.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Calculate unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Rank unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Badge unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Publish unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No high-impact or social claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A local system concept does not prove identity, trust, quality, rank, earnings, social standing, eligibility, or a fair outcome.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Governance gates</p><h2 className="mt-2 text-2xl font-black">What a real reputation system must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Identity, ownership, consent, visibility, deletion, correction, portability, and tenant boundaries", "Criteria, evidence provenance, normalization, weighting, missing data, bias, fairness, explainability, and monitoring", "Reviews, endorsements, badges, reviewer conflicts, appeals, moderation, fraud, brigading, and manipulation", "Scores, averages, rankings, thresholds, confidence, recency, decay, and high-impact consequences", "Privacy, minors, sensitive attributes, targeting, discrimination, legal boundaries, earnings, and user safety", "Audit, support, incident response, rollback, accessibility, localization, and user-visible status"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "System surface preserved", description: "Areas, search, categories, leaderboards, weighted criteria, badges, reviews, appeals, moderation, privacy, audit, save/reset, and gates remain interactive.", icon: Award, status: "Local concepts" }, { title: "No high-impact theater", description: "Users, identity, scores, rankings, trust, earnings, social proof, eligibility, enforcement, and outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Governance before ranking", description: "Real systems need consent, fairness, explainability, appeals, privacy, monitoring, and auditable ownership.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const [tab, setTab] = useState<"leaderboard" | "factors" | "badges">("leaderboard");
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border/50 px-4 py-3 flex items-center gap-3">
+        <Link href="/" className="p-2 rounded-lg hover:bg-secondary/50 transition-colors text-muted-foreground">
+          <ArrowLeft className="w-4 h-4" />
+        </Link>
+        <div>
+          <h1 className="font-bold text-lg flex items-center gap-2">
+            <Award className="w-5 h-5 text-yellow-400" />
+            Reputation System
+          </h1>
+          <p className="text-xs text-muted-foreground">Social proof engine — Phase 9</p>
+        </div>
+      </div>
+
+      <div className="max-w-2xl mx-auto p-4 space-y-4">
+        <div className="flex gap-1 bg-secondary/30 rounded-xl p-1">
+          {(["leaderboard", "factors", "badges"] as const).map(t => (
+            <button key={t} onClick={() => setTab(t)}
+              className={`flex-1 py-2 rounded-lg text-xs font-medium capitalize transition-colors ${tab === t ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"}`}>
+              {t}
+            </button>
+          ))}
+        </div>
+
+        {tab === "leaderboard" && (
+          <div className="space-y-2">
+            {TOP_CREATORS.map(c => (
+              <div key={c.rank} className="card p-4 flex items-center gap-3">
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${c.rank === 1 ? "bg-yellow-500/20 text-yellow-400" : c.rank === 2 ? "bg-gray-500/20 text-gray-400" : c.rank === 3 ? "bg-orange-500/20 text-orange-400" : "bg-secondary text-muted-foreground"}`}>
+                  {c.rank}
+                </div>
+                <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary">
+                  {c.avatar}
+                </div>
+                <div className="flex-1">
+                  <div className="font-medium text-sm">{c.name}</div>
+                  <div className="text-xs text-muted-foreground">{c.badge}</div>
+                </div>
+                <div className="text-right">
+                  <div className="font-bold text-sm">{c.score.toLocaleString()}</div>
+                  <div className="text-xs text-green-400">{c.change} pts</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === "factors" && (
+          <div className="space-y-3">
+            <p className="text-sm text-muted-foreground">Reputation is calculated from multiple weighted signals.</p>
+            {REPUTATION_FACTORS.map(f => (
+              <div key={f.factor} className="card p-4 flex items-center gap-3">
+                <f.icon className={`w-5 h-5 ${f.color} shrink-0`} />
+                <div className="flex-1">
+                  <div className="font-medium text-sm">{f.factor}</div>
+                  <div className="mt-1.5 h-1.5 bg-secondary rounded-full overflow-hidden">
+                    <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${f.weight * 4}%` }} />
+                  </div>
+                </div>
+                <div className="text-sm font-bold text-primary">{f.weight}%</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === "badges" && (
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { name: "Elite Creator", desc: "Top 1% creator", color: "text-yellow-400", bg: "bg-yellow-500/10", icon: "👑" },
+              { name: "Verified Pro", desc: "Identity verified", color: "text-blue-400", bg: "bg-blue-500/10", icon: "✓" },
+              { name: "Power Trader", desc: "100+ transactions", color: "text-green-400", bg: "bg-green-500/10", icon: "⚡" },
+              { name: "Community Pillar", desc: "High engagement", color: "text-purple-400", bg: "bg-purple-500/10", icon: "🏛️" },
+              { name: "Rising Star", desc: "Fast growing", color: "text-pink-400", bg: "bg-pink-500/10", icon: "⭐" },
+              { name: "AI Pioneer", desc: "Early AI adopter", color: "text-cyan-400", bg: "bg-cyan-500/10", icon: "🤖" },
+            ].map(b => (
+              <div key={b.name} className={`card p-4 ${b.bg} border border-border/30`}>
+                <div className="text-2xl mb-2">{b.icon}</div>
+                <div className={`font-bold text-sm ${b.color}`}>{b.name}</div>
+                <div className="text-xs text-muted-foreground mt-0.5">{b.desc}</div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }

@@ -1,18 +1,74 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Bell, Check, ChevronRight, Compass, Gamepad2, Heart, Home, LockKeyhole, Menu, MessageCircle, RefreshCw, Search, Settings, Sparkles, Wallet, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const ITEMS = [{ title: "Home", group: "Primary", description: "Return to the local mobile-home shell.", icon: Home, status: "Preview" }, { title: "Explore", group: "Primary", description: "Browse creator, education, and game surfaces.", icon: Compass, status: "Preview" }, { title: "HopeAI", group: "Assistant", description: "Open a conversation shell without live advice context.", icon: Sparkles, status: "Not connected" }, { title: "Messages", group: "Social", description: "Show a safe empty state until account and unread contracts exist.", icon: MessageCircle, status: "Unavailable" }, { title: "Wallet", group: "Finance", description: "Keep balances, prices, approvals, and signing blocked.", icon: Wallet, status: "Blocked" }, { title: "Games", group: "Play", description: "Open local mobile-game concepts without player rewards.", icon: Gamepad2, status: "Preview" }, { title: "Settings", group: "Account", description: "Map preferences, permissions, security, and recovery flows.", icon: Settings, status: "Planning" }];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function MobileMenu() {
-  const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState(ITEMS[0].title);
-  const [pinned, setPinned] = useState<string[]>([]);
-  const item = ITEMS.find((entry) => entry.title === selected) ?? ITEMS[0];
-  const visible = useMemo(() => ITEMS.filter((entry) => `${entry.title} ${entry.group} ${entry.description}`.toLowerCase().includes(query.toLowerCase())), [query]);
-  const togglePinned = () => setPinned((items) => items.includes(item.title) ? items.filter((value) => value !== item.title) : [...items, item.title]);
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Menu} eyebrow="Mobile menu · Navigation" title="Design the menu as a map, not an account claim." description="Search local navigation groups, inspect selected-item states, pin a menu item locally, and review safe action boundaries. No account session, unread count, wallet balance, market data, install package, or device action is claimed." badge="Navigation preview"><div className="flex flex-wrap gap-2"><Button onClick={togglePinned} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Heart className="mr-2 size-4" />{pinned.includes(item.title) ? "Pinned locally" : "Pin menu item"}</Button><Button onClick={() => { setQuery(""); setSelected(ITEMS[0].title); setPinned([]); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset menu</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Menu items", value: String(ITEMS.length), hint: "Local route map", icon: Menu }, { label: "Pinned", value: String(pinned.length), hint: "Local preference", icon: Heart, tone: "violet" }, { label: "Unread", value: "Off", hint: "No account session", icon: Bell, tone: "amber" }, { label: "Finance", value: "Blocked", hint: "No wallet actions", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="MobileMenu evidence boundary"><strong>Menu items, groups, selected state, local pins, and status badges are navigation fixtures—not an authenticated account menu, unread counter, personalized feed, live market route, wallet balance, installed app, or device action.</strong> Production navigation requires route contracts, account state, permissions, notification providers, cache freshness, analytics consent, and safe action handling.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search menu items" className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-5 space-y-3">{visible.map((entry) => <button key={entry.title} onClick={() => setSelected(entry.title)} className={`flex w-full items-center gap-3 rounded-2xl border p-4 text-left ${selected === entry.title ? "border-cyan-300/40 bg-cyan-300/[0.07]" : "border-white/10 bg-black/10"}`}><div className="flex size-10 items-center justify-center rounded-xl bg-violet-300/10 text-violet-200"><entry.icon className="size-5" /></div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center justify-between gap-2"><h2 className="font-black">{entry.title}</h2><Badge variant="outline" className="border-amber-300/20 text-[10px] text-amber-200">{entry.status}</Badge></div><p className="mt-1 text-xs text-cyan-200">{entry.group}</p><p className="mt-1 text-xs text-slate-500">{entry.description}</p></div><ChevronRight className="size-4 text-slate-500" /></button>)}{visible.length === 0 && <div className="p-8 text-center text-slate-500">No menu items match this search.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Selected item</p><h2 className="mt-2 text-3xl font-black">{item.title}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{item.status}</Badge></div><p className="mt-4 text-slate-400">{item.description}</p><div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5"><div className="flex items-center gap-3"><div className="flex size-12 items-center justify-center rounded-2xl bg-cyan-300/10 text-cyan-200"><item.icon className="size-6" /></div><div><p className="font-black">{item.group} navigation</p><p className="text-xs text-slate-500">Local route preview · no account data</p></div></div><div className="mt-5 space-y-3">{[{ label: "Account context", value: "Unavailable" }, { label: "Notification state", value: "Not requested" }, { label: "Device action", value: "Unavailable" }].map((row) => <div key={row.label} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{row.label}</span><span className="text-xs text-amber-200">{row.value}</span></div>)}</div></div><Button onClick={togglePinned} variant="outline" className="mt-5 w-full border-white/15 text-white">{pinned.includes(item.title) ? <><Check className="mr-2 size-4" />Pinned locally</> : "Pin for local review"}</Button></CardContent></Card></section><section className="grid gap-4 md:grid-cols-3">{[{ title: "Navigation is not personalization", description: "A menu map cannot claim identity, unread counts, recommendations, or account-specific permissions.", icon: Menu }, { title: "Notifications need consent", description: "Unread badges and push delivery require account contracts, permission, provider, and freshness.", icon: Bell }, { title: "Finance stays blocked", description: "Wallet, swaps, prices, approvals, and signing require authenticated and auditable services.", icon: Wallet }].map((entry) => <Card key={entry.title} className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><entry.icon className="size-5 text-cyan-300" /><h2 className="mt-4 font-black">{entry.title}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{entry.description}</p></CardContent></Card>)}</section><ScreenFeatureGrid features={[{ title: "Menu is not an account", description: "The local map preserves navigation without implying login, identity, unread state, or personalized permissions.", icon: WifiOff, status: "Guardrail" }, { title: "Route actions need contracts", description: "Every destination needs loading, failure, permission, and safe-action handling before live use.", icon: LockKeyhole, status: "Required" }, { title: "No fake unread badge", description: "The preview keeps menu review useful without inventing messages, notifications, balances, or device actions.", icon: Bell, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>MobileMenu</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">MobileMenu</h1>
+            <p className="text-muted-foreground mt-2">Mobile navigation menu</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

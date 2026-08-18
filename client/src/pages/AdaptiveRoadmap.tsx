@@ -163,7 +163,7 @@ export default function AdaptiveRoadmap() {
                   <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                   <XAxis type="number" stroke="#9ca3af" />
                   <YAxis dataKey="name" type="category" stroke="#9ca3af" width={120} />
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
                     labelStyle={{ color: '#fff' }}
                   />
@@ -185,7 +185,7 @@ export default function AdaptiveRoadmap() {
                   <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                   <XAxis dataKey="effort" stroke="#9ca3af" name="Effort" />
                   <YAxis dataKey="impact" stroke="#9ca3af" name="Impact" />
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
                     labelStyle={{ color: '#fff' }}
                     cursor={{ strokeDasharray: '3 3' }}
@@ -209,7 +209,7 @@ export default function AdaptiveRoadmap() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                 <XAxis dataKey="quarter" stroke="#9ca3af" />
                 <YAxis stroke="#9ca3af" />
-                <Tooltip 
+                <Tooltip
                   contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
                   labelStyle={{ color: '#fff' }}
                 />
@@ -249,7 +249,7 @@ export default function AdaptiveRoadmap() {
                     <p className="text-xs text-gray-400 mt-1">Priority Score: {item.priority}/100</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge 
+                    <Badge
                       variant="outline"
                       className={
                         item.status === 'completed' ? 'border-green-500 text-green-400' :

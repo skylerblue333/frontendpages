@@ -1,18 +1,75 @@
-import { useMemo, useState } from "react";
-import { AlertTriangle, CheckCircle2, Eye, FileCheck2, KeyRound, LockKeyhole, Search, Settings, Shield, UserRound, Users, Workflow } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-type Role = { id: string; name: string; scope: string; status: "Policy draft" | "Review required" | "High impact"; description: string };
-const ROLES: Role[] = [
-  { id: "member", name: "Member", scope: "Personal account and public features", status: "Policy draft", description: "Base access should be limited to the current user's own records and explicitly public surfaces." },
-  { id: "creator", name: "Creator", scope: "Owned content and creator tools", status: "Review required", description: "Require ownership checks before editing content, receiving payouts, or managing audiences." },
-  { id: "moderator", name: "Moderator", scope: "Scoped community review", status: "High impact", description: "Require least privilege, human context, reason codes, and audited moderation actions." },
-  { id: "admin", name: "Administrator", scope: "System configuration and oversight", status: "High impact", description: "Require strong authentication, separation of duties, approval, and immutable audit records." },
-];
-const PERMISSIONS = ["Read own profile", "Edit owned content", "Review flagged content", "Manage integrations", "Export sensitive data", "Change access policy"];
+export default function AccessControl() {
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-export default function AccessControl() { const [query, setQuery] = useState(""); const [selected, setSelected] = useState(ROLES[0]); const [active, setActive] = useState("roles"); const [simulated, setSimulated] = useState(false); const visible = useMemo(() => ROLES.filter((role) => `${role.name} ${role.scope} ${role.status} ${role.description}`.toLowerCase().includes(query.toLowerCase())), [query]); return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Shield} eyebrow="Security · Access Control" title="Make authorization inspectable before it becomes powerful." description="Explore roles, permissions, policy simulation, approval paths, and audit requirements. This workspace does not claim a user's role, enforce a permission, grant access, or expose real account data." badge="Preview authorization console"><div className="flex flex-wrap gap-2"><Button onClick={() => setSimulated((value) => !value)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Eye className="mr-2 size-4" />{simulated ? "Reset simulation" : "Run policy preview"}</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Settings className="mr-2 size-4" />Policy settings</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Role templates", value: String(ROLES.length), hint: "Local policy examples", icon: Users }, { label: "Permissions", value: String(PERMISSIONS.length), hint: "Reviewable capabilities", icon: KeyRound, tone: "violet" }, { label: "Enforcement", value: "Unverified", hint: "No live policy engine", icon: LockKeyhole, tone: "amber" }, { label: "Audit", value: "Required", hint: "Reason and owner on change", icon: FileCheck2, tone: "slate" }]} /><ScreenPreviewBanner title="Authorization safety boundary">Role cards, permission catalog, search, local policy preview, approval requirements, and audit guidance are available for UX review. No real user identity, role assignment, enforcement result, admin access, data export, or security certification is fabricated.</ScreenPreviewBanner><section><div className="mb-5 flex flex-wrap gap-2 rounded-xl border border-white/10 bg-white/[0.04] p-2">{[["roles", "Role catalog"], ["permissions", "Permission map"], ["audit", "Approval and audit"]].map(([value, label]) => <Button key={value} size="sm" variant={active === value ? "default" : "outline"} onClick={() => setActive(value)} className={active === value ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "border-white/15 bg-white/5 text-slate-300 hover:bg-white/10"}>{label}</Button>)}</div>{active === "roles" && <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search roles" aria-label="Search access roles" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visible.map((role) => <button key={role.id} onClick={() => { setSelected(role); setSimulated(false); }} className={`w-full rounded-xl border p-4 text-left transition ${selected.id === role.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><UserRound className="size-4 text-cyan-300" /><span className="font-semibold">{role.name}</span><Badge variant="outline" className={`ml-auto ${role.status === "High impact" ? "border-red-300/20 text-red-200" : "border-amber-300/20 text-amber-200"}`}>{role.status}</Badge></div><p className="mt-2 text-sm text-slate-400">{role.scope}</p><p className="mt-2 text-sm leading-6 text-slate-500">{role.description}</p></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No roles match" description="Try another role or scope." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected role</p><h2 className="mt-1 text-2xl font-bold">{selected.name}</h2><p className="mt-2 text-sm text-slate-400">{selected.scope}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><div className="mt-6 space-y-3">{PERMISSIONS.map((permission, index) => <div key={permission} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4 text-sm text-slate-300"><KeyRound className="size-4 text-violet-300" /><span className="flex-1">{permission}</span><Badge variant="outline" className="border-white/10 text-slate-500">{index < 2 ? "Candidate" : "Review"}</Badge></div>)}</div>{simulated && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-amber-200"><Shield className="size-4" />Policy preview only</div><p className="mt-2 text-sm leading-6 text-slate-300">This local simulation does not grant or deny access. A real decision requires subject identity, resource ownership, policy version, reason code, and an auditable server response.</p></div>}</CardContent></Card></div>}{active === "permissions" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><KeyRound className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Permission map</p><h2 className="mt-1 text-2xl font-bold">Scope every capability</h2></div></div><div className="mt-6 grid gap-3 md:grid-cols-2">{PERMISSIONS.map((permission) => <div key={permission} className="rounded-xl border border-white/10 bg-black/15 p-4"><div className="flex items-center gap-2"><CheckCircle2 className="size-4 text-emerald-300" /><span className="font-medium">{permission}</span></div><p className="mt-2 text-sm leading-6 text-slate-400">Define subject, resource, action, condition, and denial behavior before implementation.</p></div>)}</div></CardContent></Card>}{active === "audit" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><ScreenStatePanel type="unavailable" title="Live authorization and audit records are unavailable" description="No role assignment, policy engine, approval workflow, or audit store is connected to this preview." /><div className="mt-5 grid gap-3 md:grid-cols-3">{["Approval owner", "Reason and policy version", "Immutable audit event"].map((item) => <div key={item} className="rounded-xl border border-white/10 bg-black/15 p-4"><Workflow className="size-4 text-violet-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Required before enforcement</p></div>)}</div></CardContent></Card>}</section><ScreenFeatureGrid features={[{ title: "Least privilege", description: "Start from the smallest permission set and require explicit elevation for sensitive actions.", icon: LockKeyhole, status: "Required" }, { title: "Ownership and scope", description: "Evaluate subject, resource, action, condition, and tenant boundaries on the server.", icon: Users, status: "Required" }, { title: "No fake enforcement", description: "A local preview never grants, denies, exports, or changes access in production.", icon: AlertTriangle, status: "Guardrail" }]} /></main></div>; }
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>AccessControl</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">AccessControl</h1>
+            <p className="text-muted-foreground mt-2">Fine-grained access control settings</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

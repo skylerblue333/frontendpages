@@ -1,14 +1,75 @@
-import { useMemo, useState } from "react";
-import { Bell, CalendarDays, Check, Clock3, Globe2, Grid2X2, List, MapPin, Plus, RefreshCw, ShieldAlert, UserRound, UsersRound, WifiOff, X } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-type Event = { id: string; title: string; day: number; time: string; type: string; location: string; note: string };
-const EVENTS: Event[] = [{ id: "event-preview-01", title: "Product review workshop", day: 6, time: "10:00", type: "Workshop", location: "Remote · preview", note: "Agenda and attendee availability require confirmation." }, { id: "event-preview-02", title: "Community planning block", day: 14, time: "14:30", type: "Planning", location: "Timezone not confirmed", note: "No invitations or reminders have been sent." }, { id: "event-preview-03", title: "Design critique", day: 22, time: "09:00", type: "Review", location: "Local calendar preview", note: "Conflict check is illustrative only." }];
-const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-export default function Calendar() { const [view, setView] = useState<"month" | "agenda">("month"); const [events, setEvents] = useState(EVENTS); const [selectedId, setSelectedId] = useState(EVENTS[0].id); const [title, setTitle] = useState("New planning block"); const [day, setDay] = useState("18"); const [time, setTime] = useState("11:00"); const [saved, setSaved] = useState(false); const selected = events.find((event) => event.id === selectedId) ?? events[0]; const agenda = useMemo(() => [...events].sort((a, b) => a.day - b.day), [events]); const addEvent = () => { const newEvent = { id: `local-${Date.now()}`, title: title || "Untitled preview event", day: Number(day) || 1, time: time || "09:00", type: "Local draft", location: "Not set", note: "Local draft; no invite or reminder exists." }; setEvents((current) => [...current, newEvent]); setSelectedId(newEvent.id); setSaved(true); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={CalendarDays} eyebrow="Planning · Calendar Preview" title="Plan the moment before the calendar sends anything." description="Explore a local agenda, month-style day grid, event details, and a draft event form. This page does not sync calendars, send invitations, set reminders, resolve timezone conflicts, or claim attendee availability." badge="Preview scheduling workspace"><div className="flex flex-wrap gap-2"><Button onClick={addEvent} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Plus className="mr-2 size-4" />Add local draft</Button><Button onClick={() => { setEvents(EVENTS); setSelectedId(EVENTS[0].id); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset calendar</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Events", value: String(events.length), hint: "Synthetic and local drafts", icon: CalendarDays }, { label: "View", value: view, hint: "Local presentation", icon: view === "month" ? Grid2X2 : List, tone: "violet" }, { label: "Timezone", value: "Unconfirmed", hint: "No calendar sync", icon: Globe2, tone: "amber" }, { label: "Reminders", value: "Unavailable", hint: "No notification service", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Scheduling evidence boundary">An event card is not a confirmed meeting. A production calendar needs timezone-aware timestamps, participant consent, availability sources, invitation delivery, reminder policy, cancellation and update semantics, access controls, and an auditable provider sync.</ScreenPreviewBanner><section className="flex items-center justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Preview calendar</p><h2 className="mt-1 text-2xl font-black">April planning canvas</h2></div><div className="flex gap-2"><Button onClick={() => setView("month")} variant={view === "month" ? "default" : "outline"} className={view === "month" ? "bg-cyan-300 text-slate-950" : "border-white/15 text-white"}><Grid2X2 className="mr-2 size-4" />Month</Button><Button onClick={() => setView("agenda")} variant={view === "agenda" ? "default" : "outline"} className={view === "agenda" ? "bg-cyan-300 text-slate-950" : "border-white/15 text-white"}><List className="mr-2 size-4" />Agenda</Button></div></section>{view === "month" ? <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-4"><div className="grid grid-cols-7 gap-2 text-center text-xs text-slate-500">{DAYS.map((dayName) => <div key={dayName} className="p-2 font-semibold uppercase tracking-wider">{dayName}</div>)}{Array.from({ length: 35 }, (_, index) => { const date = index - 2; const event = events.find((item) => item.day === date); return <button key={index} onClick={() => event && setSelectedId(event.id)} className={`min-h-20 rounded-xl border p-2 text-left transition ${event ? "border-cyan-300/25 bg-cyan-300/[0.06]" : "border-white/5 bg-black/10 hover:bg-white/[0.04]"}`}><span className="text-xs text-slate-500">{date > 0 && date <= 30 ? date : ""}</span>{event && <><p className="mt-2 line-clamp-2 text-xs font-semibold text-cyan-100">{event.title}</p><p className="mt-1 text-[10px] text-slate-500">{event.time}</p></>}</button>; })}</div></CardContent></Card> : <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="space-y-3">{agenda.map((event) => <button key={event.id} onClick={() => setSelectedId(event.id)} className={`flex w-full items-center gap-4 rounded-xl border p-4 text-left ${selected?.id === event.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15"}`}><div className="w-12 text-center"><p className="text-xs uppercase text-slate-500">Apr</p><p className="text-xl font-black text-cyan-200">{event.day}</p></div><div className="flex-1"><p className="font-semibold">{event.title}</p><p className="mt-1 text-xs text-slate-500">{event.time} · {event.location}</p></div><Badge variant="outline" className="border-white/10 text-slate-400">{event.type}</Badge></button>)}</div></CardContent></Card>}<section className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Event draft</p><h2 className="mt-1 text-2xl font-black">Create locally</h2></div><Plus className="size-5 text-cyan-300" /></div><div className="mt-5 space-y-4"><div><label className="mb-2 block text-sm text-slate-300" htmlFor="event-title">Title</label><Input id="event-title" value={title} onChange={(event) => setTitle(event.target.value)} className="border-white/10 bg-black/20 text-white" /></div><div className="grid gap-4 sm:grid-cols-2"><div><label className="mb-2 block text-sm text-slate-300" htmlFor="event-day">April day</label><Input id="event-day" value={day} onChange={(event) => setDay(event.target.value)} inputMode="numeric" className="border-white/10 bg-black/20 text-white" /></div><div><label className="mb-2 block text-sm text-slate-300" htmlFor="event-time">Local time</label><Input id="event-time" value={time} onChange={(event) => setTime(event.target.value)} className="border-white/10 bg-black/20 text-white" /></div></div><Textarea placeholder="Draft agenda or context" className="min-h-24 border-white/10 bg-black/20 text-white placeholder:text-slate-500" /><Button onClick={addEvent} className="w-full bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Plus className="mr-2 size-4" />Save local draft</Button>{saved && <p className="flex items-center gap-2 text-sm text-cyan-200"><Check className="size-4" />Draft added locally; no calendar service was changed.</p>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected && <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected event</p><h2 className="mt-2 text-2xl font-black">{selected.title}</h2><p className="mt-2 text-sm text-slate-400">April {selected.day} · {selected.time}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Preview</Badge></div><div className="mt-5 grid gap-3 sm:grid-cols-3"><Detail label="Type" value={selected.type} icon={CalendarDays} /><Detail label="Location" value={selected.location} icon={MapPin} /><Detail label="Guests" value="Unconfirmed" icon={UsersRound} /></div><div className="mt-5 rounded-xl border border-white/10 bg-black/15 p-4"><p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Context</p><p className="mt-2 text-sm leading-6 text-slate-300">{selected.note}</p></div><div className="mt-5 space-y-2">{["Timezone confirmed", "Participant availability checked", "Invitation delivered", "Reminder scheduled"].map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-3"><Clock3 className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-400">{item}</span><span className="text-xs text-amber-200">Unavailable</span></div>)}</div></>}</CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Globe2 className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Time is a contract</h3><p className="mt-2 text-sm leading-6 text-slate-400">A local time needs timezone, DST, locale, and participant context before it becomes a meeting.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Bell className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Reminders require consent</h3><p className="mt-2 text-sm leading-6 text-slate-400">No notification should be implied by a local draft or preview event.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><ShieldAlert className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">No fake availability</h3><p className="mt-2 text-sm leading-6 text-slate-400">Without connected calendars, attendee availability and conflict results remain unverified.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Agenda is useful locally", description: "A month grid and agenda view help users reason about planning without pretending synchronization exists.", icon: CalendarDays, status: "Pattern" }, { title: "Event state is explicit", description: "Draft, invited, accepted, reminder, canceled, and completed need separate verified states.", icon: Check, status: "Required" }, { title: "No fake scheduling", description: "A local event is not an invitation, accepted meeting, reminder, or calendar write.", icon: WifiOff, status: "Guardrail" }]} /></main></div>; }
-function Detail({ label, value, icon: Icon }: { label: string; value: string; icon: typeof CalendarDays }) { return <div className="rounded-lg border border-white/10 bg-black/15 p-4"><Icon className="size-4 text-slate-400" /><p className="mt-3 text-xs uppercase tracking-wider text-slate-500">{label}</p><p className="mt-1 text-sm text-slate-200">{value}</p></div>; }
+export default function Calendar() {
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Calendar</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">Calendar</h1>
+            <p className="text-muted-foreground mt-2">Event calendar</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

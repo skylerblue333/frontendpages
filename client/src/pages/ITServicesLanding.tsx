@@ -58,7 +58,7 @@ export default function ITServicesLanding() {
             <h2 className="text-3xl font-bold text-white mb-4">Meet Your Technology Partner</h2>
             <p className="text-slate-300">Led by Skyler Blue, a seasoned technology expert with advanced credentials</p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <Card className="bg-slate-800 border-slate-700 p-6">
               <Award className="h-12 w-12 text-blue-400 mb-4" />
@@ -91,7 +91,7 @@ export default function ITServicesLanding() {
       <section id="services" className="py-20">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-white text-center mb-16">Our Services</h2>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Software Development */}
             <Card className="bg-slate-800 border-slate-700 p-8 hover:border-blue-500 transition">
@@ -148,7 +148,7 @@ export default function ITServicesLanding() {
       <section id="pricing" className="bg-slate-900/50 py-20 border-y border-slate-800">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-white text-center mb-16">Service Packages</h2>
-          
+
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {/* Starter */}
             <Card className="bg-slate-800 border-slate-700 p-8">

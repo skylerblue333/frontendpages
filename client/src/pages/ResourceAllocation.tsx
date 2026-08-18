@@ -1,13 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { BarChart3, Check, ClipboardList, Filter, Gauge, LockKeyhole, RefreshCw, Search, ShieldAlert, UsersRound, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const plans = [{ id: 1, name: "Compute pool plan", category: "Infrastructure", detail: "A local capacity concept awaiting resource inventory, quota authority, demand evidence, cost policy, and approval.", state: "Draft" }, { id: 2, name: "Team allocation plan", category: "People", detail: "A team planning concept requiring owner identity, availability, workload policy, privacy, and schedule provenance.", state: "Needs evidence" }, { id: 3, name: "Learning lab plan", category: "Education", detail: "An education-resource concept that must not imply seats, devices, funding, access, or learner outcomes.", state: "Unmeasured" }, { id: 4, name: "Campaign budget plan", category: "Budget", detail: "A budget concept requiring currency, balance, spending authority, approvals, and reconciliation.", state: "Blocked" }];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
+
 export default function ResourceAllocation() {
-  const [query, setQuery] = useState(""); const [category, setCategory] = useState("All"); const [selected, setSelected] = useState(1); const [mode, setMode] = useState("Allocation mode not configured"); const [window, setWindow] = useState("Window not configured"); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false);
-  const categories = ["All", ...Array.from(new Set(plans.map((item) => item.category)))]; const filtered = useMemo(() => plans.filter((item) => (category === "All" || item.category === category) && `${item.name} ${item.category} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [category, query]); const plan = plans.find((item) => item.id === selected) ?? plans[0];
-  const reset = () => { setQuery(""); setCategory("All"); setSelected(1); setMode("Allocation mode not configured"); setWindow("Window not configured"); setSaved(false); setShowGates(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Gauge} eyebrow="ResourceAllocation · Capacity preview" title="Prove the capacity before assigning a resource." description="Explore local allocation plans with search, categories, resource pools, quotas, capacity, schedules, approvals, budgets, utilization, alerts, reporting, save, reset, and governance gates. No live inventory, balance, price, demand, user, or operational outcome is connected." badge="Allocation workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "View saved locally" : "Save plan locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review allocation gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset plan</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Plans", value: `${plans.length} local`, hint: "No resource source", icon: Gauge, tone: "cyan" }, { label: "Capacity", value: "Unavailable", hint: "No inventory source", icon: BarChart3, tone: "violet" }, { label: "Owners", value: "Unavailable", hint: "No identity source", icon: UsersRound, tone: "amber" }, { label: "Approvals", value: "Unconnected", hint: "No governance source", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Allocation evidence boundary"><strong>This is a local capacity-planning preview, not evidence that a resource exists, is available, has a price, or has been assigned.</strong> Plan cards, pools, quotas, capacity, schedules, approvals, budgets, utilization, alerts, saved state, and audit gates are browser concepts. No inventory, balance, currency, demand, owner, allocation, or operational outcome is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local allocation plans" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-4 flex flex-wrap gap-2">{categories.map((entry) => <Button key={entry} onClick={() => setCategory(entry)} size="sm" variant="outline" className={category === entry ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100" : "border-white/10 text-slate-400"}><Filter className="mr-1 size-3" />{entry}</Button>)}</div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.state}</Badge></div><div className="mt-4"><Badge variant="outline" className="border-white/10 text-slate-500">{item.category}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected allocation concept</p><h2 className="mt-2 text-2xl font-black">{plan.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{plan.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Category", value: plan.category }, { label: "State", value: plan.state }, { label: "Pool", value: "Unavailable" }, { label: "Capacity", value: "Unmeasured" }, { label: "Mode", value: mode }, { label: "Approval", value: "Unconnected" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2"><label className="text-sm text-slate-400">Allocation mode<select value={mode} onChange={(event) => setMode(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Allocation mode not configured</option><option>Reserved-capacity intent</option><option>Fair-share intent</option><option>Priority intent</option></select></label><label className="text-sm text-slate-400">Planning window<select value={window} onChange={(event) => setWindow(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Window not configured</option><option>Current-window intent</option><option>Weekly intent</option><option>Quarterly intent</option></select></label></div><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><Gauge className="mx-auto size-8 text-slate-600" /><p className="mt-3 font-semibold">No allocation telemetry loaded</p><p className="mt-2 text-sm text-slate-500">Connect governed inventory, quota, budget, demand, owner identity, approval, utilization, and audit sources before assigning resources.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Simulate unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Allocate unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Approve unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Export unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No allocation or financial claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A local plan does not prove a resource, quantity, balance, price, demand, owner, allocation, budget, or operational result.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Allocation gates</p><h2 className="mt-2 text-2xl font-black">What a real resource-allocation workflow must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Resource inventory, ownership, availability, quota, capacity, unit, version, region, and tenant boundaries", "Requester identity, owner consent, priority, fairness policy, eligibility, budget authority, and approvals", "Demand provenance, forecast, schedule, utilization, reservations, overcommit, contention, and failure policy", "Pricing, currency, cost center, fees, tax, credits, chargeback, reconciliation, and financial disclosures", "Alerts, reporting, exports, audit, privacy, sensitive workloads, education, minors, security, and legal boundaries", "Simulation, rollback, revocation, incident response, support, accessibility, localization, and user-visible status"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Allocation surface preserved", description: "Plans, search, categories, pools, quotas, capacity, schedules, approvals, budgets, utilization, alerts, reporting, save/reset, and gates remain interactive.", icon: Gauge, status: "Local concepts" }, { title: "No resource theater", description: "Inventory, balances, prices, demand, owners, allocations, budgets, and operational outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before assignment", description: "Real allocation needs inventory, authority, fairness, budget policy, approvals, monitoring, and rollback.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>ResourceAllocation</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">ResourceAllocation</h1>
+            <p className="text-muted-foreground mt-2">Team resource allocation</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

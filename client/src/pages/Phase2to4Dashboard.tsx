@@ -1,31 +1,331 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { AlertTriangle, BarChart3, Check, ClipboardList, FileText, Gauge, GitBranch, Layers3, LockKeyhole, MessageSquare, RefreshCw, Search, ShieldCheck, Users, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
-type Tab = "phases" | "connectors" | "playbooks" | "simulator";
-type Phase = "Phase 2" | "Phase 3" | "Phase 4";
-const phaseData: Record<Phase, { title: string; focus: string; gates: string[] }> = {
-  "Phase 2": { title: "Foundation", focus: "Contracts, ownership, observability, and safe delivery foundations.", gates: ["Architecture review", "Security boundaries", "Test strategy"] },
-  "Phase 3": { title: "Expansion", focus: "Scale validated workflows without losing correctness or accessibility.", gates: ["Measured workload", "Dependency map", "Rollback plan"] },
-  "Phase 4": { title: "General availability", focus: "Prove operations, support, compliance, and incident readiness.", gates: ["SLO contract", "Support runbook", "Release evidence"] },
-};
-const connectors = [{ name: "Workspace source", state: "Not connected", evidence: "No connector credential or permission proof" }, { name: "Issue tracker", state: "Not connected", evidence: "No live backlog, cycle-time, or dependency stream" }, { name: "Team chat", state: "Not connected", evidence: "No message search, sentiment, or incident stream" }];
-const playbooks = [{ name: "Mobile launch", status: "Draft", proof: "Needs device matrix, release checklist, and app-store evidence" }, { name: "AI evaluation", status: "Draft", proof: "Needs eval set, safety review, and regression gates" }, { name: "Service migration", status: "Draft", proof: "Needs dependency graph, data plan, and rollback" }];
-const bottlenecks = [{ name: "Backend dependency", severity: "Needs evidence", detail: "No issue tracker or owner data is connected." }, { name: "Data migration", severity: "Review", detail: "No workload, schema, or rollback evidence is attached." }, { name: "Release readiness", severity: "Blocked", detail: "No test, support, monitoring, or incident proof is connected." }];
+/**
+ * Phase 2-4 Dashboard
+ * Competitive Radar + Behavioral Intelligence + Experiments + Narrative + Connectors + Product Brain + Company Simulator
+ */
+
 export default function Phase2to4Dashboard() {
-  const [tab, setTab] = useState<Tab>("phases");
-  const [phase, setPhase] = useState<Phase>("Phase 2");
-  const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState("Mobile launch");
-  const [checked, setChecked] = useState<string[]>([]);
-  const [saved, setSaved] = useState(false);
-  const [scenario, setScenario] = useState("baseline");
-  const visibleConnectors = useMemo(() => connectors.filter((item) => !query || `${item.name} ${item.state} ${item.evidence}`.toLowerCase().includes(query.toLowerCase())), [query]);
-  const visiblePlaybooks = useMemo(() => playbooks.filter((item) => !query || `${item.name} ${item.status} ${item.proof}`.toLowerCase().includes(query.toLowerCase())), [query]);
-  const reset = () => { setTab("phases"); setPhase("Phase 2"); setQuery(""); setSelected("Mobile launch"); setChecked([]); setSaved(false); setScenario("baseline"); };
-  const toggle = (value: string) => setChecked((items) => items.includes(value) ? items.filter((item) => item !== value) : [...items, value]);
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Layers3} eyebrow="Phase2to4Dashboard · Program preview" title="Orchestrate later phases without pretending the company is simulated." description="Explore phase gates, connector readiness, playbook concepts, bottleneck fixtures, and scenario assumptions. No Slack, Jira, analytics, finance, team, cost, timeline, probability, integration, or company outcome is connected or simulated." badge="Program planning preview"><div className="flex flex-wrap gap-2"><Button disabled={checked.length === 0} onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Plan saved locally" : "Save program plan"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset program</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Phases", value: "3", hint: "2–4 local plan", icon: Layers3, tone: "cyan" }, { label: "Connectors", value: "0", hint: "None connected", icon: GitBranch, tone: "violet" }, { label: "Playbooks", value: "3", hint: "Draft concepts", icon: FileText, tone: "amber" }, { label: "Simulation", value: "Off", hint: "No fake forecast", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Program evidence boundary"><strong>This is a phase-orchestration worksheet, not an operating company simulator.</strong> Phase labels, connector states, playbooks, bottlenecks, scenario names, and checklists are local planning concepts. They do not prove team sentiment, backlog, cycle time, costs, dates, revenue, probability, dependencies, uptime, or launch readiness.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Program surfaces</p><h2 className="mt-2 text-2xl font-black">Choose a planning view</h2><div className="mt-5 space-y-2">{([{ id: "phases", label: "Phase gates", icon: Layers3 }, { id: "connectors", label: "Connector readiness", icon: GitBranch }, { id: "playbooks", label: "Playbook library", icon: FileText }, { id: "simulator", label: "Scenario assumptions", icon: BarChart3 }] as const).map((item) => <button key={item.id} onClick={() => setTab(item.id)} className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left ${tab === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10 text-slate-400"}`}><item.icon className="size-4" /><span className="font-semibold">{item.label}</span><span className="ml-auto text-xs text-slate-500">Local</span></button>)}</div><div className="relative mt-6"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search program concepts…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><AlertTriangle className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-300">Connectors and simulations require real source permissions, defined models, reproducible evidence, and safe failure handling. They are off in this preview.</p></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{tab === "phases" && <><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Phase gates</p><h2 className="mt-2 text-2xl font-black">Progression requires proof</h2><div className="mt-5 grid gap-2 sm:grid-cols-3">{(Object.keys(phaseData) as Phase[]).map((item) => <button key={item} onClick={() => setPhase(item)} className={`rounded-xl border p-3 text-left ${phase === item ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><p className="font-semibold">{item}</p><p className="mt-1 text-xs text-slate-500">{phaseData[item].title}</p></button>)}</div><div className="mt-5 rounded-xl border border-white/10 p-4"><p className="text-lg font-black">{phase} · {phaseData[phase].title}</p><p className="mt-2 text-sm leading-6 text-slate-400">{phaseData[phase].focus}</p><div className="mt-4 space-y-2">{phaseData[phase].gates.map((gate) => <button key={gate} onClick={() => toggle(`${phase}:${gate}`)} className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left ${checked.includes(`${phase}:${gate}`) ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><span className="flex size-5 items-center justify-center rounded border border-white/20">{checked.includes(`${phase}:${gate}`) ? "✓" : ""}</span><span className="text-sm">{gate}</span><span className="ml-auto text-xs text-amber-200">Required</span></button>)}</div></div></>}{tab === "connectors" && <><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Connector readiness</p><h2 className="mt-2 text-2xl font-black">No source is connected</h2><div className="mt-5 space-y-3">{visibleConnectors.map((item) => <button key={item.name} onClick={() => toggle(item.name)} className={`w-full rounded-xl border p-4 text-left ${checked.includes(item.name) ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-center justify-between"><p className="font-semibold">{item.name}</p><Badge variant="outline" className="border-white/10 text-amber-200">{item.state}</Badge></div><p className="mt-2 text-sm text-slate-500">{item.evidence}</p></button>)}</div></>}{tab === "playbooks" && <><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Playbook library</p><h2 className="mt-2 text-2xl font-black">Draft operating patterns</h2><div className="mt-5 space-y-3">{visiblePlaybooks.map((item) => <button key={item.name} onClick={() => { setSelected(item.name); toggle(item.name); }} className={`w-full rounded-xl border p-4 text-left ${selected === item.name ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-center justify-between"><p className="font-semibold">{item.name}</p><Badge variant="outline" className="border-white/10 text-amber-200">{item.status}</Badge></div><p className="mt-2 text-sm text-slate-500">{item.proof}</p></button>)}</div></>}{tab === "simulator" && <><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Scenario assumptions</p><h2 className="mt-2 text-2xl font-black">Compare planning lenses</h2><div className="mt-5 grid gap-3 sm:grid-cols-3">{["baseline", "constrained", "accelerated"].map((item) => <button key={item} onClick={() => setScenario(item)} className={`rounded-xl border p-4 text-left ${scenario === item ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><p className="font-semibold capitalize">{item}</p><p className="mt-2 text-xs text-slate-500">Assumption only</p></button>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Timeline impact", value: "Unset" }, { label: "Cost impact", value: "Unset" }, { label: "Success probability", value: "Not modeled" }, { label: "Critical path", value: "Not mapped" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-4"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-lg font-black text-amber-200">{item.value}</p></div>)}</div><p className="mt-5 text-sm leading-6 text-slate-500">Scenario selection changes local labels only. No cost, date, probability, resource, dependency, or outcome model is executed.</p></>}{tab !== "phases" && tab !== "connectors" && tab !== "playbooks" && tab !== "simulator" && null}</CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Program checklist</p><h2 className="mt-2 text-2xl font-black">GA planning must prove</h2><div className="mt-5 space-y-3">{["Source permissions, connector contracts, data retention, privacy, and failure handling", "Dependency graph, owners, realistic workload, environment, cost, and schedule evidence", "Security, accessibility, correctness, performance, support, monitoring, and rollback gates", "Reproducible scenario model with assumptions, uncertainty, sensitivity, and decision record", "Incident response, audit, reconciliation, release approval, and post-launch review"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake company simulator</h2><p className="mt-3 text-sm leading-6 text-slate-400">Changing phase tabs, selecting a playbook, checking a gate, or choosing a scenario changes local state only. It does not read Slack/Jira, forecast cost, predict success, report bottlenecks, or launch a phase.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Phases 2–4 preserved", description: "Phase gates, connectors, playbooks, bottlenecks, and scenario concepts remain interactive.", icon: Layers3, status: "Local plan" }, { title: "Integrations stay honest", description: "Workspace, issue-tracker, and team-chat states expose missing source evidence.", icon: GitBranch, status: "Unavailable" }, { title: "No fake forecast", description: "Costs, timelines, success probability, sentiment, and company outcomes remain unmodeled.", icon: WifiOff, status: "Guardrail" }]} /></main></div>;
+  const [activeTab, setActiveTab] = useState('competitive-radar');
+
+  return (
+    <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-white mb-2">Advanced Intelligence Platform</h1>
+          <p className="text-slate-400">Phase 2-4: Competitive Radar + Behavioral Intelligence + Experiments + Narrative + Connectors + Product Brain + Company Simulator</p>
+        </div>
+
+        {/* Main Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-7 mb-8">
+            <TabsTrigger value="competitive-radar" className="text-xs">Competitive</TabsTrigger>
+            <TabsTrigger value="behavioral" className="text-xs">Behavioral</TabsTrigger>
+            <TabsTrigger value="experiments" className="text-xs">Experiments</TabsTrigger>
+            <TabsTrigger value="narrative" className="text-xs">Narrative</TabsTrigger>
+            <TabsTrigger value="connectors" className="text-xs">Connectors</TabsTrigger>
+            <TabsTrigger value="product-brain" className="text-xs">Product Brain</TabsTrigger>
+            <TabsTrigger value="simulator" className="text-xs">Simulator</TabsTrigger>
+          </TabsList>
+
+          {/* Competitive Radar Tab */}
+          <TabsContent value="competitive-radar" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Market Positioning */}
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white">Market Positioning</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-slate-300">Your Market Share</span>
+                      <Badge className="bg-gold-900 text-gold-200">5%</Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-slate-300">Competitor A</span>
+                      <Badge className="bg-red-900 text-red-200">40%</Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-slate-300">Competitor B</span>
+                      <Badge className="bg-red-900 text-red-200">30%</Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-slate-300">Others</span>
+                      <Badge className="bg-slate-600 text-slate-200">25%</Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Market Gaps */}
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white">Market Gaps (Opportunities)</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="bg-slate-700 rounded p-3">
+                    <p className="text-sm font-semibold text-white">Mobile-first + Offline Support</p>
+                    <p className="text-xs text-slate-400">Market Size: $2B+ | Difficulty: Hard | Timeline: 6-9 months</p>
+                    <Badge className="mt-2 bg-green-900 text-green-200">High Value</Badge>
+                  </div>
+                  <div className="bg-slate-700 rounded p-3">
+                    <p className="text-sm font-semibold text-white">Community Collaboration Tools</p>
+                    <p className="text-xs text-slate-400">Market Size: $500M+ | Difficulty: Medium | Timeline: 3-4 months</p>
+                    <Badge className="mt-2 bg-blue-900 text-blue-200">Medium Value</Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Pricing Comparison */}
+            <Card className="bg-slate-800 border-slate-700">
+              <CardHeader>
+                <CardTitle className="text-white">Pricing Comparison</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center p-2 bg-slate-700 rounded">
+                    <span className="text-sm text-slate-300">Your Pricing (Pro)</span>
+                    <span className="text-lg font-bold text-gold-400">$79/mo</span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-slate-700 rounded">
+                    <span className="text-sm text-slate-300">Competitor A (Pro)</span>
+                    <span className="text-lg font-bold text-slate-300">$99/mo</span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-slate-700 rounded">
+                    <span className="text-sm text-slate-300">Competitor B (Pro)</span>
+                    <span className="text-lg font-bold text-slate-300">$129/mo</span>
+                  </div>
+                  <div className="mt-4 p-3 bg-green-900 rounded text-green-200 text-sm">
+                    ✓ Your pricing is 20% below market average - strong competitive advantage
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Behavioral Intelligence Tab */}
+          <TabsContent value="behavioral" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Churn Risk */}
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white">Churn Risk Users</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="bg-red-900 rounded p-3">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-semibold text-white">john_doe</span>
+                      <Badge className="bg-red-700">Critical (85%)</Badge>
+                    </div>
+                    <p className="text-xs text-slate-300">Predicted churn: 3 days</p>
+                  </div>
+                  <div className="bg-yellow-900 rounded p-3">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-semibold text-white">jane_smith</span>
+                      <Badge className="bg-yellow-700">High (72%)</Badge>
+                    </div>
+                    <p className="text-xs text-slate-300">Predicted churn: 7 days</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Sentiment Clustering */}
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white">User Sentiment</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-slate-300">Positive (45%)</span>
+                      <Progress value={45} className="h-2 flex-1 mx-2" />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-slate-300">Neutral (35%)</span>
+                      <Progress value={35} className="h-2 flex-1 mx-2" />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-slate-300">Negative (20%)</span>
+                      <Progress value={20} className="h-2 flex-1 mx-2" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Emerging Pain Patterns */}
+            <Card className="bg-slate-800 border-slate-700">
+              <CardHeader>
+                <CardTitle className="text-white">Top 3 Emerging Pain Patterns</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="bg-slate-700 rounded p-3">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <p className="text-sm font-semibold text-white">Performance degradation during peak hours</p>
+                      <p className="text-xs text-slate-400">Affecting 234 users | Growing trend</p>
+                    </div>
+                    <Badge className="bg-red-900 text-red-200">High</Badge>
+                  </div>
+                  <p className="text-xs text-slate-300">Recommended: Implement query caching and database indexing</p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Experiments Tab */}
+          <TabsContent value="experiments" className="space-y-6">
+            <Card className="bg-slate-800 border-slate-700">
+              <CardHeader>
+                <CardTitle className="text-white">Active Experiments</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="bg-slate-700 rounded p-4">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <p className="text-sm font-semibold text-white">Simplified Onboarding Flow</p>
+                      <p className="text-xs text-slate-400">Reduce steps from 5 to 3</p>
+                    </div>
+                    <Badge className="bg-green-900 text-green-200">Winner</Badge>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 text-xs">
+                    <div>
+                      <p className="text-slate-400">Activation Rate</p>
+                      <p className="text-green-400 font-bold">+31.25%</p>
+                    </div>
+                    <div>
+                      <p className="text-slate-400">Time to Action</p>
+                      <p className="text-green-400 font-bold">-40%</p>
+                    </div>
+                    <div>
+                      <p className="text-slate-400">Completion</p>
+                      <p className="text-green-400 font-bold">+25%</p>
+                    </div>
+                  </div>
+                  <Button className="w-full mt-3 bg-green-600 hover:bg-green-700">Roll Out to 100%</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Narrative Tab */}
+          <TabsContent value="narrative" className="space-y-6">
+            <Card className="bg-slate-800 border-slate-700">
+              <CardHeader>
+                <CardTitle className="text-white">Marketing Narratives</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="bg-slate-700 rounded p-4">
+                  <p className="text-sm font-semibold text-white mb-2">Scalable Positioning</p>
+                  <p className="text-xs text-slate-300 mb-3">Scalable-Grade Solution for Fortune 500 Companies</p>
+                  <p className="text-xs text-slate-400">Reduce operational costs by 40% while improving team productivity</p>
+                  <Button className="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-xs">View Full Narrative</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Connectors Tab */}
+          <TabsContent value="connectors" className="space-y-6">
+            <Alert className="bg-red-900 border-red-700">
+              <AlertDescription className="text-red-200">
+                ⚠️ Engineering bottleneck detected in backend team (Jira) - affecting 5 dependent features
+              </AlertDescription>
+            </Alert>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white text-sm">Slack Insights</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-300">Frustration Level</span>
+                    <Badge className="bg-red-900 text-red-200">High</Badge>
+                  </div>
+                  <p className="text-xs text-slate-400">Performance issues (12 mentions)</p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white text-sm">Jira Insights</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-300">Cycle Time</span>
+                    <Badge className="bg-red-900 text-red-200">12 days</Badge>
+                  </div>
+                  <p className="text-xs text-slate-400">Target: 5 days | Trend: Degrading</p>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Product Brain Tab */}
+          <TabsContent value="product-brain" className="space-y-6">
+            <Card className="bg-slate-800 border-slate-700">
+              <CardHeader>
+                <CardTitle className="text-white">Playbook Library</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="bg-slate-700 rounded p-3">
+                  <p className="text-sm font-semibold text-white">Mobile App Launch Playbook v1</p>
+                  <p className="text-xs text-slate-400">Used 3 times | Reusability Score: 95%</p>
+                  <p className="text-xs text-green-400 mt-2">✓ Average 4.8 star rating | 50K downloads in week 1</p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Company Simulator Tab */}
+          <TabsContent value="simulator" className="space-y-6">
+            <Card className="bg-slate-800 border-slate-700">
+              <CardHeader>
+                <CardTitle className="text-white">Company Simulation Results</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-slate-700 rounded p-3">
+                    <p className="text-xs text-slate-400">Timeline Impact</p>
+                    <p className="text-2xl font-bold text-gold-400">+14 days</p>
+                  </div>
+                  <div className="bg-slate-700 rounded p-3">
+                    <p className="text-xs text-slate-400">Cost Impact</p>
+                    <p className="text-2xl font-bold text-gold-400">$700K</p>
+                  </div>
+                  <div className="bg-slate-700 rounded p-3">
+                    <p className="text-xs text-slate-400">Risk Level</p>
+                    <Badge className="bg-red-900 text-red-200">High</Badge>
+                  </div>
+                  <div className="bg-slate-700 rounded p-3">
+                    <p className="text-xs text-slate-400">Success Probability</p>
+                    <p className="text-2xl font-bold text-green-400">68%</p>
+                  </div>
+                </div>
+
+                <div className="bg-slate-700 rounded p-3">
+                  <p className="text-sm font-semibold text-white mb-2">Critical Path</p>
+                  <ul className="space-y-1">
+                    <li className="text-xs text-slate-300">• Engineering: Database migration (14 days)</li>
+                    <li className="text-xs text-slate-300">• Product: Roadmap alignment (7 days)</li>
+                    <li className="text-xs text-slate-300">• Design: System updates (10 days)</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
 }

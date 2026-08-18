@@ -1,28 +1,251 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Activity, Check, CheckSquare, ChevronRight, Download, FlaskConical, Keyboard, LockKeyhole, RefreshCw, Settings, Shield, ShieldCheck, Square, Terminal, TriangleAlert, Wrench, WifiOff, Zap } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+/**
+ * PowerUserTools — Unhidden Mode: Power User Toolkit
+ * Keyboard shortcuts, bulk actions, data export, advanced filters, dev tools
+ */
+import { useState } from "react";
+import { Link } from "wouter";
+import {
+  Wrench, ArrowLeft, Keyboard, Download, Filter, Zap, ChevronRight,
+  Copy, RefreshCw, Settings, Shield, BarChart2, Users, Activity,
+  CheckSquare, Square, AlertTriangle
+} from "lucide-react";
+import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
 
-type Tool = { key: string; label: string; description: string; keys: string[] };
-const tools: Tool[] = [
-  { key: "command", label: "Command palette", description: "Local navigation and action discovery concept.", keys: ["⌘", "K"] },
-  { key: "focus", label: "Focus mode", description: "Local distraction-reduction preference concept.", keys: ["F", "1"] },
-  { key: "inspect", label: "Inspect state", description: "Local evidence and boundary inspection concept.", keys: ["I", "1"] },
-  { key: "debug", label: "Debug panel", description: "Local diagnostics surface with no production telemetry.", keys: ["D", "1"] },
+const KEYBOARD_SHORTCUTS = [
+  { category: "Navigation",  shortcuts: [
+    { keys: ["G", "H"],   action: "Go to Home"          },
+    { keys: ["G", "F"],   action: "Go to Feed"          },
+    { keys: ["G", "W"],   action: "Go to Wallet"        },
+    { keys: ["G", "P"],   action: "Go to Profile"       },
+    { keys: ["G", "S"],   action: "Go to Settings"      },
+    { keys: ["/"],         action: "Focus search"        },
+    { keys: ["?"],         action: "Show shortcuts"      },
+  ]},
+  { category: "Actions",     shortcuts: [
+    { keys: ["N"],         action: "New post"            },
+    { keys: ["C"],         action: "Compose DM"          },
+    { keys: ["L"],         action: "Like focused post"   },
+    { keys: ["R"],         action: "Reply to post"       },
+    { keys: ["B"],         action: "Bookmark post"       },
+    { keys: ["Shift","S"], action: "Share post"          },
+  ]},
+  { category: "OS Shell",    shortcuts: [
+    { keys: ["Ctrl","K"],  action: "Open command bar"   },
+    { keys: ["Ctrl","M"],  action: "Toggle mic"         },
+    { keys: ["Esc"],       action: "Close overlay"      },
+    { keys: ["Tab"],       action: "Switch shell mode"  },
+  ]},
 ];
-const flags = ["Experimental layout", "Keyboard shortcuts", "Local diagnostics", "Advanced export", "Automation hooks"];
-const exports = ["Settings", "Feature flags", "Shortcut map", "Evidence notes", "Session state"];
+
+const EXPORT_OPTIONS = [
+  { label: "My Posts",         key: "posts",         icon: "📝" },
+  { label: "My Followers",     key: "followers",     icon: "👥" },
+  { label: "Transaction History", key: "txns",       icon: "💸" },
+  { label: "Staking Positions",key: "staking",       icon: "🔒" },
+  { label: "AI Chat History",  key: "ai_chat",       icon: "🤖" },
+  { label: "Referral Data",    key: "referrals",     icon: "🔗" },
+];
+
+const FEATURE_FLAGS = [
+  { label: "Experimental Feed Ranking", key: "exp_feed",       enabled: false },
+  { label: "Beta DM Encryption",        key: "beta_dm_enc",    enabled: true  },
+  { label: "AI Post Suggestions",       key: "ai_suggestions", enabled: true  },
+  { label: "Voice Nav (Global)",        key: "voice_nav",      enabled: true  },
+  { label: "World Simulation",          key: "world_sim",      enabled: true  },
+  { label: "Dark Pattern Detection",    key: "dark_pattern",   enabled: false },
+  { label: "Reels Auto-Play",           key: "reels_auto",     enabled: true  },
+  { label: "NFT Lazy Minting",          key: "nft_lazy",       enabled: false },
+];
+
 export default function PowerUserTools() {
-  const [selectedTool, setSelectedTool] = useState(tools[0]);
-  const [enabledFlags, setEnabledFlags] = useState<string[]>(["Keyboard shortcuts"]);
-  const [selectedExports, setSelectedExports] = useState<string[]>([]);
-  const [query, setQuery] = useState("");
-  const [saved, setSaved] = useState(false);
-  const [refreshed, setRefreshed] = useState(false);
-  const visible = useMemo(() => tools.filter((item) => !query || `${item.label} ${item.description}`.toLowerCase().includes(query.toLowerCase())), [query]);
-  const toggle = (item: string, setter: React.Dispatch<React.SetStateAction<string[]>>) => setter((items) => items.includes(item) ? items.filter((value) => value !== item) : [...items, item]);
-  const reset = () => { setSelectedTool(tools[0]); setEnabledFlags(["Keyboard shortcuts"]); setSelectedExports([]); setQuery(""); setSaved(false); setRefreshed(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Wrench} eyebrow="PowerUserTools · Advanced preview" title="Explore advanced controls without pretending they have authority." description="Explore shortcut concepts, feature flags, local diagnostics, export intent, and quick-link surfaces. No production permissions, automation jobs, telemetry, secrets, user records, or exported data source is connected." badge="Power-user laboratory"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} disabled={selectedExports.length === 0} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Workspace saved locally" : "Save workspace locally"}</Button><Button onClick={() => { setRefreshed(true); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />{refreshed ? "Preview refreshed" : "Refresh preview"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">Reset tools</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Tools", value: String(tools.length), hint: "Local concepts", icon: Wrench, tone: "cyan" }, { label: "Flags", value: String(enabledFlags.length), hint: "Local toggles", icon: Settings, tone: "violet" }, { label: "Exports", value: String(selectedExports.length), hint: "Intent only", icon: Download, tone: "amber" }, { label: "Automation", value: "Off", hint: "No jobs", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Advanced-tools evidence boundary"><strong>This is not an administrative console or automation engine.</strong> Shortcut labels, flag toggles, diagnostics, export selection, refresh state, and quick links are local browser state. They do not grant permissions, run jobs, expose secrets, query users, measure production health, export records, or change application behavior outside this preview.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Terminal className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local tools…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Shortcut concepts</p><div className="mt-3 space-y-2">{visible.map((item) => <button key={item.key} onClick={() => setSelectedTool(item)} className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left ${selectedTool.key === item.key ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex size-9 items-center justify-center rounded-xl bg-cyan-300/10"><Keyboard className="size-4 text-cyan-200" /></div><div className="flex-1"><p className="font-semibold">{item.label}</p><p className="mt-1 text-xs text-slate-500">{item.description}</p></div><div className="flex gap-1">{item.keys.map((key) => <kbd key={key} className="rounded border border-white/15 bg-black/20 px-1.5 py-0.5 text-xs text-slate-400">{key}</kbd>)}</div></button>)}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><TriangleAlert className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-300">A shortcut label does not install a command, bypass a permission, access another account, or invoke a production action.</p></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected tool</p><h2 className="mt-2 text-2xl font-black">{selectedTool.label}</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">Local only</Badge></div><p className="mt-3 text-sm leading-6 text-slate-400">{selectedTool.description}</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Shortcut", value: selectedTool.keys.join(" ") }, { label: "Permission", value: "Unavailable" }, { label: "Production action", value: "Blocked" }, { label: "Telemetry", value: "Off" }, { label: "Secret access", value: "Off" }, { label: "Persistence", value: "Off" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-4"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-lg font-black text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 rounded-xl border border-white/10 p-4"><p className="text-xs text-slate-500">Local diagnostics</p><p className="mt-2 text-sm leading-6 text-slate-400">No production logs, API responses, user records, environment secrets, or system commands are exposed by this worksheet.</p></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-2"><Settings className="size-4 text-cyan-300" /><h2 className="font-black">Feature flags</h2><Badge variant="outline" className="ml-auto border-white/10 text-amber-200">{enabledFlags.length} enabled locally</Badge></div><div className="mt-5 space-y-2">{flags.map((item) => <button key={item} onClick={() => toggle(item, setEnabledFlags)} className="flex w-full items-center justify-between rounded-xl border border-white/10 p-3 text-left"><span className="text-sm text-slate-300">{item}</span><span className={`relative h-5 w-10 rounded-full ${enabledFlags.includes(item) ? "bg-cyan-300" : "bg-white/10"}`}><span className={`absolute top-0.5 size-4 rounded-full bg-white transition-transform ${enabledFlags.includes(item) ? "translate-x-5" : "translate-x-0.5"}`} /></span></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-2"><Download className="size-4 text-cyan-300" /><h2 className="font-black">Data export intent</h2><Badge variant="outline" className="ml-auto border-white/10 text-amber-200">{selectedExports.length} selected</Badge></div><div className="mt-5 space-y-2">{exports.map((item) => <button key={item} onClick={() => toggle(item, setSelectedExports)} className="flex w-full items-center gap-3 rounded-xl border border-white/10 p-3 text-left">{selectedExports.includes(item) ? <CheckSquare className="size-4 text-cyan-300" /> : <Square className="size-4 text-slate-500" />}<span className="text-sm text-slate-300">{item}</span></button>)}</div><Button disabled={selectedExports.length === 0} className="mt-5 w-full bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Download className="mr-2 size-4" />Export unavailable</Button></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-2"><Shield className="size-4 text-cyan-300" /><h2 className="font-black">Guardrails</h2></div><div className="mt-5 space-y-3">{["No secret access", "No account switching", "No production automation", "No permission changes", "No live telemetry"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><Shield className="size-4 text-cyan-300" /><span className="text-sm text-slate-300">{item}</span></div>)}</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Advanced tools must prove</p><h2 className="mt-2 text-2xl font-black">Production checklist</h2><div className="mt-5 space-y-3">{["Authenticated authorization, least privilege, tenant isolation, audit, and safe command execution", "Feature-flag ownership, rollout, targeting, evaluation, rollback, and cache consistency", "Export schema, authorization, redaction, encryption, retention, deletion, and audit", "Automation idempotency, approvals, dry run, retries, cancellation, rate limits, and failure recovery", "Tests for keyboard accessibility, unsafe input, provider outage, stale state, and unauthorized actions"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Power surface preserved", description: "Shortcuts, flags, export selection, diagnostics, refresh, and quick controls remain visible and interactive.", icon: Wrench, status: "Local laboratory" }, { title: "Authority is off", description: "No permissions, secrets, users, production telemetry, automation jobs, or exports are connected.", icon: LockKeyhole, status: "Guardrail" }, { title: "No fake operations", description: "No deployment, system change, success rate, response time, or security claim is fabricated.", icon: WifiOff, status: "Unavailable" }]} /></section></main></div>;
+  const [flags, setFlags] = useState(
+    Object.fromEntries(FEATURE_FLAGS.map(f => [f.key, f.enabled]))
+  );
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [exporting, setExporting] = useState<string | null>(null);
+
+  const { data: me } = trpc.auth.me.useQuery();
+
+  const toggleFlag = (key: string) => {
+    setFlags(prev => ({ ...prev, [key]: !prev[key] }));
+    const flag = FEATURE_FLAGS.find(f => f.key === key);
+    toast.success(`${flag?.label} ${flags[key] ? "disabled" : "enabled"}`);
+  };
+
+  const toggleExport = (key: string) => {
+    setSelected(prev => {
+      const next = new Set(prev);
+      next.has(key) ? next.delete(key) : next.add(key);
+      return next;
+    });
+  };
+
+  const handleExport = async () => {
+    if (selected.size === 0) { toast.error("Select at least one data type"); return; }
+    setExporting("running");
+    await new Promise(r => setTimeout(r, 1200));
+    const data = {
+      exportedAt: new Date().toISOString(),
+      user: me?.name ?? "unknown",
+      datasets: Array.from(selected),
+      note: "Data export from ShadowChat Power Tools",
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href = url; a.download = `shadowchat-export-${Date.now()}.json`; a.click();
+    URL.revokeObjectURL(url);
+    setExporting(null);
+    toast.success(`Exported ${selected.size} dataset(s)`);
+  };
+
+  const copyUID = () => {
+    if (me?.id) {
+      navigator.clipboard.writeText(String(me.id));
+      toast.success("User ID copied");
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Header */}
+      <div className="sticky top-0 z-10 bg-background/90 backdrop-blur border-b border-border px-4 py-3 flex items-center gap-3">
+        <Link href="/unhidden">
+          <button className="p-1.5 rounded-lg hover:bg-secondary transition-colors">
+            <ArrowLeft className="w-4 h-4" />
+          </button>
+        </Link>
+        <div className="flex-1">
+          <h1 className="font-bold text-sm flex items-center gap-2">
+            <Wrench className="w-4 h-4 text-orange-400" />
+            Power User Tools
+          </h1>
+          <p className="text-xs text-muted-foreground">Shortcuts, exports, feature flags, dev tools</p>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+        {/* User Info Card */}
+        {me && (
+          <div className="bg-secondary/20 border border-border/50 rounded-xl p-4 flex items-center justify-between">
+            <div>
+              <p className="font-semibold">{me.name}</p>
+              <p className="text-xs text-muted-foreground">@{me.username} · {me.role}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="text-right">
+                <p className="text-xs text-muted-foreground">User ID</p>
+                <p className="text-xs font-mono text-foreground">{me.id}</p>
+              </div>
+              <button onClick={copyUID} className="p-1.5 rounded-lg hover:bg-secondary transition-colors">
+                <Copy className="w-3.5 h-3.5 text-muted-foreground" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Keyboard Shortcuts */}
+        <div className="bg-secondary/20 border border-border/50 rounded-xl overflow-hidden">
+          <div className="px-4 py-3 border-b border-border/50 flex items-center gap-2">
+            <Keyboard className="w-4 h-4 text-muted-foreground" />
+            <h2 className="font-semibold text-sm">Keyboard Shortcuts</h2>
+          </div>
+          <div className="divide-y divide-border/30">
+            {KEYBOARD_SHORTCUTS.map(cat => (
+              <div key={cat.category} className="px-4 py-3">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">{cat.category}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                  {cat.shortcuts.map(sc => (
+                    <div key={sc.action} className="flex items-center justify-between py-1">
+                      <span className="text-xs text-foreground/80">{sc.action}</span>
+                      <div className="flex items-center gap-0.5">
+                        {sc.keys.map((k, i) => (
+                          <span key={i} className="px-1.5 py-0.5 bg-secondary border border-border rounded text-xs font-mono">{k}</span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Feature Flags */}
+        <div className="bg-secondary/20 border border-border/50 rounded-xl overflow-hidden">
+          <div className="px-4 py-3 border-b border-border/50 flex items-center gap-2">
+            <Settings className="w-4 h-4 text-muted-foreground" />
+            <h2 className="font-semibold text-sm">Feature Flags</h2>
+            <span className="ml-auto text-xs text-muted-foreground">{Object.values(flags).filter(Boolean).length} enabled</span>
+          </div>
+          <div className="divide-y divide-border/30">
+            {FEATURE_FLAGS.map(flag => (
+              <div key={flag.key} className="px-4 py-3 flex items-center justify-between hover:bg-secondary/20 transition-colors">
+                <div>
+                  <p className="text-sm">{flag.label}</p>
+                  {!flag.enabled && <p className="text-xs text-yellow-400/70">Experimental</p>}
+                </div>
+                <button onClick={() => toggleFlag(flag.key)}
+                  className={`relative w-10 h-5 rounded-full transition-colors ${flags[flag.key] ? "bg-primary" : "bg-secondary"}`}>
+                  <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${flags[flag.key] ? "translate-x-5" : "translate-x-0.5"}`} />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Data Export */}
+        <div className="bg-secondary/20 border border-border/50 rounded-xl overflow-hidden">
+          <div className="px-4 py-3 border-b border-border/50 flex items-center gap-2">
+            <Download className="w-4 h-4 text-muted-foreground" />
+            <h2 className="font-semibold text-sm">Data Export</h2>
+          </div>
+          <div className="px-4 py-3 grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {EXPORT_OPTIONS.map(opt => (
+              <button key={opt.key} onClick={() => toggleExport(opt.key)}
+                className={`flex items-center gap-2 p-2.5 rounded-lg border transition-colors text-left ${
+                  selected.has(opt.key) ? "border-primary/50 bg-primary/10" : "border-border/50 bg-secondary/30 hover:bg-secondary/50"
+                }`}>
+                {selected.has(opt.key)
+                  ? <CheckSquare className="w-3.5 h-3.5 text-primary shrink-0" />
+                  : <Square className="w-3.5 h-3.5 text-muted-foreground shrink-0" />}
+                <span className="text-xs">{opt.label}</span>
+              </button>
+            ))}
+          </div>
+          <div className="px-4 pb-3">
+            <button onClick={handleExport} disabled={exporting === "running" || selected.size === 0}
+              className="w-full py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 disabled:opacity-50 transition-all flex items-center justify-center gap-2">
+              <Download className="w-4 h-4" />
+              {exporting === "running" ? "Preparing export…" : `Export ${selected.size > 0 ? `(${selected.size})` : ""} as JSON`}
+            </button>
+          </div>
+        </div>
+
+        {/* Quick Links to other power tools */}
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { label: "System Observability", path: "/system-observability", icon: Activity  },
+            { label: "Automation Engine",     path: "/automation-engine",    icon: Zap       },
+            { label: "Security Dashboard",    path: "/security-dashboard",   icon: Shield    },
+            { label: "Unhidden Mode",         path: "/unhidden",             icon: Wrench    },
+          ].map(link => {
+            const Icon = link.icon;
+            return (
+              <Link key={link.path} href={link.path}>
+                <div className="flex items-center justify-between p-3 bg-secondary/30 border border-border/50 rounded-xl hover:bg-secondary/50 transition-colors cursor-pointer">
+                  <div className="flex items-center gap-2">
+                    <Icon className="w-4 h-4 text-primary" />
+                    <span className="text-sm">{link.label}</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
 }

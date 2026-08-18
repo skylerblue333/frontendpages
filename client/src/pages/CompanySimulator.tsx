@@ -155,7 +155,7 @@ export default function CompanySimulator() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                 <XAxis dataKey="year" stroke="#9ca3af" />
                 <YAxis stroke="#9ca3af" label={{ value: 'Revenue ($M)', angle: -90, position: 'insideLeft' }} />
-                <Tooltip 
+                <Tooltip
                   contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
                   labelStyle={{ color: '#fff' }}
                   formatter={(value) => `$${value}M`}
@@ -182,7 +182,7 @@ export default function CompanySimulator() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                 <XAxis dataKey="year" stroke="#9ca3af" />
                 <YAxis stroke="#9ca3af" label={{ value: 'Users (Millions)', angle: -90, position: 'insideLeft' }} />
-                <Tooltip 
+                <Tooltip
                   contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
                   labelStyle={{ color: '#fff' }}
                   formatter={(value) => `${value}M`}

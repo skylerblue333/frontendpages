@@ -590,7 +590,7 @@ set.add(), set.remove(), set.union()`
 Reading Files:
 with open("file.txt", "r") as f:
     content = f.read()  # Read entire file
-    
+
 with open("file.txt", "r") as f:
     lines = f.readlines()  # Read as list
 
@@ -871,7 +871,7 @@ import { useState } from "react";
 
 function Counter() {
     const [count, setCount] = useState(0);
-    
+
     return (
         <div>
             <p>Count: {count}</p>
@@ -902,7 +902,7 @@ const ThemeContext = createContext();
 
 function App() {
     const [theme, setTheme] = useState("light");
-    
+
     return (
         <ThemeContext.Provider value={{theme, setTheme}}>
             <Component />
@@ -913,13 +913,13 @@ function App() {
 Custom Hooks:
 function useWindowWidth() {
     const [width, setWidth] = useState(window.innerWidth);
-    
+
     useEffect(() => {
         const handleResize = () => setWidth(window.innerWidth);
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
-    
+
     return width;
 }
 

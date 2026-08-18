@@ -1,21 +1,207 @@
-import { useMemo, useState } from "react";
-import { Activity, ArrowRight, CheckCircle2, CircleDashed, Clock3, Code2, Database, FileCheck2, Flag, Layers, Map, MessageSquare, Network, Rss, Shield, Sparkles, Target, Timer, Unplug, WalletCards, WifiOff, Zap } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+/**
+ * BuildRoadmap — Phase 29 Build Order
+ * Foundation → Chat → AI → Actions → Feed → Simulation → Economy → Trust → OS → Merge
+ */
+import { Link } from "wouter";
+import { ArrowLeft, Map, CheckCircle2, Circle, Clock, ArrowDown } from "lucide-react";
 
-type Milestone = { step: number; title: string; horizon: "Now" | "Next" | "Later"; goal: string; proof: string[]; icon: typeof Database; status: "Reference milestone" | "Needs verification" | "High-risk review"; color: string };
-const MILESTONES: Milestone[] = [
-  { step: 1, title: "Identity and data contracts", horizon: "Now", goal: "Make route access, data ownership, and API boundaries explicit.", proof: ["Auth behavior", "Schema contract", "Migration path", "Error states"], icon: Database, status: "Needs verification", color: "text-cyan-300" },
-  { step: 2, title: "Conversation surfaces", horizon: "Now", goal: "Make communication usable with moderation, persistence, and retry states.", proof: ["Message states", "Moderation path", "Pagination", "Empty state"], icon: MessageSquare, status: "Reference milestone", color: "text-blue-300" },
-  { step: 3, title: "AI interaction contract", horizon: "Next", goal: "Define what AI can read, return, remember, and decline.", proof: ["Consent boundary", "Model availability", "Fallback response", "Usage visibility"], icon: Sparkles, status: "Needs verification", color: "text-violet-300" },
-  { step: 4, title: "Action and event loop", horizon: "Next", goal: "Turn actions into auditable state transitions with idempotent retries.", proof: ["Authorization", "Action log", "Failure recovery", "Event ordering"], icon: Zap, status: "Needs verification", color: "text-amber-300" },
-  { step: 5, title: "Content and feed quality", horizon: "Next", goal: "Show content freshness, provenance, ranking limits, and user controls.", proof: ["Source provenance", "Freshness label", "Moderation", "Cache policy"], icon: Rss, status: "Reference milestone", color: "text-cyan-300" },
-  { step: 6, title: "Simulation boundary", horizon: "Later", goal: "Keep synthetic actors and generated activity visibly separate from real users.", proof: ["Synthetic labels", "Pause control", "Quota", "Replay"], icon: Network, status: "High-risk review", color: "text-fuchsia-300" },
-  { step: 7, title: "Financial and custody proof", horizon: "Later", goal: "Treat payments, wallets, and settlement as high-risk infrastructure.", proof: ["Provider contract", "Ledger", "Custody model", "Reconciliation"], icon: WalletCards, status: "High-risk review", color: "text-emerald-300" },
-  { step: 8, title: "Trust and scale operations", horizon: "Later", goal: "Operationalize rate limits, monitoring, incident response, and rollback.", proof: ["SLO definitions", "Alert policy", "Runbook", "Load evidence"], icon: Shield, status: "High-risk review", color: "text-rose-300" },
+const PHASES = [
+  {
+    step: 1,
+    title: "Foundation",
+    timeline: "Day 1–3",
+    goal: "System can run + store data",
+    items: ["MySQL database", "Redis cache + queues", "Auth system (JWT)", "Basic user model", "API gateway (tRPC)"],
+    result: "Users can sign in + system is alive",
+    status: "complete",
+  },
+  {
+    step: 2,
+    title: "Chat Core",
+    timeline: "Day 4–7",
+    goal: "Real-time communication exists",
+    items: ["WebSocket server", "Chat service", "Message storage", "Basic frontend chat UI"],
+    result: "Users can talk in real time",
+    status: "complete",
+  },
+  {
+    step: 3,
+    title: "AI Intelligence Layer",
+    timeline: "Day 8–12",
+    goal: "Chat becomes smart",
+    items: ["AI service (intent parser)", "Response generator", "Message-to-intent pipeline", "LLM integration"],
+    result: "Chat understands user requests",
+    status: "complete",
+  },
+  {
+    step: 4,
+    title: "Action Engine",
+    timeline: "Day 13–18",
+    goal: "AI can DO things, not just talk",
+    items: ["Action router", "Action executor", "Action state machine (PENDING→COMPLETED→FAILED)", "Event system"],
+    result: "Chat produces real system effects",
+    status: "complete",
+  },
+  {
+    step: 5,
+    title: "Feed System",
+    timeline: "Day 19–24",
+    goal: "Platform feels alive",
+    items: ["Post storage", "Ranking engine", "Feed generator", "AI auto-posting (light)"],
+    result: "Users see activity even without users",
+    status: "complete",
+  },
+  {
+    step: 6,
+    title: "Simulation Engine",
+    timeline: "Day 25–30",
+    goal: "AI world starts existing",
+    items: ["Persona system", "Scheduled actions", "Event triggers", "Auto interactions"],
+    result: "AI entities generate feed content",
+    status: "complete",
+  },
+  {
+    step: 7,
+    title: "Economic Layer",
+    timeline: "Day 31–35",
+    goal: "System can make money",
+    items: ["Wallet (basic ledger)", "Transaction system", "Action fees", "Payment simulation → Stripe"],
+    result: "Actions have value attached",
+    status: "in-progress",
+  },
+  {
+    step: 8,
+    title: "Trust + Safety",
+    timeline: "Day 36–40",
+    goal: "System becomes stable",
+    items: ["Moderation rules", "Rate limits", "Audit logs", "Basic trust score"],
+    result: "System can survive real users",
+    status: "in-progress",
+  },
+  {
+    step: 9,
+    title: "Frontend OS Polish",
+    timeline: "Day 41–45",
+    goal: "Feels like a real product",
+    items: ["Chat OS UI", "Feed UI", "Action drawer", "Wallet UI", "Notification system"],
+    result: "Feels like AI operating system",
+    status: "in-progress",
+  },
+  {
+    step: 10,
+    title: "Simulation + Real User Merge",
+    timeline: "Day 46–50",
+    goal: "Combine AI world + real users",
+    items: ["AI personas interact with real users", "Feed blending system", "Personalization layer", "Hybrid engagement engine"],
+    result: "World feels alive even at zero users",
+    status: "pending",
+  },
 ];
-const HORIZONS = ["All", "Now", "Next", "Later"] as const;
 
-export default function BuildRoadmap() { const [horizon, setHorizon] = useState<(typeof HORIZONS)[number]>("All"); const [selectedStep, setSelectedStep] = useState(1); const [showProof, setShowProof] = useState(false); const visible = useMemo(() => MILESTONES.filter((item) => horizon === "All" || item.horizon === horizon), [horizon]); const selected = MILESTONES.find((item) => item.step === selectedStep) ?? MILESTONES[0]; const next = MILESTONES.find((item) => item.step === selected.step + 1); return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Map} eyebrow="Engineering Planning · Milestone Board" title="Move from intention to evidence, one milestone at a time." description="Explore an uncommitted product roadmap grouped by horizon. This board is a planning reference, not a delivery schedule, staffing plan, project status report, or promise that infrastructure exists." badge="Preview roadmap board"><div className="flex flex-wrap gap-2"><Button onClick={() => setShowProof(!showProof)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><FileCheck2 className="mr-2 size-4" />{showProof ? "Hide proof gates" : "Show proof gates"}</Button><Button onClick={() => setSelectedStep(next?.step ?? 1)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">Advance preview <ArrowRight className="ml-2 size-4" /></Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Milestones", value: String(MILESTONES.length), hint: "Reference board", icon: Flag }, { label: "Visible horizon", value: horizon, hint: "Planning filter", icon: Timer, tone: "violet" }, { label: "Proven delivered", value: "0", hint: "No delivery claim", icon: CircleDashed, tone: "amber" }, { label: "High-risk reviews", value: String(MILESTONES.filter((item) => item.status === "High-risk review").length), hint: "Finance and operations", icon: Shield, tone: "slate" }]} /><ScreenPreviewBanner title="Roadmap evidence boundary">No dates, owners, delivery percentages, completion counts, staffing commitments, infrastructure claims, or outcome guarantees are shown. A milestone becomes a status only when source code, tests, contracts, browser evidence, operational checks, and documentation support it.</ScreenPreviewBanner><section className="flex flex-wrap gap-2">{HORIZONS.map((item) => <button key={item} onClick={() => setHorizon(item)} className={`rounded-xl border px-4 py-2 text-sm transition ${horizon === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 bg-black/15 text-slate-400 hover:text-white"}`}>{item} horizon</button>)}</section><section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Milestone board</p><h2 className="mt-1 text-xl font-bold">Select a workstream</h2></div><Layers className="size-5 text-cyan-300" /></div><div className="mt-5 space-y-2">{visible.map((item) => { const Icon = item.icon; return <button key={item.step} onClick={() => { setSelectedStep(item.step); setShowProof(false); }} className={`flex w-full items-start gap-3 rounded-xl border p-4 text-left transition ${selectedStep === item.step ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-white/15 text-xs font-bold text-slate-400">{item.step}</span><Icon className={`mt-1 size-4 ${item.color}`} /><span className="flex-1"><span className="flex flex-wrap items-center gap-2"><span className="font-semibold">{item.title}</span><Badge variant="outline" className="border-white/10 text-slate-400">{item.horizon}</Badge></span><span className="mt-1 block text-xs leading-5 text-slate-500">{item.goal}</span></span></button>; })}</div>{visible.length === 0 && <p className="mt-5 text-sm text-slate-500">No milestones in this horizon.</p>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected workstream</p><h2 className="mt-2 text-2xl font-black">{selected.title}</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><p className="mt-4 text-lg leading-8 text-slate-300">{selected.goal}</p><div className="mt-6 flex items-center gap-3 rounded-xl border border-white/10 bg-black/15 p-4"><Clock3 className="size-4 text-cyan-300" /><div><p className="text-xs uppercase tracking-wider text-slate-500">Planning horizon</p><p className="mt-1 font-semibold">{selected.horizon} — no calendar commitment</p></div></div><div className="mt-6 flex flex-wrap gap-2"><Button onClick={() => setShowProof(!showProof)} variant="outline" className="border-white/15 text-white hover:bg-white/10"><FileCheck2 className="mr-2 size-4" />{showProof ? "Hide" : "View"} proof gates</Button><Button onClick={() => setSelectedStep(next?.step ?? 1)} variant="ghost" className="text-cyan-300">Next milestone <ArrowRight className="ml-1 size-4" /></Button></div>{showProof && <div className="mt-6 grid gap-3 sm:grid-cols-2">{selected.proof.map((item) => <div key={item} className="rounded-lg border border-white/10 bg-black/15 p-4"><CheckCircle2 className="size-4 text-emerald-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Proof required</p></div>)}</div>}</CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Target className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Horizon, not deadline</h3><p className="mt-2 text-sm leading-6 text-slate-400">Now, Next, and Later communicate sequencing without inventing dates or staffing capacity.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Shield className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Risk changes the bar</h3><p className="mt-2 text-sm leading-6 text-slate-400">Wallets, money, simulation, and operations require stronger proof than a polished roadmap card.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Code2 className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">Outcome needs evidence</h3><p className="mt-2 text-sm leading-6 text-slate-400">A goal describes intent; it does not prove the system can deliver the stated result.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "No false completion", description: "The roadmap starts with zero proven deliveries because this page has no linked implementation evidence.", icon: CircleDashed, status: "Guardrail" }, { title: "Traceable milestones", description: "Each workstream lists the proof artifacts needed before a real status can be attached.", icon: FileCheck2, status: "Pattern" }, { title: "High-risk visibility", description: "Money, custody, synthetic actors, and operations remain visibly separated for deeper review.", icon: Shield, status: "Required" }]} /></main></div>; }
+const STATUS_CONFIG = {
+  complete: { icon: CheckCircle2, color: "text-green-400", bg: "bg-green-500/10 border-green-500/20", label: "Complete" },
+  "in-progress": { icon: Clock, color: "text-yellow-400", bg: "bg-yellow-500/10 border-yellow-500/20", label: "In Progress" },
+  pending: { icon: Circle, color: "text-muted-foreground", bg: "bg-secondary/30 border-border/30", label: "Pending" },
+};
+
+export default function BuildRoadmap() {
+  const complete = PHASES.filter(p => p.status === "complete").length;
+  const inProgress = PHASES.filter(p => p.status === "in-progress").length;
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border/50 px-4 py-3 flex items-center gap-3">
+        <Link href="/" className="p-2 rounded-lg hover:bg-secondary/50 transition-colors text-muted-foreground">
+          <ArrowLeft className="w-4 h-4" />
+        </Link>
+        <div>
+          <h1 className="font-bold text-lg flex items-center gap-2">
+            <Map className="w-5 h-5 text-yellow-400" />
+            Build Roadmap
+          </h1>
+          <p className="text-xs text-muted-foreground">Phase 29 — Dependency-ordered build sequence</p>
+        </div>
+        <div className="ml-auto text-right">
+          <div className="text-sm font-bold text-green-400">{complete}/{PHASES.length} done</div>
+          <div className="text-xs text-muted-foreground">{inProgress} in progress</div>
+        </div>
+      </div>
+
+      <div className="max-w-2xl mx-auto p-4 space-y-3">
+        {/* Progress bar */}
+        <div className="card p-4">
+          <div className="flex items-center justify-between mb-2 text-xs">
+            <span className="text-muted-foreground">Overall Progress</span>
+            <span className="font-medium">{Math.round((complete / PHASES.length) * 100)}%</span>
+          </div>
+          <div className="h-2 bg-secondary rounded-full overflow-hidden">
+            <div className="h-full bg-gradient-to-r from-green-400 to-cyan-400 rounded-full transition-all"
+              style={{ width: `${(complete / PHASES.length) * 100}%` }} />
+          </div>
+          <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-400" />{complete} complete</span>
+            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-yellow-400" />{inProgress} in progress</span>
+            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-secondary" />{PHASES.length - complete - inProgress} pending</span>
+          </div>
+        </div>
+
+        {/* System flow */}
+        <div className="card p-3 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20">
+          <h3 className="text-xs font-semibold mb-2">System Flow</h3>
+          <div className="flex items-center gap-1 flex-wrap text-xs text-muted-foreground">
+            {["User", "Chat", "AI", "Action Engine", "Event System", "Feed", "Simulation", "Frontend Update", "Loop"].map((s, i, arr) => (
+              <span key={s} className="flex items-center gap-1">
+                <span className="text-foreground font-medium">{s}</span>
+                {i < arr.length - 1 && <span className="text-primary">→</span>}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Phase list */}
+        {PHASES.map((phase, i) => {
+          const cfg = STATUS_CONFIG[phase.status as keyof typeof STATUS_CONFIG];
+          const Icon = cfg.icon;
+          return (
+            <div key={phase.step}>
+              <div className={`card p-4 border ${cfg.bg}`}>
+                <div className="flex items-start gap-3">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${phase.status === "complete" ? "bg-green-500/20" : phase.status === "in-progress" ? "bg-yellow-500/20" : "bg-secondary/50"}`}>
+                    <Icon className={`w-4 h-4 ${cfg.color}`} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="font-bold text-sm">Step {phase.step}: {phase.title}</span>
+                      <span className={`text-xs ${cfg.color}`}>{cfg.label}</span>
+                    </div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs text-muted-foreground">{phase.timeline}</span>
+                      <span className="text-xs text-muted-foreground">·</span>
+                      <span className="text-xs text-muted-foreground italic">{phase.goal}</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-1 mb-2">
+                      {phase.items.map(item => (
+                        <div key={item} className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${phase.status === "complete" ? "bg-green-400" : phase.status === "in-progress" ? "bg-yellow-400" : "bg-secondary"}`} />
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="text-xs text-foreground font-medium">
+                      Result: <span className="text-muted-foreground font-normal">{phase.result}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {i < PHASES.length - 1 && (
+                <div className="flex justify-center py-1">
+                  <ArrowDown className="w-4 h-4 text-muted-foreground/40" />
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

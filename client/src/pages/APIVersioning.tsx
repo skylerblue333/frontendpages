@@ -1,17 +1,74 @@
-import { useMemo, useState } from "react";
-import { AlertTriangle, ArrowRight, CheckCircle2, Clock3, Code2, GitBranch, History, Layers, LockKeyhole, Search, Shield, Sparkles, Tag, Workflow } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-type Version = { id: string; name: string; stage: "Draft" | "Compatibility review" | "Deprecation planning"; summary: string; path: string };
-const VERSIONS: Version[] = [
-  { id: "v1", name: "v1 baseline", stage: "Deprecation planning", summary: "Document the current contract, known clients, behavior, and migration constraints.", path: "/api/v1" },
-  { id: "v2", name: "v2 candidate", stage: "Compatibility review", summary: "Review schema changes, auth behavior, error envelope, pagination, and idempotency.", path: "/api/v2" },
-  { id: "draft", name: "Next draft", stage: "Draft", summary: "Local placeholder for a future version proposal with no published route.", path: "unpublished" },
-];
-const CHECKLIST = ["Schema diff and compatibility classification", "Client migration guide and examples", "Deprecation notice and support window", "Telemetry and adoption evidence", "Rollback and owner approval"];
+export default function APIVersioning() {
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-export default function APIVersioning() { const [query, setQuery] = useState(""); const [selected, setSelected] = useState(VERSIONS[1]); const [active, setActive] = useState("versions"); const [drafts, setDrafts] = useState(0); const visible = useMemo(() => VERSIONS.filter((version) => `${version.name} ${version.stage} ${version.summary} ${version.path}`.toLowerCase().includes(query.toLowerCase())), [query]); const createDraft = () => { setDrafts((value) => value + 1); setSelected({ id: `new-${drafts + 1}`, name: `Version proposal ${drafts + 1}`, stage: "Draft", summary: "Local versioning draft; not published or routed.", path: "unpublished" }); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={GitBranch} eyebrow="Developer Platform · Versioning" title="Change an API without surprising its clients." description="Explore version cards, compatibility review, migration checklists, deprecation planning, and rollback requirements. This page does not claim published versions, client adoption, release dates, support windows, or migration completion." badge="Preview versioning workspace"><div className="flex flex-wrap gap-2"><Button onClick={createDraft} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Tag className="mr-2 size-4" />Create local proposal</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Shield className="mr-2 size-4" />Migration safety</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Version surfaces", value: String(VERSIONS.length + drafts), hint: "Local contract records", icon: GitBranch }, { label: "Published routes", value: "Unverified", hint: "No deployment claim", icon: Layers, tone: "amber" }, { label: "Migration gates", value: String(CHECKLIST.length), hint: "Evidence required", icon: Workflow, tone: "violet" }, { label: "Client adoption", value: "Unknown", hint: "No telemetry connected", icon: History, tone: "slate" }]} /><ScreenPreviewBanner title="Versioning evidence boundary">Version cards, search, local proposal creation, compatibility and deprecation checklists, and rollback guidance are available for UX review. No published endpoint, client count, adoption percentage, release date, support window, or migration success is fabricated.</ScreenPreviewBanner><section><div className="mb-5 flex flex-wrap gap-2 rounded-xl border border-white/10 bg-white/[0.04] p-2">{[["versions", "Version catalog"], ["migration", "Migration plan"], ["deprecation", "Deprecation policy"]].map(([value, label]) => <Button key={value} size="sm" variant={active === value ? "default" : "outline"} onClick={() => setActive(value)} className={active === value ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "border-white/15 bg-white/5 text-slate-300 hover:bg-white/10"}>{label}</Button>)}</div>{active === "versions" && <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search versions" aria-label="Search API versions" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visible.map((version) => <button key={version.id} onClick={() => setSelected(version)} className={`w-full rounded-xl border p-4 text-left transition ${selected.id === version.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><GitBranch className="size-4 text-cyan-300" /><span className="font-semibold">{version.name}</span><Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">{version.stage}</Badge></div><p className="mt-2 font-mono text-xs text-slate-500">{version.path}</p><p className="mt-2 text-sm leading-6 text-slate-400">{version.summary}</p></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No versions match" description="Try another version, stage, or path." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected version</p><h2 className="mt-1 text-2xl font-bold">{selected.name}</h2><p className="mt-2 font-mono text-sm text-slate-400">{selected.path}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.stage}</Badge></div><p className="mt-5 text-sm leading-6 text-slate-300">{selected.summary}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{["Schema diff", "Auth compatibility", "Error envelope", "Pagination and idempotency", "Client migration guide", "Rollback path"].map((item) => <div key={item} className="rounded-xl border border-white/10 bg-black/15 p-4"><CheckCircle2 className="size-4 text-emerald-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Evidence required</p></div>)}</div></CardContent></Card></div>}{active === "migration" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><ArrowRight className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Migration plan preview</p><h2 className="mt-1 text-2xl font-bold">Move clients with evidence</h2></div></div><div className="mt-6 space-y-3">{CHECKLIST.map((item, index) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4 text-sm text-slate-300"><span className="flex size-7 items-center justify-center rounded-lg bg-violet-300/10 text-violet-200">{index + 1}</span>{item}<Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">Required</Badge></div>)}</div></CardContent></Card>}{active === "deprecation" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><ScreenStatePanel type="unavailable" title="Deprecation schedule is not verified" description="Do not show a support window, sunset date, client adoption rate, or migration completion until an owner and release system provide evidence." /><div className="mt-5 grid gap-3 md:grid-cols-3">{["Notice and changelog", "Support window", "Sunset and rollback"].map((item) => <div key={item} className="rounded-xl border border-white/10 bg-black/15 p-4"><Clock3 className="size-4 text-amber-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Owner required</p></div>)}</div></CardContent></Card>}</section><ScreenFeatureGrid features={[{ title: "Compatibility first", description: "Classify breaking and non-breaking changes with schema, auth, errors, pagination, and idempotency evidence.", icon: Code2, status: "Required" }, { title: "Client-safe migration", description: "Publish examples, owners, support expectations, rollback, and telemetry before moving traffic.", icon: Workflow, status: "Required" }, { title: "No invented adoption", description: "Client counts and migration progress require authoritative telemetry, not placeholder percentages.", icon: AlertTriangle, status: "Guardrail" }]} /></main></div>; }
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>APIVersioning</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">APIVersioning</h1>
+            <p className="text-muted-foreground mt-2">Version management</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

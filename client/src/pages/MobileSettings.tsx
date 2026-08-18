@@ -1,21 +1,74 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Bell, Check, Fingerprint, Globe, LockKeyhole, Moon, RefreshCw, Search, Settings, Shield, Smartphone, Wallet, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const SETTINGS = [{ title: "Notifications", category: "Preferences", description: "Plan push categories, quiet hours, and local alert presentation.", icon: Bell, status: "Local only" }, { title: "Appearance", category: "Preferences", description: "Review theme and density choices for a compact mobile shell.", icon: Moon, status: "Local only" }, { title: "Language", category: "Preferences", description: "Map language selection without claiming translation coverage.", icon: Globe, status: "Planning" }, { title: "Biometric unlock", category: "Security", description: "Document device permission and recovery requirements before enabling.", icon: Fingerprint, status: "Device proof" }, { title: "Session security", category: "Security", description: "Define sign-out, recovery, session expiry, and audit requirements.", icon: Shield, status: "Needs backend" }, { title: "Wallet safety", category: "Finance", description: "Keep seed phrases, balances, signing, and approvals unavailable.", icon: Wallet, status: "Blocked" }, { title: "Offline data", category: "Device", description: "Define cache freshness and safe stale-state presentation.", icon: WifiOff, status: "Designing" }, { title: "Device permissions", category: "Device", description: "Map purpose and consent for push, camera, microphone, and storage.", icon: Smartphone, status: "Not requested" }];
-const CATEGORIES = ["All", "Preferences", "Security", "Finance", "Device"];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function MobileSettings() {
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("All");
-  const [selected, setSelected] = useState(SETTINGS[0].title);
-  const [enabled, setEnabled] = useState<string[]>([]);
-  const [saved, setSaved] = useState(false);
-  const setting = SETTINGS.find((item) => item.title === selected) ?? SETTINGS[0];
-  const visible = useMemo(() => SETTINGS.filter((item) => (category === "All" || item.category === category) && `${item.title} ${item.category} ${item.description}`.toLowerCase().includes(query.toLowerCase())), [category, query]);
-  const toggle = () => setEnabled((items) => items.includes(setting.title) ? items.filter((item) => item !== setting.title) : [...items, setting.title]);
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Settings} eyebrow="Mobile settings · Preferences" title="Configure the preference before persisting the claim." description="Review synthetic settings categories, local toggles, security and permission readiness, and finance guardrails. No account persistence, device permission, security credential, notification provider, wallet action, or privacy record is asserted." badge="Settings preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Preferences saved locally" : "Save preference plan"}</Button><Button onClick={() => { setQuery(""); setCategory("All"); setSelected(SETTINGS[0].title); setEnabled([]); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset settings</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Settings", value: String(SETTINGS.length), hint: "Local catalog", icon: Settings }, { label: "Enabled", value: String(enabled.length), hint: "Local toggles", icon: Check, tone: "violet" }, { label: "Permissions", value: "Off", hint: "Not requested", icon: Smartphone, tone: "amber" }, { label: "Wallet", value: "Blocked", hint: "No signing or balance", icon: Wallet, tone: "slate" }]} /><ScreenPreviewBanner title="MobileSettings evidence boundary"><strong>Setting names, categories, local toggles, statuses, and readiness notes are UX fixtures—not persisted account preferences, device permissions, security credentials, privacy records, notification provider configuration, or wallet controls.</strong> Production settings require authenticated ownership, persistence, validation, audit logs, permission consent, recovery, and safe action handling.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search settings" className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 flex gap-2 overflow-x-auto">{CATEGORIES.map((item) => <button key={item} onClick={() => setCategory(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${category === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-5 space-y-3">{visible.map((item) => <button key={item.title} onClick={() => { setSelected(item.title); setSaved(false); }} className={`flex w-full items-start gap-3 rounded-2xl border p-4 text-left ${selected === item.title ? "border-cyan-300/40 bg-cyan-300/[0.07]" : "border-white/10 bg-black/10"}`}><div className="flex size-10 items-center justify-center rounded-xl bg-violet-300/10 text-violet-200"><item.icon className="size-5" /></div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center justify-between gap-2"><h2 className="font-black">{item.title}</h2><Badge variant="outline" className="border-amber-300/20 text-[10px] text-amber-200">{item.status}</Badge></div><p className="mt-1 text-xs text-cyan-200">{item.category}</p><p className="mt-2 text-sm text-slate-400">{item.description}</p></div></button>)}{visible.length === 0 && <div className="p-8 text-center text-slate-500">No settings match this view.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Selected setting</p><h2 className="mt-2 text-3xl font-black">{setting.title}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{setting.status}</Badge></div><p className="mt-4 text-slate-400">{setting.description}</p><div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5"><div className="flex items-center gap-3"><div className="flex size-11 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-200"><setting.icon className="size-5" /></div><div><p className="font-black">Local preference state</p><p className="text-xs text-slate-500">No account or device API attached</p></div></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "State", value: enabled.includes(setting.title) ? "Enabled locally" : "Off locally" }, { label: "Persistence", value: "Not connected" }, { label: "Permission", value: "Not requested" }, { label: "Audit", value: "Unavailable" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></div><Button onClick={toggle} className="mt-5 w-full bg-violet-500 text-white hover:bg-violet-400">{enabled.includes(setting.title) ? "Disable local setting" : "Enable local setting"}</Button></CardContent></Card></section><section className="grid gap-4 md:grid-cols-3">{[{ title: "Persistence needs ownership", description: "A toggle is not an account setting until it is validated, saved, audited, and recoverable.", icon: LockKeyhole }, { title: "Permissions need consent", description: "Push, camera, microphone, biometrics, and storage require purpose and recovery flows.", icon: Smartphone }, { title: "Finance stays blocked", description: "Wallet, balance, approvals, seed phrases, and signing remain unavailable in this preview.", icon: Wallet }].map((item) => <Card key={item.title} className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><item.icon className="size-5 text-cyan-300" /><h2 className="mt-4 font-black">{item.title}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{item.description}</p></CardContent></Card>)}</section><ScreenFeatureGrid features={[{ title: "A toggle is not persistence", description: "Local interactions preserve settings UX without implying an account record or device configuration.", icon: Settings, status: "Guardrail" }, { title: "Security needs recovery", description: "Biometrics, sessions, credentials, and privacy controls require tested recovery and audit flows.", icon: Shield, status: "Required" }, { title: "No fake permission", description: "The preview never requests device access or exposes a wallet action without a verified service.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>MobileSettings</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">MobileSettings</h1>
+            <p className="text-muted-foreground mt-2">Mobile settings</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

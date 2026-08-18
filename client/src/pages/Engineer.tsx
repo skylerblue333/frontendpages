@@ -8,8 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Streamdown } from "streamdown";
-import { Card } from "@/components/ui/card";
-import { StatCard } from "@/components/StatCard";
+import { Card, IconTile, StatCard } from "@/components/ui/sk";
 import { Cpu, Code2, ShieldAlert, Gauge, Bug, ScanSearch, Loader2, Share2, Users } from "lucide-react";
 
 type Mode = "generate" | "review" | "optimize" | "security" | "debug";
@@ -64,7 +63,7 @@ export default function Engineer() {
       else if (mode === "security") res = await security.mutateAsync({ code: text, language });
       else res = await debug.mutateAsync({ code: text, error: errText, language });
       setOutput(res.output);
-      
+
       // Broadcast to collaborators (simulated)
       if (collaborators.length > 1) {
         console.log(`[Collab] Shared result with ${collaborators.length - 1} collaborators`);

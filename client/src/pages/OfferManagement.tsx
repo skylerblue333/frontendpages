@@ -1,21 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Check, FileCheck2, HandCoins, LockKeyhole, Plus, RefreshCw, ShieldCheck, Tag, Users, Wallet, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const SEEDS = [{ id: "o1", name: "Creator support tier", type: "Entitlement", audience: "Community", detail: "Synthetic access concept with no price, inventory, buyer, seller, or payment provider.", price: "Unset" }, { id: "o2", name: "Learning path bundle", type: "Bundle", audience: "Learners", detail: "Local course-access concept; enrollment, tax, and fulfillment are unverified.", price: "Unset" }, { id: "o3", name: "Digital collectible offer", type: "Negotiation", audience: "Collectors", detail: "Offer worksheet with no asset ownership, market price, wallet, or transfer state.", price: "Unset" }, { id: "o4", name: "Workspace seat", type: "Subscription", audience: "Teams", detail: "Synthetic recurring-access concept with no billing cycle, seat count, or entitlement grant.", price: "Unset" }];
-const TYPES = ["All", "Entitlement", "Bundle", "Negotiation", "Subscription"];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function OfferManagement() {
-  const [offers, setOffers] = useState(SEEDS);
-  const [type, setType] = useState("All");
-  const [selectedId, setSelectedId] = useState(SEEDS[0].id);
-  const [note, setNote] = useState("");
-  const [saved, setSaved] = useState(false);
-  const visible = useMemo(() => offers.filter((item) => type === "All" || item.type === type), [offers, type]);
-  const selected = offers.find((item) => item.id === selectedId) ?? offers[0];
-  const reset = () => { setOffers(SEEDS); setType("All"); setSelectedId(SEEDS[0].id); setNote(""); setSaved(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={HandCoins} eyebrow="OfferManagement · Entitlement planner" title="Shape the offer before asking for payment." description="Review synthetic offer cards, entitlement concepts, audience framing, price-unset states, and local negotiation notes. No payment, subscription, listing, inventory, payout, tax, ownership, or backend transaction is claimed." badge="Offer preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Plan saved locally" : "Save offer plan"}</Button><Button onClick={() => setOffers((current) => [{ id: `local-${Date.now()}`, name: "New offer concept", type: "Entitlement", audience: "Unassigned", detail: "Local concept; commercial details remain unverified.", price: "Unset" }, ...current])} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Plus className="mr-2 size-4" />Add offer concept</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Offers", value: String(offers.length), hint: "Synthetic concepts", icon: Tag }, { label: "Selected", value: selected.type, hint: "Local plan", icon: HandCoins, tone: "cyan" }, { label: "Price", value: "Unset", hint: "No quote", icon: Wallet, tone: "amber" }, { label: "Payments", value: "Off", hint: "No provider", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="OfferManagement evidence boundary"><strong>Offer cards, entitlement labels, audiences, price-unset states, and notes are commercial planning fixtures—not prices, availability, subscriptions, eligibility, inventory, ownership, payment authorization, tax treatment, payouts, or accepted transactions.</strong> Production offer management requires product catalog contracts, currency/tax rules, entitlement definitions, inventory, eligibility, payment providers, webhooks, idempotency, refunds, fraud controls, auditability, and support.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Offer catalog</p><h2 className="mt-2 text-3xl font-black">Local concepts</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">Transactions unavailable</Badge></div><div className="mt-4 flex gap-2 overflow-x-auto">{TYPES.map((item) => <button key={item} onClick={() => setType(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${type === item ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-5 space-y-3">{visible.map((item) => <button key={item.id} onClick={() => setSelectedId(item.id)} className={`w-full rounded-2xl border p-4 text-left ${selectedId === item.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/10"}`}><div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-200"><Tag className="size-4" /></div><div className="flex-1"><p className="font-black">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.type} · {item.audience}</p></div><span className="text-xs text-amber-200">Price {item.price}</span></div><p className="mt-3 text-sm text-slate-400">{item.detail}</p></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Offer worksheet</p><h2 className="mt-2 text-3xl font-black">{selected.name}</h2><p className="mt-3 text-slate-400">{selected.detail}</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Type", value: selected.type }, { label: "Audience", value: selected.audience }, { label: "Price", value: "Unset" }, { label: "Currency", value: "Unset" }, { label: "Eligibility", value: "Not defined" }, { label: "Entitlement", value: "Not granted" }, { label: "Payment", value: "Unavailable" }, { label: "Payout", value: "Unavailable" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-cyan-300/20 text-cyan-100/40"><Wallet className="mr-2 size-4" />Payment unavailable</Button><Button disabled variant="outline" className="border-white/10 text-white/40">Publish unavailable</Button></div><textarea value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} placeholder="Write local negotiation, entitlement, or risk notes…" className="mt-5 min-h-24 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-slate-500" /><div className="mt-5 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />Local controls do not charge, list, publish, grant, transfer, refund, or persist a commercial offer.</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Commercial readiness</p><h2 className="mt-2 text-2xl font-black">Required before transaction claims</h2><div className="mt-5 space-y-3">{["Catalog, offer, entitlement, eligibility, inventory, seat, and cancellation contracts", "Currency, tax, billing cycle, refunds, receipts, regional and accessibility rules", "Payment provider, tokenization, webhooks, idempotency, fraud, and disputes", "Authorization, ownership, payout, royalty, reconciliation, and audit trails", "Privacy, support, failure states, incident response, and user recovery"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><FileCheck2 className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake offer</h2><p className="mt-3 text-sm leading-6 text-slate-400">This workspace changes local state only. It does not charge, create subscriptions, publish listings, grant access, process payouts, calculate tax, or record a transaction.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "An offer is not a price", description: "Synthetic concepts preserve planning UX without catalog, inventory, eligibility, or payment claims.", icon: Tag, status: "Guardrail" }, { title: "Money needs reconciliation", description: "Providers, taxes, refunds, fraud, webhooks, ownership, payouts, and audit need evidence.", icon: ShieldCheck, status: "Required" }, { title: "No fake transaction", description: "The preview makes no payment, subscription, listing, entitlement, payout, or backend request.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>OfferManagement</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">OfferManagement</h1>
+            <p className="text-muted-foreground mt-2">Make/receive offers</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

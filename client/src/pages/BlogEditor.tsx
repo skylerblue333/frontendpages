@@ -1,10 +1,75 @@
-import { useMemo, useState } from "react";
-import { CheckCircle2, Eye, FileText, Hash, History, Image, Info, LockKeyhole, PenLine, Plus, Save, Send, Sparkles, Tag, WifiOff } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-export default function BlogEditor() { const [title, setTitle] = useState("Build with evidence, not assumptions"); const [excerpt, setExcerpt] = useState("A preview article exploring how product teams can make trustworthy claims."); const [body, setBody] = useState("Start writing here. This local drafting studio keeps the content editable and makes the publishing boundary visible.\n\nAdd the source, context, and limitations that a reader needs before this piece is reviewed."); const [tags, setTags] = useState("product, evidence, trust"); const [mode, setMode] = useState<"edit" | "preview">("edit"); const [saved, setSaved] = useState(false); const wordCount = useMemo(() => body.trim() ? body.trim().split(/\s+/).length : 0, [body]); return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={PenLine} eyebrow="Creator Tools · Editorial Studio" title="Turn a blank draft into a publishable point of view." description="Compose, preview, and save a local editorial draft with visible source and publishing boundaries. No article is published, indexed, distributed, autosaved remotely, or attributed to an author from this screen." badge="Preview editorial workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => { setSaved(true); }} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Save className="mr-2 size-4" />Save local draft</Button><Button onClick={() => setMode(mode === "edit" ? "preview" : "edit")} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{mode === "edit" ? <><Eye className="mr-2 size-4" />Preview article</> : <><PenLine className="mr-2 size-4" />Edit draft</>}</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Draft status", value: saved ? "Saved locally" : "Unsaved", hint: "This browser only", icon: saved ? CheckCircle2 : FileText, tone: saved ? "cyan" : "amber" }, { label: "Words", value: String(wordCount), hint: "Current body length", icon: PenLine }, { label: "Publishing", value: "Unavailable", hint: "No editorial pipeline", icon: WifiOff, tone: "violet" }, { label: "Distribution", value: "Not sent", hint: "No feed or email delivery", icon: Send, tone: "slate" }]} /><ScreenPreviewBanner title="Editorial evidence boundary">This editor supports local composition and preview only. A production publishing flow must authenticate the author, validate content, run moderation and link checks, preserve revision history, expose approval state, publish atomically, and report a canonical URL. No publish, autosave, analytics, index, or delivery claim is made.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{mode === "edit" ? <div className="space-y-5"><div><label className="mb-2 block text-sm font-medium text-slate-300" htmlFor="article-title">Title</label><Input id="article-title" value={title} onChange={(event) => { setTitle(event.target.value); setSaved(false); }} className="border-white/10 bg-black/20 text-xl font-semibold text-white placeholder:text-slate-500" /></div><div><label className="mb-2 block text-sm font-medium text-slate-300" htmlFor="article-excerpt">Excerpt</label><Textarea id="article-excerpt" value={excerpt} onChange={(event) => { setExcerpt(event.target.value); setSaved(false); }} className="min-h-20 border-white/10 bg-black/20 text-white placeholder:text-slate-500" /></div><div><div className="mb-2 flex items-center justify-between"><label className="block text-sm font-medium text-slate-300" htmlFor="article-body">Body</label><span className="text-xs text-slate-500">{wordCount} words</span></div><Textarea id="article-body" value={body} onChange={(event) => { setBody(event.target.value); setSaved(false); }} className="min-h-[300px] border-white/10 bg-black/20 leading-7 text-white placeholder:text-slate-500" /></div><div><label className="mb-2 block text-sm font-medium text-slate-300" htmlFor="article-tags">Tags</label><div className="relative"><Tag className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input id="article-tags" value={tags} onChange={(event) => { setTags(event.target.value); setSaved(false); }} className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div></div></div> : <article className="space-y-5"><div className="flex flex-wrap items-center gap-2"><Badge variant="outline" className="border-cyan-300/25 text-cyan-200">Local preview</Badge><span className="text-xs uppercase tracking-wider text-slate-500">{wordCount} words</span></div><h2 className="text-3xl font-bold leading-tight">{title || "Untitled draft"}</h2><p className="text-lg leading-8 text-slate-300">{excerpt || "No excerpt yet."}</p><div className="whitespace-pre-wrap border-t border-white/10 pt-5 text-base leading-8 text-slate-300">{body || "No body content yet."}</div><div className="flex flex-wrap gap-2 border-t border-white/10 pt-5">{tags.split(",").map((tag) => tag.trim()).filter(Boolean).map((tag) => <Badge key={tag} variant="outline" className="border-white/15 text-slate-300">#{tag}</Badge>)}</div></article>}</CardContent></Card><div className="space-y-6"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Publishing checklist</p><div className="mt-4 space-y-3">{[{ icon: Info, label: "Source links and citations", status: "Required" }, { icon: LockKeyhole, label: "Author and approval identity", status: "Required" }, { icon: History, label: "Revision history", status: "Not connected" }, { icon: Image, label: "Image rights and alt text", status: "Required" }, { icon: Send, label: "Publish and distribution pipeline", status: "Unavailable" }].map(({ icon: Icon, label, status }) => <div key={label} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-3"><Icon className="size-4 text-slate-400" /><span className="flex-1 text-sm text-slate-300">{label}</span><span className={`text-xs ${status === "Required" ? "text-amber-200" : "text-slate-500"}`}>{status}</span></div>)}</div></CardContent></Card><Card className="border-amber-300/20 bg-amber-300/[0.06]"><CardContent className="p-6"><div className="flex items-center gap-2 font-medium text-amber-200"><WifiOff className="size-4" />No remote editorial services</div><p className="mt-2 text-sm leading-6 text-slate-300">Local draft persistence is a UX preview. It does not create a server record, canonical URL, public article, feed entry, email, notification, index, or analytics event.</p></CardContent></Card>{saved && <Card className="border-emerald-300/20 bg-emerald-300/[0.06]"><CardContent className="p-5"><div className="flex items-center gap-2 font-medium text-emerald-200"><CheckCircle2 className="size-4" />Draft saved locally</div><p className="mt-2 text-sm text-slate-300">The current text is marked saved for this screen session only.</p></CardContent></Card>}</div></section><ScreenFeatureGrid features={[{ title: "Write with context", description: "Keep title, excerpt, body, tags, sources, citations, and limitations visible while drafting.", icon: Sparkles, status: "Ready" }, { title: "Preview before publish", description: "Review the reader-facing hierarchy without implying that preview content is public or indexed.", icon: Eye, status: "Ready" }, { title: "Publishing requires proof", description: "Identity, approval, moderation, revision history, rights, canonical URL, and delivery state must be connected before launch.", icon: LockKeyhole, status: "Guardrail" }]} /></main></div>; }
+export default function BlogEditor() {
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>BlogEditor</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">BlogEditor</h1>
+            <p className="text-muted-foreground mt-2">Rich text blog post editor</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

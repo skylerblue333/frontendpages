@@ -187,7 +187,7 @@ export default function DatingProfileSetup() {
           <Card className="p-6 space-y-4">
             <h2 className="text-xl font-semibold">Add Photos</h2>
             <p className="text-sm text-gray-600">Add up to 6 photos. First photo will be your main profile picture.</p>
-            
+
             <div className="grid grid-cols-3 gap-4">
               {formData.photos.map((photo, idx) => (
                 <div key={idx} className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
@@ -207,7 +207,7 @@ export default function DatingProfileSetup() {
                   </button>
                 </div>
               ))}
-              
+
               {formData.photos.length < 6 && (
                 <label className="aspect-square bg-pink-50 border-2 border-dashed border-pink-300 rounded-lg flex items-center justify-center cursor-pointer hover:bg-pink-100 transition">
                   <div className="text-center">
@@ -278,7 +278,7 @@ export default function DatingProfileSetup() {
           <Card className="p-6 space-y-4">
             <h2 className="text-xl font-semibold">Your Interests</h2>
             <p className="text-sm text-gray-600">Select interests that match your personality</p>
-            
+
             <div className="flex flex-wrap gap-2 mb-4">
               {formData.interests.map((interest) => (
                 <Badge
@@ -336,7 +336,7 @@ export default function DatingProfileSetup() {
           <Card className="p-6 space-y-4">
             <h2 className="text-xl font-semibold">Verify Your Profile</h2>
             <p className="text-sm text-gray-600">Verified profiles get more matches and visibility</p>
-            
+
             <div className="space-y-3">
               {[
                 { status: 'email', label: 'Email Verification', icon: '✉️' },
@@ -383,7 +383,7 @@ export default function DatingProfileSetup() {
           >
             Previous
           </Button>
-          
+
           {step < totalSteps ? (
             <Button
               onClick={handleNextStep}

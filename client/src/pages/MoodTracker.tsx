@@ -1,22 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { BookHeart, Check, ChevronRight, ClipboardPenLine, HeartPulse, LockKeyhole, RefreshCw, Search, ShieldCheck, Sparkles, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const MOODS = [{ label: "Steady", tone: "Calm", color: "text-cyan-200", description: "A balanced moment worth noticing." }, { label: "Bright", tone: "Positive", color: "text-amber-200", description: "Energy or optimism feels present." }, { label: "Tired", tone: "Low energy", color: "text-violet-200", description: "Rest or a gentler pace may feel useful." }, { label: "Restless", tone: "Activated", color: "text-rose-200", description: "Your attention or body feels unsettled." }, { label: "Heavy", tone: "Difficult", color: "text-slate-300", description: "A hard moment can be recorded without judgment." }];
-const CONTEXTS = ["Sleep", "Work", "Learning", "Relationships", "Movement", "Quiet time"];
-const STARTER_ENTRIES = [{ mood: "Steady", context: "Quiet time", time: "Today · local example", note: "A gentle check-in placeholder." }, { mood: "Tired", context: "Sleep", time: "Yesterday · local example", note: "A reminder to observe patterns, not diagnose them." }];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function MoodTracker() {
-  const [mood, setMood] = useState(MOODS[0].label);
-  const [intensity, setIntensity] = useState(3);
-  const [context, setContext] = useState(CONTEXTS[0]);
-  const [note, setNote] = useState("");
-  const [saved, setSaved] = useState(false);
-  const [query, setQuery] = useState("");
-  const selected = MOODS.find((item) => item.label === mood) ?? MOODS[0];
-  const entries = useMemo(() => STARTER_ENTRIES.filter((entry) => `${entry.mood} ${entry.context} ${entry.note}`.toLowerCase().includes(query.toLowerCase())), [query]);
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={BookHeart} eyebrow="MoodTracker · Private reflection" title="Notice the moment without turning it into a diagnosis." description="Create a local mood check-in with intensity, context, and an optional note. This experience supports self-reflection only: it does not diagnose, treat, predict, monitor, or replace a qualified professional or urgent support service." badge="Reflection preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Check-in saved locally" : "Save check-in"}</Button><Button onClick={() => { setMood(MOODS[0].label); setIntensity(3); setContext(CONTEXTS[0]); setNote(""); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset check-in</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Check-in", value: mood, hint: "Local selection", icon: HeartPulse }, { label: "Intensity", value: `${intensity}/5`, hint: "Self-rated", icon: Sparkles, tone: "violet" }, { label: "History", value: "Local", hint: "No synced health record", icon: ClipboardPenLine, tone: "amber" }, { label: "Care", value: "Not provided", hint: "No clinical service", icon: ShieldCheck, tone: "slate" }]} /><ScreenPreviewBanner title="MoodTracker privacy and safety boundary"><strong>Mood labels, intensity, context tags, and notes are self-reflection controls—not diagnoses, treatment recommendations, clinical measurements, wellness scores, crisis monitoring, or verified health analytics.</strong> Keep sensitive details minimal. If you may be in immediate danger or need urgent support, contact local emergency services or a qualified crisis resource in your region.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">New check-in</p><h2 className="mt-2 text-3xl font-black">How does this moment feel?</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">Local only</Badge></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{MOODS.map((item) => <button key={item.label} onClick={() => { setMood(item.label); setSaved(false); }} className={`rounded-2xl border p-4 text-left ${mood === item.label ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/10"}`}><div className="flex items-center justify-between"><span className={`font-black ${item.color}`}>{item.label}</span>{mood === item.label && <Check className="size-4 text-cyan-200" />}</div><p className="mt-1 text-xs text-slate-500">{item.tone}</p><p className="mt-2 text-sm text-slate-400">{item.description}</p></button>)}</div><div className="mt-6"><div className="flex items-center justify-between"><label className="text-sm font-semibold">Intensity</label><span className="text-sm font-bold text-cyan-200">{intensity}/5</span></div><input type="range" min="1" max="5" value={intensity} onChange={(event) => { setIntensity(Number(event.target.value)); setSaved(false); }} className="mt-4 w-full accent-cyan-300" /><div className="mt-1 flex justify-between text-xs text-slate-500"><span>Gentle</span><span>Strong</span></div></div><div className="mt-6"><label className="text-sm font-semibold">What context fits?</label><div className="mt-3 flex flex-wrap gap-2">{CONTEXTS.map((item) => <button key={item} onClick={() => { setContext(item); setSaved(false); }} className={`rounded-xl border px-3 py-2 text-xs ${context === item ? "border-violet-300/40 bg-violet-300/[0.1] text-violet-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div></div><textarea value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} placeholder="Optional private reflection…" className="mt-6 min-h-28 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-slate-500" /><div className="mt-4 flex items-center gap-2 text-xs text-slate-500"><LockKeyhole className="size-4 text-cyan-300" />No sensitive health detail is required to continue.</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Selected reflection</p><h2 className="mt-2 text-3xl font-black">{selected.label}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{context}</Badge></div><p className="mt-4 text-slate-400">{selected.description}</p><div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-5"><div className="grid gap-3 sm:grid-cols-2">{[{ label: "Mood", value: selected.label }, { label: "Tone", value: selected.tone }, { label: "Intensity", value: `${intensity}/5` }, { label: "Storage", value: "Local preview" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-cyan-200">{item.value}</p></div>)}</div><p className="mt-4 text-sm leading-6 text-slate-400">A check-in can help you notice what you want to explore. It cannot establish a cause, condition, trend, or recommended care plan.</p></div><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-200">No clinical inference</p><p className="mt-2 text-sm leading-6 text-slate-400">This screen does not score wellbeing, identify risk, send an alert, or contact a provider.</p></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local reflection examples" className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-5 space-y-3">{entries.map((entry) => <div key={`${entry.mood}-${entry.context}`} className="rounded-2xl border border-white/10 bg-black/10 p-4"><div className="flex items-center justify-between"><p className="font-black">{entry.mood}</p><span className="text-xs text-slate-500">{entry.time}</span></div><p className="mt-1 text-xs text-violet-200">{entry.context}</p><p className="mt-2 text-sm text-slate-400">{entry.note}</p></div>)}{entries.length === 0 && <div className="p-8 text-center text-slate-500">No local reflection examples match this search.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><ShieldCheck className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">Private by design</h2><p className="mt-3 text-sm leading-6 text-slate-400">There is no health-record sync, provider integration, risk scoring, diagnosis, treatment plan, or crisis-monitoring claim in this preview.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A check-in is not a diagnosis", description: "Mood labels preserve a reflective UX without clinical interpretation, predictions, or care recommendations.", icon: HeartPulse, status: "Guardrail" }, { title: "Keep notes minimal", description: "Optional notes are local planning text; do not enter secrets or sensitive detail you do not want stored.", icon: LockKeyhole, status: "Privacy" }, { title: "No fake care pathway", description: "The screen does not alert providers, monitor crises, or replace urgent or qualified support.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>MoodTracker</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">MoodTracker</h1>
+            <p className="text-muted-foreground mt-2">Mood logging</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

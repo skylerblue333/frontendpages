@@ -1,29 +1,75 @@
-import { useMemo, useState } from "react";
-import { Bot, CheckCircle2, FileText, History, Lightbulb, LockKeyhole, MessageSquare, Plus, Search, Settings, Sparkles, WandSparkles } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
-
-type Starter = { title: string; description: string; prompt: string; icon: typeof Lightbulb };
-const STARTERS: Starter[] = [
-  { title: "Plan a project", description: "Turn an idea into a reviewable sequence of next steps.", prompt: "Help me turn this idea into a practical project plan.", icon: Lightbulb },
-  { title: "Summarize notes", description: "Create a concise brief with decisions and follow-ups.", prompt: "Summarize these notes into decisions, risks, and follow-ups.", icon: FileText },
-  { title: "Improve writing", description: "Refine clarity, tone, and structure without changing intent.", prompt: "Improve the clarity and structure of this draft.", icon: WandSparkles },
-  { title: "Explain a concept", description: "Get a plain-language explanation and useful examples.", prompt: "Explain this concept in plain language with an example.", icon: MessageSquare },
-];
-const PREVIEW_THREADS = ["Launch checklist", "Course outline review", "Portfolio questions", "Brand voice notes"];
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function AIAssistant() {
+  const { isAuthenticated } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
-  const [prompt, setPrompt] = useState("");
-  const [activeThread, setActiveThread] = useState<string | null>(null);
-  const [isDrafted, setIsDrafted] = useState(false);
-  const visibleThreads = useMemo(() => PREVIEW_THREADS.filter((thread) => thread.toLowerCase().includes(searchQuery.toLowerCase())), [searchQuery]);
-  const chooseStarter = (starter: Starter) => { setPrompt(starter.prompt); setIsDrafted(false); };
-  const draftResponse = () => { if (prompt.trim()) setIsDrafted(true); };
+  const [isLoading, setIsLoading] = useState(false);
 
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Bot} eyebrow="AI & Automation · Assistant" title="A focused space to think, plan, and create." description="Use bounded prompt starters, inspect example workspace states, and draft a response locally. Synced conversations and live model execution remain behind an explicit authentication and integration boundary." badge="Preview workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => { setPrompt(""); setActiveThread(null); setIsDrafted(false); }} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Plus className="mr-2 size-4" />New workspace</Button><Button onClick={() => document.getElementById("assistant-workspace")?.scrollIntoView({ behavior: "smooth" })} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Sparkles className="mr-2 size-4" />Open assistant</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Workspace", value: "Ready", hint: "Local prompt drafting is available", icon: Bot }, { label: "Prompt starters", value: String(STARTERS.length), hint: "Bounded workflows to get moving", icon: Lightbulb, tone: "violet" }, { label: "Example threads", value: String(PREVIEW_THREADS.length), hint: "Preview items, not user records", icon: History, tone: "amber" }, { label: "Sync status", value: "Sign-in needed", hint: "Cloud history is not claimed here", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="What is available in this screen">The assistant workspace, prompt starters, local draft state, search, example threads, settings entry point, and clear loading/empty boundaries are available for UX review. A live model response, saved conversation, user history, and account data are not fabricated when the connected service is unavailable.</ScreenPreviewBanner><section id="assistant-workspace" className="grid gap-6 xl:grid-cols-[1.35fr_0.65fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5 sm:p-6"><div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Workbench</p><h2 className="mt-1 text-2xl font-bold">Draft an assistant request</h2><p className="mt-1 text-sm text-slate-400">Write a question or start from a guided workflow. Nothing is sent until a verified model contract is connected.</p></div><Button variant="outline" size="icon" aria-label="Assistant settings" className="border-white/15 bg-white/5 text-slate-300"><Settings className="size-4" /></Button></div><div className="mt-5"><Textarea value={prompt} onChange={(event) => { setPrompt(event.target.value); setIsDrafted(false); }} placeholder="What would you like to work through?" aria-label="Assistant prompt" className="min-h-36 resize-y border-white/10 bg-black/20 text-white placeholder:text-slate-500" /></div><div className="mt-4 flex flex-wrap items-center gap-3"><Button onClick={draftResponse} disabled={!prompt.trim()} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200 disabled:opacity-50"><Sparkles className="mr-2 size-4" />Prepare preview</Button><Badge variant="outline" className="border-white/15 text-slate-400">Local draft only</Badge></div>{isDrafted && <div className="mt-5 rounded-xl border border-emerald-300/20 bg-emerald-300/[0.06] p-4" aria-live="polite"><div className="flex items-center gap-2 font-medium text-emerald-200"><CheckCircle2 className="size-4" />Preview request prepared</div><p className="mt-2 text-sm leading-6 text-slate-300">Your prompt is ready for a verified assistant service. Live generation, tool use, and saved history remain disabled in this unauthenticated preview.</p></div>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5 sm:p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Start faster</p><h2 className="mt-1 text-xl font-bold">Prompt starters</h2></div><WandSparkles className="size-5 text-violet-300" /></div><div className="mt-4 space-y-2">{STARTERS.map((starter) => { const Icon = starter.icon; return <button key={starter.title} onClick={() => chooseStarter(starter)} className="flex w-full items-start gap-3 rounded-xl border border-white/10 bg-black/15 p-3 text-left transition hover:border-cyan-300/30 hover:bg-white/[0.06]"><span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-violet-300/10 text-violet-200"><Icon className="size-4" /></span><span><span className="block text-sm font-medium text-white">{starter.title}</span><span className="mt-1 block text-xs leading-5 text-slate-400">{starter.description}</span></span></button>; })}</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-300">Workspace history</p><h2 className="mt-1 text-xl font-bold">Example threads</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Preview</Badge></div><div className="relative mt-4"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" aria-hidden="true" /><Input value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search example threads" aria-label="Search example threads" className="border-white/10 bg-black/15 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visibleThreads.map((thread) => <button key={thread} onClick={() => setActiveThread(thread)} className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left text-sm transition ${activeThread === thread ? "border-cyan-300/40 bg-cyan-300/[0.08] text-white" : "border-white/10 bg-black/10 text-slate-300 hover:bg-white/[0.05]"}`}><MessageSquare className="size-4 text-cyan-300" />{thread}<span className="ml-auto text-xs text-slate-500">Example</span></button>)}{visibleThreads.length === 0 && <p className="py-4 text-sm text-slate-400">No example threads match this search.</p>}</div></CardContent></Card><div className="space-y-6">{activeThread ? <ScreenStatePanel type="unavailable" title={`${activeThread} is an example thread`} description="This preview demonstrates selection and detail-state behavior. Personal conversation history will appear only after authentication and a verified persistence contract." /> : <ScreenStatePanel type="empty" title="No live conversation selected" description="Choose an example thread or use a prompt starter to explore the assistant workspace." />}<ScreenFeatureGrid features={[{ title: "Guided workflows", description: "Use bounded starters for planning, writing, review, and explanation tasks.", icon: Lightbulb, status: "Available" }, { title: "Cloud history", description: "Conversation persistence requires authentication and a connected backend service.", icon: History, status: "Sign-in needed" }, { title: "Tool execution", description: "External actions remain disabled until permissions and service contracts are verified.", icon: LockKeyhole, status: "Guardrail" }]} /></div></section></main></div>;
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>AIAssistant</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">AIAssistant</h1>
+            <p className="text-muted-foreground mt-2">AI helper interface</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

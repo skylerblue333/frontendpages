@@ -1,19 +1,74 @@
-import { useMemo, useState } from "react";
-import { Activity, AlertTriangle, CheckCircle2, Clock3, Cloud, Database, Eye, FileText, Globe, LockKeyhole, Search, Server, Settings, Shield, Siren, Wrench } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-type Component = { id: string; name: string; scope: string; status: "Status unavailable" | "Maintenance example" | "Review required" };
-const COMPONENTS: Component[] = [
-  { id: "gateway", name: "API gateway", scope: "Request routing and authentication", status: "Status unavailable" },
-  { id: "database", name: "Data services", scope: "Database and cache dependencies", status: "Status unavailable" },
-  { id: "identity", name: "Identity callback", scope: "OAuth and session boundary", status: "Review required" },
-  { id: "webhooks", name: "Webhook delivery", scope: "Signed external callbacks", status: "Status unavailable" },
-  { id: "storage", name: "File storage", scope: "Uploads and object access", status: "Maintenance example" },
-];
-const INCIDENTS = ["Investigating", "Identified", "Monitoring", "Resolved"];
+export default function APIStatus() {
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-export default function APIStatus() { const [query, setQuery] = useState(""); const [selected, setSelected] = useState<Component | null>(null); const [tab, setTab] = useState("components"); const visible = useMemo(() => COMPONENTS.filter((component) => `${component.name} ${component.scope} ${component.status}`.toLowerCase().includes(query.toLowerCase())), [query]); return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Activity} eyebrow="Developer Platform · Status" title="Publish status only when the evidence is real." description="Explore a transparent status-page workspace with component inventory, incident lifecycle, maintenance examples, and dependency notes. This page does not claim uptime, current health, incident history, latency, or deployment status." badge="Preview status page"><div className="flex flex-wrap gap-2"><Button onClick={() => setTab("components")} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Globe className="mr-2 size-4" />Review components</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Settings className="mr-2 size-4" />Status settings</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Components", value: String(COMPONENTS.length), hint: "Documented service surfaces", icon: Server }, { label: "Current status", value: "Unavailable", hint: "No live checks connected", icon: Activity, tone: "amber" }, { label: "Incident lifecycle", value: String(INCIDENTS.length), hint: "Reviewable workflow states", icon: Siren, tone: "violet" }, { label: "Uptime", value: "Unverified", hint: "No percentage claim", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Status-page evidence boundary">The component catalog, search, selected detail, incident lifecycle, maintenance examples, and unavailable current-status state are available for UX review. No green status, uptime percentage, incident history, latency, resolution time, or deployment health is fabricated.</ScreenPreviewBanner><section><div className="mb-5 flex flex-wrap gap-2 rounded-xl border border-white/10 bg-white/[0.04] p-2">{[["components", "Components"], ["incidents", "Incident lifecycle"], ["maintenance", "Maintenance"], ["current", "Current status"]].map(([value, label]) => <Button key={value} size="sm" variant={tab === value ? "default" : "outline"} onClick={() => setTab(value)} className={tab === value ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "border-white/15 bg-white/5 text-slate-300 hover:bg-white/10"}>{label}</Button>)}</div>{tab === "components" && <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search components" aria-label="Search status components" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visible.map((component) => <button key={component.id} onClick={() => setSelected(component)} className={`w-full rounded-xl border p-4 text-left transition ${selected?.id === component.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><Server className="size-4 text-cyan-300" /><span className="font-semibold">{component.name}</span><Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">{component.status}</Badge></div><p className="mt-2 text-sm text-slate-400">{component.scope}</p></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No components match" description="Try another search term." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected component</p><h2 className="mt-1 text-2xl font-bold">{selected.name}</h2><p className="mt-2 text-sm text-slate-400">{selected.scope}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><div className="mt-6 grid gap-3 sm:grid-cols-2">{["Check source", "Last checked timestamp", "Dependency context", "Incident link", "Owner", "Public message"].map((item) => <div key={item} className="rounded-xl border border-white/10 bg-black/15 p-4"><CheckCircle2 className="size-4 text-emerald-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Evidence required</p></div>)}</div></> : <ScreenStatePanel type="empty" title="Select a component" description="Inspect what a public status claim needs before it can be displayed." />}</CardContent></Card></div>}{tab === "incidents" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Siren className="size-5 text-amber-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-300">Incident lifecycle</p><h2 className="mt-1 text-2xl font-bold">Use clear, time-stamped updates</h2></div></div><div className="mt-6 grid gap-3 md:grid-cols-4">{INCIDENTS.map((stage, index) => <div key={stage} className="rounded-xl border border-white/10 bg-black/15 p-4"><div className="flex size-8 items-center justify-center rounded-lg bg-amber-300/10 text-amber-200">{index + 1}</div><h3 className="mt-4 font-semibold">{stage}</h3><p className="mt-2 text-sm leading-6 text-slate-400">Example workflow state. No real incident is implied.</p></div>)}</div></CardContent></Card>}{tab === "maintenance" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><ScreenStatePanel type="unavailable" title="Maintenance calendar is not connected" description="Do not publish a maintenance window, expected impact, or completion time until an authorized operations source provides it." /><div className="mt-5 grid gap-3 md:grid-cols-3">{["Scope and owner", "Start and end time", "Customer impact"].map((item) => <div key={item} className="rounded-xl border border-white/10 bg-black/15 p-4"><Wrench className="size-4 text-violet-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Required evidence</p></div>)}</div></CardContent></Card>}{tab === "current" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><ScreenStatePanel type="unavailable" title="Current status is unavailable" description="No monitoring feed is connected. The page intentionally avoids a green or red production claim." /></CardContent></Card>}</section><ScreenFeatureGrid features={[{ title: "Status with provenance", description: "Show source, timestamp, dependencies, and owner for every public health statement.", icon: Eye, status: "Required" }, { title: "Incident transparency", description: "Use clear lifecycle states with customer impact, updates, and resolution evidence.", icon: FileText, status: "Required" }, { title: "No status theater", description: "Unavailable checks stay unavailable instead of becoming invented uptime or green badges.", icon: Shield, status: "Guardrail" }]} /></main></div>; }
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>APIStatus</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">APIStatus</h1>
+            <p className="text-muted-foreground mt-2">API status page</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

@@ -1,20 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Bell, Check, Clock3, LockKeyhole, Mail, MessageSquare, RefreshCw, Search, ShieldAlert, Smartphone, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const categories = [{ id: 1, title: "Security notices", detail: "Account and access-change concepts", channel: "Email intent", enabled: true }, { id: 2, title: "Learning reminders", detail: "Course and practice concepts", channel: "Push intent", enabled: false }, { id: 3, title: "Community updates", detail: "Replies and ecosystem concepts", channel: "In-app intent", enabled: false }];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
+
 export default function PushNotifications() {
-  const [items, setItems] = useState(categories);
-  const [query, setQuery] = useState("");
-  const [quiet, setQuiet] = useState("Quiet hours not set");
-  const [selected, setSelected] = useState(1);
-  const [saved, setSaved] = useState(false);
-  const [showGates, setShowGates] = useState(false);
-  const filtered = useMemo(() => items.filter((item) => `${item.title} ${item.detail} ${item.channel}`.toLowerCase().includes(query.toLowerCase())), [items, query]);
-  const current = items.find((item) => item.id === selected) ?? items[0];
-  const toggle = (id: number) => setItems((currentItems) => currentItems.map((item) => item.id === id ? { ...item, enabled: !item.enabled } : item));
-  const reset = () => { setItems(categories); setQuery(""); setQuiet("Quiet hours not set"); setSelected(1); setSaved(false); setShowGates(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Bell} eyebrow="PushNotifications · Preference preview" title="Design the preference before claiming delivery." description="Explore local notification categories, channels, templates, previews, quiet hours, opt-out, permission, and delivery gates. No user subscription, device token, permission, message, delivery, read state, analytics, or notification is connected." badge="Notification workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Preferences saved locally" : "Save preferences locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review delivery gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset preferences</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Categories", value: `${items.length} local`, hint: "Not subscribed", icon: Bell, tone: "cyan" }, { label: "Channels", value: "Unconfigured", hint: "No device source", icon: Smartphone, tone: "violet" }, { label: "Permission", value: "Unknown", hint: "No browser prompt", icon: LockKeyhole, tone: "amber" }, { label: "Delivery", value: "Unmeasured", hint: "No event source", icon: MessageSquare, tone: "slate" }]} /><ScreenPreviewBanner title="Notification evidence boundary"><strong>This is a local preference preview, not a push-notification service.</strong> Categories, channel intent, toggles, quiet hours, preview text, saved state, and opt-out posture are browser concepts. No user account, consent, device token, browser permission, message, delivery, read state, notification count, engagement, analytics, or subscription is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local notification categories" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.title}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className={item.enabled ? "border-cyan-300/30 text-cyan-200" : "border-white/10 text-slate-500"}>{item.enabled ? "Local on" : "Local off"}</Badge></div><div className="mt-4 flex items-center justify-between"><Badge variant="outline" className="border-white/10 text-slate-500">{item.channel}</Badge><span className="text-xs text-amber-200">Delivery unmeasured</span></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected preference</p><h2 className="mt-2 text-2xl font-black">{current.title}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{current.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Channel", value: current.channel }, { label: "Permission", value: "Unknown" }, { label: "Device token", value: "Not available" }, { label: "Delivery", value: "Unmeasured" }, { label: "Read state", value: "Unavailable" }, { label: "History", value: "Empty preview" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2"><Button onClick={() => toggle(current.id)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200">{current.enabled ? "Turn local intent off" : "Turn local intent on"}</Button><label className="text-sm text-slate-400">Quiet hours<select value={quiet} onChange={(event) => setQuiet(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Quiet hours not set</option><option>Local preview only</option><option>22:00–07:00 intent</option></select></label></div><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">Preview only</p><p className="mt-2 text-sm leading-6 text-slate-400">No message will be sent. Local toggles are not consent, subscription, permission, or delivery.</p></div>{showGates && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.05] p-4"><p className="font-semibold text-cyan-100">Delivery gates</p><p className="mt-2 text-sm leading-6 text-slate-400">Real notifications require account persistence, consent, device registration, provider configuration, retries, opt-out, audit, privacy, and support.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Notification gates</p><h2 className="mt-2 text-2xl font-black">What real delivery must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Authenticated account, consent, subscription, preference persistence, and regional policy", "Browser, mobile, email, or in-app permission and device/token registration", "Template version, localization, accessibility, sensitive-data review, and claims", "Provider routing, delivery, retries, expiry, deduplication, and failure handling", "Read/unread state, history, unsubscribe, quiet hours, and support", "Audit, privacy, retention, deletion, analytics, incidents, and rollback"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Preference surface preserved", description: "Categories, search, channels, toggles, quiet hours, permission, templates, preview, opt-out, history, save/reset, and gates remain interactive.", icon: Bell, status: "Local preferences" }, { title: "No delivery theater", description: "Users, consent, tokens, permissions, messages, delivery, read state, notification counts, and engagement are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Consent before sending", description: "Real notifications need account persistence, provider configuration, opt-out, retries, privacy, audit, and support.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>PushNotifications</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">PushNotifications</h1>
+            <p className="text-muted-foreground mt-2">Push notification setup</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

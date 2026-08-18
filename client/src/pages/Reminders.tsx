@@ -1,13 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { BellRing, CalendarClock, Check, Filter, LockKeyhole, RefreshCw, Search, ShieldAlert, Timer, UsersRound, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const reminders = [{ id: 1, name: "Review learning plan", category: "Personal", detail: "A local reminder concept awaiting a due-time source, recipient identity, notification channel, and persistence.", state: "Draft" }, { id: 2, name: "Community event follow-up", category: "Community", detail: "A shared reminder concept requiring participant consent, calendar ownership, and delivery evidence.", state: "Needs evidence" }, { id: 3, name: "Security review cadence", category: "Work", detail: "A recurring-task concept requiring an approved schedule, owner, escalation policy, and audit trail.", state: "Unmeasured" }, { id: 4, name: "Subscription check", category: "Finance", detail: "A financial reminder concept that must not imply a bill, due date, payment, or account relationship.", state: "Blocked" }];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
+
 export default function Reminders() {
-  const [query, setQuery] = useState(""); const [category, setCategory] = useState("All"); const [selected, setSelected] = useState(1); const [schedule, setSchedule] = useState("Schedule not configured"); const [channel, setChannel] = useState("Channel not configured"); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false);
-  const categories = ["All", ...Array.from(new Set(reminders.map((item) => item.category)))]; const filtered = useMemo(() => reminders.filter((item) => (category === "All" || item.category === category) && `${item.name} ${item.category} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [category, query]); const reminder = reminders.find((item) => item.id === selected) ?? reminders[0];
-  const reset = () => { setQuery(""); setCategory("All"); setSelected(1); setSchedule("Schedule not configured"); setChannel("Channel not configured"); setSaved(false); setShowGates(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={BellRing} eyebrow="Reminders · Automation preview" title="Prove the schedule before promising a notification." description="Explore local reminder concepts with search, categories, schedules, recurrence, recipients, notification channels, status, snooze, completion, privacy, audit, save, reset, and evidence gates. No live users, dates, deliveries, tasks, or automation is connected." badge="Reminder workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "View saved locally" : "Save reminder locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review reminder gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset reminder</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Concepts", value: `${reminders.length} local`, hint: "No reminders loaded", icon: BellRing, tone: "cyan" }, { label: "Schedule", value: "Unconfigured", hint: "No clock source", icon: CalendarClock, tone: "violet" }, { label: "Delivery", value: "Unconnected", hint: "No channel source", icon: Timer, tone: "amber" }, { label: "Recipients", value: "Unavailable", hint: "No identity source", icon: UsersRound, tone: "slate" }]} /><ScreenPreviewBanner title="Reminder evidence boundary"><strong>This is a local reminder and automation preview, not evidence that a task exists or a notification will be delivered.</strong> Reminder cards, schedule and recurrence intent, recipients, channels, status, snooze and completion posture, saved state, privacy, and audit gates are browser concepts. No user, task, date, time, delivery, acknowledgment, or automation outcome is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local reminder concepts" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-4 flex flex-wrap gap-2">{categories.map((entry) => <Button key={entry} onClick={() => setCategory(entry)} size="sm" variant="outline" className={category === entry ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100" : "border-white/10 text-slate-400"}><Filter className="mr-1 size-3" />{entry}</Button>)}</div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.state}</Badge></div><div className="mt-4"><Badge variant="outline" className="border-white/10 text-slate-500">{item.category}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected reminder concept</p><h2 className="mt-2 text-2xl font-black">{reminder.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{reminder.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Category", value: reminder.category }, { label: "State", value: reminder.state }, { label: "Schedule", value: schedule }, { label: "Recipients", value: "Unavailable" }, { label: "Delivery", value: "Unconnected" }, { label: "Status", value: "Not started" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2"><label className="text-sm text-slate-400">Schedule<select value={schedule} onChange={(event) => setSchedule(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Schedule not configured</option><option>One-time intent</option><option>Daily intent</option><option>Weekly intent</option></select></label><label className="text-sm text-slate-400">Notification channel<select value={channel} onChange={(event) => setChannel(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Channel not configured</option><option>In-app intent</option><option>Email intent</option><option>Push intent</option></select></label></div><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><BellRing className="mx-auto size-8 text-slate-600" /><p className="mt-3 font-semibold">No reminder delivery loaded</p><p className="mt-2 text-sm text-slate-500">Connect a governed scheduler, recipient, channel, timezone, and notification provider before creating or sending a reminder.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Create unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Snooze unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Complete unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Send test unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No schedule or delivery claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A local reminder concept does not prove that a task, date, recipient, notification, acknowledgment, or automation exists.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Reminder gates</p><h2 className="mt-2 text-2xl font-black">What a real reminder workflow must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Authenticated owner, recipient consent, task scope, privacy, delegation, tenant isolation, and deletion", "Schedule, recurrence, timezone, daylight-saving behavior, clock source, idempotency, and missed-run policy", "Notification provider, address, template, localization, delivery status, retries, bounce, and rate limits", "Snooze, completion, cancellation, duplicate prevention, acknowledgment, audit, and reconciliation", "Sensitive tasks, finance, health, education, security, minors, and high-impact escalation boundaries", "Support, incident response, rollback, recovery, accessibility, localization, and user-visible status"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Reminder surface preserved", description: "Concepts, search, categories, schedules, recurrence, recipients, channels, status, snooze, completion, privacy, audit, save/reset, and gates remain interactive.", icon: BellRing, status: "Local concepts" }, { title: "No automation theater", description: "Users, tasks, dates, deliveries, acknowledgments, notifications, and automation outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Consent before notification", description: "Real reminders need owners, recipients, schedules, timezone, provider status, privacy, audit, and recovery.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Reminders</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">Reminders</h1>
+            <p className="text-muted-foreground mt-2">Reminder system</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

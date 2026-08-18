@@ -1,20 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Building2, Check, FileKey2, Globe2, LockKeyhole, RefreshCw, Save, ShieldCheck, TriangleAlert, Users, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-type Tab = "profile" | "environment" | "access";
 export default function OrganizationSettings() {
-  const [tab, setTab] = useState<Tab>("profile");
-  const [name, setName] = useState("SKYCOIN4444 Workspace");
-  const [slug, setSlug] = useState("skycoin4444");
-  const [region, setRegion] = useState("Not selected");
-  const [saved, setSaved] = useState(false);
-  const dirty = name !== "SKYCOIN4444 Workspace" || slug !== "skycoin4444" || region !== "Not selected";
-  const valid = name.trim().length >= 3 && /^[a-z0-9-]+$/.test(slug);
-  const status = useMemo(() => saved ? "Saved locally" : dirty ? "Unsaved draft" : "Baseline", [saved, dirty]);
-  const reset = () => { setName("SKYCOIN4444 Workspace"); setSlug("skycoin4444"); setRegion("Not selected"); setSaved(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Building2} eyebrow="OrganizationSettings · Workspace control" title="Shape the workspace without implying server authority." description="Edit a local organization profile, inspect environment and access boundaries, and save a draft locally. No organization record, member directory, billing plan, region, permission, or deployment configuration is changed." badge="Settings preview"><div className="flex flex-wrap gap-2"><Button disabled={!valid} onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Save className="mr-2 size-4" />{saved ? "Saved locally" : "Save local draft"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset settings</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Workspace", value: "Draft", hint: status, icon: Building2, tone: "cyan" }, { label: "Members", value: "Not loaded", hint: "No directory source", icon: Users, tone: "violet" }, { label: "Region", value: region === "Not selected" ? "Unset" : region, hint: "Local preference", icon: Globe2, tone: "amber" }, { label: "Server sync", value: "Off", hint: "No admin mutation", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Organization settings evidence boundary"><strong>These controls update local state only.</strong> They do not prove an organization exists, identify an owner, list members, change roles, alter billing, select a residency region, modify security policy, or deploy configuration. Production settings require authenticated organization scope, authorization, audit logging, validation, and reversible server operations.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.85fr_1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="space-y-2">{([{ id: "profile", label: "Profile", icon: Building2 }, { id: "environment", label: "Environment", icon: Globe2 }, { id: "access", label: "Access", icon: Users }] as const).map((item) => <button key={item.id} onClick={() => setTab(item.id)} className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left ${tab === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10 text-slate-400"}`}><item.icon className="size-4" /><span className="font-semibold">{item.label}</span><span className="ml-auto text-xs text-slate-500">{item.id === "profile" ? "Editable" : "Preview"}</span></button>)}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><TriangleAlert className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-300">Do not enter secrets, API keys, private keys, passwords, seed phrases, or sensitive member data into this local preview.</p></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{tab === "profile" && <><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Workspace profile</p><h2 className="mt-2 text-2xl font-black">Identity fields</h2><div className="mt-5 grid gap-4"><label className="text-sm text-slate-400">Organization name<input value={name} onChange={(e) => { setName(e.target.value); setSaved(false); }} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-white outline-none focus:border-cyan-300/50" /></label><label className="text-sm text-slate-400">Slug<input value={slug} onChange={(e) => { setSlug(e.target.value.toLowerCase()); setSaved(false); }} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-white outline-none focus:border-cyan-300/50" />{slug && !/^[a-z0-9-]+$/.test(slug) && <span className="mt-2 block text-xs text-amber-200">Use lowercase letters, numbers, and hyphens only.</span>}</label></div><div className="mt-5 flex items-center gap-2"><Badge variant="outline" className="border-white/10 text-amber-200">{status}</Badge><span className="text-sm text-slate-500">No server request made</span></div></>}{tab === "environment" && <><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Environment preference</p><h2 className="mt-2 text-2xl font-black">Make deployment scope explicit</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Not selected", "United States", "European Union", "Asia Pacific"].map((item) => <button key={item} onClick={() => { setRegion(item); setSaved(false); }} className={`rounded-xl border p-4 text-left ${region === item ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><p className="font-semibold">{item}</p><p className="mt-1 text-xs text-slate-500">Local preference only</p></button>)}</div><p className="mt-5 text-sm leading-6 text-slate-400">A region selection here does not configure hosting, data residency, compliance, backups, latency, or legal jurisdiction.</p></>}{tab === "access" && <><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Access boundary</p><h2 className="mt-2 text-2xl font-black">Permissions are not loaded</h2><div className="mt-5 space-y-3">{["Members and invitations", "Roles and organization permissions", "Billing and subscription controls", "Security policy and SSO configuration", "Audit logs and administrative actions"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Unavailable</span></div>)}</div><p className="mt-5 text-sm leading-6 text-slate-400">The preview cannot grant, revoke, invite, bill, authenticate, or mutate an organization.</p></>}</CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Production checklist</p><h2 className="mt-2 text-2xl font-black">What settings need to prove</h2><div className="mt-5 space-y-3">{["Authenticated organization scope, owner, member, role, and policy authorization", "Validated fields, uniqueness, region/residency semantics, and safe defaults", "Server-side mutation, optimistic concurrency, audit events, rollback, and confirmation", "Secrets handling, SSO/SCIM, billing, backups, retention, and compliance controls", "Error states, support workflow, monitoring, privacy, and incident response"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><FileKey2 className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake authority</h2><p className="mt-3 text-sm leading-6 text-slate-400">Saving a local draft changes this browser state only. It does not change organization identity, permissions, billing, security, residency, or deployment.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Profile is editable", description: "Name and slug validation provide a useful local settings experience.", icon: Building2, status: "Verified locally" }, { title: "Environment is explicit", description: "Region choices are labeled preferences, not hosting or compliance claims.", icon: Globe2, status: "Local preference" }, { title: "Access is protected", description: "Member, role, billing, SSO, and audit controls remain unavailable until server contracts exist.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>OrganizationSettings</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">OrganizationSettings</h1>
+            <p className="text-muted-foreground mt-2">Company settings and configuration</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

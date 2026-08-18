@@ -6,7 +6,7 @@ interface VoiceCommandsUIProps {
   onCommand?: (command: string) => void;
 }
 
-function VoiceCommandsUI({ onCommand }: VoiceCommandsUIProps) {
+export default function VoiceCommandsUI({ onCommand }: VoiceCommandsUIProps) {
   const [isListening, setIsListening] = useState(false);
 
   const handleToggle = () => {
@@ -29,4 +29,3 @@ function VoiceCommandsUI({ onCommand }: VoiceCommandsUIProps) {
 }
 
 export { VoiceCommandsUI };
-export default VoiceCommandsUI;

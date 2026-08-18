@@ -1,19 +1,74 @@
-import { useMemo, useState } from "react";
-import { Activity, AlertTriangle, Bell, CheckCircle2, Clock3, Database, Eye, Gauge, LockKeyhole, Plus, Search, Settings, Shield, Siren, TimerReset, Workflow } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-type Check = { id: string; name: string; target: string; status: "Telemetry unavailable" | "Draft check" | "Review required"; category: string };
-const CHECKS: Check[] = [
-  { id: "api", name: "Public API health", target: "/api/health", status: "Telemetry unavailable", category: "API" },
-  { id: "auth", name: "OAuth callback", target: "/api/oauth/callback", status: "Review required", category: "Identity" },
-  { id: "trpc", name: "tRPC gateway", target: "/api/trpc", status: "Telemetry unavailable", category: "API" },
-  { id: "webhook", name: "Webhook receiver", target: "provider callback", status: "Draft check", category: "Automation" },
-  { id: "database", name: "Database dependency", target: "server connection", status: "Review required", category: "Data" },
-];
-const ALERTS = ["Availability threshold", "Latency threshold", "Error-rate threshold", "Dependency failure", "Stale telemetry"];
+export default function APIMonitoring() {
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-export default function APIMonitoring() { const [query, setQuery] = useState(""); const [selected, setSelected] = useState<Check | null>(null); const [active, setActive] = useState("checks"); const [checks, setChecks] = useState(CHECKS); const visible = useMemo(() => checks.filter((check) => `${check.name} ${check.target} ${check.category} ${check.status}`.toLowerCase().includes(query.toLowerCase())), [checks, query]); const addCheck = () => { const draft = { id: `draft-${checks.length + 1}`, name: `New synthetic check ${checks.length + 1}`, target: "Define target", status: "Draft check" as const, category: "Draft" }; setChecks((current) => [draft, ...current]); setSelected(draft); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Activity} eyebrow="Developer Platform · Monitoring" title="Make system health observable before you promise it." description="Explore synthetic check templates, alert policy requirements, incident states, dependency review, and telemetry freshness. This workspace does not claim uptime, latency, request volume, error rates, or incidents." badge="Preview monitoring console"><div className="flex flex-wrap gap-2"><Button onClick={addCheck} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Plus className="mr-2 size-4" />Add local check</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Settings className="mr-2 size-4" />Monitoring settings</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Check templates", value: String(checks.length), hint: "Synthetic monitoring surfaces", icon: Activity }, { label: "Live telemetry", value: "Unavailable", hint: "No health feed connected", icon: Database, tone: "amber" }, { label: "Alert policies", value: String(ALERTS.length), hint: "Policy requirements", icon: Bell, tone: "violet" }, { label: "Incidents", value: "Unverified", hint: "No incident feed claim", icon: Siren, tone: "slate" }]} /><ScreenPreviewBanner title="Observability evidence boundary">The check catalog, search, local check creation, alert-policy requirements, selected-check detail, and unavailable telemetry state are available for UX review. No uptime, latency, success rate, error count, incident, status page, or notification delivery is fabricated.</ScreenPreviewBanner><section><div className="mb-5 flex flex-wrap gap-2 rounded-xl border border-white/10 bg-white/[0.04] p-2">{[["checks", "Check catalog"], ["alerts", "Alert policies"], ["incidents", "Incident state"]].map(([value, label]) => <Button key={value} size="sm" variant={active === value ? "default" : "outline"} onClick={() => setActive(value)} className={active === value ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "border-white/15 bg-white/5 text-slate-300 hover:bg-white/10"}>{label}</Button>)}</div>{active === "checks" && <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search checks" aria-label="Search monitoring checks" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visible.map((check) => <button key={check.id} onClick={() => setSelected(check)} className={`w-full rounded-xl border p-4 text-left transition ${selected?.id === check.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><Activity className="size-4 text-cyan-300" /><span className="font-semibold">{check.name}</span><Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">{check.status}</Badge></div><p className="mt-2 font-mono text-xs text-slate-500">{check.target}</p><p className="mt-1 text-xs uppercase tracking-wider text-slate-500">{check.category}</p></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No checks match" description="Try another target, category, or status." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected check</p><h2 className="mt-1 text-2xl font-bold">{selected.name}</h2><p className="mt-2 font-mono text-sm text-slate-400">{selected.target}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><div className="mt-6 grid gap-3 sm:grid-cols-2">{["Probe location", "Authentication mode", "Timeout and retry", "Freshness timestamp", "Dependency context", "Escalation owner"].map((item) => <div key={item} className="rounded-xl border border-white/10 bg-black/15 p-4"><CheckCircle2 className="size-4 text-emerald-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Evidence required</p></div>)}</div><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-amber-200"><Database className="size-4" />No telemetry response</div><p className="mt-2 text-sm leading-6 text-slate-300">This check is a configuration preview. Do not show green, red, latency, or uptime until a real probe response arrives with timestamp and failure context.</p></div></> : <ScreenStatePanel type="empty" title="Select a monitoring check" description="Inspect probe, auth, retry, freshness, dependency, and escalation requirements." />}</CardContent></Card></div>}{active === "alerts" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Bell className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Alert policy preview</p><h2 className="mt-1 text-2xl font-bold">Define when a signal is actionable</h2></div></div><div className="mt-6 grid gap-3 md:grid-cols-2">{ALERTS.map((alert) => <div key={alert} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4 text-sm text-slate-300"><Shield className="size-4 text-violet-300" />{alert}<Badge variant="outline" className="ml-auto border-slate-300/20 text-slate-400">Policy required</Badge></div>)}</div></CardContent></Card>}{active === "incidents" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><ScreenStatePanel type="unavailable" title="Incident feed is unavailable" description="No alert delivery, incident database, status page, or on-call integration is connected. The screen will not invent incidents or resolution times." /><div className="mt-5 grid gap-3 md:grid-cols-3">{["Detection", "Triage", "Resolution"].map((item) => <div key={item} className="rounded-xl border border-white/10 bg-black/15 p-4"><TimerReset className="size-4 text-amber-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Workflow required</p></div>)}</div></CardContent></Card>}</section><ScreenFeatureGrid features={[{ title: "Freshness first", description: "Every health claim needs a timestamp, probe source, dependency context, and stale-data state.", icon: Clock3, status: "Required" }, { title: "Actionable alerts", description: "Define thresholds, owners, escalation, retries, and notification delivery before paging.", icon: Bell, status: "Required" }, { title: "No green theater", description: "Unavailable telemetry should be visibly unavailable rather than replaced by invented health numbers.", icon: Eye, status: "Guardrail" }]} /></main></div>; }
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>APIMonitoring</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">APIMonitoring</h1>
+            <p className="text-muted-foreground mt-2">Uptime monitoring</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

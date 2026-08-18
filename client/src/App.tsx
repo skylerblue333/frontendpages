@@ -637,7 +637,6 @@ const OrderBook = lazy(() => import('./pages/OrderBook'));
 const OrderConfirmation = lazy(() => import('./pages/OrderConfirmation'));
 const OrderHistory = lazy(() => import('./pages/OrderHistory'));
 const OrderPlacement = lazy(() => import('./pages/OrderPlacement'));
-const OrderSummary = lazy(() => import('./pages/OrderSummary'));
 const OrderTracking = lazy(() => import('./pages/OrderTracking'));
 const OrderTypes = lazy(() => import('./pages/OrderTypes'));
 const OrganizationSettings = lazy(() => import('./pages/OrganizationSettings'));
@@ -744,36 +743,30 @@ const RateLimitError = lazy(() => import('./pages/RateLimitError'));
 const RateLimiting = lazy(() => import('./pages/RateLimiting'));
 const RatingSystem = lazy(() => import('./pages/RatingSystem'));
 const ReadReceipts = lazy(() => import('./pages/ReadReceipts'));
-const RealTimeAnalytics = lazy(() => import('./pages/RealTimeAnalytics'));
 const RealTimeGameEngine = lazy(() => import('./pages/RealTimeGameEngine'));
 const RealTimeMonitoring = lazy(() => import('./pages/RealTimeMonitoring'));
 const RealTimeStreaming = lazy(() => import('./pages/RealTimeStreaming'));
 const RebalancingTools = lazy(() => import('./pages/RebalancingTools'));
 const ReceiptDownload = lazy(() => import('./pages/ReceiptDownload'));
 const ReceiveCrypto = lazy(() => import('./pages/ReceiveCrypto'));
-const ReceiveCryptoError = lazy(() => import('./pages/ReceiveCryptoError'));
 const RecentActivity = lazy(() => import('./pages/RecentActivity'));
 const Recommendations = lazy(() => import('./pages/Recommendations'));
 const RecommendationsFeed = lazy(() => import('./pages/RecommendationsFeed'));
 const RecommendedMatches = lazy(() => import('./pages/RecommendedMatches'));
 const Reels = lazy(() => import('./pages/Reels'));
-const RecentlyViewed = lazy(() => import('./pages/RecentlyViewed'));
 const RefactoringTools = lazy(() => import('./pages/RefactoringTools'));
 const Referrals = lazy(() => import('./pages/Referrals'));
 const RefundRequests = lazy(() => import('./pages/RefundRequests'));
 const RegionalSettings = lazy(() => import('./pages/RegionalSettings'));
 const Reminders = lazy(() => import('./pages/Reminders'));
-const RemoteAccess = lazy(() => import('./pages/RemoteAccess'));
 const ReportDialog = lazy(() => import('./pages/ReportDialog'));
 const ReportUser = lazy(() => import('./pages/ReportUser'));
 const ReportsDashboard = lazy(() => import('./pages/ReportsDashboard'));
 const Reputation = lazy(() => import('./pages/Reputation'));
 const ReputationSystem = lazy(() => import('./pages/ReputationSystem'));
-const RequestQuote = lazy(() => import('./pages/RequestQuote'));
 const ResourceAllocation = lazy(() => import('./pages/ResourceAllocation'));
 const ResourceLibrary = lazy(() => import('./pages/ResourceLibrary'));
 const ResponseTime = lazy(() => import('./pages/ResponseTime'));
-const ResponseTimeError = lazy(() => import('./pages/ResponseTimeError'));
 const Retention = lazy(() => import('./pages/Retention'));
 const RetentionAnalytics = lazy(() => import('./pages/RetentionAnalytics'));
 const RetentionEngine = lazy(() => import('./pages/RetentionEngine'));
@@ -1707,7 +1700,6 @@ function Router() {
         <Route path="/order-confirmation" component={OrderConfirmation} />
         <Route path="/order-history" component={OrderHistory} />
         <Route path="/order-placement" component={OrderPlacement} />
-        <Route path="/order-summary" component={OrderSummary} />
         <Route path="/order-tracking" component={OrderTracking} />
         <Route path="/order-types" component={OrderTypes} />
         <Route path="/organization-settings" component={OrganizationSettings} />
@@ -1814,36 +1806,30 @@ function Router() {
         <Route path="/rate-limiting" component={RateLimiting} />
         <Route path="/rating-system" component={RatingSystem} />
         <Route path="/read-receipts" component={ReadReceipts} />
-        <Route path="/real-time-analytics" component={RealTimeAnalytics} />
         <Route path="/real-time-game-engine" component={RealTimeGameEngine} />
         <Route path="/real-time-monitoring" component={RealTimeMonitoring} />
         <Route path="/real-time-streaming" component={RealTimeStreaming} />
         <Route path="/rebalancing-tools" component={RebalancingTools} />
         <Route path="/receipt-download" component={ReceiptDownload} />
         <Route path="/receive-crypto" component={ReceiveCrypto} />
-        <Route path="/receive-crypto-error" component={ReceiveCryptoError} />
         <Route path="/recent-activity" component={RecentActivity} />
         <Route path="/recommendations" component={Recommendations} />
         <Route path="/recommendations-feed" component={RecommendationsFeed} />
         <Route path="/recommended-matches" component={RecommendedMatches} />
         <Route path="/reels" component={Reels} />
-        <Route path="/recently-viewed" component={RecentlyViewed} />
         <Route path="/refactoring-tools" component={RefactoringTools} />
         <Route path="/referrals" component={Referrals} />
         <Route path="/refund-requests" component={RefundRequests} />
         <Route path="/regional-settings" component={RegionalSettings} />
         <Route path="/reminders" component={Reminders} />
-        <Route path="/remote-access" component={RemoteAccess} />
         <Route path="/report-dialog" component={ReportDialog} />
         <Route path="/report-user" component={ReportUser} />
         <Route path="/reports-dashboard" component={ReportsDashboard} />
         <Route path="/reputation" component={Reputation} />
         <Route path="/reputation-system" component={ReputationSystem} />
-        <Route path="/request-quote" component={RequestQuote} />
         <Route path="/resource-allocation" component={ResourceAllocation} />
         <Route path="/resource-library" component={ResourceLibrary} />
         <Route path="/response-time" component={ResponseTime} />
-        <Route path="/response-time-error" component={ResponseTimeError} />
         <Route path="/retention" component={Retention} />
         <Route path="/retention-analytics" component={RetentionAnalytics} />
         <Route path="/retention-engine" component={RetentionEngine} />
@@ -1928,7 +1914,7 @@ function Router() {
         <Route path="/skill-badges" component={SkillBadges} />
         <Route path="/sky-school" component={SkySchool} />
         <Route path="/sky-school-a-i" component={SkySchoolAI} />
-        <Route path="/sky-school-quiz" component={SkySchoolQuiz} />
+        <Route path="/sky-school-quiz" component={() => <SkySchoolQuiz lessonId="blockchain-101-lesson-0" />} />
         <Route path="/sky-store" component={SkyStore} />
         <Route path="/slack-integration" component={SlackIntegration} />
         <Route path="/sleep-tracking" component={SleepTracking} />

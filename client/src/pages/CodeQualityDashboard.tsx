@@ -62,7 +62,7 @@ export default function CodeQualityDashboard() {
                 placeholder="Paste your code here..."
                 className="bg-slate-900 border-slate-700 text-white font-mono text-sm h-64 resize-none"
               />
-              
+
               <div className="flex gap-4 mt-4">
                 <Select value={language} onValueChange={setLanguage}>
                   <SelectTrigger className="w-40 bg-slate-900 border-slate-700">

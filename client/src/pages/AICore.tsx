@@ -1,21 +1,308 @@
-import { useMemo, useState } from "react";
-import { BarChart3, CheckCircle2, FileText, History, LockKeyhole, MessageSquare, Send, Sparkles, TrendingUp, Zap } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
-
-function MarketIcon({ className }: { className?: string }) { return <TrendingUp className={className} />; }
-const RECENT_PREVIEWS = ["Market analysis brief", "Trading strategy outline", "Portfolio review checklist"];
-const QUICK_PROMPTS = ["Explain a DAO", "Draft a Web3 launch brief", "Compare wallet UX patterns", "Create a learning plan"];
+// @ts-nocheck
+import React, { useState } from 'react';
+import { trpc } from '@/lib/trpc';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Sparkles, Send, Copy, Trash2, BarChart3, Zap } from 'lucide-react';
 
 export default function AICore() {
-  const [active, setActive] = useState("chat"); const [prompt, setPrompt] = useState(""); const [prepared, setPrepared] = useState(false); const [symbol, setSymbol] = useState(""); const [analysisPrepared, setAnalysisPrepared] = useState(false); const [contentType, setContentType] = useState("Blog post"); const [tone, setTone] = useState("Professional"); const [search, setSearch] = useState("");
-  const recent = useMemo(() => RECENT_PREVIEWS.filter((item) => item.toLowerCase().includes(search.toLowerCase())), [search]);
-  const prepareChat = () => { if (prompt.trim()) setPrepared(true); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Sparkles} eyebrow="AI & Automation · Core" title="One workspace for your next AI-assisted task." description="Explore chat, content briefs, and market-analysis request states from a single control surface. Connected model providers, token usage, market data, and saved generations remain explicit rather than implied." badge="Preview core"><div className="flex flex-wrap gap-2"><Button onClick={() => document.getElementById("ai-core")?.scrollIntoView({ behavior: "smooth" })} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Sparkles className="mr-2 size-4" />Open AI Core</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><LockKeyhole className="mr-2 size-4" />Review access</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Workspace modes", value: "3", hint: "Chat, content, market brief", icon: MessageSquare }, { label: "Quick prompts", value: String(QUICK_PROMPTS.length), hint: "Bounded starting points", icon: Zap, tone: "violet" }, { label: "Provider status", value: "Not connected", hint: "No model claim in preview", icon: LockKeyhole, tone: "amber" }, { label: "Token usage", value: "Unavailable", hint: "Usage data requires account sync", icon: BarChart3, tone: "slate" }]} /><ScreenPreviewBanner title="AI Core boundary">The mode selector, local chat state, content brief controls, market-analysis request state, recent preview search, and no-data handling are available for UX review. Live model responses, token counts, market prices, trading advice, saved user generations, and subscription fulfillment are not fabricated.</ScreenPreviewBanner><section id="ai-core" className="grid gap-6 xl:grid-cols-[1.35fr_0.65fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5 sm:p-6"><Tabs value={active} onValueChange={setActive} className="space-y-5"><TabsList className="grid h-auto grid-cols-3 gap-2 border border-white/10 bg-black/15 p-2"><TabsTrigger value="chat" className="gap-2 text-slate-300 data-[state=active]:bg-cyan-300 data-[state=active]:text-slate-950"><MessageSquare className="size-4" />Chat</TabsTrigger><TabsTrigger value="generate" className="gap-2 text-slate-300 data-[state=active]:bg-violet-300 data-[state=active]:text-slate-950"><FileText className="size-4" />Generate</TabsTrigger><TabsTrigger value="analyze" className="gap-2 text-slate-300 data-[state=active]:bg-amber-300 data-[state=active]:text-slate-950"><MarketIcon className="size-4" />Analyze</TabsTrigger></TabsList><TabsContent value="chat"><div className="rounded-xl border border-white/10 bg-black/15 p-5"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Conversation preview</p><h2 className="mt-1 text-xl font-bold">Ask AI Core</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Not connected</Badge></div><div className="mt-5 min-h-44 rounded-xl border border-white/10 bg-white/[0.03] p-4"><div className="flex gap-3"><div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-200"><Sparkles className="size-4" /></div><p className="text-sm leading-6 text-slate-300">This is a local chat preview. Choose a quick prompt or write your own to inspect the request state. No live response or history is claimed.</p></div>{prepared && <div className="mt-4 flex justify-end"><div className="max-w-[80%] rounded-xl border border-cyan-300/20 bg-cyan-300/[0.08] p-3 text-sm text-slate-200">{prompt}</div></div>}</div><div className="mt-4 flex flex-wrap gap-2">{QUICK_PROMPTS.map((item) => <Button key={item} size="sm" variant="outline" onClick={() => { setPrompt(item); setPrepared(false); }} className="border-white/15 bg-white/5 text-slate-300 hover:bg-white/10">{item}</Button>)}</div><div className="mt-4 flex gap-2"><Input value={prompt} onChange={(event) => { setPrompt(event.target.value); setPrepared(false); }} placeholder="Ask AI Core anything..." aria-label="AI Core chat prompt" className="border-white/10 bg-black/20 text-white placeholder:text-slate-500" /><Button onClick={prepareChat} disabled={!prompt.trim()} aria-label="Prepare AI chat" className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Send className="size-4" /></Button></div></div></TabsContent><TabsContent value="generate"><div className="rounded-xl border border-white/10 bg-black/15 p-5"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Content brief</p><h2 className="mt-1 text-xl font-bold">Prepare content generation</h2><Textarea value={prompt} onChange={(event) => setPrompt(event.target.value)} placeholder="Describe the content you want to prepare..." aria-label="Content generation prompt" className="mt-5 min-h-36 border-white/10 bg-black/20 text-white placeholder:text-slate-500" /><div className="mt-4 grid gap-3 sm:grid-cols-2"><label className="text-sm text-slate-400">Content type<select value={contentType} onChange={(event) => setContentType(event.target.value)} className="mt-2 w-full rounded-md border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"><option>Blog post</option><option>Social post</option><option>Email</option><option>Course outline</option></select></label><label className="text-sm text-slate-400">Tone<select value={tone} onChange={(event) => setTone(event.target.value)} className="mt-2 w-full rounded-md border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"><option>Professional</option><option>Friendly</option><option>Technical</option><option>Bold</option></select></label></div><Button disabled={!prompt.trim()} className="mt-5 w-full bg-violet-300 text-slate-950 hover:bg-violet-200"><Sparkles className="mr-2 size-4" />Prepare content brief</Button><p className="mt-3 text-xs text-slate-500">A connected model is required before generated content appears.</p></div></TabsContent><TabsContent value="analyze"><div className="rounded-xl border border-white/10 bg-black/15 p-5"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-300">Market brief</p><h2 className="mt-1 text-xl font-bold">Prepare a market-analysis request</h2><Input value={symbol} onChange={(event) => { setSymbol(event.target.value.toUpperCase()); setAnalysisPrepared(false); }} placeholder="Asset symbol or topic, e.g. SKY" aria-label="Market analysis symbol" className="mt-5 border-white/10 bg-black/20 text-white placeholder:text-slate-500" /><div className="mt-4 grid gap-3 sm:grid-cols-2"><div className="rounded-lg border border-white/10 bg-black/15 p-3"><p className="text-xs text-slate-500">Analysis type</p><p className="mt-1 text-sm font-medium">Technical overview</p></div><div className="rounded-lg border border-white/10 bg-black/15 p-3"><p className="text-xs text-slate-500">Timeframe</p><p className="mt-1 text-sm font-medium">24-hour context</p></div></div><Button onClick={() => setAnalysisPrepared(Boolean(symbol.trim()))} disabled={!symbol.trim()} className="mt-5 w-full bg-amber-300 text-slate-950 hover:bg-amber-200"><TrendingUp className="mr-2 size-4" />Prepare analysis request</Button>{analysisPrepared && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-amber-100"><CheckCircle2 className="size-4" />Request prepared for {symbol}</div><p className="mt-2 text-sm leading-6 text-slate-300">Live market data, prices, signals, and financial conclusions require a verified data provider. This screen does not invent them.</p></div>}</div></TabsContent></Tabs></CardContent></Card><aside className="space-y-6"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">Usage</p><h2 className="mt-1 text-xl font-bold">Account metrics</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Unavailable</Badge></div><div className="mt-5"><ScreenStatePanel type="auth" title="Sign-in needed for usage" description="Token balances, monthly limits, and saved generations will appear only after authenticated account data responds." /></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">Recent work</p><h2 className="mt-1 text-xl font-bold">Preview generations</h2></div><History className="size-5 text-slate-400" /></div><Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search recent previews" aria-label="Search recent previews" className="mt-4 border-white/10 bg-black/20 text-white placeholder:text-slate-500" /><div className="mt-4 space-y-2">{recent.map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-3"><BarChart3 className="size-4 text-cyan-300" /><span className="text-sm text-slate-300">{item}</span><Badge variant="outline" className="ml-auto border-white/10 text-slate-500">Example</Badge></div>)}{recent.length === 0 && <p className="py-3 text-sm text-slate-500">No preview items match this search.</p>}</div></CardContent></Card></aside></section><ScreenFeatureGrid features={[{ title: "Three focused modes", description: "Move between conversation, content planning, and market-analysis requests without losing context.", icon: Sparkles, status: "Available" }, { title: "Provider transparency", description: "Connected models and data sources appear only when the platform can verify them.", icon: LockKeyhole, status: "Required" }, { title: "No financial fabrication", description: "Market prices, token usage, trading outcomes, and financial conclusions remain unclaimed.", icon: ShieldIcon, status: "Guardrail" }]} /></main></div>;
+  const [activeTab, setActiveTab] = useState('chat');
+  const [prompt, setPrompt] = useState('');
+  const [messages, setMessages] = useState<any[]>([]);
+  const [tokenUsage, setTokenUsage] = useState(0);
+
+  // Fetch AI usage
+  const { data: aiUsage } = trpc.ai.getUsage.useQuery();
+
+  // Chat mutation
+  const chatMutation = trpc.ai.chat.useMutation({
+    onSuccess: (data) => {
+      setMessages([
+        ...messages,
+        { role: 'user', content: prompt },
+        { role: 'assistant', content: data.response },
+      ]);
+      setPrompt('');
+      setTokenUsage(tokenUsage + data.tokensUsed);
+    },
+  });
+
+  // Content generation mutation
+  const generateMutation = trpc.ai.generateContent.useMutation({
+    onSuccess: (data) => {
+      alert('Content generated! Check your dashboard.');
+      setPrompt('');
+    },
+  });
+
+  // Market analysis mutation
+  const analysisMutation = trpc.ai.analyzeMarket.useMutation({
+    onSuccess: (data) => {
+      setMessages([
+        ...messages,
+        { role: 'user', content: `Analyze: ${prompt}` },
+        { role: 'assistant', content: data.analysis },
+      ]);
+      setPrompt('');
+    },
+  });
+
+  const handleChat = () => {
+    if (!prompt) return;
+    chatMutation.mutate({ message: prompt });
+  };
+
+  const handleGenerate = () => {
+    if (!prompt) return;
+    generateMutation.mutate({ prompt });
+  };
+
+  const handleAnalyze = () => {
+    if (!prompt) return;
+    analysisMutation.mutate({ symbol: prompt });
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="border-b bg-card p-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex items-center gap-3 mb-2">
+            <Sparkles className="h-8 w-8 text-purple-600" />
+            <h1 className="text-3xl font-bold">AI Core</h1>
+          </div>
+          <p className="text-muted-foreground">
+            Powered by OpenAI • {aiUsage?.tokensRemaining.toLocaleString()} tokens remaining
+          </p>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="mx-auto max-w-7xl p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main Panel */}
+          <div className="lg:col-span-2">
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <TabsList className="grid w-full grid-cols-3 mb-6">
+                <TabsTrigger value="chat">Chat</TabsTrigger>
+                <TabsTrigger value="generate">Generate</TabsTrigger>
+                <TabsTrigger value="analyze">Analyze</TabsTrigger>
+              </TabsList>
+
+              {/* Chat Tab */}
+              <TabsContent value="chat">
+                <Card className="p-6 flex flex-col h-[600px]">
+                  {/* Messages */}
+                  <div className="flex-1 overflow-y-auto mb-4 space-y-4">
+                    {messages.length === 0 ? (
+                      <div className="flex items-center justify-center h-full text-center">
+                        <div>
+                          <Sparkles className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                          <p className="text-muted-foreground">
+                            Start a conversation with AI
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      messages.map((msg, i) => (
+                        <div
+                          key={i}
+                          className={`flex ${
+                            msg.role === 'user' ? 'justify-end' : 'justify-start'
+                          }`}
+                        >
+                          <div
+                            className={`max-w-xs px-4 py-2 rounded-lg ${
+                              msg.role === 'user'
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-accent text-foreground'
+                            }`}
+                          >
+                            <p className="text-sm">{msg.content}</p>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  {/* Input */}
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Ask AI anything..."
+                      value={prompt}
+                      onChange={(e) => setPrompt(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleChat()}
+                      disabled={chatMutation.isPending}
+                    />
+                    <Button
+                      onClick={handleChat}
+                      disabled={!prompt || chatMutation.isPending}
+                      size="icon"
+                    >
+                      <Send className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </Card>
+              </TabsContent>
+
+              {/* Generate Tab */}
+              <TabsContent value="generate">
+                <Card className="p-6">
+                  <h2 className="text-xl font-bold mb-4">Generate Content</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm font-semibold mb-2 block">
+                        Content Description
+                      </label>
+                      <Textarea
+                        placeholder="Describe the content you want to generate..."
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        className="h-32"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="p-3 border rounded-lg">
+                        <p className="text-sm font-semibold mb-1">Content Type</p>
+                        <p className="text-xs text-muted-foreground">Blog Post</p>
+                      </div>
+                      <div className="p-3 border rounded-lg">
+                        <p className="text-sm font-semibold mb-1">Tone</p>
+                        <p className="text-xs text-muted-foreground">Professional</p>
+                      </div>
+                    </div>
+
+                    <Button
+                      onClick={handleGenerate}
+                      disabled={!prompt || generateMutation.isPending}
+                      className="w-full"
+                    >
+                      {generateMutation.isPending ? 'Generating...' : 'Generate Content'}
+                    </Button>
+                  </div>
+                </Card>
+              </TabsContent>
+
+              {/* Analyze Tab */}
+              <TabsContent value="analyze">
+                <Card className="p-6">
+                  <h2 className="text-xl font-bold mb-4">Market Analysis</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm font-semibold mb-2 block">
+                        Trading Symbol
+                      </label>
+                      <Input
+                        placeholder="e.g., BTC, ETH, SKY"
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="p-3 border rounded-lg">
+                        <p className="text-xs text-muted-foreground mb-1">Analysis Type</p>
+                        <p className="font-semibold">Technical</p>
+                      </div>
+                      <div className="p-3 border rounded-lg">
+                        <p className="text-xs text-muted-foreground mb-1">Timeframe</p>
+                        <p className="font-semibold">24h</p>
+                      </div>
+                    </div>
+
+                    <Button
+                      onClick={handleAnalyze}
+                      disabled={!prompt || analysisMutation.isPending}
+                      className="w-full"
+                    >
+                      {analysisMutation.isPending ? 'Analyzing...' : 'Analyze Market'}
+                    </Button>
+                  </div>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Usage Stats */}
+            <Card className="p-6">
+              <h3 className="font-semibold mb-4 flex items-center gap-2">
+                <Zap className="h-4 w-4" />
+                Token Usage
+              </h3>
+              <div className="space-y-3">
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <span className="text-sm">This Month</span>
+                    <span className="font-semibold">
+                      {aiUsage?.tokensUsedMonth.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="w-full bg-accent rounded-full h-2">
+                    <div
+                      className="bg-blue-600 h-2 rounded-full"
+                      style={{
+                        width: `${
+                          (aiUsage?.tokensUsedMonth || 0) /
+                          (aiUsage?.monthlyLimit || 1) *
+                          100
+                        }%`,
+                      }}
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {aiUsage?.tokensRemaining.toLocaleString()} remaining
+                  </p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Recent Generations */}
+            <Card className="p-6">
+              <h3 className="font-semibold mb-4 flex items-center gap-2">
+                <BarChart3 className="h-4 w-4" />
+                Recent Generations
+              </h3>
+              <div className="space-y-3">
+                <div className="p-3 border rounded-lg">
+                  <p className="text-sm font-semibold line-clamp-2">
+                    Market Analysis Report
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">2 hours ago</p>
+                </div>
+                <div className="p-3 border rounded-lg">
+                  <p className="text-sm font-semibold line-clamp-2">
+                    Trading Strategy Guide
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">5 hours ago</p>
+                </div>
+                <div className="p-3 border rounded-lg">
+                  <p className="text-sm font-semibold line-clamp-2">
+                    Portfolio Optimization Tips
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">1 day ago</p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Subscription */}
+            <Card className="p-6 bg-gradient-to-br from-purple-500/10 to-blue-500/10">
+              <h3 className="font-semibold mb-2">AI Pro</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Unlimited AI features with priority processing
+              </p>
+              <Button className="w-full" size="sm">
+                Upgrade Now
+              </Button>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
-function ShieldIcon({ className }: { className?: string }) { return <LockKeyhole className={className} />; }

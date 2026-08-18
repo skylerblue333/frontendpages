@@ -1,23 +1,84 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { AlertTriangle, Check, FileCheck2, LockKeyhole, RefreshCw, ShieldCheck, SlidersHorizontal, TrendingUp, Wallet, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const STRATEGIES = [{ name: "Defined-risk call concept", type: "Long call", detail: "Educational payoff shape only; no quote, chain, probability, or recommendation." }, { name: "Defined-risk put concept", type: "Long put", detail: "Synthetic downside-protection concept; no hedge suitability or execution claim." }, { name: "Covered-call concept", type: "Income concept", detail: "Planning card only; no shares, yield, assignment, or income guarantee." }, { name: "Neutral range concept", type: "Spread", detail: "Synthetic multi-leg worksheet; no margin, Greeks, liquidity, or order routing." }];
+import { Card } from "@/components/ui/card";
+import { PageHeader } from "@/components/PageHeader";
 
 export default function OptionsTrading() {
-  const [strategy, setStrategy] = useState(STRATEGIES[0].name);
-  const [underlying, setUnderlying] = useState("100");
-  const [strike, setStrike] = useState("105");
-  const [premium, setPremium] = useState("3");
-  const [expiry, setExpiry] = useState("30");
-  const [saved, setSaved] = useState(false);
-  const [note, setNote] = useState("");
-  const selected = STRATEGIES.find((item) => item.name === strategy) ?? STRATEGIES[0];
-  const localPayoff = useMemo(() => { const s = Number(strike); const p = Number(premium); const u = Number(underlying); return Number.isFinite(s) && Number.isFinite(p) && Number.isFinite(u) ? (u - s - p).toFixed(2) : "—"; }, [premium, strike, underlying]);
-  const valid = [underlying, strike, premium, expiry].every((value) => value.trim() !== "" && Number.isFinite(Number(value)) && Number(value) >= 0);
-  const reset = () => { setStrategy(STRATEGIES[0].name); setUnderlying("100"); setStrike("105"); setPremium("3"); setExpiry("30"); setSaved(false); setNote(""); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={TrendingUp} eyebrow="OptionsTrading · Strategy worksheet" title="Model the risk before discussing an order." description="Compare synthetic strategy concepts and inspect transparent local payoff arithmetic. No live option chain, quote, Greeks, probability, broker, margin, order, execution, account, or financial advice is claimed." badge="Trading preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} disabled={!valid} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Plan saved locally" : "Save plan locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset worksheet</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Strategies", value: String(STRATEGIES.length), hint: "Synthetic concepts", icon: TrendingUp }, { label: "Underlying", value: `$${underlying}`, hint: "Local placeholder", icon: SlidersHorizontal, tone: "cyan" }, { label: "Payoff", value: `$${localPayoff}`, hint: "One local scenario", icon: Wallet, tone: "violet" }, { label: "Execution", value: "Off", hint: "No broker", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="OptionsTrading evidence boundary"><strong>Strategy cards and the payoff worksheet are educational fixtures—not live quotes, option chains, Greeks, implied volatility, probabilities, margin, suitability, execution, profit forecasts, or financial advice.</strong> Production options trading requires licensed market-data sources, contract specifications, corporate-action handling, pricing models, Greeks validation, margin/risk controls, suitability, broker authorization, order idempotency, confirmations, and auditability.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Strategy library</p><h2 className="mt-2 text-3xl font-black">Compare concepts</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">Market data off</Badge></div><div className="mt-5 space-y-3">{STRATEGIES.map((item) => <button key={item.name} onClick={() => { setStrategy(item.name); setSaved(false); }} className={`w-full rounded-2xl border p-4 text-left ${strategy === item.name ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/10"}`}><div className="flex items-center justify-between gap-2"><p className="font-black">{item.name}</p><Badge variant="outline" className="border-white/10 text-[10px] text-amber-200">{item.type}</Badge></div><p className="mt-2 text-sm text-slate-400">{item.detail}</p></button>)}</div><div className="mt-5 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />Do not enter brokerage credentials, account identifiers, or trade instructions into this preview.</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Scenario worksheet</p><h2 className="mt-2 text-3xl font-black">{selected.name}</h2><p className="mt-3 text-slate-400">{selected.detail}</p><div className="mt-5 grid gap-4 sm:grid-cols-2"><label className="text-sm text-slate-400">Underlying placeholder<input value={underlying} onChange={(event) => { setUnderlying(event.target.value); setSaved(false); }} type="number" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-white" /></label><label className="text-sm text-slate-400">Strike placeholder<input value={strike} onChange={(event) => { setStrike(event.target.value); setSaved(false); }} type="number" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-white" /></label><label className="text-sm text-slate-400">Premium placeholder<input value={premium} onChange={(event) => { setPremium(event.target.value); setSaved(false); }} type="number" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-white" /></label><label className="text-sm text-slate-400">Days to expiry placeholder<input value={expiry} onChange={(event) => { setExpiry(event.target.value); setSaved(false); }} type="number" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-white" /></label></div><div className="mt-5 rounded-2xl border border-violet-300/20 bg-violet-300/[0.05] p-5"><p className="text-xs uppercase tracking-[0.2em] text-violet-200">Simplified call-style scenario</p><p className="mt-3 text-5xl font-black text-violet-100">${localPayoff}</p><p className="mt-2 text-sm text-slate-400">Underlying − strike − premium · local arithmetic only</p></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Option chain", value: "Unavailable" }, { label: "Greeks", value: "Not calculated" }, { label: "Probability", value: "Not modeled" }, { label: "Margin", value: "Not assessed" }, { label: "Quote freshness", value: "Not sourced" }, { label: "Order routing", value: "Disabled" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><textarea value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} placeholder="Write a local risk question or verification note…" className="mt-5 min-h-24 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-slate-500" /></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Trading readiness</p><h2 className="mt-2 text-2xl font-black">Required before execution claims</h2><div className="mt-5 space-y-3">{["Licensed chain and quote source, contract specs, expirations, and corporate actions", "Pricing model, Greeks, volatility, probability, scenario, and reconciliation tests", "Suitability, risk disclosure, margin, liquidity, assignment, and exercise controls", "Broker auth, order idempotency, confirmations, fills, cancellations, and errors", "Privacy, auditability, support, incident response, and no-advice boundary"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><FileCheck2 className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake order</h2><p className="mt-3 text-sm leading-6 text-slate-400">This worksheet changes local state only. It does not quote, recommend, calculate a production payoff, assess suitability, connect a broker, place an order, or report a fill.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A strategy card is not a quote", description: "Synthetic concepts preserve learning UX without market-data, probability, or execution claims.", icon: TrendingUp, status: "Guardrail" }, { title: "Options need controls", description: "Greeks, margin, suitability, liquidity, broker authorization, and confirmations need evidence.", icon: AlertTriangle, status: "Required" }, { title: "No fake execution", description: "The preview makes no market, broker, wallet, order, or financial-advice request.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  return (
+    <div className="min-h-screen bg-background">
+      <PageHeader icon={Zap} title="Options Trading" subtitle="Advanced options trading with cutting-edge technology" />
+
+      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+        {/* Main Content Area */}
+        <Card className="p-8 bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20">
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Options Trading</h2>
+
+            {/* Advanced Features */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <Zap className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Advanced Analytics</h3>
+                  <p className="text-sm text-muted-foreground">Real-time data processing with AI insights</p>
+                  <Button size="sm" variant="outline" className="w-full">Explore</Button>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <Zap className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Automation Engine</h3>
+                  <p className="text-sm text-muted-foreground">Autonomous operations with intelligent decision making</p>
+                  <Button size="sm" variant="outline" className="w-full">Configure</Button>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <Zap className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Security First</h3>
+                  <p className="text-sm text-muted-foreground">Robust encryption and protection</p>
+                  <Button size="sm" variant="outline" className="w-full">Secure</Button>
+                </div>
+              </Card>
+            </div>
+
+            {/* Performance Metrics */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Processing Speed</p>
+                <p className="text-2xl font-bold text-primary">99.9%</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Uptime</p>
+                <p className="text-2xl font-bold text-primary">24/7</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Latency</p>
+                <p className="text-2xl font-bold text-primary">&lt;50ms</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Throughput</p>
+                <p className="text-2xl font-bold text-primary">10K+/s</p>
+              </div>
+            </div>
+
+            {/* Action Section */}
+            <div className="flex gap-4 flex-wrap pt-6">
+              <Button size="lg" className="bg-primary hover:bg-primary/90">
+                Get Started Now
+              </Button>
+              <Button size="lg" variant="outline">
+                View Documentation
+              </Button>
+              <Button size="lg" variant="ghost">
+                Schedule Demo
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
 }

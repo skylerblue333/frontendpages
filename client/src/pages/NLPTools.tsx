@@ -1,22 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { BrainCircuit, Check, FileText, Fingerprint, KeyRound, LockKeyhole, RefreshCw, ScanText, ShieldCheck, Sparkles, Tags, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const TASKS = ["Summarize", "Extract keywords", "Classify intent", "Review tone"];
-const SAMPLE = "Skycoin4444 is planning a careful product review. The team wants clear evidence, safe boundaries, and a useful experience before connecting live services.";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function NLPTools() {
-  const [task, setTask] = useState(TASKS[0]);
-  const [text, setText] = useState(SAMPLE);
-  const [note, setNote] = useState("");
-  const [saved, setSaved] = useState(false);
-  const words = useMemo(() => text.trim() ? text.trim().split(/\s+/) : [], [text]);
-  const sentences = useMemo(() => text.split(/[.!?]+/).map((item) => item.trim()).filter(Boolean), [text]);
-  const keywords = useMemo(() => Array.from(new Set(words.map((word) => word.toLowerCase().replace(/[^a-z0-9-]/g, "")).filter((word) => word.length > 5))).slice(0, 6), [words]);
-  const reset = () => { setTask(TASKS[0]); setText(SAMPLE); setNote(""); setSaved(false); };
-  const output = task === "Summarize" ? "A product team is planning an evidence-led review with safety boundaries before live integrations." : task === "Extract keywords" ? (keywords.length ? keywords.join(" · ") : "No keywords in sample") : task === "Classify intent" ? "Planning / product review (heuristic fixture)" : "Neutral-to-focused tone cue (heuristic fixture)";
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={BrainCircuit} eyebrow="NLPTools · Language workbench" title="Inspect the text before claiming the model result." description="Try local task modes against editable sample text with transparent word, sentence, and keyword cues. No model is invoked, no language is translated, no accuracy is measured, no sensitive data is retained, and no production API result is asserted." badge="NLP preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Workbench saved locally" : "Save workbench locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset text</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Task", value: task, hint: "Local mode", icon: ScanText }, { label: "Words", value: String(words.length), hint: "Simple count", icon: FileText, tone: "cyan" }, { label: "Sentences", value: String(sentences.length), hint: "Punctuation cue", icon: Tags, tone: "violet" }, { label: "Model", value: "Off", hint: "No invocation", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="NLPTools evidence boundary"><strong>Task labels, word counts, sentence cues, keywords, and heuristic output are deterministic local fixtures—not model output, benchmark accuracy, sentiment diagnosis, intent certainty, translation, extraction quality, privacy certification, or a production API response.</strong> Production NLP requires an authorized model/provider, input policy, data minimization, sensitive-data handling, evaluation set, confidence calibration, error handling, cost/latency observability, and human review for consequential use.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Language workbench</p><h2 className="mt-2 text-3xl font-black">Choose a local task</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">No model</Badge></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{TASKS.map((item) => <button key={item} onClick={() => { setTask(item); setSaved(false); }} className={`rounded-xl border p-4 text-left ${task === item ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/10"}`}><div className="flex items-center justify-between"><span className="font-semibold">{item}</span>{task === item && <Check className="size-4 text-cyan-200" />}</div><p className="mt-2 text-xs text-slate-500">Local heuristic fixture</p></button>)}</div><label className="mt-5 block"><span className="text-sm font-semibold text-slate-300">Sample text</span><textarea value={text} onChange={(event) => { setText(event.target.value); setSaved(false); }} className="mt-2 min-h-44 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm leading-6 text-white" /></label><div className="mt-4 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />Use synthetic or non-sensitive text. This preview does not upload, retain, profile, or share input.</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Local result</p><h2 className="mt-2 text-3xl font-black">{task}</h2><p className="mt-3 text-slate-400">A transparent deterministic cue for reviewing the language-tool UX.</p><div className="mt-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/[0.06] p-5"><p className="text-xs uppercase tracking-[0.2em] text-cyan-200">Heuristic output</p><p className="mt-3 text-lg font-semibold leading-7 text-white">{output}</p><p className="mt-4 text-xs leading-5 text-slate-500">Not generated by a model. No confidence, accuracy, or semantic guarantee is provided.</p></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Input", value: `${words.length} words` }, { label: "Segments", value: `${sentences.length} sentence cue${sentences.length === 1 ? "" : "s"}` }, { label: "Keywords", value: `${keywords.length} local cues` }, { label: "Privacy", value: "Unverified" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><textarea value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} placeholder="Write a local evaluation or review note…" className="mt-5 min-h-24 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-slate-500" /></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">NLP readiness</p><h2 className="mt-2 text-2xl font-black">Required before language claims</h2><div className="mt-5 space-y-3">{["Authorized model/provider, version, task, and language coverage", "Input minimization, privacy, retention, and sensitive-data policy", "Labeled evaluation set, quality metrics, calibration, and error analysis", "Confidence handling, adversarial inputs, retries, cost, and latency", "Human review and escalation for consequential classification or extraction"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><Fingerprint className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake intelligence</h2><p className="mt-3 text-sm leading-6 text-slate-400">The workbench does not invoke an AI model, infer a person’s mental state, translate text, determine intent with certainty, or return a production API result.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A cue is not a model result", description: "Deterministic local cues preserve language-tool UX without quality, confidence, or accuracy claims.", icon: ScanText, status: "Guardrail" }, { title: "Sensitive text needs care", description: "Input policy, minimization, retention, evaluation, and human review need explicit ownership.", icon: KeyRound, status: "Required" }, { title: "No fake API", description: "The preview creates no provider request, model trace, export, or production response.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>NLPTools</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">NLPTools</h1>
+            <p className="text-muted-foreground mt-2">Natural language processing</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

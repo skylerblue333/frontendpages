@@ -1,24 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Check, Clock3, Filter, Flag, LayoutDashboard, LockKeyhole, Plus, RefreshCw, Search, ShieldAlert, Users, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-type Status = "Backlog" | "In progress" | "Review" | "Done";
-type Item = { id: number; title: string; status: Status; priority: string; owner: string; detail: string };
-const initial: Item[] = [{ id: 1, title: "Define evidence contract", status: "Backlog", priority: "High", owner: "Unassigned", detail: "Document what a real integration must prove." }, { id: 2, title: "Map responsive states", status: "In progress", priority: "Medium", owner: "Local draft", detail: "Review loading, empty, error, and mobile behavior." }, { id: 3, title: "Review accessibility gates", status: "Review", priority: "High", owner: "Unassigned", detail: "Check keyboard, focus, contrast, and screen-reader paths." }];
-const statuses: Status[] = ["Backlog", "In progress", "Review", "Done"];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
+
 export default function ProjectBoard() {
-  const [items, setItems] = useState(initial);
-  const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState(1);
-  const [priority, setPriority] = useState("All priorities");
-  const [saved, setSaved] = useState(false);
-  const [showBoundary, setShowBoundary] = useState(false);
-  const filtered = useMemo(() => items.filter((item) => `${item.title} ${item.detail} ${item.status}`.toLowerCase().includes(query.toLowerCase()) && (priority === "All priorities" || item.priority === priority)), [items, priority, query]);
-  const createItem = () => { const id = Math.max(...items.map((item) => item.id), 0) + 1; const item: Item = { id, title: `Local planning item ${id}`, status: "Backlog", priority: "Medium", owner: "Unassigned", detail: "A local task concept awaiting scope and evidence." }; setItems((current) => [...current, item]); setSelected(id); };
-  const move = (id: number, delta: number) => setItems((current) => current.map((item) => { if (item.id !== id) return item; const index = statuses.indexOf(item.status); return { ...item, status: statuses[Math.max(0, Math.min(statuses.length - 1, index + delta))] }; }));
-  const reset = () => { setItems(initial); setQuery(""); setSelected(1); setPriority("All priorities"); setSaved(false); setShowBoundary(false); };
-  const selectedItem = items.find((item) => item.id === selected) ?? items[0];
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={LayoutDashboard} eyebrow="ProjectBoard · Planning preview" title="Make project planning useful without inventing a team." description="Explore a local Kanban board with search, statuses, priorities, owner intent, task creation, movement controls, and review gates. No shared backlog, authenticated team, dates, completion, budgets, permissions, or collaboration event is asserted." badge="Board workspace"><div className="flex flex-wrap gap-2"><Button onClick={createItem} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Plus className="mr-2 size-4" />New local item</Button><Button onClick={() => setSaved(true)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Check className="mr-2 size-4" />{saved ? "Board saved locally" : "Save board locally"}</Button><Button onClick={() => setShowBoundary((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showBoundary ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showBoundary ? "Close boundary" : "Review boundary"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset board</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Items", value: `${items.length} local`, hint: "Not shared", icon: LayoutDashboard, tone: "cyan" }, { label: "Owners", value: "Unassigned", hint: "No team source", icon: Users, tone: "violet" }, { label: "Dates", value: "Unknown", hint: "No schedule source", icon: Clock3, tone: "amber" }, { label: "Completion", value: "Unmeasured", hint: "No workflow ledger", icon: Flag, tone: "slate" }]} /><ScreenPreviewBanner title="Project board evidence boundary"><strong>This is a local Kanban planning preview, not a shared project system.</strong> Items, status movement, priority, owner intent, search, and saved state are browser concepts. No user, team, dates, completion, budget, permissions, comments, notifications, or shared workflow event is persisted.</ScreenPreviewBanner><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex flex-wrap items-center gap-3"><div className="relative min-w-64 flex-1"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local items" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><Filter className="size-4 text-slate-500" />{["All priorities", "High", "Medium"].map((item) => <button key={item} onClick={() => setPriority(item)} className={`rounded-lg border px-3 py-2 text-xs ${priority === item ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-6 grid gap-4 xl:grid-cols-4">{statuses.map((status) => <div key={status} className="rounded-2xl border border-white/10 bg-black/10 p-3"><div className="mb-3 flex items-center justify-between"><h2 className="font-semibold">{status}</h2><Badge variant="outline" className="border-white/10 text-slate-500">{filtered.filter((item) => item.status === status).length}</Badge></div><div className="space-y-3">{filtered.filter((item) => item.status === status).map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><p className="font-semibold">{item.title}</p><Badge variant="outline" className={item.priority === "High" ? "border-amber-300/20 text-amber-200" : "border-white/10 text-slate-500"}>{item.priority}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-500">{item.detail}</p><p className="mt-3 text-xs text-slate-600">Owner: {item.owner}</p></button>)}{filtered.filter((item) => item.status === status).length === 0 && <p className="rounded-xl border border-dashed border-white/10 p-4 text-center text-xs text-slate-600">No local items</p>}</div></div>)}</div></CardContent></Card><section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected item</p><h2 className="mt-2 text-2xl font-black">{selectedItem.title}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{selectedItem.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Status", value: selectedItem.status }, { label: "Priority", value: selectedItem.priority }, { label: "Owner", value: selectedItem.owner }, { label: "Due date", value: "Unknown" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 flex flex-wrap gap-2"><Button onClick={() => move(selectedItem.id, -1)} variant="outline" className="border-white/10 text-white">Move earlier</Button><Button onClick={() => move(selectedItem.id, 1)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200">Move later</Button></div>{showBoundary && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No shared-workflow claim</p><p className="mt-2 text-sm leading-6 text-slate-400">Local movement does not assign a person, set a deadline, notify a team, close work, or update a shared board.</p></div>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Board gates</p><h2 className="mt-2 text-2xl font-black">What a real project board must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Authenticated project membership and role authorization", "Server persistence, concurrency, audit, and reversible status changes", "Owners, dates, dependencies, estimates, budgets, and approval rules", "Comments, mentions, notifications, attachments, and activity history", "Privacy, export, deletion, moderation, and workspace isolation", "Offline recovery, error states, accessibility, and support"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Board surface preserved", description: "Search, priorities, Kanban columns, local task creation, selection, movement, owner/dates, save/reset, and gates remain interactive.", icon: LayoutDashboard, status: "Local board" }, { title: "No collaboration theater", description: "Users, teams, dates, completion, budgets, permissions, comments, notifications, and shared updates are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Authorization before sharing", description: "Real boards need workspace isolation, roles, persistence, concurrency, audit, notifications, recovery, and support.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>ProjectBoard</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">ProjectBoard</h1>
+            <p className="text-muted-foreground mt-2">Kanban board for project tasks</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

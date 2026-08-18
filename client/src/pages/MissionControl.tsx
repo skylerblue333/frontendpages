@@ -1,19 +1,74 @@
-import { useState } from "react";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { getLoginUrl } from "@/const";
 import { Link } from "wouter";
-import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { BriefcaseBusiness, Check, ChevronRight, Gauge, LockKeyhole, RefreshCw, Rocket, Shield, Sparkles, Store, Target, Trophy, Users, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+import { Gauge, Trophy, Briefcase, Sparkles, Rocket, Store } from "lucide-react";
+import { GOLD } from "./mission-control/shared";
+import { TodaySection } from "./mission-control/TodaySection";
+import { ReputationSection } from "./mission-control/ReputationSection";
+import { OpportunitiesSection } from "./mission-control/OpportunitiesSection";
+import { MissionsSection } from "./mission-control/MissionsSection";
+import { StartupSection } from "./mission-control/StartupSection";
+import { MarketplaceSection } from "./mission-control/MarketplaceSection";
 
-const TABS = [{ id: "today", label: "Today", icon: Gauge }, { id: "missions", label: "Missions", icon: Sparkles }, { id: "opportunities", label: "Opportunities", icon: BriefcaseBusiness }, { id: "reputation", label: "Reputation", icon: Trophy }, { id: "startup", label: "Startup Builder", icon: Rocket }, { id: "marketplace", label: "AI Marketplace", icon: Store }];
-const MISSION_CARDS = [{ title: "Build a focused learning loop", category: "Learning", progress: 2, total: 4 }, { title: "Draft a safer creator workflow", category: "Builder", progress: 1, total: 3 }, { title: "Document an integration boundary", category: "Operations", progress: 3, total: 5 }];
-const OPPORTUNITIES = [{ title: "Protocol education sprint", type: "Research brief", status: "Needs source" }, { title: "Creator tools review", type: "Product study", status: "Preview" }, { title: "Community systems map", type: "Collaboration brief", status: "Unverified" }];
+const TABS = [
+  { value: "today", label: "Today", icon: Gauge, el: <TodaySection /> },
+  { value: "missions", label: "Missions", icon: Sparkles, el: <MissionsSection /> },
+  { value: "opportunities", label: "Opportunities", icon: Briefcase, el: <OpportunitiesSection /> },
+  { value: "reputation", label: "Reputation", icon: Trophy, el: <ReputationSection /> },
+  { value: "startup", label: "Startup Builder", icon: Rocket, el: <StartupSection /> },
+  { value: "marketplace", label: "AI Marketplace", icon: Store, el: <MarketplaceSection /> },
+] as const;
 
 export default function MissionControl() {
-  const [tab, setTab] = useState("today");
-  const [saved, setSaved] = useState(false);
-  const [checked, setChecked] = useState<string[]>([]);
-  const toggle = (value: string) => setChecked((items) => items.includes(value) ? items.filter((item) => item !== value) : [...items, value]);
-  return <div className="min-h-screen bg-[#050510] text-white"><ScreenHero icon={Gauge} eyebrow="Operations · Mission Control" title="Coordinate the work without inventing the record." description="Explore local Today, Missions, Opportunities, Reputation, Startup Builder, and AI Marketplace surfaces. No live goals, messages, scores, rankings, purchases, listings, startup records, or AI actions are asserted." badge="Operations preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-amber-300 text-slate-950 hover:bg-amber-200"><Check className="mr-2 size-4" />{saved ? "Saved locally" : "Save workspace note"}</Button><Button onClick={() => { setTab("today"); setSaved(false); setChecked([]); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset workspace</Button><Link href="/"><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">Back home</Button></Link></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Open goals", value: "3", hint: "Synthetic planning set", icon: Target }, { label: "Active missions", value: "3", hint: "Local cards", icon: Sparkles, tone: "violet" }, { label: "Reputation", value: "Off", hint: "No live score", icon: Trophy, tone: "amber" }, { label: "AI actions", value: "Off", hint: "No purchase or publish", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Mission Control evidence boundary"><strong>This operations preview preserves navigation and interaction patterns without claiming live goals, mission progress, reputation scores, mutual connections, AI matching, generated startup blueprints, marketplace balances, purchases, listings, or direct messages.</strong> Live production use requires authenticated contracts, data provenance, permissions, audit logs, moderation, payment controls, and action-specific confirmation.</ScreenPreviewBanner><nav className="flex flex-wrap gap-2">{TABS.map((item) => <button key={item.id} onClick={() => setTab(item.id)} className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm ${tab === item.id ? "border-amber-300/40 bg-amber-300/[0.1] text-amber-200" : "border-white/10 text-white/50"}`}><item.icon className="size-4" />{item.label}</button>)}</nav>{tab === "today" && <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.03]"><CardContent className="p-6"><p className="text-xs uppercase tracking-[0.2em] text-amber-300">Local day plan</p><h2 className="mt-2 text-2xl font-black">A focused preview of today</h2><div className="mt-5 space-y-3">{["Choose one learning objective", "Review one safety boundary", "Write one reflection note"].map((item) => <button key={item} onClick={() => toggle(item)} className="flex w-full items-center gap-3 rounded-xl border border-white/10 p-4 text-left"><span className={`flex size-7 items-center justify-center rounded-full ${checked.includes(item) ? "bg-emerald-300/15 text-emerald-300" : "bg-white/10 text-white/50"}`}>{checked.includes(item) ? <Check className="size-4" /> : <ChevronRight className="size-4" />}</span><span className="flex-1 text-sm text-white/75">{item}</span><span className="text-xs text-white/40">Local</span></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.03]"><CardContent className="p-6"><Users className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">Connections unavailable</h2><p className="mt-3 text-sm leading-6 text-white/50">No live messages, social graph, mutual counts, or personalized suggestions are connected to this preview.</p></CardContent></Card></section>}{tab === "missions" && <section className="grid gap-4 md:grid-cols-3">{MISSION_CARDS.map((mission) => <Card key={mission.title} className="border-white/10 bg-white/[0.03]"><CardContent className="p-5"><Badge variant="outline" className="border-violet-300/20 text-violet-200">{mission.category}</Badge><h2 className="mt-4 font-black">{mission.title}</h2><p className="mt-2 text-sm text-white/50">{mission.progress}/{mission.total} local steps reviewed</p><div className="mt-3 h-2 rounded-full bg-white/10"><div className="h-full rounded-full bg-violet-300" style={{ width: `${mission.progress / mission.total * 100}%` }} /></div><Button onClick={() => toggle(mission.title)} variant="outline" className="mt-5 w-full border-white/15 text-white">{checked.includes(mission.title) ? "Saved locally" : "Review mission"}</Button></CardContent></Card>)}</section>}{tab === "opportunities" && <section className="grid gap-4 md:grid-cols-3">{OPPORTUNITIES.map((item) => <Card key={item.title} className="border-white/10 bg-white/[0.03]"><CardContent className="p-5"><BriefcaseBusiness className="size-5 text-amber-300" /><h2 className="mt-4 font-black">{item.title}</h2><p className="mt-2 text-sm text-white/50">{item.type}</p><Badge variant="outline" className="mt-4 border-amber-300/20 text-amber-200">{item.status}</Badge><p className="mt-4 text-xs leading-5 text-white/40">No match score, employer, compensation, social graph, or recommendation is attached.</p></CardContent></Card>)}</section>}{tab === "reputation" && <section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.03]"><CardContent className="p-6"><Trophy className="size-5 text-amber-300" /><h2 className="mt-4 text-2xl font-black">Reputation preview</h2><p className="mt-3 text-white/50">No live score is calculated. Review the dimensions that a production system would need to document.</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Learning evidence", "Builder evidence", "Teaching evidence", "Community evidence"].map((item) => <div key={item} className="rounded-xl border border-white/10 p-4"><p className="text-sm text-white/70">{item}</p><p className="mt-2 text-xs text-amber-200">Needs source</p></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.03]"><CardContent className="p-6"><Shield className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No leaderboard</h2><p className="mt-3 text-sm leading-6 text-white/50">No rank, percentile, public profile, or recompute action is exposed.</p></CardContent></Card></section>}{tab === "startup" && <section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.03]"><CardContent className="p-6"><Rocket className="size-5 text-violet-300" /><h2 className="mt-4 text-2xl font-black">Startup Builder preview</h2><p className="mt-3 text-white/50">Draft a local idea brief; no AI blueprint, market validation, MVP, team plan, funding, or launch record is generated.</p><textarea placeholder="Describe a product idea for a local brief" className="mt-5 min-h-28 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-white/30" /><Button onClick={() => setSaved(true)} className="mt-4 bg-violet-500 text-white hover:bg-violet-400">Save local brief</Button></CardContent></Card><Card className="border-white/10 bg-white/[0.03]"><CardContent className="p-6"><LockKeyhole className="size-5 text-amber-300" /><h2 className="mt-4 text-xl font-black">Action gate</h2><p className="mt-3 text-sm leading-6 text-white/50">AI generation, publishing, collaboration, analytics, and financial actions require a verified service and explicit confirmation.</p></CardContent></Card></section>}{tab === "marketplace" && <section className="grid gap-4 md:grid-cols-3">{["Prompt library", "Workflow template", "Research pack"].map((item) => <Card key={item} className="border-white/10 bg-white/[0.03]"><CardContent className="p-5"><Store className="size-5 text-cyan-300" /><h2 className="mt-4 font-black">{item}</h2><p className="mt-2 text-sm text-white/50">Preview listing · no seller or content attached</p><Button disabled variant="outline" className="mt-5 w-full border-white/10 text-white/40">Purchase unavailable</Button></CardContent></Card>)}</section>}<ScreenFeatureGrid features={[{ title: "Status is not telemetry", description: "Local cards preserve operations UX without claiming uptime, incidents, deployment state, or production health.", icon: WifiOff, status: "Guardrail" }, { title: "Scores need provenance", description: "Reputation, matching, ranking, and opportunity claims require authenticated records and documented methodology.", icon: Shield, status: "Required" }, { title: "No fake marketplace", description: "The preview keeps discovery and planning usable without balance, purchase, listing, or unlocked-content claims.", icon: Store, status: "Unavailable" }]} /></main></div>;
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div className="min-h-screen bg-[#050510] flex items-center justify-center text-white/40">Loading…</div>;
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-[#050510] text-white flex flex-col items-center justify-center gap-4 px-6 text-center">
+        <h1 className="text-3xl font-bold">Mission Control</h1>
+        <p className="text-white/50 max-w-md">Your HOPE AI command center — digital twin memory, reputation, opportunities, missions, a startup builder, and the AI marketplace. Sign in to continue.</p>
+        <div className="flex gap-3">
+          <a href={getLoginUrl()}><Button style={{ backgroundColor: GOLD, color: "#000" }}>Sign in</Button></a>
+          <Link href="/"><Button variant="outline" className="border-white/20 text-white/80">Back home</Button></Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[#050510] text-white">
+      <div className="border-b border-white/10 sticky top-0 z-30" style={{ background: "rgba(5,5,16,0.92)", backdropFilter: "blur(20px)" }}>
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center gap-3">
+          <Link href="/" className="text-white/40 hover:text-white/70 text-sm">← Home</Link>
+          <div className="w-px h-4 bg-white/15" />
+          <div>
+            <h1 className="text-lg font-black tracking-tight">Mission <span style={{ color: GOLD }}>Control</span></h1>
+            <p className="text-[11px] text-white/40 -mt-0.5">HOPE AI orchestration layer</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 py-6">
+        <Tabs defaultValue="today">
+          <TabsList className="bg-white/[0.03] border border-white/10 flex flex-wrap h-auto p-1 mb-6">
+            {TABS.map((t) => (
+              <TabsTrigger key={t.value} value={t.value} className="data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/50 gap-1.5">
+                <t.icon className="h-3.5 w-3.5" />
+                {t.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {TABS.map((t) => (
+            <TabsContent key={t.value} value={t.value} className="mt-0">{t.el}</TabsContent>
+          ))}
+        </Tabs>
+      </div>
+    </div>
+  );
 }

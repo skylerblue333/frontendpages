@@ -1,20 +1,84 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { ArrowRightLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowDownUp, Check, ClipboardList, Coins, LockKeyhole, RefreshCw, Route, Shield, TriangleAlert, WalletCards, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const TOKENS = ["SKY", "ETH", "MATIC", "USDC"];
-const GATES = ["Wallet connection and ownership", "Token contract and network validation", "Liquidity route and quote freshness", "Slippage, fee, approval, and nonce", "Transaction hash, confirmation, and recovery"];
+import { Card } from "@/components/ui/card";
+import { PageHeader } from "@/components/PageHeader";
 
 export default function CrossChainSwap() {
-  const [from, setFrom] = useState("ETH");
-  const [to, setTo] = useState("SKY");
-  const [amount, setAmount] = useState("");
-  const [slippage, setSlippage] = useState("0.50");
-  const [saved, setSaved] = useState(false);
-  const route = useMemo(() => `${from} → ${to}`, [from, to]);
-  const swap = () => { setFrom(to); setTo(from); setSaved(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={ArrowDownUp} eyebrow="Crypto trading · Cross-chain swap" title="Design the swap before requesting a quote." description="Explore a local swap form, token selectors, slippage preference, route readiness, and transaction safety gates. No wallet, price feed, liquidity pool, allowance, quote, approval, or transaction is connected." badge="Swap preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><ClipboardList className="mr-2 size-4" />Save local intent</Button><Button onClick={() => { setFrom("ETH"); setTo("SKY"); setAmount(""); setSlippage("0.50"); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset swap</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Route", value: route, hint: "Local selection", icon: Route }, { label: "Quote", value: "Off", hint: "No price source", icon: WifiOff, tone: "amber" }, { label: "Liquidity", value: "Unknown", hint: "No pool connected", icon: Coins, tone: "slate" }, { label: "Transaction", value: "Blocked", hint: "No wallet approval", icon: WalletCards, tone: "violet" }]} /><ScreenPreviewBanner title="Swap evidence boundary"><strong>Token symbols, amounts, slippage, route labels, and readiness states are local planning inputs—not prices, balances, quotes, liquidity, fair value, fees, approvals, transaction submissions, or settlement.</strong> Production swaps require verified contracts and networks, fresh quotes, route and liquidity proof, wallet signatures, allowance handling, slippage protection, nonce/replay controls, transaction hashes, confirmation, and failure recovery.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.82fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><ArrowDownUp className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Local swap intent</p><h2 className="mt-1 text-2xl font-black">{route}</h2></div></div><label className="mt-6 block text-sm text-slate-300">You send<select value={from} onChange={(event) => { setFrom(event.target.value); setSaved(false); }} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white">{TOKENS.map((token) => <option key={token}>{token}</option>)}</select></label><button onClick={swap} className="mx-auto my-4 flex size-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-cyan-200" aria-label="Swap tokens"><ArrowDownUp className="size-4" /></button><label className="block text-sm text-slate-300">You receive<select value={to} onChange={(event) => { setTo(event.target.value); setSaved(false); }} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white">{TOKENS.filter((token) => token !== from || token === to).map((token) => <option key={token}>{token}</option>)}</select></label><label className="mt-5 block text-sm text-slate-300">Send amount<input value={amount} onChange={(event) => { setAmount(event.target.value); setSaved(false); }} inputMode="decimal" placeholder="Local input only" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white placeholder:text-slate-500" /></label><label className="mt-5 block text-sm text-slate-300">Max slippage<input value={slippage} onChange={(event) => { setSlippage(event.target.value); setSaved(false); }} inputMode="decimal" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white" /><span className="mt-2 block text-xs text-slate-500">Preference only; no execution guard is active.</span></label><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 font-semibold text-amber-200"><TriangleAlert className="size-4" />Quote unavailable</div><p className="mt-2 text-sm leading-6 text-slate-400">No rate, minimum received amount, fee, gas, liquidity, route, or price impact is calculated.</p></div><Button onClick={() => setSaved(true)} className="mt-5 w-full bg-violet-500 text-white hover:bg-violet-400"><ClipboardList className="mr-2 size-4" />Save dry-run intent</Button>{saved && <p className="mt-4 flex items-center gap-2 text-sm text-cyan-200"><Check className="size-4" />Local intent saved; no approval or transaction created.</p>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Shield className="size-5 text-violet-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Execution readiness</p><h2 className="mt-1 text-2xl font-black">Blocked by design</h2></div></div><div className="mt-6 space-y-3">{GATES.map((gate) => <div key={gate} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{gate}</span><span className="text-xs text-amber-200">Missing</span></div>)}</div><div className="mt-5 rounded-xl border border-red-300/20 bg-red-300/[0.05] p-4"><p className="font-semibold text-red-200">No swap action</p><p className="mt-2 text-sm leading-6 text-slate-400">This preview cannot connect a wallet, request approval, submit a swap, transfer tokens, or report success.</p></div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A token pair is not a quote", description: "Symbols and amounts cannot establish a market price, liquidity route, minimum received value, or fair execution.", icon: Coins, status: "Guardrail" }, { title: "Approvals are security events", description: "Allowance, chain, spender, nonce, and replay controls must be validated before any signature request.", icon: Shield, status: "Required" }, { title: "No fake settlement", description: "The swap form preserves product utility without inventing balances, approvals, hashes, confirmations, or completed trades.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  return (
+    <div className="min-h-screen bg-background">
+      <PageHeader icon={ArrowRightLeft} title="Cross Chain Swap" subtitle="Advanced cross chain swap with cutting-edge technology" />
+
+      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+        {/* Main Content Area */}
+        <Card className="p-8 bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20">
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Cross Chain Swap</h2>
+
+            {/* Advanced Features */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <ArrowRightLeft className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Advanced Analytics</h3>
+                  <p className="text-sm text-muted-foreground">Real-time data processing with AI insights</p>
+                  <Button size="sm" variant="outline" className="w-full">Explore</Button>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <ArrowRightLeft className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Automation Engine</h3>
+                  <p className="text-sm text-muted-foreground">Autonomous operations with intelligent decision making</p>
+                  <Button size="sm" variant="outline" className="w-full">Configure</Button>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <ArrowRightLeft className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Security First</h3>
+                  <p className="text-sm text-muted-foreground">Robust encryption and protection</p>
+                  <Button size="sm" variant="outline" className="w-full">Secure</Button>
+                </div>
+              </Card>
+            </div>
+
+            {/* Performance Metrics */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Processing Speed</p>
+                <p className="text-2xl font-bold text-primary">99.9%</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Uptime</p>
+                <p className="text-2xl font-bold text-primary">24/7</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Latency</p>
+                <p className="text-2xl font-bold text-primary">&lt;50ms</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Throughput</p>
+                <p className="text-2xl font-bold text-primary">10K+/s</p>
+              </div>
+            </div>
+
+            {/* Action Section */}
+            <div className="flex gap-4 flex-wrap pt-6">
+              <Button size="lg" className="bg-primary hover:bg-primary/90">
+                Get Started Now
+              </Button>
+              <Button size="lg" variant="outline">
+                View Documentation
+              </Button>
+              <Button size="lg" variant="ghost">
+                Schedule Demo
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
 }

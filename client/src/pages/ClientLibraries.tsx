@@ -1,26 +1,74 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Code2, Copy, Download, GitBranch, KeyRound, LockKeyhole, Package, Search, Settings2, Terminal, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatePanel, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const LIBRARIES = [
-  { id: "web", name: "Skycoin Web SDK", version: "0.1.0-preview", runtime: "TypeScript · Browser", description: "Typed client patterns for a local integration preview." },
-  { id: "python", name: "Skycoin Python SDK", version: "0.1.0-preview", runtime: "Python · Server", description: "Server-side request-shape examples with no live credentials." },
-  { id: "mobile", name: "Skycoin Mobile SDK", version: "0.1.0-preview", runtime: "React Native", description: "Mobile integration notes for a future authenticated client." },
-  { id: "cli", name: "Skycoin CLI", version: "0.1.0-preview", runtime: "Node.js · CLI", description: "Local command previews for inspecting integration contracts." },
-];
-const TABS = ["Catalog", "Quickstart", "Releases"];
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function ClientLibraries() {
-  const [tab, setTab] = useState("Catalog");
-  const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState(LIBRARIES[0]);
-  const [copied, setCopied] = useState(false);
-  const filtered = useMemo(() => LIBRARIES.filter((item) => `${item.name} ${item.runtime}`.toLowerCase().includes(query.toLowerCase())), [query]);
-  const install = `pnpm add @skycoin4444/${selected.id}-sdk@${selected.version}`;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Code2} eyebrow="Developer platform · Client libraries" title="Build against contracts before claiming connectivity." description="Explore local SDK catalog entries, installation shape, and release discipline. These previews do not publish packages, issue API keys, connect to production services, or verify an integration." badge="Developer preview"><div className="flex flex-wrap gap-2"><Button onClick={() => { setCopied(true); setTimeout(() => setCopied(false), 1800); }} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Copy className="mr-2 size-4" />{copied ? "Copied locally" : "Copy install shape"}</Button><Button onClick={() => { setQuery(""); setTab("Catalog"); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Settings2 className="mr-2 size-4" />Reset catalog</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Libraries", value: String(LIBRARIES.length), hint: "Preview catalog", icon: Package }, { label: "Channels", value: "4", hint: "Runtime examples", icon: Terminal, tone: "violet" }, { label: "API keys", value: "Off", hint: "No credential service", icon: KeyRound, tone: "amber" }, { label: "Publishing", value: "Blocked", hint: "No package registry", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Developer evidence boundary"><strong>A package name, version string, install command, or code sample is not proof of a published artifact, working endpoint, compatible schema, API-key issuance, authentication, telemetry, or production support.</strong> Production SDKs require versioned contracts, generated types, secure credential handling, retries, idempotency, observability, compatibility tests, release provenance, and a package registry.</ScreenPreviewBanner><section className="flex flex-wrap gap-2" aria-label="Client library sections">{TABS.map((item) => <button key={item} onClick={() => setTab(item)} className={`rounded-xl border px-4 py-2 text-sm ${tab === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-400"}`}>{item}</button>)}</section>{tab === "Catalog" && <section className="space-y-5"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search runtime or library" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div></CardContent></Card><div className="grid gap-4 md:grid-cols-2">{filtered.map((item) => <Card key={item.id} className={`border-white/10 bg-white/[0.04] transition hover:border-cyan-300/30 ${selected.id === item.id ? "ring-1 ring-cyan-300/40" : ""}`}><CardContent className="p-5"><div className="flex items-start justify-between gap-3"><div className="flex size-11 items-center justify-center rounded-2xl bg-cyan-300/10 text-cyan-200"><Package className="size-5" /></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.version}</Badge></div><h2 className="mt-4 text-lg font-black">{item.name}</h2><p className="mt-1 text-sm text-cyan-200">{item.runtime}</p><p className="mt-4 text-sm leading-6 text-slate-400">{item.description}</p><Button onClick={() => { setSelected(item); setTab("Quickstart"); setCopied(false); }} variant="outline" className="mt-5 w-full border-white/15 text-white">Inspect local quickstart</Button></CardContent></Card>)}{filtered.length === 0 && <ScreenStatePanel type="empty" title="No preview library matches" description="Try another runtime or library name. No package registry was queried." />}</div></section>}{tab === "Quickstart" && <section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Terminal className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Local quickstart</p><h2 className="mt-1 text-2xl font-black">{selected.name}</h2></div></div><p className="mt-5 text-sm leading-6 text-slate-400">The command below documents intended package shape only. It is not executed, and no package download or API request occurs.</p><div className="mt-5 rounded-xl border border-white/10 bg-black/30 p-4 font-mono text-sm text-cyan-200">{install}</div><div className="mt-5 flex flex-wrap gap-2"><Button onClick={() => { setCopied(true); setTimeout(() => setCopied(false), 1800); }} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Copy className="mr-2 size-4" />{copied ? "Copied locally" : "Copy command"}</Button><Button onClick={() => setTab("Catalog")} variant="outline" className="border-white/15 text-white">Back to catalog</Button></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Integration checklist</p><h2 className="mt-2 text-2xl font-black">Before an SDK ships</h2><div className="mt-6 space-y-3">{["Versioned API contract", "Auth and secret boundary", "Retry and idempotency policy", "Compatibility matrix", "Error and telemetry policy", "Signed release artifact"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><GitBranch className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card></section>}{tab === "Releases" && <section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Download className="size-5 text-cyan-300" /><h2 className="mt-4 font-black">Preview release channel</h2><p className="mt-2 text-sm leading-6 text-slate-400">0.1.0-preview is a UI catalog label, not a published package or support commitment.</p><Badge variant="outline" className="mt-4 border-amber-300/20 text-amber-200">Unpublished</Badge></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><LockKeyhole className="size-5 text-amber-300" /><h2 className="mt-4 font-black">Credentials</h2><p className="mt-2 text-sm leading-6 text-slate-400">No API key creation, secret storage, or environment verification is connected here.</p><Badge variant="outline" className="mt-4 border-amber-300/20 text-amber-200">Unavailable</Badge></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><WifiOff className="size-5 text-violet-300" /><h2 className="mt-4 font-black">Registry status</h2><p className="mt-2 text-sm leading-6 text-slate-400">No npm, PyPI, mobile package, or internal registry publication has been verified.</p><Badge variant="outline" className="mt-4 border-amber-300/20 text-amber-200">Blocked</Badge></CardContent></Card></section>}<ScreenFeatureGrid features={[{ title: "Contracts before convenience", description: "SDK ergonomics should reflect a versioned, tested, observable backend contract rather than imply one.", icon: Code2, status: "Pattern" }, { title: "Secrets stay server-side", description: "The preview never asks for or exposes API keys, tokens, or private credentials.", icon: KeyRound, status: "Guardrail" }, { title: "Publish only with provenance", description: "A release needs registry evidence, compatibility tests, signed artifacts, and support ownership.", icon: GitBranch, status: "Required" }]} /></main></div>;
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>ClientLibraries</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">ClientLibraries</h1>
+            <p className="text-muted-foreground mt-2">Client libraries</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

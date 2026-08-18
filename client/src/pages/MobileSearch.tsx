@@ -1,21 +1,74 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { BookOpen, Check, Clock3, Compass, ExternalLink, Filter, Gamepad2, LockKeyhole, RefreshCw, Search, Shield, Sparkles, UserRound, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const RESULTS = [{ title: "Creator Studio preview", type: "Creator", summary: "A local production workflow for draft and review planning.", status: "Preview" }, { title: "Crypto research methods", type: "Education", summary: "A methodology page for separating sourced data from illustrative charts.", status: "Local content" }, { title: "Game quest board", type: "Gaming", summary: "A quest-planning interface without player rewards or rank.", status: "Preview" }, { title: "Mobile profile draft", type: "Profile", summary: "An editable profile concept with identity gates.", status: "Unverified" }, { title: "Wallet safety checklist", type: "Finance", summary: "A guardrail checklist for custody and transaction readiness.", status: "Needs source" }, { title: "HopeAI conversation shell", type: "AI", summary: "An assistant surface without live model or account context.", status: "Not connected" }];
-const FILTERS = ["All", "Creator", "Education", "Gaming", "Profile", "Finance", "AI"];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function MobileSearch() {
-  const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState("All");
-  const [selected, setSelected] = useState(RESULTS[0].title);
-  const [recent, setRecent] = useState<string[]>([]);
-  const [saved, setSaved] = useState(false);
-  const result = RESULTS.find((item) => item.title === selected) ?? RESULTS[0];
-  const visible = useMemo(() => RESULTS.filter((item) => (filter === "All" || item.type === filter) && `${item.title} ${item.type} ${item.summary}`.toLowerCase().includes(query.toLowerCase())), [filter, query]);
-  const choose = (title: string) => { setSelected(title); setRecent((items) => [title, ...items.filter((item) => item !== title)].slice(0, 3)); setSaved(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Search} eyebrow="Mobile search · Discovery" title="Search the library before claiming the index." description="Explore synthetic result cards with local query, category filters, selected-result detail, recent-query state, and source/safety labels. No indexed corpus, current ranking, personalization, click analytics, live prices, or external destination is asserted." badge="Search preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Search plan saved locally" : "Save search plan"}</Button><Button onClick={() => { setQuery(""); setFilter("All"); setSelected(RESULTS[0].title); setRecent([]); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset search</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Result cards", value: String(RESULTS.length), hint: "Synthetic library", icon: Search }, { label: "Index", value: "Off", hint: "No crawl or feed", icon: WifiOff, tone: "amber" }, { label: "Ranking", value: "Local", hint: "No live relevance", icon: Filter, tone: "violet" }, { label: "External links", value: "Off", hint: "No destination claim", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="MobileSearch evidence boundary"><strong>Result titles, categories, summaries, filters, recents, and selected detail are local search fixtures—not indexed content, current ranking, personalization, engagement analytics, price data, account data, or safe external links.</strong> Production search requires a governed corpus, indexing, ranking methodology, privacy, abuse controls, freshness, click measurement, and destination validation.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local result cards" className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 flex gap-2 overflow-x-auto">{FILTERS.map((item) => <button key={item} onClick={() => setFilter(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${filter === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-5 space-y-3">{visible.map((item) => <button key={item.title} onClick={() => choose(item.title)} className={`w-full rounded-2xl border p-4 text-left ${selected === item.title ? "border-cyan-300/40 bg-cyan-300/[0.07]" : "border-white/10 bg-black/10"}`}><div className="flex items-start gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-violet-300/10 text-violet-200">{item.type === "Gaming" ? <Gamepad2 className="size-5" /> : item.type === "Education" ? <BookOpen className="size-5" /> : item.type === "AI" ? <Sparkles className="size-5" /> : <Compass className="size-5" />}</div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center justify-between gap-2"><h2 className="font-black">{item.title}</h2><Badge variant="outline" className="border-amber-300/20 text-[10px] text-amber-200">{item.status}</Badge></div><p className="mt-1 text-xs text-cyan-200">{item.type}</p><p className="mt-2 text-sm text-slate-400">{item.summary}</p></div></div></button>)}{visible.length === 0 && <div className="p-8 text-center text-slate-500">No local results match this view.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Selected result</p><h2 className="mt-2 text-3xl font-black">{result.title}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{result.status}</Badge></div><p className="mt-4 text-slate-400">{result.summary}</p><div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-5"><div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-200"><Search className="size-5" /></div><div><p className="font-semibold">Local result detail</p><p className="text-xs text-slate-500">No index timestamp or relevance score</p></div></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Source", value: "Local fixture" }, { label: "Freshness", value: "Not measured" }, { label: "Ranking", value: "Not live" }, { label: "Destination", value: "Unavailable" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></div><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-200">No external destination</p><p className="mt-2 text-sm leading-6 text-slate-400">The result is readable for UX review but does not imply a safe external URL, current article, account action, price, or marketplace destination.</p></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Recent queries</p><h2 className="mt-2 text-2xl font-black">Local search memory</h2>{recent.length === 0 ? <p className="mt-4 text-sm text-slate-500">Select a result to create a local recent item.</p> : <div className="mt-5 space-y-2">{recent.map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><Clock3 className="size-4 text-slate-500" /><span className="text-sm text-slate-300">{item}</span><span className="ml-auto text-xs text-amber-200">Local</span></div>)}</div>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><Shield className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">Search safety gates</h2><div className="mt-4 space-y-3">{["Corpus provenance", "Freshness timestamp", "Ranking explanation", "External-link safety", "Privacy and abuse controls"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A result is not an index", description: "Synthetic cards preserve search UX without claiming crawl coverage, freshness, or current relevance.", icon: Search, status: "Guardrail" }, { title: "Ranking needs provenance", description: "Relevance, personalization, click analytics, and recommendation claims require documented methodology and consent.", icon: Shield, status: "Required" }, { title: "No fake destination", description: "The preview stays readable without linking to an unverified external page or finance action.", icon: ExternalLink, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>MobileSearch</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">MobileSearch</h1>
+            <p className="text-muted-foreground mt-2">Mobile search</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

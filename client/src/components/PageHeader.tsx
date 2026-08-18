@@ -1,46 +1,40 @@
-import { ArrowLeft } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
+import React from "react";
 import { Link } from "wouter";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { ArrowLeft } from "lucide-react";
 
 interface PageHeaderProps {
   title: string;
   description?: string;
   subtitle?: string;
-  icon?: LucideIcon;
   backHref?: string;
-  badge?: string;
-  badgeVariant?: "default" | "secondary" | "destructive" | "outline";
-  actions?: ReactNode;
-  children?: ReactNode;
-  className?: string;
+  icon?: React.ComponentType<{ className?: string }>;
+  actions?: React.ReactNode;
+  badge?: React.ReactNode;
+  badgeVariant?: string;
+  children?: React.ReactNode;
 }
 
-export function PageHeader({ title, description, subtitle, icon: Icon, backHref, badge, badgeVariant = "secondary", actions, children, className }: PageHeaderProps) {
-  const supportingText = description ?? subtitle;
+export function PageHeader({ title, description, subtitle, backHref, icon: Icon, actions, badge, badgeVariant, children }: PageHeaderProps) {
   return (
-    <header className={cn("mb-8 flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between", className)}>
-      <div className="flex min-w-0 items-start gap-3">
-        {backHref ? (
-          <Button variant="ghost" size="icon" className="mt-0.5 shrink-0" asChild aria-label="Go back">
-            <Link href={backHref}><ArrowLeft className="size-4" /></Link>
-          </Button>
-        ) : null}
-        {Icon ? <div className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><Icon className="size-5" aria-hidden="true" /></div> : null}
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">{title}</h1>
-            {badge ? <Badge variant={badgeVariant}>{badge}</Badge> : null}
+    <div className="mb-8">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start gap-3">
+          {backHref && (
+            <Link href={backHref} aria-label="Go back" className="mt-1 rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground">
+              <ArrowLeft className="h-4 w-4" />
+            </Link>
+          )}
+          {Icon && <Icon className="mt-1 h-7 w-7 text-primary" aria-hidden="true" />}
+          <div>
+            <h1 className="text-3xl font-bold mb-2">{title}</h1>
+            {(description || subtitle) && <p className="text-muted-foreground">{description ?? subtitle}</p>}
+            {badge && <span className={`mt-2 inline-flex rounded-full border px-2 py-0.5 text-xs ${badgeVariant ?? "border-primary/30 text-primary"}`}>{badge}</span>}
           </div>
-          {supportingText ? <p className="mt-1.5 max-w-2xl text-sm leading-6 text-muted-foreground">{supportingText}</p> : null}
-          {children ? <div className="mt-4">{children}</div> : null}
         </div>
+        {actions}
       </div>
-      {actions ? <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div> : null}
-    </header>
+      {children}
+    </div>
   );
 }
 

@@ -1,19 +1,74 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Bell, Check, FileText, LockKeyhole, MessageCircle, Paperclip, RefreshCw, Search, Send, Shield, UserRound, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const THREADS = [{ title: "Creator collaboration", type: "Draft thread", preview: "Rights and review questions to confirm.", status: "Local only" }, { title: "Study group", type: "Planning thread", preview: "Compare the next module outline.", status: "No recipients" }, { title: "Support handoff", type: "Workflow note", preview: "Capture the issue before routing.", status: "Needs service" }, { title: "Community circle", type: "Conversation concept", preview: "Consent-first discussion prompts.", status: "Unverified" }];
-const GATES = ["Recipient identity and consent", "Delivery provider and retry", "Read/unread synchronization", "Moderation and report path", "Retention and deletion policy"];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function MobileMessages() {
-  const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState(THREADS[0].title);
-  const [draft, setDraft] = useState("");
-  const [saved, setSaved] = useState(false);
-  const thread = THREADS.find((item) => item.title === selected) ?? THREADS[0];
-  const visible = useMemo(() => THREADS.filter((item) => `${item.title} ${item.type} ${item.preview}`.toLowerCase().includes(query.toLowerCase())), [query]);
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={MessageCircle} eyebrow="Mobile messages · Communication" title="Design the conversation before sending the claim." description="Explore synthetic thread cards, local search and selection, a draft composer, and delivery-readiness gates. No recipient, message delivery, unread count, identity, notification, moderation action, or account record is asserted." badge="Messaging preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Draft saved locally" : "Save local draft"}</Button><Button onClick={() => { setQuery(""); setSelected(THREADS[0].title); setDraft(""); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset messages</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Threads", value: String(THREADS.length), hint: "Synthetic cards", icon: MessageCircle }, { label: "Recipients", value: "Off", hint: "No identity source", icon: UserRound, tone: "amber" }, { label: "Unread", value: "Off", hint: "No sync provider", icon: Bell, tone: "slate" }, { label: "Delivery", value: "Blocked", hint: "No messaging service", icon: WifiOff, tone: "violet" }]} /><ScreenPreviewBanner title="MobileMessages evidence boundary"><strong>Thread titles, previews, statuses, local draft text, and readiness gates are communication fixtures—not real people, message history, unread state, notification delivery, moderation records, or account data.</strong> Production messaging requires identity, consent, encryption, delivery and retry, storage, moderation, retention, reporting, notification permissions, and auditability.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search thread concepts" className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-5 space-y-3">{visible.map((item) => <button key={item.title} onClick={() => { setSelected(item.title); setSaved(false); }} className={`w-full rounded-2xl border p-4 text-left ${selected === item.title ? "border-cyan-300/40 bg-cyan-300/[0.07]" : "border-white/10 bg-black/10"}`}><div className="flex items-start gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-violet-300/10 text-violet-200"><MessageCircle className="size-5" /></div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center justify-between gap-2"><h2 className="font-black">{item.title}</h2><Badge variant="outline" className="border-amber-300/20 text-[10px] text-amber-200">{item.status}</Badge></div><p className="mt-1 text-xs text-cyan-200">{item.type}</p><p className="mt-2 text-sm text-slate-400">{item.preview}</p></div></div></button>)}{visible.length === 0 && <div className="p-8 text-center text-slate-500">No thread concepts match this search.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Selected thread</p><h2 className="mt-2 text-3xl font-black">{thread.title}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{thread.status}</Badge></div><p className="mt-4 text-slate-400">{thread.preview}</p><div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4"><div className="flex items-center gap-3"><div className="flex size-9 items-center justify-center rounded-full bg-cyan-300/10 text-cyan-200"><UserRound className="size-4" /></div><div><p className="text-sm font-semibold">Recipient unavailable</p><p className="text-xs text-slate-500">Local preview · no identity or thread history</p></div></div><div className="mt-4 rounded-xl border border-dashed border-white/10 p-4 text-sm text-slate-500">No delivered messages are shown. Draft locally, then verify identity, consent, retention, moderation, and delivery contracts.</div></div><textarea value={draft} onChange={(event) => { setDraft(event.target.value); setSaved(false); }} placeholder="Write a local draft…" className="mt-5 min-h-28 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-slate-500" /><div className="mt-3 flex gap-2"><Button onClick={() => setSaved(true)} className="bg-violet-500 text-white hover:bg-violet-400"><FileText className="mr-2 size-4" />Save draft</Button><Button disabled variant="outline" className="border-white/10 text-white/40"><Send className="mr-2 size-4" />Send unavailable</Button><Button disabled variant="outline" className="border-white/10 text-white/40"><Paperclip className="size-4" /></Button></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Delivery readiness</p><h2 className="mt-2 text-2xl font-black">Required before send</h2><div className="mt-5 space-y-3">{GATES.map((gate) => <div key={gate} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{gate}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><Shield className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake delivery</h2><p className="mt-3 text-sm leading-6 text-slate-400">The send button stays disabled. No recipient, push notification, read receipt, message ID, moderation event, or retention record is created.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A thread card is not a conversation", description: "Synthetic cards preserve messaging UX without creating identities, history, or social proof.", icon: MessageCircle, status: "Guardrail" }, { title: "Delivery needs observability", description: "Retries, read state, notifications, moderation, and retention need backend and operational evidence.", icon: Shield, status: "Required" }, { title: "No fake send", description: "Drafting remains usable while delivery and account actions stay unavailable.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>MobileMessages</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">MobileMessages</h1>
+            <p className="text-muted-foreground mt-2">Mobile messaging</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

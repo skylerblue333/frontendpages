@@ -1,20 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { BookOpen, Gauge, LockKeyhole, RefreshCw, Search, ShieldAlert, SlidersHorizontal, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const topics = [{ id: 1, name: "Scope and identity", category: "Design", detail: "Choose a key without exposing sensitive identifiers or enabling spoofing." }, { id: 2, name: "Algorithm trade-offs", category: "Design", detail: "Compare fixed window, sliding window, token bucket, and concurrency intent." }, { id: 3, name: "Rollout and rollback", category: "Operations", detail: "Test in dry run, canary safely, and keep a kill switch before enforcement." }, { id: 4, name: "Monitoring and response", category: "Operations", detail: "Define telemetry, alerts, user messaging, incidents, and support ownership." }];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
+
 export default function RateLimiting() {
-  const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState(1);
-  const [algorithm, setAlgorithm] = useState("Algorithm not selected");
-  const [scope, setScope] = useState("Scope not selected");
-  const [rollout, setRollout] = useState("Dry-run intent");
-  const [saved, setSaved] = useState(false);
-  const [showGates, setShowGates] = useState(false);
-  const filtered = useMemo(() => topics.filter((topic) => `${topic.name} ${topic.category} ${topic.detail}`.toLowerCase().includes(query.toLowerCase())), [query]);
-  const topic = topics.find((item) => item.id === selected) ?? topics[0];
-  const reset = () => { setQuery(""); setSelected(1); setAlgorithm("Algorithm not selected"); setScope("Scope not selected"); setRollout("Dry-run intent"); setSaved(false); setShowGates(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Gauge} eyebrow="RateLimiting · Control-design preview" title="Design the limit before declaring protection." description="Explore a local rate-limiting studio with policy topics, scope, algorithm, thresholds, exemptions, rollout, testing, monitoring, save, reset, and governance gates. No traffic, enforcement, abuse reduction, uptime, or security guarantee is connected." badge="Policy studio"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200">{saved ? "View saved locally" : "Save design locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review design gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset studio</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Topics", value: `${topics.length} local`, hint: "Design concepts", icon: BookOpen, tone: "cyan" }, { label: "Algorithm", value: algorithm, hint: "Not configured", icon: Gauge, tone: "violet" }, { label: "Scope", value: scope, hint: "Not configured", icon: SlidersHorizontal, tone: "amber" }, { label: "Rollout", value: rollout, hint: "Browser intent", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Rate-limiting evidence boundary"><strong>This is a local control-design and education preview, not an active security mechanism.</strong> Topics, policy selections, rollout intent, saved state, testing posture, and empty telemetry states are browser concepts. No request count, limit, block, retry, incident, uptime, abuse reduction, or security guarantee is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local design topics" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Design topic</Badge></div><div className="mt-4"><Badge variant="outline" className="border-white/10 text-slate-500">{item.category}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected design topic</p><h2 className="mt-2 text-2xl font-black">{topic.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{topic.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2"><label className="text-sm text-slate-400">Scope<select value={scope} onChange={(event) => setScope(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Scope not selected</option><option>IP intent</option><option>Session intent</option><option>Tenant intent</option><option>Route intent</option></select></label><label className="text-sm text-slate-400">Algorithm<select value={algorithm} onChange={(event) => setAlgorithm(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Algorithm not selected</option><option>Fixed window intent</option><option>Sliding window intent</option><option>Token bucket intent</option><option>Concurrency intent</option></select></label><label className="text-sm text-slate-400">Threshold<select className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Not configured</option><option>Low-volume intent</option><option>Moderate-volume intent</option><option>High-volume intent</option></select></label><label className="text-sm text-slate-400">Rollout<select value={rollout} onChange={(event) => setRollout(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Dry-run intent</option><option>Canary intent</option><option>Enforcement intent</option></select></label></div><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><Gauge className="mx-auto size-7 text-slate-600" /><p className="mt-3 font-semibold">No control test loaded</p><p className="mt-2 text-sm text-slate-500">A real design needs load tests, distributed-state behavior, false-positive analysis, and monitored rollout.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Run test unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Apply unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Monitor unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No protection claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A selected algorithm or rollout label does not protect an endpoint, stop abuse, preserve uptime, or change production traffic.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Design gates</p><h2 className="mt-2 text-2xl font-black">What a real control must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Key scope, identity, tenant isolation, privacy, spoofing resistance, and trusted proxy policy", "Algorithm semantics, burst, concurrency, queueing, retry-after, clocks, and distributed state", "Capacity tests, traffic baselines, seasonality, false positives, error budgets, and abuse scenarios", "Exemptions, health checks, service accounts, admin routes, rollout ownership, and review", "Dry run, canary, kill switch, versioning, migration, rollback, incident response, and audit", "Telemetry, alerting, status codes, user messaging, documentation, support, and recovery"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Design surface preserved", description: "Policy topics, search, scope, algorithms, thresholds, exemptions, rollout, testing, monitoring, save/reset, and gates remain interactive.", icon: Gauge, status: "Local design" }, { title: "No security theater", description: "Traffic, limits, blocks, retries, incidents, uptime, abuse reduction, and protection are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Testing before enforcement", description: "Real controls need distributed-state behavior, load tests, rollout safety, monitoring, audit, and rollback.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>RateLimiting</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">RateLimiting</h1>
+            <p className="text-muted-foreground mt-2">Rate limit settings</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

@@ -9,7 +9,7 @@ import { trpc } from '@/lib/trpc';
 import { toast } from 'sonner';
 
 const GovernancePage: React.FC = () => {
-  
+
   const [activeTab, setActiveTab] = useState<'proposals' | 'treasury' | 'votes' | 'create'>('proposals');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');

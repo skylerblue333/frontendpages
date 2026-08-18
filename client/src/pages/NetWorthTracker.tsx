@@ -1,23 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Banknote, Check, CircleDollarSign, FileCheck2, Landmark, LockKeyhole, PieChart, RefreshCw, ShieldCheck, SlidersHorizontal, WalletCards, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const DEFAULT_ASSETS = [{ name: "Cash reserve", value: 12000 }, { name: "Investments", value: 18500 }, { name: "Digital assets", value: 0 }, { name: "Property placeholder", value: 0 }];
-const DEFAULT_LIABILITIES = [{ name: "Credit balance", value: 3200 }, { name: "Loan placeholder", value: 0 }, { name: "Other liability", value: 0 }];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function NetWorthTracker() {
-  const [assets, setAssets] = useState(DEFAULT_ASSETS);
-  const [liabilities, setLiabilities] = useState(DEFAULT_LIABILITIES);
-  const [note, setNote] = useState("");
-  const [saved, setSaved] = useState(false);
-  const assetTotal = useMemo(() => assets.reduce((sum, item) => sum + item.value, 0), [assets]);
-  const liabilityTotal = useMemo(() => liabilities.reduce((sum, item) => sum + item.value, 0), [liabilities]);
-  const netWorth = assetTotal - liabilityTotal;
-  const update = (kind: "assets" | "liabilities", index: number, value: string) => { const parsed = Math.max(0, Number(value.replace(/[^0-9.]/g, "")) || 0); if (kind === "assets") setAssets((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, value: parsed } : item)); else setLiabilities((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, value: parsed } : item)); setSaved(false); };
-  const reset = () => { setAssets(DEFAULT_ASSETS); setLiabilities(DEFAULT_LIABILITIES); setNote(""); setSaved(false); };
-  const money = (value: number) => `$${value.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={PieChart} eyebrow="NetWorthTracker · Financial worksheet" title="Measure the inputs before interpreting the number." description="Enter local asset and liability placeholders to see transparent arithmetic. No account connects, market price loads, tax or legal position is inferred, forecast is generated, or financial advice is provided." badge="Worksheet preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Worksheet saved locally" : "Save worksheet locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset worksheet</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Assets", value: money(assetTotal), hint: "Local inputs", icon: WalletCards }, { label: "Liabilities", value: money(liabilityTotal), hint: "Local inputs", icon: Landmark, tone: "amber" }, { label: "Net worth", value: money(netWorth), hint: "Assets minus liabilities", icon: CircleDollarSign, tone: "cyan" }, { label: "Sync", value: "Off", hint: "No account source", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="NetWorthTracker evidence boundary"><strong>Amounts shown are local worksheet inputs and transparent arithmetic—not verified balances, market prices, account statements, tax basis, debt obligations, credit data, valuation, forecast, affordability, financial advice, or a recommendation to act.</strong> A production tracker requires consented account integrations, source freshness, reconciliation, currency and valuation rules, encryption, access controls, auditability, correction flows, and careful handling of sensitive financial data.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-2"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Assets</p><h2 className="mt-2 text-3xl font-black">{money(assetTotal)}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">Local inputs</Badge></div><div className="mt-5 space-y-3">{assets.map((item, index) => <label key={item.name} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><span className="flex-1 text-sm text-slate-300">{item.name}</span><span className="text-xs text-slate-500">USD placeholder</span><input inputMode="decimal" value={item.value} onChange={(event) => update("assets", index, event.target.value)} className="w-28 rounded-lg border border-white/10 bg-black/20 px-2 py-2 text-right text-sm text-white" /></label>)}</div><div className="mt-5 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />Do not enter account credentials, full account numbers, seed phrases, tax IDs, or sensitive statements into this preview.</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Liabilities</p><h2 className="mt-2 text-3xl font-black">{money(liabilityTotal)}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">Local inputs</Badge></div><div className="mt-5 space-y-3">{liabilities.map((item, index) => <label key={item.name} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><span className="flex-1 text-sm text-slate-300">{item.name}</span><span className="text-xs text-slate-500">USD placeholder</span><input inputMode="decimal" value={item.value} onChange={(event) => update("liabilities", index, event.target.value)} className="w-28 rounded-lg border border-white/10 bg-black/20 px-2 py-2 text-right text-sm text-white" /></label>)}</div><div className="mt-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/[0.06] p-5"><div className="flex items-center justify-between"><div><p className="font-black">Worksheet result</p><p className="text-xs text-slate-500">{money(assetTotal)} − {money(liabilityTotal)}</p></div><span className="text-2xl font-black text-cyan-200">{money(netWorth)}</span></div><p className="mt-3 text-xs leading-5 text-slate-500">This is arithmetic on your local inputs, not a verified net-worth assessment.</p></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Review ledger</p><h2 className="mt-2 text-2xl font-black">What still needs verification</h2><div className="mt-5 space-y-3">{["Account, asset, debt, and ownership sources", "Market price, valuation, currency, and timestamp", "Tax basis, fees, interest, and legal obligations", "Reconciliation, duplicates, corrections, and access control", "Privacy, encryption, export, deletion, and support"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Verify</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><FileCheck2 className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake financial insight</h2><p className="mt-3 text-sm leading-6 text-slate-400">The worksheet does not sync accounts, value assets, forecast wealth, assess affordability, determine taxes, or recommend a financial action.</p></CardContent></Card></section><textarea value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} placeholder="Write a local source, freshness, or reconciliation note…" className="min-h-24 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-slate-500" /><ScreenFeatureGrid features={[{ title: "Arithmetic is not valuation", description: "Transparent local subtraction preserves worksheet UX without market, tax, debt, or account claims.", icon: SlidersHorizontal, status: "Guardrail" }, { title: "Data needs freshness", description: "Sources, timestamps, currency, reconciliation, privacy, and correction flows need evidence.", icon: ShieldCheck, status: "Required" }, { title: "No fake sync", description: "The preview creates no account link, balance import, statement, forecast, or financial recommendation.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>NetWorthTracker</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">NetWorthTracker</h1>
+            <p className="text-muted-foreground mt-2">Net worth tracking</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

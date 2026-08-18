@@ -1,1 +1,1 @@
-export { useAuth } from "@/_core/hooks/useAuth";
+export { useAuth } from "../_core/hooks/useAuth";

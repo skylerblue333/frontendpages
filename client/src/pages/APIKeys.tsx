@@ -1,17 +1,74 @@
-import { useMemo, useState } from "react";
-import { AlertTriangle, CheckCircle2, Clock3, EyeOff, KeyRound, LockKeyhole, Plus, RotateCw, Search, Settings, Shield, Trash2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-type KeyDraft = { id: string; name: string; scope: string; status: "Draft" | "Rotation required" | "Revoked example" };
-const INITIAL_KEYS: KeyDraft[] = [
-  { id: "server-read", name: "Server read access", scope: "Read-only API", status: "Draft" },
-  { id: "webhook", name: "Webhook verifier", scope: "Webhook signature checks", status: "Rotation required" },
-  { id: "automation", name: "Automation worker", scope: "Scoped background task", status: "Revoked example" },
-];
-const CHECKLIST = ["Least-privilege scope", "Server-side storage", "Expiration and rotation owner", "Audit and revocation path", "No secrets in logs or client bundles"];
+export default function APIKeys() {
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-export default function APIKeys() { const [query, setQuery] = useState(""); const [keys, setKeys] = useState(INITIAL_KEYS); const [selected, setSelected] = useState<KeyDraft | null>(null); const [showExample, setShowExample] = useState(false); const visible = useMemo(() => keys.filter((key) => `${key.name} ${key.scope} ${key.status}`.toLowerCase().includes(query.toLowerCase())), [keys, query]); const createDraft = () => { const draft = { id: `draft-${keys.length + 1}`, name: `New server key draft ${keys.length + 1}`, scope: "Choose scope", status: "Draft" as const }; setKeys((current) => [draft, ...current]); setSelected(draft); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={KeyRound} eyebrow="Developer Platform · Key Management" title="Treat every key like a production secret." description="Explore key names, scope, rotation, revocation, and audit states without exposing or generating credentials. This workspace demonstrates secure UX; it does not create a usable key or bypass authentication." badge="Preview key manager"><div className="flex flex-wrap gap-2"><Button onClick={createDraft} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Plus className="mr-2 size-4" />Create local key draft</Button><Button onClick={() => setShowExample((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><EyeOff className="mr-2 size-4" />{showExample ? "Hide example" : "Show masked example"}</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Key drafts", value: String(keys.length), hint: "Local metadata only", icon: KeyRound }, { label: "Usable secrets", value: "0", hint: "No credential is generated", icon: LockKeyhole, tone: "violet" }, { label: "Rotation", value: "Required", hint: "Owner and expiry must exist", icon: RotateCw, tone: "amber" }, { label: "Storage", value: "Server only", hint: "Never expose to browser", icon: Shield, tone: "slate" }]} /><ScreenPreviewBanner title="Secret-handling boundary">The key list, search, local draft creation, masked example, scope states, rotation and revocation checklists are available for UX review. No API key, token, password, credential, quota, last-used event, or secret storage is fabricated.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search key drafts" aria-label="Search API key drafts" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visible.map((key) => <button key={key.id} onClick={() => setSelected(key)} className={`w-full rounded-xl border p-4 text-left transition ${selected?.id === key.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><KeyRound className="size-4 text-cyan-300" /><span className="font-semibold">{key.name}</span><Badge variant="outline" className={`ml-auto ${key.status === "Rotation required" ? "border-amber-300/20 text-amber-200" : key.status === "Revoked example" ? "border-red-300/20 text-red-200" : "border-white/10 text-slate-400"}`}>{key.status}</Badge></div><p className="mt-2 text-sm text-slate-400">{key.scope}</p></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No key drafts match" description="Try another search or create a local draft." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected key draft</p><h2 className="mt-1 text-2xl font-bold">{selected.name}</h2><p className="mt-2 text-sm text-slate-400">Scope: {selected.scope}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div>{showExample && <div className="mt-5 rounded-xl border border-white/10 bg-black/30 p-4"><div className="flex items-center gap-2 text-xs uppercase tracking-wider text-slate-500"><EyeOff className="size-4" />Masked display example</div><code className="mt-3 block text-sm text-slate-300">sk_live_••••••••••••••••••••••••</code><p className="mt-2 text-xs text-slate-500">Illustrative mask only. This is not a usable credential.</p></div>}<div className="mt-5 space-y-3">{CHECKLIST.map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4 text-sm text-slate-300"><CheckCircle2 className="size-4 text-emerald-300" />{item}</div>)}</div><div className="mt-5 flex flex-wrap gap-2"><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RotateCw className="mr-2 size-4" />Rotation workflow</Button><Button variant="outline" className="border-red-300/20 text-red-200 hover:bg-red-300/10"><Trash2 className="mr-2 size-4" />Revocation workflow</Button></div></> : <ScreenStatePanel type="empty" title="Select a key draft" description="Choose a key metadata record to inspect its secure lifecycle checklist." />}</CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Never expose secrets", description: "Browser code receives scoped status, not raw keys, tokens, or credentials.", icon: EyeOff, status: "Required" }, { title: "Lifecycle controls", description: "Every key needs owner, scope, expiry, rotation, revocation, and audit evidence.", icon: RotateCw, status: "Required" }, { title: "No fake credentials", description: "Local drafts and masked examples cannot authenticate against any service.", icon: AlertTriangle, status: "Guardrail" }]} /></main></div>; }
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>APIKeys</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">APIKeys</h1>
+            <p className="text-muted-foreground mt-2">API key management</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

@@ -1,18 +1,84 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Check, FileCheck2, KeyRound, LockKeyhole, RefreshCw, Search, Shield, ShieldAlert, Target, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const workstreams = [{ id: 1, name: "Algorithm inventory", detail: "Map cryptographic dependencies and data flows before choosing a migration path.", status: "Not assessed" }, { id: 2, name: "Key lifecycle", detail: "Document generation, storage, rotation, recovery, revocation, and access boundaries.", status: "Unconfigured" }, { id: 3, name: "Migration rehearsal", detail: "Plan hybrid compatibility, test vectors, rollback, and staged adoption.", status: "Blocked" }];
+import { Card } from "@/components/ui/card";
+import { PageHeader } from "@/components/PageHeader";
+
 export default function QuantumSafe() {
-  const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState(1);
-  const [dataClass, setDataClass] = useState("Unclassified");
-  const [saved, setSaved] = useState(false);
-  const [showGates, setShowGates] = useState(false);
-  const filtered = useMemo(() => workstreams.filter((item) => `${item.name} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [query]);
-  const item = workstreams.find((entry) => entry.id === selected) ?? workstreams[0];
-  const reset = () => { setQuery(""); setSelected(1); setDataClass("Unclassified"); setSaved(false); setShowGates(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Shield} eyebrow="QuantumSafe · Security readiness preview" title="Map the threat before claiming the protection." description="Review local post-quantum workstreams for algorithms, keys, data, migration, testing, and governance. No encryption, key generation, security guarantee, compliance certification, or protected data state is connected." badge="Security workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Review saved locally" : "Save review locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review security gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset review</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Workstreams", value: `${workstreams.length} local`, hint: "Not assessed", icon: Shield, tone: "cyan" }, { label: "Algorithms", value: "Unverified", hint: "No inventory source", icon: Target, tone: "violet" }, { label: "Keys", value: "Not managed", hint: "No vault source", icon: KeyRound, tone: "amber" }, { label: "Protection", value: "Unattested", hint: "No test source", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Post-quantum evidence boundary"><strong>This is a local cryptographic-readiness worksheet, not an encryption service.</strong> Workstreams, threat-model intent, data class, key posture, migration notes, saved state, and gates are browser concepts. No algorithm implementation, key, ciphertext, protection, quantum-resistance, compliance, certification, incident posture, or security outcome is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.84fr_1.16fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local security workstreams" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-6 space-y-3">{filtered.map((entry) => <button key={entry.id} onClick={() => setSelected(entry.id)} className={`w-full rounded-xl border p-4 text-left ${selected === entry.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{entry.name}</p><p className="mt-1 text-sm leading-6 text-slate-500">{entry.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{entry.status}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected security workstream</p><h2 className="mt-2 text-2xl font-black">{item.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{item.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Status", value: item.status }, { label: "Threat model", value: "Not documented" }, { label: "Algorithm", value: "Unselected" }, { label: "Key vault", value: "Not connected" }, { label: "Test vectors", value: "Unavailable" }, { label: "Compliance", value: "Unattested" }].map((entry) => <div key={entry.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{entry.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{entry.value}</p></div>)}</div><label className="mt-5 block text-sm text-slate-400">Data classification intent<select value={dataClass} onChange={(event) => setDataClass(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Unclassified</option><option>Public concept</option><option>Internal concept</option><option>Sensitive concept</option></select></label><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400"><LockKeyhole className="mr-2 size-4" />Encrypt unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Generate key unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No protection claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A readiness card does not provide quantum resistance, confidentiality, integrity, compliance, or protection from a threat.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Quantum-safe gates</p><h2 className="mt-2 text-2xl font-black">What a real security migration must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Asset, data, algorithm, key, protocol, dependency, and cryptographic inventory", "Threat model, adversary capability, harvest-now-decrypt-later scope, and risk owner", "Algorithm selection, implementation, parameterization, interoperability, and review", "Key generation, custody, rotation, revocation, recovery, access, and incident response", "Test vectors, negative tests, performance, compatibility, downgrade, and rollback", "Independent security review, compliance scope, disclosure, monitoring, and support"].map((entry) => <div key={entry} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{entry}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Security surface preserved", description: "Workstreams, threat model, data class, algorithm, key posture, migration, tests, compliance, save/reset, and blocked actions remain interactive.", icon: Shield, status: "Local readiness" }, { title: "No encryption theater", description: "Algorithms, keys, ciphertext, quantum resistance, compliance, certifications, and protection outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before assurance", description: "Real security needs inventory, threat model, implementation, key custody, testing, review, monitoring, and incident support.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  return (
+    <div className="min-h-screen bg-background">
+      <PageHeader icon={Shield} title="Quantum Safe Encryption" subtitle="Advanced quantum safe encryption with cutting-edge technology" />
+
+      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+        {/* Main Content Area */}
+        <Card className="p-8 bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20">
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Quantum Safe Encryption</h2>
+
+            {/* Advanced Features */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <Shield className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Advanced Analytics</h3>
+                  <p className="text-sm text-muted-foreground">Real-time data processing with AI insights</p>
+                  <Button size="sm" variant="outline" className="w-full">Explore</Button>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <Shield className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Automation Engine</h3>
+                  <p className="text-sm text-muted-foreground">Autonomous operations with intelligent decision making</p>
+                  <Button size="sm" variant="outline" className="w-full">Configure</Button>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <Shield className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Security First</h3>
+                  <p className="text-sm text-muted-foreground">Robust encryption and protection</p>
+                  <Button size="sm" variant="outline" className="w-full">Secure</Button>
+                </div>
+              </Card>
+            </div>
+
+            {/* Performance Metrics */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Processing Speed</p>
+                <p className="text-2xl font-bold text-primary">99.9%</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Uptime</p>
+                <p className="text-2xl font-bold text-primary">24/7</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Latency</p>
+                <p className="text-2xl font-bold text-primary">&lt;50ms</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Throughput</p>
+                <p className="text-2xl font-bold text-primary">10K+/s</p>
+              </div>
+            </div>
+
+            {/* Action Section */}
+            <div className="flex gap-4 flex-wrap pt-6">
+              <Button size="lg" className="bg-primary hover:bg-primary/90">
+                Get Started Now
+              </Button>
+              <Button size="lg" variant="outline">
+                View Documentation
+              </Button>
+              <Button size="lg" variant="ghost">
+                Schedule Demo
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
 }

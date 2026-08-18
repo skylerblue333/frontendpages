@@ -1,11 +1,75 @@
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Check, Clock3, Eye, Globe2, Languages, LockKeyhole, RefreshCw, ShieldAlert, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
+
 export default function RegionalSettings() {
-  const [language, setLanguage] = useState("Language not set"); const [region, setRegion] = useState("Region not set"); const [timezone, setTimezone] = useState("Timezone not set"); const [currency, setCurrency] = useState("Currency not set"); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false);
-  const reset = () => { setLanguage("Language not set"); setRegion("Region not set"); setTimezone("Timezone not set"); setCurrency("Currency not set"); setSaved(false); setShowGates(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Globe2} eyebrow="RegionalSettings · Locale preview" title="Make the locale explicit before formatting anything." description="Explore local language, region, timezone, currency, date and number format, accessibility, privacy, preview, save, reset, and confirmation intent. No user location, legal jurisdiction, financial rate, persisted preference, or localized claim is connected." badge="Locale workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "View saved locally" : "Save preferences locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review locale gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset locale</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Language", value: language === "Language not set" ? "Unset" : "Local intent", hint: "No language source", icon: Languages, tone: "cyan" }, { label: "Region", value: region === "Region not set" ? "Unset" : "Local intent", hint: "No location source", icon: Globe2, tone: "violet" }, { label: "Timezone", value: timezone === "Timezone not set" ? "Unset" : "Local intent", hint: "No clock source", icon: Clock3, tone: "amber" }, { label: "Persistence", value: "Unconnected", hint: "Browser-only state", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Locale evidence boundary"><strong>This is a local locale-preference preview, not a statement of a user’s location, legal jurisdiction, tax status, or financial context.</strong> Language, region, timezone, currency, formatting, accessibility, privacy, saved state, and confirmation are browser concepts. No preference is persisted, no location is inferred, and no localized legal or financial conclusion is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Locale controls</p><h2 className="mt-2 text-2xl font-black">Choose formatting intent</h2><div className="mt-6 grid gap-4">{[{ label: "Language", value: language, set: setLanguage, options: ["Language not set", "English intent", "Spanish intent", "French intent"] }, { label: "Region", value: region, set: setRegion, options: ["Region not set", "North America intent", "Europe intent", "Asia-Pacific intent"] }, { label: "Timezone", value: timezone, set: setTimezone, options: ["Timezone not set", "UTC intent", "Central intent", "Pacific intent"] }, { label: "Currency", value: currency, set: setCurrency, options: ["Currency not set", "USD display intent", "EUR display intent", "GBP display intent"] }].map((item) => <label key={item.label} className="text-sm text-slate-400">{item.label}<select value={item.value} onChange={(event) => item.set(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none">{item.options.map((option) => <option key={option}>{option}</option>)}</select></label>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Formatting preview</p><h2 className="mt-2 text-2xl font-black">No locale applied</h2><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><Eye className="mx-auto size-8 text-slate-600" /><p className="mt-3 font-semibold">Preview unavailable</p><p className="mt-2 text-sm text-slate-500">Connect a governed locale source before rendering dates, numbers, currency, translations, or region-sensitive notices.</p></div><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Date format", value: "Unconfigured" }, { label: "Number format", value: "Unconfigured" }, { label: "Currency display", value: currency }, { label: "Accessibility", value: "Review needed" }, { label: "Privacy", value: "Review needed" }, { label: "Confirmation", value: "Not configured" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Apply unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Confirm unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Export unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No location or legal claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A local selection does not prove residence, jurisdiction, tax status, exchange rate, legal requirement, or persisted preference.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Locale gates</p><h2 className="mt-2 text-2xl font-black">What a real regional-settings surface must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Preference ownership, authentication, consent, persistence, deletion, tenant isolation, and device synchronization", "Locale data, language fallback, pluralization, translation provenance, and accessibility review", "Timezone source, clock behavior, daylight-saving rules, date ordering, timestamps, and audit consistency", "Currency display versus settlement, exchange-rate provenance, tax, rounding, fees, and financial disclosures", "Region and jurisdiction must not be inferred from IP, device, payment, or sensitive signals without review", "Preview, confirmation, rollback, localization QA, support, incident response, and user-visible status"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Locale surface preserved", description: "Language, region, timezone, currency, format, accessibility, privacy, preview, save/reset, confirmation, and gates remain interactive.", icon: Globe2, status: "Local intent" }, { title: "No localization theater", description: "Location, jurisdiction, tax status, exchange rate, legal requirements, persisted preference, and user identity are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Format before consequence", description: "Real regional settings need governed locale data, persistence, timezone provenance, currency policy, accessibility, and confirmation.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>RegionalSettings</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">RegionalSettings</h1>
+            <p className="text-muted-foreground mt-2">Locale/timezone</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

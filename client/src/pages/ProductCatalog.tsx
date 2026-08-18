@@ -1,20 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, BookOpen, Check, Eye, Filter, LockKeyhole, RefreshCw, Search, ShieldAlert, Sparkles, Wallet, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const products = [{ id: "cat-001", name: "HopeAI workspace", category: "AI", summary: "AI interaction surface concept with explicit evidence boundaries.", status: "Preview", price: "Unpublished", availability: "Unknown", icon: Sparkles }, { id: "cat-002", name: "SkySchool learning", category: "Education", summary: "Course and practice surface concept for guided learning.", status: "Preview", price: "Unpublished", availability: "Unknown", icon: BookOpen }, { id: "cat-003", name: "Crypto Hub", category: "Financial", summary: "Wallet and market surface concept requiring verified integrations.", status: "High-risk review", price: "Unavailable", availability: "Not connected", icon: Wallet }, { id: "cat-004", name: "Community spaces", category: "Community", summary: "Social discovery surface concept with moderation requirements.", status: "Preview", price: "Unpublished", availability: "Unknown", icon: Eye }];
-const categories = ["All", "AI", "Education", "Financial", "Community"];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
+
 export default function ProductCatalog() {
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("All");
-  const [selectedId, setSelectedId] = useState(products[0].id);
-  const [compare, setCompare] = useState<string[]>([]);
-  const [saved, setSaved] = useState(false);
-  const visible = useMemo(() => products.filter((item) => (category === "All" || item.category === category) && `${item.name} ${item.category} ${item.summary}`.toLowerCase().includes(query.toLowerCase())), [category, query]);
-  const selected = products.find((item) => item.id === selectedId) ?? products[0];
-  const toggleCompare = (id: string) => setCompare((items) => items.includes(id) ? items.filter((item) => item !== id) : items.length < 3 ? [...items, id] : items);
-  const reset = () => { setQuery(""); setCategory("All"); setSelectedId(products[0].id); setCompare([]); setSaved(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Filter} eyebrow="ProductCatalog · Discovery preview" title="Explore the ecosystem before inventory and checkout are connected." description="Browse local product concepts by category, search, inspect detail, and build a comparison set. No live catalog, price, inventory, rating, review, customer, subscription, checkout, or purchase is asserted or executed." badge="Catalog discovery"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "List saved locally" : "Save list locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset catalog</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Product concepts", value: String(products.length), hint: "Local discovery", icon: Sparkles, tone: "cyan" }, { label: "Categories", value: String(categories.length - 1), hint: "Surface groups", icon: Filter, tone: "violet" }, { label: "Prices", value: "Off", hint: "Unpublished", icon: LockKeyhole, tone: "amber" }, { label: "Checkout", value: "Blocked", hint: "No commerce path", icon: ShieldAlert, tone: "slate" }]} /><ScreenPreviewBanner title="Catalog evidence boundary"><strong>This is a product-discovery preview, not a storefront.</strong> Names, categories, summaries, prices, availability, and statuses are local concepts. No live inventory, price, rating, review, demand, user, subscription, checkout, payment, fulfillment, or purchase claim is connected.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.85fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Catalog controls</p><h2 className="mt-2 text-2xl font-black">Find a product concept</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">{visible.length} shown</Badge></div><div className="relative mt-5"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search catalog…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="mt-4 flex flex-wrap gap-2">{categories.map((item) => <button key={item} onClick={() => setCategory(item)} className={`rounded-lg border px-3 py-2 text-xs ${category === item ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2">{visible.map((item) => { const Icon = item.icon; return <div key={item.id} className={`rounded-xl border p-4 ${selected.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><button onClick={() => setSelectedId(item.id)} className="w-full text-left"><div className="flex items-start gap-3"><Icon className="mt-1 size-5 text-cyan-200" /><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{item.name}</p><Badge variant="outline" className="border-white/10 text-slate-400">{item.category}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-500">{item.summary}</p></div></div></button><Button onClick={() => toggleCompare(item.id)} variant="outline" className="mt-4 w-full border-white/10 text-xs text-slate-300">{compare.includes(item.id) ? "Remove from compare" : "Add to compare"}</Button></div>; })}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Product detail</p><h2 className="mt-2 text-2xl font-black">{selected.name}</h2><p className="mt-2 text-sm text-slate-500">{selected.category} · local concept</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><div className="mt-6 rounded-xl border border-white/10 p-5"><p className="text-sm leading-7 text-slate-300">{selected.summary}</p></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Price", value: selected.price }, { label: "Availability", value: selected.availability }, { label: "Rating", value: "Unmeasured" }, { label: "Reviews", value: "Unavailable" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-6 rounded-2xl border border-amber-300/25 bg-amber-300/[0.06] p-5"><div className="flex items-start gap-3"><LockKeyhole className="mt-0.5 size-5 shrink-0 text-amber-200" /><div><p className="font-semibold text-amber-100">Commerce is unavailable</p><p className="mt-2 text-sm leading-6 text-slate-400">No live product source, price book, inventory service, ratings, review store, customer identity, checkout, payment, or fulfillment integration is connected.</p><Button disabled className="mt-4 bg-slate-700 text-slate-400">View or purchase unavailable</Button></div></div></div></CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Compare intent</p><h2 className="mt-2 text-2xl font-black">Local comparison set</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">{compare.length}/3 selected</Badge></div>{compare.length ? <div className="mt-5 grid gap-3 sm:grid-cols-3">{compare.map((id) => { const item = products.find((product) => product.id === id)!; return <div key={id} className="rounded-xl border border-white/10 p-4"><p className="font-semibold">{item.name}</p><p className="mt-2 text-sm text-slate-500">{item.category} · {item.price}</p></div>; })}</div> : <div className="mt-5 rounded-xl border border-dashed border-white/10 p-6 text-center text-sm text-slate-500">Add up to three product concepts to compare local positioning. No recommendation is generated.</div>}</CardContent></Card><ScreenFeatureGrid features={[{ title: "Discovery surface preserved", description: "Category filters, search, product cards, selected detail, compare intent, local save/reset, price and availability labels remain interactive.", icon: Sparkles, status: "Local catalog" }, { title: "No storefront theater", description: "Prices, inventory, ratings, reviews, demand, users, subscriptions, checkout, payment, and fulfillment are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Commerce requires evidence", description: "A real catalog needs a connected source, versioned price book, identity, commerce integration, support, and reconciliation.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>ProductCatalog</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">ProductCatalog</h1>
+            <p className="text-muted-foreground mt-2">Browse all products with filters and search</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

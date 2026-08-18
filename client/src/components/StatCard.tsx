@@ -1,67 +1,40 @@
-import type { LucideIcon } from "lucide-react";
-import { ArrowDownRight, ArrowUpRight, Minus } from "lucide-react";
-import type { ReactNode } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { createElement, type ComponentType, type ReactNode } from "react";
 
-type StatCardColor = "primary" | "success" | "accent" | "warning" | "danger";
-
-interface StatCardProps {
+export type StatCardProps = {
+  icon?: ReactNode | ComponentType<{ className?: string }>;
   label: string;
   value: ReactNode;
-  icon?: LucideIcon | ReactNode;
+  color?: string;
+  accent?: "cyan" | "purple" | "green" | "pink" | "yellow";
   change?: number;
   changeLabel?: string;
-  color?: StatCardColor;
-  className?: string;
-}
-
-const colorStyles: Record<StatCardColor, string> = {
-  primary: "bg-primary/10 text-primary ring-primary/15",
-  success: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 ring-emerald-500/15",
-  accent: "bg-violet-500/10 text-violet-600 dark:text-violet-400 ring-violet-500/15",
-  warning: "bg-amber-500/10 text-amber-600 dark:text-amber-400 ring-amber-500/15",
-  danger: "bg-destructive/10 text-destructive ring-destructive/15",
+  sub?: ReactNode;
 };
 
-export function StatCard({
-  label,
-  value,
-  icon,
-  change,
-  changeLabel = "from previous period",
-  color = "primary",
-  className,
-}: StatCardProps) {
-  const Icon = typeof icon === "function" ? (icon as LucideIcon) : null;
-  const iconNode = typeof icon === "function" ? null : (icon as ReactNode | undefined);
-  const trendIcon = change == null ? <Minus className="size-3.5" /> : change >= 0 ? <ArrowUpRight className="size-3.5" /> : <ArrowDownRight className="size-3.5" />;
-  const trendColor = change == null ? "text-muted-foreground" : change >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400";
+const accentClasses: Record<NonNullable<StatCardProps["accent"]>, string> = {
+  cyan: "border-cyan-500/30 text-cyan-300",
+  purple: "border-purple-500/30 text-purple-300",
+  green: "border-green-500/30 text-green-300",
+  pink: "border-pink-500/30 text-pink-300",
+  yellow: "border-yellow-500/30 text-yellow-300",
+};
 
+export function StatCard({ icon, label, value, color, accent = "cyan", change, changeLabel, sub }: StatCardProps) {
+  const iconNode = typeof icon === "function" ? createElement(icon, { className: "h-4 w-4" }) : icon;
+  const colorClass = color && !color.includes("[") ? `text-${color}` : undefined;
   return (
-    <Card className={cn("overflow-hidden border-border/70 bg-card/90 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md", className)}>
-      <CardContent className="p-5">
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <p className="text-sm font-medium text-muted-foreground">{label}</p>
-            <p className="mt-2 truncate text-2xl font-semibold tracking-tight text-foreground">{value}</p>
-          </div>
-          {icon ? (
-            <div className={cn("flex size-10 shrink-0 items-center justify-center rounded-xl ring-1", colorStyles[color])} aria-hidden="true">
-              {Icon ? <Icon className="size-5" /> : iconNode}
-            </div>
-          ) : null}
+    <div className={`rounded-xl border bg-card/60 p-4 ${accentClasses[accent]}`} style={color && !colorClass ? { borderColor: color } : undefined}>
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        {iconNode}
+        <span>{label}</span>
+      </div>
+      <div className="mt-2 text-2xl font-semibold text-foreground">{value}</div>
+      {sub && <div className="mt-1 text-xs text-muted-foreground">{sub}</div>}
+      {typeof change === "number" && (
+        <div className={`mt-2 text-xs ${change >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+          {change >= 0 ? "+" : ""}{change.toFixed(1)}%{changeLabel ? ` ${changeLabel}` : ""}
         </div>
-        {change !== undefined ? (
-          <div className={cn("mt-4 flex items-center gap-1 text-xs font-medium", trendColor)}>
-            {trendIcon}
-            <span>{Math.abs(change).toFixed(1)}%</span>
-            <span className="font-normal text-muted-foreground">{changeLabel}</span>
-          </div>
-        ) : null}
-      </CardContent>
-    </Card>
+      )}
+    </div>
   );
 }
-
-export default StatCard;

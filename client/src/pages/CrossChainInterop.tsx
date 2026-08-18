@@ -1,22 +1,151 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRightLeft, Check, ChevronDown, ClipboardList, Coins, Globe2, LockKeyhole, RefreshCw, Route, Shield, TriangleAlert, WalletCards, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+/**
+ * CrossChainInterop — Phase 11 Cross-Chain Interoperability
+ * Multi-chain bridge, asset transfers, protocol interoperability
+ */
+import { useState } from "react";
+import { Link } from "wouter";
+import { ArrowLeft, ArrowRightLeft, Globe, Zap, Shield, TrendingUp } from "lucide-react";
 
-const CHAINS = [{ name: "Ethereum", symbol: "ETH", state: "Catalogued", color: "from-blue-500 to-indigo-500" }, { name: "Polygon", symbol: "MATIC", state: "Catalogued", color: "from-violet-500 to-fuchsia-500" }, { name: "BNB Chain", symbol: "BNB", state: "Catalogued", color: "from-amber-400 to-yellow-500" }, { name: "Solana", symbol: "SOL", state: "Needs adapter", color: "from-emerald-400 to-cyan-400" }, { name: "Arbitrum", symbol: "ARB", state: "Needs adapter", color: "from-cyan-400 to-blue-500" }];
-const HISTORY = [{ route: "ETH → SKY", state: "Preview only", note: "No transaction hash" }, { route: "MATIC → SKY", state: "Not submitted", note: "Awaiting wallet proof" }, { route: "SKY → ETH", state: "Dry run", note: "No finality evidence" }];
-const GATES = ["Wallet ownership and signature", "Source/destination contract allowlists", "Network and chain-ID validation", "Fee, slippage, nonce, and replay controls", "Bridge monitoring, finality, failure, and recovery"];
+const CHAINS = [
+  { name: "Ethereum", symbol: "ETH", color: "text-blue-400", bg: "bg-blue-500/10", status: "active", tvl: "$1.2M" },
+  { name: "Polygon", symbol: "MATIC", color: "text-purple-400", bg: "bg-purple-500/10", status: "active", tvl: "$340K" },
+  { name: "BNB Chain", symbol: "BNB", color: "text-yellow-400", bg: "bg-yellow-500/10", status: "active", tvl: "$180K" },
+  { name: "Solana", symbol: "SOL", color: "text-green-400", bg: "bg-green-500/10", status: "coming", tvl: "—" },
+  { name: "Arbitrum", symbol: "ARB", color: "text-cyan-400", bg: "bg-cyan-500/10", status: "coming", tvl: "—" },
+];
+
+const RECENT_BRIDGES = [
+  { from: "ETH", to: "SKY", amount: "0.5 ETH", value: "$1,250", time: "2m ago", status: "completed" },
+  { from: "MATIC", to: "SKY", amount: "500 MATIC", value: "$320", time: "8m ago", status: "completed" },
+  { from: "SKY", to: "ETH", amount: "10,000 SKY", value: "$2,100", time: "15m ago", status: "completed" },
+  { from: "BNB", to: "SKY", amount: "2 BNB", value: "$840", time: "22m ago", status: "pending" },
+];
 
 export default function CrossChainInterop() {
-  const [from, setFrom] = useState("ETH");
-  const [to, setTo] = useState("SKY");
+  const [fromChain, setFromChain] = useState("ETH");
+  const [toChain, setToChain] = useState("SKY");
   const [amount, setAmount] = useState("");
-  const [tab, setTab] = useState("Route planner");
-  const [saved, setSaved] = useState(false);
-  const tabs = ["Route planner", "Chain catalog", "History preview"];
-  const route = useMemo(() => `${from} → ${to}`, [from, to]);
-  const swap = () => { setFrom(to); setTo(from); setSaved(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Globe2} eyebrow="Crypto infrastructure · Cross-chain" title="Map the route before moving an asset." description="Explore a dry-run cross-chain route planner, synthetic chain catalog, transfer-history preview, and security gates. No wallet is connected, no bridge contract is called, and no asset, message, fee, or transaction state is real." badge="Dry-run preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><ClipboardList className="mr-2 size-4" />Save local route</Button><Button onClick={() => { setFrom("ETH"); setTo("SKY"); setAmount(""); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset route</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Chains", value: String(CHAINS.length), hint: "Catalog entries", icon: Globe2 }, { label: "Route", value: route, hint: "Local selection", icon: Route, tone: "violet" }, { label: "Bridge", value: "Off", hint: "No contract call", icon: WifiOff, tone: "amber" }, { label: "Wallet", value: "Unconnected", hint: "No signing proof", icon: WalletCards, tone: "slate" }]} /><ScreenPreviewBanner title="Blockchain evidence boundary"><strong>Chain names, symbols, route selections, fee/timing placeholders, history rows, and status labels are interface fixtures—not proof of balances, liquidity, bridge support, asset custody, transaction submission, confirmation, or finality.</strong> Production interoperability requires audited contracts, verified network/chain IDs, wallet signatures, allowlists, nonce/replay protection, fee/slippage handling, monitoring, failure recovery, and transaction-hash evidence.</ScreenPreviewBanner><section className="flex flex-wrap gap-2" aria-label="Cross-chain sections">{tabs.map((item) => <button key={item} onClick={() => setTab(item)} className={`rounded-xl border px-4 py-2 text-sm ${tab === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-400"}`}>{item}</button>)}</section>{tab === "Route planner" && <section className="grid gap-6 lg:grid-cols-[1fr_0.85fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><ArrowRightLeft className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Dry-run route</p><h2 className="mt-1 text-2xl font-black">Plan {route}</h2></div></div><div className="mt-6 grid gap-4 sm:grid-cols-[1fr_auto_1fr]"><label className="text-sm text-slate-300">From<select value={from} onChange={(event) => { setFrom(event.target.value); setSaved(false); }} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white">{["ETH", "MATIC", "BNB", "SKY"].map((item) => <option key={item}>{item}</option>)}</select></label><button onClick={swap} className="mt-7 flex size-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-cyan-200" aria-label="Swap route"><ArrowRightLeft className="size-4" /></button><label className="text-sm text-slate-300">To<select value={to} onChange={(event) => { setTo(event.target.value); setSaved(false); }} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white">{["SKY", "ETH", "MATIC", "BNB"].map((item) => <option key={item}>{item}</option>)}</select></label></div><label className="mt-5 block text-sm text-slate-300">Amount<input value={amount} onChange={(event) => { setAmount(event.target.value); setSaved(false); }} inputMode="decimal" placeholder="Local amount only" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white placeholder:text-slate-500" /></label><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 font-semibold text-amber-200"><TriangleAlert className="size-4" />No quote or fee</div><p className="mt-2 text-sm leading-6 text-slate-400">Amount and route are local inputs. There is no exchange rate, bridge fee, gas estimate, slippage quote, delivery time, or custody decision.</p></div><Button onClick={() => setSaved(true)} className="mt-5 w-full bg-violet-500 text-white hover:bg-violet-400"><Route className="mr-2 size-4" />Save dry-run route</Button>{saved && <p className="mt-4 text-sm text-cyan-200">Local route saved; no wallet request, signature, contract call, or transaction record created.</p>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Shield className="size-5 text-violet-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Security gates</p><h2 className="mt-1 text-2xl font-black">Required before execution</h2></div></div><div className="mt-6 space-y-3">{GATES.map((gate) => <div key={gate} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{gate}</span><span className="text-xs text-amber-200">Missing</span></div>)}</div><div className="mt-5 rounded-xl border border-red-300/20 bg-red-300/[0.05] p-4"><p className="font-semibold text-red-200">No blockchain action</p><p className="mt-2 text-sm leading-6 text-slate-400">This UI intentionally cannot move assets, mint wrapped assets, relay messages, or declare completion.</p></div></CardContent></Card></section>}{tab === "Chain catalog" && <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{CHAINS.map((chain) => <Card key={chain.name} className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className={`flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br ${chain.color} font-black text-slate-950`}>{chain.symbol}</div><div className="mt-5 flex items-center justify-between"><h2 className="font-black">{chain.name}</h2><Badge variant="outline" className="border-white/10 text-xs text-slate-400">{chain.state}</Badge></div><p className="mt-3 text-sm leading-6 text-slate-400">Catalog metadata only. RPC, chain ID, asset registry, bridge adapter, finality, and health status are not verified.</p></CardContent></Card>)}</section>}{tab === "History preview" && <section className="space-y-3">{HISTORY.map((item) => <Card key={item.route} className="border-white/10 bg-white/[0.04]"><CardContent className="flex items-center gap-4 p-5"><div className="flex size-10 items-center justify-center rounded-xl bg-violet-300/10 text-violet-200"><Coins className="size-5" /></div><div className="flex-1"><p className="font-semibold">{item.route}</p><p className="mt-1 text-sm text-slate-500">{item.note}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.state}</Badge></CardContent></Card>)}</section>}<ScreenFeatureGrid features={[{ title: "A route is not a transaction", description: "Selecting networks and amount cannot establish wallet ownership, signing, submission, or finality.", icon: Route, status: "Guardrail" }, { title: "Bridge safety is a system", description: "Contracts, allowlists, replay protection, monitoring, failure recovery, and audits are required before execution.", icon: Shield, status: "Required" }, { title: "No fake chain state", description: "Catalog and history previews preserve product utility without inventing balances, TVL, fees, or completed transfers.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  const [tab, setTab] = useState<"bridge" | "chains" | "history">("bridge");
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border/50 px-4 py-3 flex items-center gap-3">
+        <Link href="/" className="p-2 rounded-lg hover:bg-secondary/50 transition-colors text-muted-foreground">
+          <ArrowLeft className="w-4 h-4" />
+        </Link>
+        <div>
+          <h1 className="font-bold text-lg flex items-center gap-2">
+            <Globe className="w-5 h-5 text-cyan-400" />
+            Cross-Chain Bridge
+          </h1>
+          <p className="text-xs text-muted-foreground">Multi-chain interoperability — Phase 11</p>
+        </div>
+      </div>
+
+      <div className="max-w-2xl mx-auto p-4 space-y-4">
+        <div className="grid grid-cols-3 gap-2">
+          {[
+            { label: "Total TVL", value: "$1.72M", icon: TrendingUp, color: "text-green-400" },
+            { label: "Active Chains", value: "3", icon: Globe, color: "text-blue-400" },
+            { label: "Avg Bridge Time", value: "45s", icon: Zap, color: "text-yellow-400" },
+          ].map(s => (
+            <div key={s.label} className="card p-3 text-center">
+              <s.icon className={`w-4 h-4 ${s.color} mx-auto mb-1`} />
+              <div className="font-bold text-sm">{s.value}</div>
+              <div className="text-xs text-muted-foreground">{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex gap-1 bg-secondary/30 rounded-xl p-1">
+          {(["bridge", "chains", "history"] as const).map(t => (
+            <button key={t} onClick={() => setTab(t)}
+              className={`flex-1 py-2 rounded-lg text-xs font-medium capitalize transition-colors ${tab === t ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"}`}>
+              {t}
+            </button>
+          ))}
+        </div>
+
+        {tab === "bridge" && (
+          <div className="space-y-3">
+            <div className="card p-4 space-y-3">
+              <div className="space-y-2">
+                <label className="text-xs text-muted-foreground">From</label>
+                <select value={fromChain} onChange={e => setFromChain(e.target.value)}
+                  className="w-full bg-secondary/50 border border-border/50 rounded-lg px-3 py-2 text-sm">
+                  {["ETH", "MATIC", "BNB", "SKY"].map(c => <option key={c}>{c}</option>)}
+                </select>
+              </div>
+              <div className="flex justify-center">
+                <button onClick={() => { setFromChain(toChain); setToChain(fromChain); }}
+                  className="p-2 rounded-full bg-secondary/50 hover:bg-secondary transition-colors">
+                  <ArrowRightLeft className="w-4 h-4 text-primary" />
+                </button>
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs text-muted-foreground">To</label>
+                <select value={toChain} onChange={e => setToChain(e.target.value)}
+                  className="w-full bg-secondary/50 border border-border/50 rounded-lg px-3 py-2 text-sm">
+                  {["SKY", "ETH", "MATIC", "BNB"].map(c => <option key={c}>{c}</option>)}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs text-muted-foreground">Amount</label>
+                <input value={amount} onChange={e => setAmount(e.target.value)} placeholder="0.00"
+                  className="w-full bg-secondary/50 border border-border/50 rounded-lg px-3 py-2 text-sm" />
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground p-2 bg-secondary/30 rounded-lg">
+                <Shield className="w-3.5 h-3.5 text-green-400" />
+                <span>Bridge fee: 0.1% · Estimated time: ~45 seconds</span>
+              </div>
+              <button className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:opacity-90 transition-opacity">
+                Bridge {fromChain} → {toChain}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {tab === "chains" && (
+          <div className="space-y-2">
+            {CHAINS.map(c => (
+              <div key={c.name} className="card p-4 flex items-center gap-3">
+                <div className={`w-9 h-9 rounded-full ${c.bg} flex items-center justify-center font-bold text-xs ${c.color}`}>
+                  {c.symbol}
+                </div>
+                <div className="flex-1">
+                  <div className="font-medium text-sm">{c.name}</div>
+                  <div className="text-xs text-muted-foreground">TVL: {c.tvl}</div>
+                </div>
+                <span className={`text-xs px-2 py-0.5 rounded-full ${c.status === "active" ? "bg-green-500/20 text-green-400" : "bg-secondary text-muted-foreground"}`}>
+                  {c.status}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === "history" && (
+          <div className="space-y-2">
+            {RECENT_BRIDGES.map((b, i) => (
+              <div key={i} className="card p-3 flex items-center gap-3">
+                <div className="text-xs font-mono text-center">
+                  <div className="text-primary">{b.from}</div>
+                  <div className="text-muted-foreground">→</div>
+                  <div className="text-primary">{b.to}</div>
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm font-medium">{b.amount}</div>
+                  <div className="text-xs text-muted-foreground">{b.value}</div>
+                </div>
+                <div className="text-right">
+                  <div className={`text-xs ${b.status === "completed" ? "text-green-400" : "text-yellow-400"}`}>{b.status}</div>
+                  <div className="text-xs text-muted-foreground">{b.time}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }

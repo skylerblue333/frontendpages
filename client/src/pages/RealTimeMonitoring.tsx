@@ -1,21 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Activity, AlertTriangle, Bell, Check, Filter, LockKeyhole, RefreshCw, Search, ShieldAlert, Siren, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const monitors = [{ id: 1, name: "API edge", category: "Platform", status: "Unconnected", detail: "A local service-monitor concept awaiting telemetry, thresholds, and on-call ownership." }, { id: 2, name: "Learning runtime", category: "Education", status: "Unmeasured", detail: "A monitoring concept awaiting service events, learner impact definitions, and privacy controls." }, { id: 3, name: "Wallet gateway", category: "Financial", status: "Blocked", detail: "A high-risk monitor concept that must not imply balances, transactions, or custody health." }, { id: 4, name: "Game session service", category: "Gaming", status: "Unconnected", detail: "A session-health concept awaiting real-time traces, match semantics, and incident policy." }];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
+
 export default function RealTimeMonitoring() {
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("All");
-  const [selected, setSelected] = useState(1);
-  const [range, setRange] = useState("Window not set");
-  const [alerts, setAlerts] = useState("Alerts not configured");
-  const [saved, setSaved] = useState(false);
-  const [showGates, setShowGates] = useState(false);
-  const categories = ["All", ...Array.from(new Set(monitors.map((item) => item.category)))];
-  const filtered = useMemo(() => monitors.filter((item) => (category === "All" || item.category === category) && `${item.name} ${item.category} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [category, query]);
-  const monitor = monitors.find((item) => item.id === selected) ?? monitors[0];
-  const reset = () => { setQuery(""); setCategory("All"); setSelected(1); setRange("Window not set"); setAlerts("Alerts not configured"); setSaved(false); setShowGates(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Activity} eyebrow="RealTimeMonitoring · Observability preview" title="Monitor the signal before declaring the system healthy." description="Explore local monitor concepts with service search, categories, reporting window, latency, uptime, errors, alerts, incidents, escalation, privacy, save, reset, and evidence gates. No live telemetry, health outcome, uptime, or operational claim is connected." badge="Monitoring workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "View saved locally" : "Save view locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review monitor gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset view</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Monitors", value: `${monitors.length} local`, hint: "No telemetry loaded", icon: Activity, tone: "cyan" }, { label: "Uptime", value: "Unavailable", hint: "No health source", icon: Check, tone: "violet" }, { label: "Alerts", value: alerts, hint: "Browser intent", icon: Bell, tone: "amber" }, { label: "Incidents", value: "Unknown", hint: "No incident source", icon: Siren, tone: "slate" }]} /><ScreenPreviewBanner title="Monitoring evidence boundary"><strong>This is a local observability-definition preview, not a live status page.</strong> Monitor labels, categories, range and alert intent, empty chart state, escalation posture, saved state, and evidence gates are browser concepts. No health, uptime, latency, error rate, alert, incident, availability, user impact, or recovery outcome is asserted.</ScreenPreviewBanner><section className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Reporting window</p><select value={range} onChange={(event) => setRange(event.target.value)} className="mt-2 rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Window not set</option><option>Last 15 minutes intent</option><option>Last hour intent</option><option>Last 24 hours intent</option></select></div><label className="text-sm text-slate-400">Alert posture<select value={alerts} onChange={(event) => setAlerts(event.target.value)} className="mt-2 rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Alerts not configured</option><option>Threshold intent</option><option>SLO intent</option><option>Anomaly intent</option></select></label><Badge variant="outline" className="border-amber-300/20 text-amber-200">Telemetry disconnected</Badge></section><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local monitors" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-4 flex flex-wrap gap-2">{categories.map((entry) => <Button key={entry} onClick={() => setCategory(entry)} size="sm" variant="outline" className={category === entry ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100" : "border-white/10 text-slate-400"}><Filter className="mr-1 size-3" />{entry}</Button>)}</div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.status}</Badge></div><div className="mt-4"><Badge variant="outline" className="border-white/10 text-slate-500">{item.category}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected monitor</p><h2 className="mt-2 text-2xl font-black">{monitor.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{monitor.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Status", value: monitor.status }, { label: "Window", value: range }, { label: "Latency", value: "Unavailable" }, { label: "Uptime", value: "Unavailable" }, { label: "Errors", value: "Unmeasured" }, { label: "Last incident", value: "Unknown" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><Activity className="mx-auto size-7 text-slate-600" /><p className="mt-3 font-semibold">No monitoring stream loaded</p><p className="mt-2 text-sm text-slate-500">Connect governed metrics before displaying health, latency, uptime, errors, alerts, or impact.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Refresh unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Acknowledge unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Escalate unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No health claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A monitor label does not establish that a service is healthy, available, performant, secure, or recovering.</p></div>}</CardContent></Card></section><section className="grid gap-6 md:grid-cols-2"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><AlertTriangle className="size-5 text-amber-300" /><div><p className="font-semibold">Alerts and anomalies</p><p className="text-sm text-slate-500">No event stream</p></div></div><div className="mt-6 rounded-xl border border-dashed border-white/10 p-6 text-center text-sm text-slate-500">No thresholds, alerts, anomaly scores, timestamps, or owners are loaded.</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Siren className="size-5 text-red-300" /><div><p className="font-semibold">Incidents and escalation</p><p className="text-sm text-slate-500">No incident source</p></div></div><div className="mt-6 rounded-xl border border-dashed border-white/10 p-6 text-center text-sm text-slate-500">No incident, user impact, recovery, or escalation outcome is displayed.</div></CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Monitoring gates</p><h2 className="mt-2 text-2xl font-black">What real-time monitoring must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Authenticated telemetry source, event schema, sampling, timestamps, time zone, retention, and freshness", "Metric definitions, aggregation, baselines, percentiles, health checks, SLOs, and error budgets", "Privacy, identity, IP handling, financial-data boundaries, access controls, redaction, and consent", "Alert thresholds, anomaly policy, deduplication, notification delivery, ownership, and escalation", "Incident correlation, timeline, impact assessment, communication, remediation, and postmortem", "Dashboards, exports, support, on-call, audits, deployments, rollback, and disaster recovery"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Monitoring surface preserved", description: "Monitor search, categories, range, alert posture, latency, uptime, errors, charts, alerts, incidents, escalation, save/reset, and gates remain interactive.", icon: Activity, status: "Local monitors" }, { title: "No operations theater", description: "Health, uptime, latency, errors, alerts, incidents, availability, user impact, recovery, and security outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Telemetry before status", description: "Real monitoring needs governed metrics, privacy, baselines, alerting, incident response, and rollback evidence.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>RealTimeMonitoring</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">RealTimeMonitoring</h1>
+            <p className="text-muted-foreground mt-2">Live metrics dashboard</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

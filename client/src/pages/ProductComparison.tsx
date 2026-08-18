@@ -1,20 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Check, ChevronDown, FileText, LockKeyhole, RefreshCw, Search, ShieldAlert, SlidersHorizontal, Sparkles, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const products = [{ id: "cmp-001", name: "HopeAI workspace", category: "AI", values: { flexibility: "Concept", evidence: "Required", cost: "Unpublished", availability: "Unknown" } }, { id: "cmp-002", name: "SkySchool learning", category: "Education", values: { flexibility: "Guided", evidence: "Required", cost: "Unpublished", availability: "Unknown" } }, { id: "cmp-003", name: "Crypto Hub", category: "Financial", values: { flexibility: "High-risk", evidence: "Required", cost: "Unavailable", availability: "Not connected" } }, { id: "cmp-004", name: "Community spaces", category: "Community", values: { flexibility: "Social", evidence: "Required", cost: "Unpublished", availability: "Unknown" } }];
-const criteria = ["Flexibility", "Evidence posture", "Cost", "Availability"] as const;
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
+
 export default function ProductComparison() {
-  const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState<string[]>(products.slice(0, 3).map((item) => item.id));
-  const [expanded, setExpanded] = useState<string>(criteria[0]);
-  const [notes, setNotes] = useState("");
-  const [saved, setSaved] = useState(false);
-  const visible = useMemo(() => products.filter((item) => `${item.name} ${item.category}`.toLowerCase().includes(query.toLowerCase())), [query]);
-  const selectedProducts = products.filter((item) => selected.includes(item.id));
-  const toggle = (id: string) => setSelected((items) => items.includes(id) ? items.filter((item) => item !== id) : items.length < 4 ? [...items, id] : items);
-  const reset = () => { setQuery(""); setSelected(products.slice(0, 3).map((item) => item.id)); setExpanded(criteria[0]); setNotes(""); setSaved(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={SlidersHorizontal} eyebrow="ProductComparison · Decision preview" title="Compare trade-offs before a recommendation becomes a promise." description="Build a local comparison set, inspect criteria, record notes, and expose unavailable evidence. No benchmark, rating, price, recommendation, availability, customer outcome, or purchase decision is generated." badge="Comparison studio"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Comparison saved locally" : "Save comparison locally"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset comparison</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Products", value: String(selectedProducts.length), hint: "Local compare set", icon: Sparkles, tone: "cyan" }, { label: "Criteria", value: String(criteria.length), hint: "Design rows", icon: SlidersHorizontal, tone: "violet" }, { label: "Recommendation", value: "Off", hint: "No decision engine", icon: LockKeyhole, tone: "amber" }, { label: "Purchase", value: "Blocked", hint: "No commerce path", icon: ShieldAlert, tone: "slate" }]} /><ScreenPreviewBanner title="Comparison evidence boundary"><strong>This is a trade-off worksheet, not a recommendation engine.</strong> Values are local labels. No benchmark dataset, rating, review, price, inventory, customer preference, financial outcome, recommendation, ranking, or purchase decision is measured or inferred.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Product set</p><h2 className="mt-2 text-2xl font-black">Choose comparison subjects</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">{selected.length}/4 selected</Badge></div><div className="relative mt-5"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search products…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="mt-4 space-y-2">{visible.map((item) => <button key={item.id} onClick={() => toggle(item.id)} className={`flex w-full items-center gap-3 rounded-xl border p-4 text-left ${selected.includes(item.id) ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className={`flex size-5 items-center justify-center rounded border ${selected.includes(item.id) ? "border-cyan-300 bg-cyan-300 text-slate-950" : "border-white/20"}`}>{selected.includes(item.id) && <Check className="size-3" />}</div><div className="flex-1"><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.category}</p></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Comparison table</p><h2 className="mt-2 text-2xl font-black">Review local trade-offs</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">No ranking</Badge></div><div className="mt-5 overflow-x-auto"><table className="w-full min-w-[560px] border-separate border-spacing-y-2 text-left"><thead><tr><th className="px-3 py-2 text-xs uppercase tracking-[0.15em] text-slate-500">Criterion</th>{selectedProducts.map((item) => <th key={item.id} className="px-3 py-2 text-sm font-semibold text-cyan-100">{item.name}</th>)}</tr></thead><tbody>{criteria.map((criterion) => <tr key={criterion}><td className="rounded-l-xl border-y border-l border-white/10 px-3 py-3 text-sm text-slate-300">{criterion}</td>{selectedProducts.map((item, index) => <td key={item.id} className={`${index === selectedProducts.length - 1 ? "rounded-r-xl border-r" : ""} border-y border-white/10 px-3 py-3 text-sm text-amber-200`}>{item.values[criterion.toLowerCase().replace(" ", "") as keyof typeof item.values] ?? "Local label"}</td>)}</tr>)}</tbody></table></div><div className="mt-5 space-y-2">{criteria.map((criterion) => <button key={criterion} onClick={() => setExpanded(expanded === criterion ? "" : criterion)} className="flex w-full items-center gap-3 rounded-xl border border-white/10 p-3 text-left"><FileText className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{criterion} evidence</span><ChevronDown className={`size-4 text-slate-500 transition ${expanded === criterion ? "rotate-180" : ""}`} /></button>)}{expanded && <div className="rounded-xl border border-violet-300/20 bg-violet-300/[0.06] p-4 text-sm leading-6 text-slate-400">Evidence for <strong className="text-violet-100">{expanded}</strong> is not connected. A real comparison needs source definitions, measurement method, timestamp, scope, and uncertainty.</div>}</div></CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Decision notes</p><h2 className="mt-2 text-2xl font-black">Record context locally</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{notes.length}/500</Badge></div><textarea value={notes} onChange={(event) => setNotes(event.target.value.slice(0, 500))} placeholder="What trade-off are you trying to understand?" className="mt-5 min-h-28 w-full resize-y rounded-xl border border-white/10 bg-black/20 p-4 text-sm text-white outline-none focus:border-cyan-300/50" /><div className="mt-4 flex items-start gap-3 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><ShieldAlert className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-400">Notes are local context only. They do not create a recommendation, ranking, eligibility result, purchase, or business decision.</p></div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Comparison surface preserved", description: "Product selection, search, criteria rows, expandable evidence, local notes, save/reset, and compare count remain interactive.", icon: SlidersHorizontal, status: "Local worksheet" }, { title: "No ranking theater", description: "Benchmarks, ratings, prices, reviews, availability, customer outcomes, recommendations, and purchases are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before decisions", description: "A real comparison needs source definitions, measurement methods, timestamps, scope, uncertainty, and human context.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>ProductComparison</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">ProductComparison</h1>
+            <p className="text-muted-foreground mt-2">Compare multiple products side by side</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

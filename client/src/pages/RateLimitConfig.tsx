@@ -1,23 +1,74 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Gauge, LockKeyhole, RefreshCw, Search, ShieldAlert, SlidersHorizontal, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
- type Policy = { id: number; name: string; scope: string; algorithm: string; status: string; detail: string };
-const initial: Policy[] = [{ id: 1, name: "Public API baseline", scope: "Unauthenticated edge", algorithm: "Token bucket", status: "Draft", detail: "A local policy concept for protecting a public endpoint without claiming enforcement." }, { id: 2, name: "Authenticated burst control", scope: "User session", algorithm: "Sliding window", status: "Needs review", detail: "A policy draft awaiting traffic baselines, tenant rules, and incident testing." }, { id: 3, name: "Admin mutation guard", scope: "Privileged route", algorithm: "Fixed window", status: "Blocked", detail: "A high-risk policy concept requiring authorization review and safe rollout controls." }];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
+
 export default function RateLimitConfig() {
-  const [policies, setPolicies] = useState(initial);
-  const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState(1);
-  const [window, setWindow] = useState("Window not configured");
-  const [threshold, setThreshold] = useState("Threshold not configured");
-  const [rollout, setRollout] = useState("Dry-run intent");
-  const [saved, setSaved] = useState(false);
-  const [showGates, setShowGates] = useState(false);
-  const filtered = useMemo(() => policies.filter((item) => `${item.name} ${item.scope} ${item.algorithm} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [policies, query]);
-  const policy = policies.find((item) => item.id === selected) ?? policies[0];
-  const create = () => { const id = Math.max(...policies.map((item) => item.id), 0) + 1; const item: Policy = { id, name: `Local policy ${id}`, scope: "Unassigned", algorithm: "Not selected", status: "Draft", detail: "A browser-only rate-limit policy awaiting traffic evidence and rollout review." }; setPolicies((current) => [...current, item]); setSelected(id); };
-  const reset = () => { setPolicies(initial); setQuery(""); setSelected(1); setWindow("Window not configured"); setThreshold("Threshold not configured"); setRollout("Dry-run intent"); setSaved(false); setShowGates(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Gauge} eyebrow="RateLimitConfig · Policy preview" title="Tune the guardrail before enforcing the limit." description="Explore local rate-limit policies with scopes, algorithms, windows, thresholds, exemptions, dry-run rollout, validation, save, and audit gates. No traffic, request count, enforcement result, security guarantee, or production change is connected." badge="Rate-limit workspace"><div className="flex flex-wrap gap-2"><Button onClick={create} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><SlidersHorizontal className="mr-2 size-4" />New local policy</Button><Button onClick={() => setSaved(true)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{saved ? "View saved locally" : "Save policy locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review policy gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset workspace</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Policies", value: `${policies.length} local`, hint: "Not enforced", icon: Gauge, tone: "cyan" }, { label: "Traffic", value: "Unmeasured", hint: "No request source", icon: RefreshCw, tone: "violet" }, { label: "Rollout", value: rollout, hint: "Browser intent", icon: SlidersHorizontal, tone: "amber" }, { label: "Incidents", value: "Unknown", hint: "No monitor connected", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Rate-limit evidence boundary"><strong>This is a local policy-definition and rollout preview, not an active security control.</strong> Policy names, scopes, algorithms, window and threshold intent, dry-run posture, saved state, and empty traffic states are browser concepts. No requests, limits, blocks, retries, incidents, uptime, abuse reduction, security guarantee, or production enforcement is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local rate-limit policies" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.status}</Badge></div><div className="mt-4 flex gap-2"><Badge variant="outline" className="border-white/10 text-slate-500">{item.scope}</Badge><Badge variant="outline" className="border-white/10 text-slate-500">{item.algorithm}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected policy</p><h2 className="mt-2 text-2xl font-black">{policy.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{policy.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Scope", value: policy.scope }, { label: "Algorithm", value: policy.algorithm }, { label: "Window", value: window }, { label: "Threshold", value: threshold }, { label: "Exemptions", value: "Not configured" }, { label: "Enforcement", value: "Not connected" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-3"><label className="text-sm text-slate-400">Window<select value={window} onChange={(event) => setWindow(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Window not configured</option><option>1-minute intent</option><option>5-minute intent</option><option>1-hour intent</option></select></label><label className="text-sm text-slate-400">Threshold<select value={threshold} onChange={(event) => setThreshold(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Threshold not configured</option><option>Low-volume intent</option><option>Moderate-volume intent</option><option>High-volume intent</option></select></label><label className="text-sm text-slate-400">Rollout<select value={rollout} onChange={(event) => setRollout(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Dry-run intent</option><option>Canary intent</option><option>Enforcement intent</option></select></label></div><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><Gauge className="mx-auto size-7 text-slate-600" /><p className="mt-3 font-semibold">No request telemetry loaded</p><p className="mt-2 text-sm text-slate-500">Connect governed traffic traces before calculating capacity, blocks, retries, or incident impact.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Apply unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Validate against traffic unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Audit unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No enforcement claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A local policy draft does not block requests, protect an endpoint, prevent abuse, preserve uptime, or change production behavior.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Policy gates</p><h2 className="mt-2 text-2xl font-black">What a real rate limit must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Identity, tenant, route, method, IP, token, and key scope with privacy and spoofing controls", "Algorithm, window, burst, concurrency, queue, retry-after, clock, and distributed-state behavior", "Traffic baselines, capacity, seasonality, error budgets, false-positive analysis, and load tests", "Exemptions, admin access, service accounts, health checks, trusted proxies, and abuse review", "Rollout, canary, kill switch, migration, config versioning, audit, rollback, and incident response", "Observability, alerting, dashboards, user messaging, status codes, documentation, and support"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Policy surface preserved", description: "Rate-limit drafts, search, scopes, algorithms, windows, thresholds, exemptions, rollout, validation, apply, audit, save/reset, and gates remain interactive.", icon: Gauge, status: "Local policies" }, { title: "No security theater", description: "Traffic, blocks, retries, incidents, uptime, abuse reduction, protection, and enforcement are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before enforcement", description: "Real controls need distributed-state design, traffic tests, rollout safety, monitoring, audit, and rollback.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>RateLimitConfig</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">RateLimitConfig</h1>
+            <p className="text-muted-foreground mt-2">Rate limit setup</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

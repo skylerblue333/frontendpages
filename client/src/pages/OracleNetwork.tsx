@@ -1,19 +1,84 @@
-import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { Radio } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Check, FileCheck2, Gauge, LockKeyhole, Radio, RefreshCw, ShieldCheck, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const SOURCES = [{ name: "Market reference", detail: "Synthetic price-source concept", state: "Unconfigured" }, { name: "Weather signal", detail: "Synthetic external-data concept", state: "Unconfigured" }, { name: "Identity attestation", detail: "Synthetic verification concept", state: "Unavailable" }, { name: "Network heartbeat", detail: "Synthetic service-health concept", state: "No telemetry" }];
+import { Card } from "@/components/ui/card";
+import { PageHeader } from "@/components/PageHeader";
 
 export default function OracleNetwork() {
-  const [selected, setSelected] = useState(SOURCES[0].name);
-  const [quorum, setQuorum] = useState("3 of 5");
-  const [freshness, setFreshness] = useState("Unset");
-  const [saved, setSaved] = useState(false);
-  const [note, setNote] = useState("");
-  const source = SOURCES.find((item) => item.name === selected) ?? SOURCES[0];
-  const reset = () => { setSelected(SOURCES[0].name); setQuorum("3 of 5"); setFreshness("Unset"); setSaved(false); setNote(""); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Radio} eyebrow="OracleNetwork · Data trust planner" title="Design the attestation before trusting the feed." description="Review synthetic source concepts, freshness, quorum, aggregation, and incident gates. No live oracle, price, external data, chain transaction, cryptographic attestation, uptime, or automation claim is made." badge="Oracle preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Plan saved locally" : "Save trust plan"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset plan</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Sources", value: String(SOURCES.length), hint: "Synthetic concepts", icon: Radio }, { label: "Selected", value: source.name, hint: "Local plan", icon: Gauge, tone: "cyan" }, { label: "Freshness", value: freshness, hint: "No timestamp", icon: RefreshCw, tone: "amber" }, { label: "Feed", value: "Off", hint: "No telemetry", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="OracleNetwork evidence boundary"><strong>Source cards, quorum, freshness, aggregation, and incident controls are data-trust fixtures—not live feeds, price attestations, external truth, cryptographic signatures, chain writes, uptime, or a guaranteed oracle.</strong> Production oracle infrastructure requires source contracts, timestamp and freshness policy, quorum, outlier handling, cryptographic verification, chain/network controls, monitoring, circuit breakers, replay protection, audits, and incident response.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Source registry</p><h2 className="mt-2 text-3xl font-black">Trust concepts</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">No sources connected</Badge></div><div className="mt-5 space-y-3">{SOURCES.map((item) => <button key={item.name} onClick={() => { setSelected(item.name); setSaved(false); }} className={`flex w-full items-center gap-3 rounded-2xl border p-4 text-left ${selected === item.name ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/10"}`}><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-200"><Radio className="size-4" /></div><div className="flex-1"><p className="font-black">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><span className="text-xs text-amber-200">{item.state}</span></button>)}</div><div className="mt-5 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />Do not enter private keys, provider credentials, signing material, or sensitive source data into this preview.</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Trust worksheet</p><h2 className="mt-2 text-3xl font-black">{source.name}</h2><p className="mt-3 text-slate-400">{source.detail}</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Source state", value: source.state }, { label: "Freshness", value: freshness }, { label: "Quorum", value: quorum }, { label: "Aggregation", value: "Median concept" }, { label: "Signature", value: "Not verified" }, { label: "Chain write", value: "Disabled" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 grid gap-4 sm:grid-cols-2"><label className="text-sm text-slate-400">Quorum<select value={quorum} onChange={(event) => { setQuorum(event.target.value); setSaved(false); }} className="mt-2 w-full rounded-xl border border-white/10 bg-slate-950 p-3 text-white"><option>1 of 1</option><option>2 of 3</option><option>3 of 5</option><option>5 of 7</option></select></label><label className="text-sm text-slate-400">Freshness threshold<select value={freshness} onChange={(event) => { setFreshness(event.target.value); setSaved(false); }} className="mt-2 w-full rounded-xl border border-white/10 bg-slate-950 p-3 text-white"><option>Unset</option><option>1 minute</option><option>5 minutes</option><option>1 hour</option></select></label></div><textarea value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} placeholder="Write a local source, quorum, or incident note…" className="mt-5 min-h-24 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-slate-500" /></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Oracle readiness</p><h2 className="mt-2 text-2xl font-black">Required before feed claims</h2><div className="mt-5 space-y-3">{["Source contracts, provenance, timestamps, freshness, outages, and corrections", "Quorum, aggregation, outlier handling, circuit breakers, and fallback policy", "Cryptographic signatures, replay protection, key custody, and verification", "Network, chain, gas, reorg, rollback, monitoring, and incident response", "Independent audits, privacy, access controls, support, and alerting"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><FileCheck2 className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake oracle</h2><p className="mt-3 text-sm leading-6 text-slate-400">This planner changes local state only. It does not fetch, attest, sign, publish, store, or consume a production data feed.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A source card is not truth", description: "Synthetic sources preserve architecture UX without freshness, price, or attestation claims.", icon: Radio, status: "Guardrail" }, { title: "Trust needs redundancy", description: "Quorum, signatures, replay protection, chain controls, monitoring, and audits need evidence.", icon: ShieldCheck, status: "Required" }, { title: "No fake feed", description: "The preview makes no oracle, provider, chain, telemetry, signing, or automation request.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  return (
+    <div className="min-h-screen bg-background">
+      <PageHeader icon={Radio} title="Oracle Network" subtitle="Advanced oracle network with cutting-edge technology" />
+
+      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+        {/* Main Content Area */}
+        <Card className="p-8 bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20">
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Oracle Network</h2>
+
+            {/* Advanced Features */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <Radio className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Advanced Analytics</h3>
+                  <p className="text-sm text-muted-foreground">Real-time data processing with AI insights</p>
+                  <Button size="sm" variant="outline" className="w-full">Explore</Button>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <Radio className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Automation Engine</h3>
+                  <p className="text-sm text-muted-foreground">Autonomous operations with intelligent decision making</p>
+                  <Button size="sm" variant="outline" className="w-full">Configure</Button>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <Radio className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Security First</h3>
+                  <p className="text-sm text-muted-foreground">Robust encryption and protection</p>
+                  <Button size="sm" variant="outline" className="w-full">Secure</Button>
+                </div>
+              </Card>
+            </div>
+
+            {/* Performance Metrics */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Processing Speed</p>
+                <p className="text-2xl font-bold text-primary">99.9%</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Uptime</p>
+                <p className="text-2xl font-bold text-primary">24/7</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Latency</p>
+                <p className="text-2xl font-bold text-primary">&lt;50ms</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Throughput</p>
+                <p className="text-2xl font-bold text-primary">10K+/s</p>
+              </div>
+            </div>
+
+            {/* Action Section */}
+            <div className="flex gap-4 flex-wrap pt-6">
+              <Button size="lg" className="bg-primary hover:bg-primary/90">
+                Get Started Now
+              </Button>
+              <Button size="lg" variant="outline">
+                View Documentation
+              </Button>
+              <Button size="lg" variant="ghost">
+                Schedule Demo
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
 }

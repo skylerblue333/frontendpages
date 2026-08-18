@@ -1,18 +1,75 @@
-import { useMemo, useState } from "react";
-import { Archive, CheckCircle2, FileImage, FolderKanban, KeyRound, LockKeyhole, Plus, Search, Shield, Tags, Users, Wallet } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-type Asset = { id: string; name: string; kind: string; lifecycle: "Draft" | "Review required" | "Published unavailable"; owner: string; description: string };
-const ASSETS: Asset[] = [
-  { id: "brand", name: "SKYCOIN4444 brand kit", kind: "Design", lifecycle: "Review required", owner: "Design team", description: "A metadata example requiring source files, license, usage scope, and approval history." },
-  { id: "campaign", name: "Gaming launch campaign", kind: "Campaign", lifecycle: "Draft", owner: "Marketing workspace", description: "A campaign example requiring audience, channel, budget, consent, and outcome evidence." },
-  { id: "nft", name: "Creator collectible metadata", kind: "Digital asset", lifecycle: "Published unavailable", owner: "Creator workspace", description: "A digital-asset example requiring provenance, ownership, media integrity, and chain verification." },
-  { id: "course", name: "Sky School lesson pack", kind: "Education", lifecycle: "Review required", owner: "Curriculum team", description: "A lesson example requiring version, accessibility, contributor, and publication checks." },
-];
-const REQUIREMENTS = ["Owner and permission scope", "Source and license", "Version and integrity", "Visibility and approval", "Usage and retention", "Audit history"];
+export default function AssetManagement() {
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-export default function AssetManagement() { const [query, setQuery] = useState(""); const [assets, setAssets] = useState(ASSETS); const [selected, setSelected] = useState<Asset | null>(null); const [tab, setTab] = useState("catalog"); const [drafted, setDrafted] = useState(false); const visible = useMemo(() => assets.filter((asset) => `${asset.name} ${asset.kind} ${asset.lifecycle} ${asset.owner} ${asset.description}`.toLowerCase().includes(query.toLowerCase())), [assets, query]); const addAsset = () => { const draft = { id: `draft-${assets.length + 1}`, name: `New asset draft ${assets.length + 1}`, kind: "Unclassified", lifecycle: "Draft" as const, owner: "Local workspace", description: "Local asset placeholder; no file, ownership, valuation, or publication has been recorded." }; setAssets((current) => [draft, ...current]); setSelected(draft); setDrafted(true); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={FolderKanban} eyebrow="Workspace · Assets" title="Organize assets without inventing ownership or value." description="Explore asset records, lifecycle, permissions, provenance, and publication gates. This page does not claim stored files, balances, valuations, ownership, licensing, or completed publishing." badge="Preview asset manager"><div className="flex flex-wrap gap-2"><Button onClick={addAsset} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Plus className="mr-2 size-4" />Add local asset draft</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Shield className="mr-2 size-4" />Permission checklist</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Asset examples", value: String(assets.length), hint: "Local catalog records", icon: FolderKanban }, { label: "Stored files", value: "Unavailable", hint: "No asset store connected", icon: FileImage, tone: "amber" }, { label: "Publication", value: "Gated", hint: "Approval and provenance required", icon: Tags, tone: "violet" }, { label: "Valuation", value: "Not shown", hint: "No pricing or ownership claim", icon: Wallet, tone: "slate" }]} /><ScreenPreviewBanner title="Asset-management evidence boundary">Asset examples, search, local draft creation, lifecycle and permission views, provenance requirements, and unavailable storage state are available for UX review. No file, owner, balance, valuation, license, NFT ownership, publication, or sales result is fabricated.</ScreenPreviewBanner><section><div className="mb-5 flex flex-wrap gap-2 rounded-xl border border-white/10 bg-white/[0.04] p-2">{[["catalog", "Asset catalog"], ["lifecycle", "Lifecycle"], ["permissions", "Permissions"]].map(([value, label]) => <Button key={value} size="sm" variant={tab === value ? "default" : "outline"} onClick={() => setTab(value)} className={tab === value ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "border-white/15 bg-white/5 text-slate-300 hover:bg-white/10"}>{label}</Button>)}</div>{tab === "catalog" && <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search asset catalog" aria-label="Search asset catalog" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visible.map((asset) => <button key={asset.id} onClick={() => { setSelected(asset); setDrafted(false); }} className={`w-full rounded-xl border p-4 text-left transition ${selected?.id === asset.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><FolderKanban className="size-4 text-cyan-300" /><span className="font-semibold">{asset.name}</span><Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">{asset.lifecycle}</Badge></div><p className="mt-2 text-xs uppercase tracking-wider text-slate-500">{asset.kind} · {asset.owner}</p><p className="mt-2 text-sm leading-6 text-slate-400">{asset.description}</p></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No assets match" description="Try another asset name, type, or owner." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected asset</p><h2 className="mt-1 text-2xl font-bold">{selected.name}</h2><p className="mt-2 text-sm text-slate-400">{selected.kind} · {selected.owner}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.lifecycle}</Badge></div><p className="mt-5 text-sm leading-6 text-slate-300">{selected.description}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{REQUIREMENTS.map((item) => <div key={item} className="rounded-lg border border-white/10 bg-black/15 p-4"><CheckCircle2 className="size-4 text-emerald-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Evidence required</p></div>)}</div>{drafted && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-cyan-200"><FileImage className="size-4" />Local draft created</div><p className="mt-2 text-sm leading-6 text-slate-300">This draft is frontend state only. No file was uploaded, no owner assigned, and no asset published.</p></div>}</> : <ScreenStatePanel type="empty" title="Select an asset" description="Inspect owner, source, version, permission, publication, and audit requirements." />}</CardContent></Card></div>}{tab === "lifecycle" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Archive className="size-5 text-violet-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Lifecycle preview</p><h2 className="mt-1 text-2xl font-bold">Draft, review, publish, archive</h2></div></div><div className="mt-6 grid gap-3 md:grid-cols-4">{["Draft", "Review", "Published", "Archived"].map((stage, index) => <div key={stage} className="rounded-xl border border-white/10 bg-black/15 p-4"><div className="flex size-8 items-center justify-center rounded-lg bg-violet-300/10 text-violet-200">{index + 1}</div><h3 className="mt-4 font-semibold">{stage}</h3><p className="mt-2 text-sm leading-6 text-slate-400">Require owner, version, permission, and audit evidence before advancing.</p></div>)}</div></CardContent></Card>}{tab === "permissions" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><ScreenStatePanel type="unavailable" title="Asset permissions are not connected" description="No identity, file store, ownership record, licensing service, or publication workflow is connected to this preview." /><div className="mt-5 grid gap-3 md:grid-cols-3">{["Owner and collaborators", "License and usage scope", "Publication approval"].map((item) => <div key={item} className="rounded-xl border border-white/10 bg-black/15 p-4"><KeyRound className="size-4 text-cyan-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Required evidence</p></div>)}</div></CardContent></Card>}</section><ScreenFeatureGrid features={[{ title: "Provenance first", description: "Every asset needs source, license, owner, version, integrity, and publication evidence.", icon: FileImage, status: "Required" }, { title: "Permissions are scoped", description: "Separate view, edit, publish, export, and delete rights with role and audit context.", icon: KeyRound, status: "Required" }, { title: "No fake ownership", description: "A catalog example is not a stored file, wallet asset, valuation, sale, or published record.", icon: LockKeyhole, status: "Guardrail" }]} /></main></div>; }
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>AssetManagement</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">AssetManagement</h1>
+            <p className="text-muted-foreground mt-2">Marketing assets</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

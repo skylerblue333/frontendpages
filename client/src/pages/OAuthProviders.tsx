@@ -1,19 +1,74 @@
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Check, FileCheck2, Globe2, KeyRound, LockKeyhole, RefreshCw, Search, ShieldCheck, UserRound, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const PROVIDERS = [{ name: "Workspace identity", detail: "Synthetic enterprise SSO concept", scopes: ["identity", "basic profile"], icon: Globe2 }, { name: "Community identity", detail: "Synthetic social sign-in concept", scopes: ["identity", "public profile"], icon: UserRound }, { name: "Learning provider", detail: "Synthetic education connection concept", scopes: ["course access", "progress"], icon: KeyRound }, { name: "Wallet connector", detail: "High-risk connector concept", scopes: ["address only"], icon: ShieldCheck }];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function OAuthProviders() {
-  const [selected, setSelected] = useState(PROVIDERS[0].name);
-  const [consent, setConsent] = useState(false);
-  const [redirect, setRedirect] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [note, setNote] = useState("");
-  const provider = PROVIDERS.find((item) => item.name === selected) ?? PROVIDERS[0];
-  const reset = () => { setSelected(PROVIDERS[0].name); setConsent(false); setRedirect(false); setSaved(false); setNote(""); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={KeyRound} eyebrow="OAuthProviders · Integration readiness" title="Plan the consent before linking an identity." description="Review synthetic provider concepts, least-privilege scopes, consent and redirect gates, and token-off states. No login, account linking, token exchange, provider availability, identity verification, or backend integration is claimed." badge="OAuth preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Plan saved locally" : "Save integration plan"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset plan</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Providers", value: String(PROVIDERS.length), hint: "Synthetic concepts", icon: Globe2 }, { label: "Selected", value: provider.name, hint: "Local plan", icon: KeyRound, tone: "violet" }, { label: "Consent", value: consent ? "Local yes" : "Off", hint: "No legal consent", icon: ShieldCheck, tone: "amber" }, { label: "Token", value: "Off", hint: "No exchange", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="OAuthProviders evidence boundary"><strong>Provider cards, scope labels, consent/redirect toggles, and token-off state are integration-design fixtures—not provider availability, OAuth configuration, login, account linking, identity verification, token exchange, access grants, or security certification.</strong> Production OAuth requires registered clients, redirect URI controls, PKCE/state/nonce, least-privilege scopes, consent, token storage/rotation/revocation, session binding, provider contracts, monitoring, and incident response.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Provider catalog</p><h2 className="mt-2 text-3xl font-black">Choose a concept</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">No providers connected</Badge></div><div className="mt-5 space-y-3">{PROVIDERS.map((item) => { const Icon = item.icon; return <button key={item.name} onClick={() => { setSelected(item.name); setSaved(false); }} className={`flex w-full items-center gap-3 rounded-2xl border p-4 text-left ${selected === item.name ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/10"}`}><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-200"><Icon className="size-4" /></div><div className="flex-1"><p className="font-black">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><span className="text-xs text-slate-500">Unconfigured</span></button>; })}</div><div className="mt-5 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />Do not enter client secrets, access tokens, private keys, or personal login information into this preview.</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Integration worksheet</p><h2 className="mt-2 text-3xl font-black">{provider.name}</h2><p className="mt-3 text-slate-400">{provider.detail}</p><div className="mt-5 rounded-2xl border border-violet-300/20 bg-violet-300/[0.05] p-5"><p className="text-xs uppercase tracking-[0.2em] text-violet-200">Requested scopes</p><div className="mt-3 flex flex-wrap gap-2">{provider.scopes.map((scope) => <Badge key={scope} variant="outline" className="border-violet-300/30 text-violet-100">{scope}</Badge>)}</div><p className="mt-3 text-xs leading-5 text-slate-500">Scope names are planning concepts. No provider has approved or issued them.</p></div><div className="mt-5 space-y-3">{[{ label: "Provider registration", state: "Not configured" }, { label: "Redirect URI", state: redirect ? "Local planned" : "Unset" }, { label: "Consent", state: consent ? "Local acknowledged" : "Not collected" }, { label: "PKCE/state/nonce", state: "Not implemented" }, { label: "Token exchange", state: "Disabled" }].map((item) => <div key={item.label} className="flex items-center justify-between rounded-xl border border-white/10 p-3"><span className="text-sm text-slate-400">{item.label}</span><span className="text-xs text-amber-200">{item.state}</span></div>)}</div><div className="mt-5 flex flex-wrap gap-2"><Button onClick={() => { setConsent(!consent); setSaved(false); }} className="bg-violet-500 text-white hover:bg-violet-400">{consent ? "Clear local consent" : "Acknowledge locally"}</Button><Button onClick={() => { setRedirect(!redirect); setSaved(false); }} variant="outline" className="border-white/10 text-white">{redirect ? "Unset redirect" : "Plan redirect"}</Button><Button disabled variant="outline" className="border-white/10 text-white/40">Connect unavailable</Button></div><textarea value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} placeholder="Write a local scope, consent, or security note…" className="mt-5 min-h-24 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-slate-500" /></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">OAuth readiness</p><h2 className="mt-2 text-2xl font-black">Required before identity claims</h2><div className="mt-5 space-y-3">{["Provider registration, redirect allowlist, PKCE, state, nonce, and CSRF controls", "Least-privilege scopes, consent copy, identity mapping, and account linking", "Server-side token storage, rotation, revocation, encryption, and session binding", "Provider failures, timeouts, rate limits, retries, unlinking, and deletion", "Audit logs, privacy, support, incident response, and security review"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><FileCheck2 className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake OAuth</h2><p className="mt-3 text-sm leading-6 text-slate-400">This workspace changes local state only. It does not open a provider, log in, link an account, exchange a token, read identity, or persist credentials.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A provider card is not a connection", description: "Synthetic providers preserve planning UX without availability, login, identity, or token claims.", icon: Globe2, status: "Guardrail" }, { title: "Tokens need custody", description: "PKCE, state, scopes, server storage, rotation, revocation, privacy, and support need evidence.", icon: ShieldCheck, status: "Required" }, { title: "No fake login", description: "The preview makes no OAuth, account, token, identity, or provider request.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>OAuthProviders</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">OAuthProviders</h1>
+            <p className="text-muted-foreground mt-2">OAuth setup</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

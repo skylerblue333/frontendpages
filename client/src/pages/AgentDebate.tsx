@@ -227,9 +227,9 @@ export default function AgentDebate() {
                           <CardTitle className="text-white text-lg">{agent.name}</CardTitle>
                           <CardDescription>{agent.role}</CardDescription>
                         </div>
-                        <Badge 
+                        <Badge
                           className={
-                            agent.recommendation === 'ACCELERATE' 
+                            agent.recommendation === 'ACCELERATE'
                               ? 'bg-green-900 text-green-300'
                               : agent.recommendation === 'DEFER'
                               ? 'bg-yellow-900 text-yellow-300'
@@ -242,12 +242,12 @@ export default function AgentDebate() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <p className="text-sm text-gray-300">{agent.perspective}</p>
-                      
+
                       <div className="space-y-2">
                         <p className="text-xs text-gray-400 font-medium">Confidence: {Math.round(agent.confidence * 100)}%</p>
                         <div className="w-full bg-slate-700 rounded-full h-2">
-                          <div 
-                            className="bg-purple-500 h-2 rounded-full" 
+                          <div
+                            className="bg-purple-500 h-2 rounded-full"
                             style={{ width: `${agent.confidence * 100}%` }}
                           />
                         </div>
@@ -286,7 +286,7 @@ export default function AgentDebate() {
                       <Radar name="Finance" dataKey="finance" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.25} />
                       <Radar name="Customer" dataKey="customer" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.25} />
                       <Legend />
-                      <Tooltip 
+                      <Tooltip
                         contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
                         labelStyle={{ color: '#fff' }}
                       />
@@ -309,8 +309,8 @@ export default function AgentDebate() {
                       <p className="text-sm text-gray-400 mb-2">{item.name}</p>
                       <p className="text-3xl font-bold text-white mb-2">{item.value}%</p>
                       <div className="w-full bg-slate-700 rounded-full h-2">
-                        <div 
-                          className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full" 
+                        <div
+                          className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full"
                           style={{ width: `${item.value}%` }}
                         />
                       </div>

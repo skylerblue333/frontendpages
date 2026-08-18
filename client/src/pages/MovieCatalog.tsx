@@ -1,23 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Bookmark, Check, Clapperboard, Film, Filter, Heart, Info, Play, RefreshCw, Search, ShieldCheck, Star, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const MOVIES = [{ title: "Signal Beyond the Blue", genre: "Sci-fi", format: "Feature", year: "Preview year", description: "A synthetic discovery card for a future-facing story about signals, trust, and the unknown.", tone: "Atmospheric" }, { title: "The Last Lantern", genre: "Drama", format: "Feature", year: "Preview year", description: "A local catalog concept about memory, community, and one difficult promise.", tone: "Reflective" }, { title: "Orbit of Small Things", genre: "Animation", format: "Short", year: "Preview year", description: "A playful short-form concept built for a visual browsing experience.", tone: "Playful" }, { title: "Night Market Radio", genre: "Documentary", format: "Series", year: "Preview year", description: "An editorial placeholder exploring voices, places, and late-night connection.", tone: "Observational" }, { title: "Garden State of Mind", genre: "Comedy", format: "Feature", year: "Preview year", description: "A light local title concept for testing genre discovery and watchlist flows.", tone: "Warm" }, { title: "Paper Satellites", genre: "Thriller", format: "Short", year: "Preview year", description: "A tense synthetic title card for evaluating detail and availability states.", tone: "Tense" }];
-const GENRES = ["All", "Sci-fi", "Drama", "Animation", "Documentary", "Comedy", "Thriller"];
-const FORMATS = ["All formats", "Feature", "Short", "Series"];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function MovieCatalog() {
-  const [query, setQuery] = useState("");
-  const [genre, setGenre] = useState("All");
-  const [format, setFormat] = useState("All formats");
-  const [selected, setSelected] = useState(MOVIES[0].title);
-  const [watchlist, setWatchlist] = useState<string[]>([]);
-  const [saved, setSaved] = useState(false);
-  const movie = MOVIES.find((item) => item.title === selected) ?? MOVIES[0];
-  const visible = useMemo(() => MOVIES.filter((item) => (genre === "All" || item.genre === genre) && (format === "All formats" || item.format === format) && `${item.title} ${item.genre} ${item.format} ${item.description}`.toLowerCase().includes(query.toLowerCase())), [format, genre, query]);
-  const toggleWatchlist = (title: string) => { setWatchlist((current) => current.includes(title) ? current.filter((item) => item !== title) : [...current, title]); setSaved(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Clapperboard} eyebrow="MovieCatalog · Discovery" title="Browse a story world before claiming a streaming library." description="Explore synthetic movie cards, search and filter discovery, local watchlist state, and selected-title detail. No live catalog, rating source, licensing, availability, playback, subscription, or personalization is asserted." badge="Catalog preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Catalog plan saved locally" : "Save catalog plan"}</Button><Button onClick={() => { setQuery(""); setGenre("All"); setFormat("All formats"); setSelected(MOVIES[0].title); setWatchlist([]); setSaved(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset catalog</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Titles", value: String(MOVIES.length), hint: "Synthetic discovery cards", icon: Film }, { label: "Genres", value: String(GENRES.length - 1), hint: "Local filter groups", icon: Filter, tone: "violet" }, { label: "Watchlist", value: String(watchlist.length), hint: "Local only", icon: Bookmark, tone: "amber" }, { label: "Playback", value: "Off", hint: "No media source", icon: Play, tone: "slate" }]} /><ScreenPreviewBanner title="MovieCatalog evidence boundary"><strong>Titles, genres, formats, descriptions, and watchlist state are synthetic catalog fixtures—not a live content library, rating or review source, licensing record, availability result, playback service, subscription entitlement, or recommendation metric.</strong> Production catalog functionality requires rights and territory data, content metadata provenance, provider availability, age ratings, privacy, playback delivery, and support.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search synthetic titles" className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 flex gap-2 overflow-x-auto">{GENRES.map((item) => <button key={item} onClick={() => setGenre(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${genre === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-3 flex gap-2 overflow-x-auto">{FORMATS.map((item) => <button key={item} onClick={() => setFormat(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${format === item ? "border-violet-300/40 bg-violet-300/[0.1] text-violet-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2">{visible.map((item) => <div key={item.title} className={`rounded-2xl border p-4 ${selected === item.title ? "border-cyan-300/40 bg-cyan-300/[0.07]" : "border-white/10 bg-black/10"}`}><button onClick={() => { setSelected(item.title); setSaved(false); }} className="w-full text-left"><div className="flex items-start gap-3"><div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-violet-300/10 text-violet-200"><Film className="size-5" /></div><div className="min-w-0 flex-1"><div className="flex items-start justify-between gap-2"><h2 className="font-black leading-tight">{item.title}</h2><Badge variant="outline" className="border-amber-300/20 text-[10px] text-amber-200">{item.format}</Badge></div><p className="mt-1 text-xs text-cyan-200">{item.genre} · {item.tone}</p><p className="mt-2 text-sm text-slate-400">{item.description}</p></div></div></button><div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3"><span className="text-xs text-slate-500">{item.year}</span><button onClick={() => toggleWatchlist(item.title)} className={`rounded-lg p-2 ${watchlist.includes(item.title) ? "bg-cyan-300/15 text-cyan-200" : "text-slate-500 hover:bg-white/10"}`} aria-label={`Toggle ${item.title} watchlist`}><Heart className={`size-4 ${watchlist.includes(item.title) ? "fill-current" : ""}`} /></button></div></div>)}{visible.length === 0 && <div className="col-span-full p-8 text-center text-slate-500">No synthetic titles match these filters.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Selected title</p><h2 className="mt-2 text-3xl font-black">{movie.title}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{movie.genre}</Badge></div><p className="mt-4 text-slate-400">{movie.description}</p><div className="mt-5 aspect-video rounded-2xl border border-white/10 bg-gradient-to-br from-cyan-300/10 via-violet-400/10 to-rose-300/10 p-5"><div className="flex h-full flex-col justify-between"><div className="flex items-center justify-between"><span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-slate-400">Poster placeholder</span><Badge variant="outline" className="border-white/10 text-slate-400">{movie.format}</Badge></div><div><p className="text-xs uppercase tracking-[0.2em] text-cyan-200">{movie.tone} · local concept</p><h3 className="mt-2 text-2xl font-black">{movie.title}</h3></div></div></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Availability", value: "Not sourced" }, { label: "Rating", value: "Not assigned" }, { label: "Playback", value: "Unavailable" }, { label: "Watchlist", value: watchlist.includes(movie.title) ? "Saved locally" : "Not saved" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-4 flex gap-2"><Button onClick={() => toggleWatchlist(movie.title)} className="bg-violet-500 text-white hover:bg-violet-400"><Bookmark className="mr-2 size-4" />{watchlist.includes(movie.title) ? "Remove from watchlist" : "Save to watchlist"}</Button><Button disabled variant="outline" className="border-white/10 text-white/40"><Play className="mr-2 size-4" />Play unavailable</Button></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Catalog readiness</p><h2 className="mt-2 text-2xl font-black">Required before availability claims</h2><div className="mt-5 space-y-3">{["Metadata source, title ownership, and rights", "Territory, window, age rating, and accessibility", "Availability provider and freshness", "Playback delivery, DRM, and device support", "Subscription, entitlement, privacy, and support"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><Info className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake playback</h2><p className="mt-3 text-sm leading-6 text-slate-400">The catalog does not claim a movie is streamable, licensed, rated, available in a region, or included in a subscription.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A title card is not a license", description: "Synthetic discovery cards preserve browsing UX without rights, territory, or availability claims.", icon: Film, status: "Guardrail" }, { title: "Watchlist is local", description: "The local watchlist demonstrates interaction without account sync or recommendation analytics.", icon: Bookmark, status: "Local" }, { title: "No fake playback", description: "Playback remains unavailable until media delivery, rights, age ratings, and support are verified.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>MovieCatalog</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">MovieCatalog</h1>
+            <p className="text-muted-foreground mt-2">Browse movies</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

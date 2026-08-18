@@ -1,13 +1,75 @@
-import { useMemo, useState } from "react";
-import { AlertTriangle, Bug, Check, CheckCircle2, ClipboardCheck, Code2, Copy, FileText, Flag, Globe2, Laptop, LockKeyhole, Monitor, RefreshCw, Search, Send, ShieldAlert, Sparkles, Tag, WifiOff, XCircle } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-const SEVERITIES = ["Low", "Medium", "High", "Blocker"] as const;
-const CHECKS = ["Reproduction steps", "Expected result", "Actual result", "Environment", "Console or network evidence", "Privacy review"];
+export default function BugReporting() {
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-export default function BugReporting() { const [title, setTitle] = useState(""); const [steps, setSteps] = useState(""); const [expected, setExpected] = useState(""); const [actual, setActual] = useState(""); const [severity, setSeverity] = useState<(typeof SEVERITIES)[number]>("Medium"); const [environment, setEnvironment] = useState("Browser preview"); const [saved, setSaved] = useState(false); const [submitted, setSubmitted] = useState(false); const [search, setSearch] = useState(""); const [checked, setChecked] = useState<string[]>([]); const completion = useMemo(() => Math.round((checked.length / CHECKS.length) * 100), [checked]); const canPrepare = title.trim().length > 4 && steps.trim().length > 10 && expected.trim().length > 4 && actual.trim().length > 4; const toggleCheck = (item: string) => setChecked((current) => current.includes(item) ? current.filter((value) => value !== item) : [...current, item]); const prepare = () => { if (canPrepare) { setSaved(true); setSubmitted(false); } }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Bug} eyebrow="Quality Engineering · Issue Intake" title="Turn a frustrating moment into a reproducible signal." description="Capture the context an engineer needs, inspect the evidence checklist, and prepare a local issue draft. This page does not create a ticket, assign an engineer, promise an SLA, notify a team, or claim a fix." badge="Preview bug report workflow"><div className="flex flex-wrap gap-2"><Button onClick={prepare} className="bg-rose-300 text-slate-950 hover:bg-rose-200"><ClipboardCheck className="mr-2 size-4" />Prepare local report</Button><Button onClick={() => { setTitle(""); setSteps(""); setExpected(""); setActual(""); setChecked([]); setSaved(false); setSubmitted(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset draft</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Draft readiness", value: `${completion}%`, hint: "Evidence checklist", icon: ClipboardCheck }, { label: "Severity", value: severity, hint: "Reporter-selected", icon: Flag, tone: severity === "Blocker" ? "amber" : "violet" }, { label: "Ticket system", value: "Unavailable", hint: "No issue API connected", icon: WifiOff, tone: "amber" }, { label: "Notifications", value: "Not sent", hint: "No team or reporter contact", icon: Send, tone: "slate" }]} /><ScreenPreviewBanner title="Issue-reporting evidence boundary">A local draft is not a ticket, incident, assignment, SLA, notification, root cause, fix, or release. A production workflow must authenticate the reporter, sanitize content and attachments, preserve privacy, deduplicate reports, capture immutable status history, and confirm delivery to the engineering system.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-rose-300">Reproduction draft</p><h2 className="mt-1 text-2xl font-black">What went wrong?</h2></div><Bug className="size-5 text-rose-300" /></div><div className="mt-6 space-y-5"><div><label className="mb-2 block text-sm font-medium text-slate-300" htmlFor="bug-title">Short title</label><Input id="bug-title" value={title} onChange={(event) => { setTitle(event.target.value); setSaved(false); }} placeholder="Example: Save button remains disabled after valid input" className="border-white/10 bg-black/20 text-white placeholder:text-slate-500" /></div><div><label className="mb-2 block text-sm font-medium text-slate-300" htmlFor="bug-steps">Steps to reproduce</label><Textarea id="bug-steps" value={steps} onChange={(event) => { setSteps(event.target.value); setSaved(false); }} placeholder="1. Open…\n2. Enter…\n3. Select…" className="min-h-24 border-white/10 bg-black/20 text-white placeholder:text-slate-500" /></div><div className="grid gap-4 sm:grid-cols-2"><div><label className="mb-2 block text-sm font-medium text-slate-300" htmlFor="expected">Expected result</label><Textarea id="expected" value={expected} onChange={(event) => { setExpected(event.target.value); setSaved(false); }} className="min-h-24 border-white/10 bg-black/20 text-white placeholder:text-slate-500" /></div><div><label className="mb-2 block text-sm font-medium text-slate-300" htmlFor="actual">Actual result</label><Textarea id="actual" value={actual} onChange={(event) => { setActual(event.target.value); setSaved(false); }} className="min-h-24 border-white/10 bg-black/20 text-white placeholder:text-slate-500" /></div></div><div><p className="mb-2 text-sm font-medium text-slate-300">Severity</p><div className="flex flex-wrap gap-2">{SEVERITIES.map((item) => <button key={item} onClick={() => { setSeverity(item); setSaved(false); }} className={`rounded-lg border px-3 py-2 text-xs transition ${severity === item ? "border-rose-300/40 bg-rose-300/10 text-rose-200" : "border-white/10 bg-black/15 text-slate-500 hover:text-white"}`}>{item}</button>)}</div></div></div></CardContent></Card><div className="space-y-6"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Evidence checklist</p><h2 className="mt-1 text-xl font-bold">Make it actionable</h2></div><span className="text-2xl font-black text-cyan-200">{completion}%</span></div><div className="mt-5 space-y-2">{CHECKS.map((item) => <button key={item} onClick={() => toggleCheck(item)} className="flex w-full items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-3 text-left"><span className={`flex size-5 items-center justify-center rounded border ${checked.includes(item) ? "border-emerald-300 bg-emerald-300 text-slate-950" : "border-white/20"}`}>{checked.includes(item) && <Check className="size-3" />}</span><span className="flex-1 text-sm text-slate-300">{item}</span></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-2"><Monitor className="size-4 text-violet-300" /><h2 className="font-semibold">Environment snapshot</h2></div><Input value={environment} onChange={(event) => setEnvironment(event.target.value)} aria-label="Environment snapshot" className="mt-4 border-white/10 bg-black/20 text-white" /><p className="mt-2 text-xs leading-5 text-slate-500">Capture browser, device, build, locale, network mode, and feature flags without exposing secrets or personal data.</p></CardContent></Card></div></section><section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Search className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Triage preview</p><h2 className="mt-1 text-xl font-bold">Search known patterns</h2></div></div><Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search error keywords" aria-label="Search error keywords" className="mt-5 border-white/10 bg-black/20 text-white placeholder:text-slate-500" /><div className="mt-4 rounded-xl border border-white/10 bg-black/15 p-4"><p className="text-sm text-slate-300">{search ? `No connected issue index for “${search}”.` : "No connected issue index. Search is a UI preview only."}</p><p className="mt-2 text-xs leading-5 text-slate-500">Do not imply duplicate detection, known issue matches, or incident linkage without a server response.</p></div></CardContent></Card><Card className="border-rose-300/20 bg-rose-300/[0.05]"><CardContent className="p-6"><div className="flex items-center gap-2 text-rose-200"><ShieldAlert className="size-5" /><h2 className="text-xl font-bold">Privacy before attachments</h2></div><p className="mt-4 text-sm leading-7 text-slate-300">Screenshots, logs, URLs, and recordings can contain tokens, personal information, private messages, or financial data. Redaction and consent are required before upload.</p><div className="mt-5 flex flex-wrap gap-2"><Badge variant="outline" className="border-rose-300/20 text-rose-200">No upload connected</Badge><Badge variant="outline" className="border-white/15 text-slate-400">No ticket created</Badge></div></CardContent></Card></section>{saved && <Card className="border-cyan-300/20 bg-cyan-300/[0.06]"><CardContent className="flex items-center gap-3 p-5"><CheckCircle2 className="size-5 text-cyan-300" /><div><p className="font-semibold">Local report prepared</p><p className="mt-1 text-sm text-slate-400">No ticket, assignment, SLA, notification, or engineering status was created.</p></div><Button onClick={() => setSubmitted(true)} variant="outline" className="ml-auto border-white/15 text-white">Preview submit state</Button></CardContent></Card>}{submitted && <ScreenStatePanel type="success" title="Submission preview complete" description="This is a local confirmation state only. No issue was sent to an engineering system." />}<ScreenFeatureGrid features={[{ title: "Reproduction over drama", description: "Steps, expected result, actual result, environment, and evidence make a report actionable.", icon: FileText, status: "Ready" }, { title: "Triage is not resolution", description: "Severity and matching are reporter-facing inputs, not root cause, assignment, priority, or an SLA promise.", icon: ShieldAlert, status: "Guardrail" }, { title: "Redact before upload", description: "Logs, screenshots, and URLs need privacy review before a real attachment pipeline accepts them.", icon: LockKeyhole, status: "Required" }]} /></main></div>; }
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>BugReporting</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">BugReporting</h1>
+            <p className="text-muted-foreground mt-2">Report bugs</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

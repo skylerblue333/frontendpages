@@ -1,24 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Check, FileText, Image, LockKeyhole, Plus, RefreshCw, Search, ShieldAlert, SlidersHorizontal, Store, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-type Listing = { id: string; title: string; category: string; summary: string; status: string; evidence: string };
-const initial: Listing[] = [{ id: "list-001", title: "HopeAI workspace", category: "AI", summary: "Evidence-aware AI interaction concept.", status: "Draft", evidence: "Required" }, { id: "list-002", title: "SkySchool learning", category: "Education", summary: "Guided learning experience concept.", status: "Review required", evidence: "Required" }, { id: "list-003", title: "Crypto Hub", category: "Financial", summary: "Wallet and market surface concept.", status: "Blocked", evidence: "High-risk review" }];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
+
 export default function ProductListing() {
-  const [listings, setListings] = useState(initial);
-  const [query, setQuery] = useState("");
-  const [selectedId, setSelectedId] = useState(initial[0].id);
-  const [title, setTitle] = useState(initial[0].title);
-  const [summary, setSummary] = useState(initial[0].summary);
-  const [saved, setSaved] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
-  const visible = useMemo(() => listings.filter((item) => `${item.title} ${item.category} ${item.status}`.toLowerCase().includes(query.toLowerCase())), [listings, query]);
-  const selected = listings.find((item) => item.id === selectedId) ?? listings[0];
-  const select = (item: Listing) => { setSelectedId(item.id); setTitle(item.title); setSummary(item.summary); setSaved(false); };
-  const addListing = () => { const id = `list-${Date.now()}`; const next: Listing = { id, title: "Untitled local listing", category: "Uncategorized", summary: "Draft description", status: "Draft", evidence: "Required" }; setListings((items) => [next, ...items]); select(next); };
-  const save = () => { setListings((items) => items.map((item) => item.id === selectedId ? { ...item, title, summary } : item)); setSaved(true); };
-  const reset = () => { setListings(initial); setQuery(""); select(initial[0]); setShowPreview(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Store} eyebrow="ProductListing · Listing studio preview" title="Draft a clear listing before publishing a claim." description="Create and inspect local listing drafts with title, category, summary, evidence status, preview, and publishing gates. No live catalog, price, inventory, seller identity, review, checkout, or public publication is connected." badge="Listing studio"><div className="flex flex-wrap gap-2"><Button onClick={save} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Draft saved locally" : "Save draft locally"}</Button><Button onClick={addListing} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Plus className="mr-2 size-4" />New draft</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Drafts", value: String(listings.length), hint: "Local listings", icon: Store, tone: "cyan" }, { label: "Published", value: "0", hint: "Publication blocked", icon: LockKeyhole, tone: "violet" }, { label: "Evidence", value: "Required", hint: "No source ledger", icon: FileText, tone: "amber" }, { label: "Inventory", value: "Unknown", hint: "No commerce source", icon: ShieldAlert, tone: "slate" }]} /><ScreenPreviewBanner title="Listing evidence boundary"><strong>This is a local listing editor, not a live marketplace.</strong> Draft titles, categories, summaries, statuses, and evidence labels are browser-state concepts. No seller, price, inventory, image ownership, rating, review, customer, checkout, payment, fulfillment, or public publication is claimed or executed.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1.18fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Listing drafts</p><h2 className="mt-2 text-2xl font-black">Choose a local listing</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">{visible.length} listed</Badge></div><div className="relative mt-5"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search drafts…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="mt-4 space-y-3">{visible.map((item) => <button key={item.id} onClick={() => select(item)} className={`w-full rounded-xl border p-4 text-left ${selected.id === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start gap-3"><Store className="mt-1 size-5 text-cyan-200" /><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{item.title}</p><Badge variant="outline" className="border-white/10 text-slate-400">{item.status}</Badge></div><p className="mt-2 text-sm text-slate-500">{item.category} · Evidence {item.evidence}</p></div></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Draft editor</p><h2 className="mt-2 text-2xl font-black">{selected.title}</h2><p className="mt-2 text-sm text-slate-500">Local editable fields · not published</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><div className="mt-6 space-y-4"><label className="block text-sm text-slate-400">Listing title<input value={title} onChange={(event) => setTitle(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-white outline-none focus:border-cyan-300/50" /></label><label className="block text-sm text-slate-400">Summary<textarea value={summary} onChange={(event) => setSummary(event.target.value)} className="mt-2 min-h-28 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-white outline-none focus:border-cyan-300/50" /></label></div><div className="mt-6 grid gap-3 sm:grid-cols-3">{[{ label: "Category", value: selected.category }, { label: "Evidence", value: selected.evidence }, { label: "Publish", value: "Blocked" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 flex flex-wrap gap-2"><Button onClick={() => setShowPreview((value) => !value)} variant="outline" className="border-white/10 text-slate-300">{showPreview ? <X className="mr-2 size-4" /> : <Image className="mr-2 size-4" />}{showPreview ? "Close preview" : "Preview draft"}</Button><Button disabled className="bg-slate-700 text-slate-400">Publish unavailable</Button></div>{showPreview && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.05] p-5"><p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-300">Preview</p><h3 className="mt-2 text-xl font-black">{title || "Untitled listing"}</h3><p className="mt-2 text-sm leading-6 text-slate-400">{summary || "No summary drafted."}</p><p className="mt-4 text-xs text-amber-200">Local preview only · no public URL or customer visibility.</p></div>}<div className="mt-6 rounded-2xl border border-amber-300/25 bg-amber-300/[0.06] p-5"><div className="flex items-start gap-3"><LockKeyhole className="mt-0.5 size-5 shrink-0 text-amber-200" /><div><p className="font-semibold text-amber-100">Publishing is blocked</p><p className="mt-2 text-sm leading-6 text-slate-400">A real listing needs authenticated ownership, content moderation, asset rights, price/inventory source, review, audit, and a commerce deployment path.</p></div></div></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Listing gates</p><h2 className="mt-2 text-2xl font-black">What publication must prove</h2><div className="mt-5 space-y-3">{["Authenticated owner and role-scoped edit permissions", "Accurate product data, category, price, inventory, and effective dates", "Asset ownership, accessibility, moderation, and prohibited-content review", "Evidence for ratings, reviews, capabilities, and availability", "Audit, rollback, support, checkout, payment, fulfillment, and outage behavior"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><FileText className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Listing surface preserved", description: "Draft search, local creation, title/summary editing, selected detail, preview, save/reset, evidence labels, and publish state remain interactive.", icon: Store, status: "Local studio" }, { title: "No marketplace theater", description: "Seller identity, prices, inventory, assets, reviews, ratings, customers, checkout, payment, and fulfillment are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Governance before publish", description: "Publication remains unavailable until ownership, content, commerce, audit, support, and rollback requirements exist.", icon: LockKeyhole, status: "Blocked" }]} /></section></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>ProductListing</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">ProductListing</h1>
+            <p className="text-muted-foreground mt-2">Create and edit product listings</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

@@ -1,21 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Check, FileText, Home, LockKeyhole, MapPin, RefreshCw, Search, ShieldAlert, SlidersHorizontal, Star, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const properties = [{ id: 1, name: "Urban studio concept", type: "Apartment", location: "Location unverified", summary: "A local comparison concept for evaluating access, layout, and evidence." }, { id: 2, name: "Garden townhouse concept", type: "Townhouse", location: "Location unverified", summary: "A local comparison concept for evaluating space, maintenance, and disclosure." }, { id: 3, name: "Skyline workspace concept", type: "Workspace", location: "Location unverified", summary: "A local comparison concept for evaluating use, access, and operating assumptions." }];
-const criteria = ["Location", "Layout", "Condition", "Operating cost", "Evidence"];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
+
 export default function PropertyComparison() {
-  const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState(properties[0].id);
-  const [compareIds, setCompareIds] = useState<number[]>([1, 2]);
-  const [note, setNote] = useState("");
-  const [saved, setSaved] = useState(false);
-  const [showGates, setShowGates] = useState(false);
-  const filtered = useMemo(() => properties.filter((property) => `${property.name} ${property.type} ${property.summary}`.toLowerCase().includes(query.toLowerCase())), [query]);
-  const selectedProperty = properties.find((property) => property.id === selected) ?? properties[0];
-  const toggleCompare = (id: number) => setCompareIds((items) => items.includes(id) ? items.filter((item) => item !== id) : [...items, id]);
-  const reset = () => { setQuery(""); setSelected(1); setCompareIds([1, 2]); setNote(""); setSaved(false); setShowGates(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Home} eyebrow="PropertyComparison · Decision preview" title="Compare criteria without pretending to value an asset." description="Explore a local property comparison set with search, selection, criteria, trade-off notes, location posture, valuation, financing, and purchase boundaries. No property, price, valuation, ownership, availability, rating, financing, or transaction is verified." badge="Comparison workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Comparison saved locally" : "Save comparison locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review property gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset comparison</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Compared", value: `${compareIds.length} local`, hint: "No listing source", icon: Home, tone: "cyan" }, { label: "Value", value: "Unmeasured", hint: "No appraisal source", icon: SlidersHorizontal, tone: "violet" }, { label: "Availability", value: "Unknown", hint: "No inventory source", icon: MapPin, tone: "amber" }, { label: "Decision", value: "Not provided", hint: "No recommendation", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Property comparison evidence boundary"><strong>This is a local comparison worksheet, not a real-estate listing or financial recommendation.</strong> Property names, criteria, notes, comparison selection, and saved state are browser concepts. No price, valuation, rent, mortgage, tax, ownership, availability, location, rating, legal title, inspection, financing, transaction, or investment conclusion is asserted.</ScreenPreviewBanner><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local property concepts" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-6 grid gap-4 md:grid-cols-3">{filtered.map((property) => <button key={property.id} onClick={() => setSelected(property.id)} className={`rounded-2xl border p-5 text-left ${selected === property.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><h2 className="font-black">{property.name}</h2><Badge variant="outline" className="border-amber-300/20 text-amber-200">Unverified</Badge></div><p className="mt-3 text-sm leading-6 text-slate-400">{property.summary}</p><div className="mt-5 flex flex-wrap gap-2"><Badge variant="outline" className="border-white/10 text-slate-500">{property.type}</Badge><Badge variant="outline" className="border-white/10 text-slate-500">{property.location}</Badge></div></button>)}</div></CardContent></Card><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected concept</p><h2 className="mt-2 text-2xl font-black">{selectedProperty.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{selectedProperty.summary}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Type", value: selectedProperty.type }, { label: "Location", value: selectedProperty.location }, { label: "Price", value: "Unpublished" }, { label: "Valuation", value: "Unmeasured" }, { label: "Availability", value: "Unknown" }, { label: "Ownership", value: "Unverified" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><label className="mt-5 block text-sm text-slate-400">Trade-off note<textarea value={note} onChange={(event) => setNote(event.target.value)} rows={3} placeholder="Record what you would need to verify..." className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none" /></label>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No property recommendation</p><p className="mt-2 text-sm leading-6 text-slate-400">A local comparison does not determine suitability, fair value, affordability, financing eligibility, legal title, or whether to buy, rent, sell, or invest.</p></div>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Criteria matrix</p><h2 className="mt-2 text-2xl font-black">Compare what is known</h2></div><Badge variant="outline" className="border-white/10 text-slate-500">{compareIds.length} selected</Badge></div><div className="mt-6 overflow-x-auto"><table className="w-full min-w-[520px] text-left"><thead><tr className="border-b border-white/10 text-xs uppercase tracking-wider text-slate-500"><th className="pb-3">Criterion</th>{properties.filter((property) => compareIds.includes(property.id)).map((property) => <th key={property.id} className="pb-3">{property.name}</th>)}</tr></thead><tbody>{criteria.map((criterion) => <tr key={criterion} className="border-b border-white/10"><td className="py-4 text-sm text-slate-300">{criterion}</td>{properties.filter((property) => compareIds.includes(property.id)).map((property) => <td key={property.id} className="py-4"><span className="text-sm text-amber-200">{criterion === "Evidence" ? "Needs source" : "Unmeasured"}</span></td>)}</tr>)}</tbody></table></div><div className="mt-6 flex flex-wrap gap-2">{properties.map((property) => <button key={property.id} onClick={() => toggleCompare(property.id)} className={`rounded-lg border px-3 py-2 text-xs ${compareIds.includes(property.id) ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500"}`}>{compareIds.includes(property.id) ? "Remove " : "Add "}{property.name}</button>)}</div></CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Property decision gates</p><h2 className="mt-2 text-2xl font-black">What a real comparison must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Verified listing source, address, ownership, title, and legal status", "Independent valuation, comparable evidence, condition, inspection, and disclosures", "Price, rent, taxes, fees, insurance, utilities, maintenance, and cash flow", "Mortgage, credit, rate, affordability, underwriting, and tax treatment", "Location, zoning, access, safety, environmental, and regional applicability", "No buy, sell, rent, or investment recommendation without qualified review"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Comparison surface preserved", description: "Search, selection, compare set, criteria matrix, trade-off notes, location/value/availability posture, save/reset, and decision gates remain interactive.", icon: Home, status: "Local comparison" }, { title: "No property theater", description: "Prices, valuations, ownership, availability, ratings, financing, affordability, and transactions are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before action", description: "Real property decisions require verified sources, legal and financial review, regional context, and qualified advice.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>PropertyComparison</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">PropertyComparison</h1>
+            <p className="text-muted-foreground mt-2">Compare properties</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

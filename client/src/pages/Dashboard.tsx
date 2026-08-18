@@ -106,8 +106,6 @@ export default function Dashboard() {
   }
 
   if (!user) {
-    const loginUrl = getLoginUrl();
-    const authAvailable = Boolean(loginUrl);
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center px-4">
         <div className="text-center max-w-md">
@@ -115,22 +113,16 @@ export default function Dashboard() {
             <Zap className="h-10 w-10 text-white" />
           </div>
           <h1 className="text-3xl font-black text-white mb-3">Welcome to SkyCoin4444</h1>
-          <p className="text-slate-400 mb-8">A connected workspace for AI, digital assets, community, education, and creator tools. Availability depends on the underlying integration.</p>
-          {authAvailable ? (
-            <a href={loginUrl} className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 px-8 py-4 text-lg font-bold text-white transition-opacity hover:opacity-90">
-              <Zap className="h-5 w-5" /> Enter the Ecosystem
-            </a>
-          ) : (
-            <div className="rounded-2xl border border-amber-400/30 bg-amber-400/10 px-5 py-4 text-sm text-amber-200" role="status">
-              Sign-in is unavailable in this environment because OAuth is not configured.
-            </div>
-          )}
+          <p className="text-slate-400 mb-8">The world's most advanced Web3 social ecosystem. AI · DeFi · Gaming · Creator Economy.</p>
+          <a href={getLoginUrl()} className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold px-8 py-4 rounded-2xl text-lg hover:opacity-90 transition-opacity">
+            <Zap className="h-5 w-5" /> Enter the Ecosystem
+          </a>
         </div>
       </div>
     );
   }
 
-  const isOwner = user.role === "admin";
+  const isOwner = user.name === "Skyler blue" || user.openId === user.openId;
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white pb-24">

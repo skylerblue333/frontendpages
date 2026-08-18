@@ -1,13 +1,74 @@
-import { useMemo, useState } from "react";
-import { AlertTriangle, Check, CheckCircle2, ChevronRight, ClipboardCheck, Database, FileWarning, Filter, LockKeyhole, PlayCircle, RefreshCw, Search, ShieldAlert, Square, SquareCheck, Tag, Timer, Undo2, UserRound, WifiOff, XCircle } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-type Target = { id: string; name: string; kind: string; state: "Preview target" | "Needs review" | "Protected"; tags: string[] };
-const TARGETS: Target[] = [{ id: "target-001", name: "Synthetic community cohort", kind: "Content records", state: "Preview target", tags: ["synthetic", "community"] }, { id: "target-002", name: "Unverified notification cohort", kind: "Notification records", state: "Needs review", tags: ["notifications", "consent"] }, { id: "target-003", name: "Protected finance records", kind: "Financial records", state: "Protected", tags: ["high-risk", "restricted"] }, { id: "target-004", name: "Preview campaign cohort", kind: "Campaign records", state: "Preview target", tags: ["campaign", "draft"] }];
-const ACTIONS = ["Tag records", "Archive records", "Export manifest", "Request review"];
+export default function BulkOperations() {
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-export default function BulkOperations() { const [query, setQuery] = useState(""); const [selected, setSelected] = useState<string[]>(["target-001", "target-004"]); const [action, setAction] = useState(ACTIONS[0]); const [prepared, setPrepared] = useState(false); const [confirmed, setConfirmed] = useState(false); const visible = useMemo(() => TARGETS.filter((target) => `${target.id} ${target.name} ${target.kind} ${target.tags.join(" ")}`.toLowerCase().includes(query.toLowerCase())), [query]); const toggle = (id: string) => { setSelected((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]); setPrepared(false); setConfirmed(false); }; const safeTargets = TARGETS.filter((target) => selected.includes(target.id) && target.state !== "Protected"); const prepare = () => { setPrepared(true); setConfirmed(false); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={ClipboardCheck} eyebrow="Operations · Batch Action Review" title="Batch work deserves a preview before it deserves a button." description="Select synthetic targets, choose a proposed action, inspect safeguards, and prepare a local operation plan. This page does not mutate records, export data, send notifications, archive content, or bypass authorization." badge="Preview bulk-operations console"><div className="flex flex-wrap gap-2"><Button onClick={prepare} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><PlayCircle className="mr-2 size-4" />Prepare operation</Button><Button onClick={() => { setSelected([]); setPrepared(false); setConfirmed(false); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Clear selection</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Selected", value: String(selected.length), hint: "Local target selection", icon: Tag }, { label: "Safe preview", value: String(safeTargets.length), hint: "Protected targets excluded", icon: ShieldAlert, tone: "violet" }, { label: "Execution", value: "Unavailable", hint: "No mutation API connected", icon: WifiOff, tone: "amber" }, { label: "Rollback", value: "Required", hint: "No action was run", icon: Undo2, tone: "slate" }]} /><ScreenPreviewBanner title="Batch-action evidence boundary">Bulk actions multiply mistakes. A production workflow must enforce authorization per target, scope and validate inputs, show a dry run, handle partial failure, be idempotent, write an audit event, rate-limit execution, protect sensitive records, and provide a verified rollback or compensating action. No record changes occur here.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex flex-col gap-3 sm:flex-row"><div className="relative flex-1"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search synthetic targets" aria-label="Search synthetic targets" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><Button variant="outline" size="icon" className="border-white/15 text-slate-300"><Filter className="size-4" /></Button></div><div className="mt-5 space-y-2">{visible.map((target) => { const active = selected.includes(target.id); const protectedTarget = target.state === "Protected"; return <button key={target.id} onClick={() => !protectedTarget && toggle(target.id)} className={`flex w-full items-start gap-3 rounded-xl border p-4 text-left transition ${active ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"} ${protectedTarget ? "cursor-not-allowed opacity-60" : ""}`}><span className={`mt-0.5 flex size-5 items-center justify-center rounded border ${active ? "border-cyan-300 bg-cyan-300 text-slate-950" : "border-white/20"}`}>{active && <Check className="size-3" />}</span><div className="flex-1"><div className="flex flex-wrap items-center gap-2"><span className="font-semibold">{target.name}</span><Badge variant="outline" className="border-white/10 text-slate-400">{target.kind}</Badge></div><p className="mt-1 font-mono text-xs text-slate-500">{target.id}</p><div className="mt-2 flex flex-wrap gap-1">{target.tags.map((tag) => <span key={tag} className="rounded bg-white/5 px-2 py-1 text-[10px] text-slate-500">#{tag}</span>)}</div></div><Badge variant="outline" className={protectedTarget ? "border-rose-300/20 text-rose-200" : "border-amber-300/20 text-amber-200"}>{target.state}</Badge></button>; })}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Database className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Operation plan</p><h2 className="mt-1 text-2xl font-black">Review before action</h2></div></div><div className="mt-6 space-y-5"><div><label className="mb-2 block text-sm font-medium text-slate-300" htmlFor="bulk-action">Proposed action</label><select id="bulk-action" value={action} onChange={(event) => { setAction(event.target.value); setPrepared(false); }} className="w-full rounded-md border border-white/10 bg-black/20 p-2.5 text-sm text-white">{ACTIONS.map((item) => <option key={item}>{item}</option>)}</select></div><div className="rounded-xl border border-white/10 bg-black/15 p-4"><div className="flex items-center gap-3"><Tag className="size-4 text-cyan-300" /><div className="flex-1"><p className="text-sm font-semibold">{action}</p><p className="mt-1 text-xs text-slate-500">{safeTargets.length} safe preview target(s) · {selected.length - safeTargets.length} protected or excluded</p></div></div></div><div className="space-y-3">{[{ icon: LockKeyhole, label: "Authorization per target", state: "Required" }, { icon: Timer, label: "Rate limit and chunk size", state: "Required" }, { icon: FileWarning, label: "Partial failure handling", state: "Required" }, { icon: Undo2, label: "Rollback or compensating action", state: "Required" }].map(({ icon: Icon, label, state }) => <div key={label} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-3"><Icon className="size-4 text-violet-300" /><span className="flex-1 text-sm text-slate-300">{label}</span><span className="text-xs text-amber-200">{state}</span></div>)}</div>{prepared && <div className="rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-cyan-200"><CheckCircle2 className="size-4" />Dry-run preview prepared</div><p className="mt-2 text-sm leading-6 text-slate-300">No records changed. No export, notification, archive, tag mutation, audit event, or rollback was executed.</p><Button onClick={() => setConfirmed(true)} variant="outline" className="mt-4 border-white/15 text-white">Preview confirmation state</Button></div>}{confirmed && <div className="rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-amber-200"><ShieldAlert className="size-4" />Execution blocked safely</div><p className="mt-2 text-sm leading-6 text-slate-300">A real operation requires an authenticated operator, target-level authorization, a connected mutation service, idempotency key, and a verified audit trail.</p></div>}</div></CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><UserRound className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Target-level authorization</h3><p className="mt-2 text-sm leading-6 text-slate-400">One operator permission is not proof that every selected record may be changed.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><FileWarning className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">Partial failure is normal</h3><p className="mt-2 text-sm leading-6 text-slate-400">Batch workflows need per-item outcomes, retry rules, and reconciliation—not one optimistic success banner.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><LockKeyhole className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Sensitive records stay protected</h3><p className="mt-2 text-sm leading-6 text-slate-400">Financial, personal, and consent-bound records require stricter scope and audit controls.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Dry run first", description: "Preview target counts, exclusions, and affected fields before a mutation is even eligible.", icon: ClipboardCheck, status: "Pattern" }, { title: "Idempotency is mandatory", description: "A retried batch must not duplicate notifications, exports, payments, or destructive changes.", icon: RefreshCw, status: "Required" }, { title: "No fake execution", description: "A prepared plan is not a completed operation, changed record, sent notification, or finished rollback.", icon: ShieldAlert, status: "Guardrail" }]} /></main></div>; }
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>BulkOperations</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">BulkOperations</h1>
+            <p className="text-muted-foreground mt-2">Bulk actions</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

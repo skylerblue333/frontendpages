@@ -1,23 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { CalendarDays, Check, Compass, FileCheck2, Globe2, Hotel, LockKeyhole, MapPin, RefreshCw, Search, ShieldCheck, Sparkles, Ticket, Users, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const TRIPS = [{ title: "Coastal Signal Weekend", destination: "North Coast", status: "Draft", dates: "3 days · dates unset", detail: "A synthetic itinerary for slow travel, coastal walks, and flexible planning.", checkpoints: ["Arrival plan", "Coastal route", "Local meal", "Return buffer"] }, { title: "City Systems Study Tour", destination: "Metro District", status: "Planning", dates: "5 days · dates unset", detail: "A local travel brief for museums, public spaces, and systems-focused learning.", checkpoints: ["Museum block", "Transit check", "Workshop", "Rest day"] }, { title: "Mountain Reset", destination: "Highlands", status: "Idea", dates: "4 days · dates unset", detail: "A synthetic trip concept centered on nature, recovery time, and weather-aware choices.", checkpoints: ["Trail option", "Weather check", "Cabin plan", "Exit route"] }, { title: "Night Market Notes", destination: "Old Quarter", status: "Unavailable", dates: "2 days · provider unset", detail: "A local itinerary card without venue, safety, availability, or reservation data.", checkpoints: ["Market route", "Accessibility", "Safe return", "Backup plan"] }];
-const FILTERS = ["All", "Draft", "Planning", "Idea", "Unavailable"];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function MyTrips() {
-  const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState("All");
-  const [selected, setSelected] = useState(TRIPS[0].title);
-  const [checked, setChecked] = useState<string[]>([]);
-  const [note, setNote] = useState("");
-  const [saved, setSaved] = useState(false);
-  const trip = TRIPS.find((item) => item.title === selected) ?? TRIPS[0];
-  const visible = useMemo(() => TRIPS.filter((item) => (filter === "All" || item.status === filter) && `${item.title} ${item.destination} ${item.status} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [filter, query]);
-  const toggle = (checkpoint: string) => { setChecked((current) => current.includes(checkpoint) ? current.filter((item) => item !== checkpoint) : [...current, checkpoint]); setSaved(false); };
-  const reset = () => { setQuery(""); setFilter("All"); setSelected(TRIPS[0].title); setChecked([]); setNote(""); setSaved(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Compass} eyebrow="MyTrips · Itinerary planning" title="Plan the journey before claiming the booking." description="Explore synthetic trip cards, status filters, day checkpoints, packing and verification notes, and safety-minded planning. No booking, reservation, ticket, price, availability, traveler identity, route guarantee, or travel advisory is asserted." badge="Trip preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Trip plan saved locally" : "Save trip plan"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset trips</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Trips", value: String(TRIPS.length), hint: "Synthetic itineraries", icon: Compass }, { label: "Current", value: trip.status, hint: "Local plan state", icon: CalendarDays, tone: "cyan" }, { label: "Checkpoints", value: `${checked.length}/${trip.checkpoints.length}`, hint: "Local checklist", icon: FileCheck2, tone: "violet" }, { label: "Booking", value: "Off", hint: "No reservation source", icon: Ticket, tone: "amber" }]} /><ScreenPreviewBanner title="MyTrips evidence boundary"><strong>Trip names, destinations, dates, statuses, checkpoints, and notes are planning fixtures—not bookings, reservations, ticket records, prices, availability results, route guarantees, traveler identity, hotel/transport confirmations, or travel advisories.</strong> Production travel requires provider availability, price and currency freshness, identity and payment safeguards, cancellation rules, accessibility, location safety information, support, and auditable reservation state.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search synthetic trips" className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 flex gap-2 overflow-x-auto">{FILTERS.map((item) => <button key={item} onClick={() => setFilter(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${filter === item ? "border-cyan-300/40 bg-cyan-300/[0.1] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-5 space-y-3">{visible.map((item) => <button key={item.title} onClick={() => { setSelected(item.title); setChecked([]); setSaved(false); }} className={`w-full rounded-2xl border p-4 text-left ${selected === item.title ? "border-cyan-300/40 bg-cyan-300/[0.07]" : "border-white/10 bg-black/10"}`}><div className="flex items-start gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-violet-300/10 text-violet-200"><Compass className="size-5" /></div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center justify-between gap-2"><h2 className="font-black">{item.title}</h2><Badge variant="outline" className="border-amber-300/20 text-[10px] text-amber-200">{item.status}</Badge></div><p className="mt-1 text-xs text-cyan-200">{item.destination} · {item.dates}</p><p className="mt-2 text-sm text-slate-400">{item.detail}</p></div></div></button>)}{visible.length === 0 && <div className="p-8 text-center text-slate-500">No synthetic trips match this view.</div>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Selected trip</p><h2 className="mt-2 text-3xl font-black">{trip.title}</h2></div><Badge variant="outline" className="border-white/10 text-slate-400">{trip.status}</Badge></div><p className="mt-4 text-slate-400">{trip.detail}</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{[{ label: "Destination", value: trip.destination }, { label: "Dates", value: trip.dates }, { label: "Stay", value: "Not sourced" }, { label: "Transport", value: "Not sourced" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4"><div className="flex items-center justify-between"><div><p className="font-black">Trip checkpoints</p><p className="text-xs text-slate-500">Local planning checklist</p></div><span className="text-sm font-bold text-cyan-200">{checked.length}/{trip.checkpoints.length}</span></div><div className="mt-4 space-y-2">{trip.checkpoints.map((item) => <button key={item} onClick={() => toggle(item)} className="flex w-full items-center gap-3 rounded-xl border border-white/10 p-3 text-left"><span className={`flex size-5 items-center justify-center rounded-md border ${checked.includes(item) ? "border-cyan-300/40 bg-cyan-300 text-slate-950" : "border-white/15 text-transparent"}`}><Check className="size-3" /></span><span className={`text-sm ${checked.includes(item) ? "text-cyan-200" : "text-slate-300"}`}>{item}</span></button>)}</div></div><textarea value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} placeholder="Write a local packing, accessibility, or backup note…" className="mt-5 min-h-24 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-white placeholder:text-slate-500" /><div className="mt-4 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />No traveler profile, payment detail, reservation, or exact location record is created by this preview.</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Travel readiness</p><h2 className="mt-2 text-2xl font-black">Verify before making a booking</h2><div className="mt-5 space-y-3">{["Provider, price, currency, availability, and freshness", "Traveler identity, payment, cancellation, and refund rules", "Transport, lodging, accessibility, and itinerary confirmation", "Local safety, health, legal, weather, and emergency information", "Support, changes, disruption handling, and auditable reservation state"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Verify</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><Globe2 className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake booking</h2><p className="mt-3 text-sm leading-6 text-slate-400">The planner does not check availability, quote prices, reserve a room or seat, issue a ticket, or provide current travel safety advice.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "An itinerary is not a reservation", description: "Synthetic trips preserve planning UX without provider, price, availability, or ticket claims.", icon: Compass, status: "Guardrail" }, { title: "Safety needs current sources", description: "Local conditions, accessibility, weather, legal, health, and emergency information need authoritative freshness.", icon: ShieldCheck, status: "Required" }, { title: "No fake booking", description: "Checkpoints and notes remain local while reservation, payment, and ticketing stay unavailable.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>MyTrips</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">MyTrips</h1>
+            <p className="text-muted-foreground mt-2">My bookings</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

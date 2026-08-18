@@ -1,18 +1,74 @@
-import { useMemo, useState } from "react";
-import { BarChart3, CalendarDays, CheckCircle2, Clock3, Database, Download, Gauge, KeyRound, LockKeyhole, Search, Settings, Shield, SlidersHorizontal, Sparkles, Users } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-const METRICS = [
-  { id: "requests", name: "Request volume", description: "Count successful, rejected, retried, and failed calls from a verified gateway source.", status: "Data required" },
-  { id: "latency", name: "Latency", description: "Show percentile definitions, timestamp, region, and whether the sample is fresh.", status: "Data required" },
-  { id: "errors", name: "Errors", description: "Separate client, auth, rate-limit, dependency, and server failures with a stable envelope.", status: "Data required" },
-  { id: "cost", name: "Cost and billing", description: "Display metered usage only from an authoritative plan and billing contract.", status: "Contract required" },
-  { id: "privacy", name: "Privacy controls", description: "Document retention, aggregation, redaction, and account-level access rules.", status: "Policy required" },
-];
-const PERIODS = ["Current period", "Previous period", "Custom range"];
+export default function APIUsage() {
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-export default function APIUsage() { const [query, setQuery] = useState(""); const [period, setPeriod] = useState(PERIODS[0]); const [selected, setSelected] = useState(METRICS[0]); const [reportPrepared, setReportPrepared] = useState(false); const visible = useMemo(() => METRICS.filter((metric) => `${metric.name} ${metric.description} ${metric.status}`.toLowerCase().includes(query.toLowerCase())), [query]); return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={BarChart3} eyebrow="Developer Platform · Usage" title="Measure usage without inventing a meter." description="Explore usage dimensions, period filters, privacy controls, and billing-contract boundaries. This page does not claim request counts, users, quotas, spend, plan entitlements, latency, or cost." badge="Preview usage workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setReportPrepared(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><BarChart3 className="mr-2 size-4" />Prepare report</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Download className="mr-2 size-4" />Export unavailable</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Metric dimensions", value: String(METRICS.length), hint: "Reviewable usage surfaces", icon: BarChart3 }, { label: "Current period", value: "Unverified", hint: "No gateway data connected", icon: CalendarDays, tone: "violet" }, { label: "Quota", value: "Unknown", hint: "Plan contract required", icon: Gauge, tone: "amber" }, { label: "Privacy", value: "Required", hint: "Retention and redaction", icon: Shield, tone: "slate" }]} /><ScreenPreviewBanner title="Usage evidence boundary">Metric dimensions, period selectors, report preparation, privacy requirements, and unavailable export/quota states are available for UX review. No request count, user count, spend, plan limit, billing amount, latency, quota, or usage trend is fabricated.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search usage dimensions" aria-label="Search usage dimensions" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 flex gap-2 overflow-x-auto pb-1">{PERIODS.map((item) => <Button key={item} size="sm" variant={period === item ? "default" : "outline"} onClick={() => { setPeriod(item); setReportPrepared(false); }} className={period === item ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "border-white/15 bg-white/5 text-slate-300 hover:bg-white/10"}><CalendarDays className="mr-1 size-3.5" />{item}</Button>)}</div><div className="mt-4 space-y-2">{visible.map((metric) => <button key={metric.id} onClick={() => { setSelected(metric); setReportPrepared(false); }} className={`w-full rounded-xl border p-4 text-left transition ${selected.id === metric.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><BarChart3 className="size-4 text-cyan-300" /><span className="font-semibold">{metric.name}</span><Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">{metric.status}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-400">{metric.description}</p></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No dimensions match" description="Try another search term." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected metric</p><h2 className="mt-1 text-2xl font-bold">{selected.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{selected.description}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><div className="mt-6 grid gap-3 sm:grid-cols-2">{["Source and freshness", "Aggregation definition", "Account scope", "Privacy and retention", "Error and stale state", "Plan or billing authority"].map((item) => <div key={item} className="rounded-xl border border-white/10 bg-black/15 p-4"><CheckCircle2 className="size-4 text-emerald-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Evidence required</p></div>)}</div>{reportPrepared && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-amber-200"><Database className="size-4" />Report prepared for {period}</div><p className="mt-2 text-sm leading-6 text-slate-300">No usage data is available. Connect an authoritative gateway and billing source before rendering values or exporting a report.</p></div>}</CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Authoritative source", description: "Usage values require a gateway, telemetry, plan, or billing source with freshness metadata.", icon: Database, status: "Required" }, { title: "Privacy by design", description: "Aggregate and redact usage data; restrict account-level views and define retention.", icon: Shield, status: "Required" }, { title: "No fake billing", description: "Never invent request counts, quotas, spend, users, or entitlements to make a dashboard look complete.", icon: LockKeyhole, status: "Guardrail" }]} /></main></div>; }
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>APIUsage</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">APIUsage</h1>
+            <p className="text-muted-foreground mt-2">Usage tracking</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

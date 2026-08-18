@@ -1,23 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Activity, BarChart3, Check, Clock3, Database, Gauge, LockKeyhole, RefreshCw, Search, ShieldCheck, TriangleAlert, Users, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-type Tab = "api" | "database" | "product";
-const metrics = {
-  api: [{ name: "Request latency", value: "Sample unavailable", evidence: "No instrumented stream" }, { name: "Error rate", value: "Sample unavailable", evidence: "No production counter" }, { name: "Throughput", value: "Sample unavailable", evidence: "No request volume" }],
-  database: [{ name: "Query duration", value: "Sample unavailable", evidence: "No query telemetry" }, { name: "Connection health", value: "Not measured", evidence: "No live database probe" }, { name: "Cache hit rate", value: "Not configured", evidence: "No cache source" }],
-  product: [{ name: "Active users", value: "Not measured", evidence: "No analytics source" }, { name: "Workflow completion", value: "Not measured", evidence: "No event stream" }, { name: "SLO compliance", value: "Not established", evidence: "No SLO contract" }],
-};
 export default function PerformanceMetrics() {
-  const [tab, setTab] = useState<Tab>("api");
-  const [window, setWindow] = useState("24h");
-  const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState(metrics.api[0].name);
-  const [refreshed, setRefreshed] = useState(false);
-  const activeMetrics = useMemo(() => metrics[tab].filter((item) => !query || `${item.name} ${item.evidence}`.toLowerCase().includes(query.toLowerCase())), [query, tab]);
-  const reset = () => { setTab("api"); setWindow("24h"); setQuery(""); setSelected(metrics.api[0].name); setRefreshed(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Activity} eyebrow="PerformanceMetrics · Observability preview" title="Measure only what the system can prove." description="Explore API, database, and product metric categories with local evidence states. No live telemetry, uptime, active-user count, response-time percentile, error rate, SLO, or production performance claim is fabricated." badge="Metrics preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setRefreshed(true)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />{refreshed ? "Preview refreshed" : "Refresh preview"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">Reset metrics</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Metric domains", value: "3", hint: "API / DB / product", icon: BarChart3, tone: "cyan" }, { label: "Window", value: window, hint: "Local filter", icon: Clock3, tone: "violet" }, { label: "Live source", value: "Off", hint: "No telemetry", icon: WifiOff, tone: "amber" }, { label: "SLO", value: "Unset", hint: "No contract", icon: Gauge, tone: "slate" }]} /><ScreenPreviewBanner title="Performance evidence boundary"><strong>This worksheet is not production observability.</strong> Metric labels and evidence states are local UI data. They do not represent uptime, latency, error rate, throughput, database health, active users, conversion, retention, SLO compliance, or any production measurement. Real claims require instrumented systems, defined windows, sampling, access controls, and reproducible queries.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Metric domains</p><h2 className="mt-2 text-2xl font-black">Choose an evidence family</h2><div className="mt-5 space-y-2">{([{ id: "api", label: "API performance", icon: Activity }, { id: "database", label: "Database health", icon: Database }, { id: "product", label: "Product outcomes", icon: Users }] as const).map((item) => <button key={item.id} onClick={() => { setTab(item.id); setSelected(metrics[item.id][0].name); }} className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left ${tab === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10 text-slate-400"}`}><item.icon className="size-4" /><span className="font-semibold">{item.label}</span><span className="ml-auto text-xs text-slate-500">Preview</span></button>)}</div><p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Time window</p><div className="mt-2 flex gap-2">{["1h", "24h", "7d"].map((item) => <button key={item} onClick={() => setWindow(item)} className={`rounded-lg border px-3 py-2 text-xs ${window === item ? "border-cyan-300/40 bg-cyan-300/10 text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><div className="mt-6 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex gap-3"><TriangleAlert className="mt-0.5 size-5 shrink-0 text-amber-200" /><p className="text-sm leading-6 text-slate-300">A time-window selector without a telemetry source is a local filter, not a historical measurement.</p></div></div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search metric definitions…" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-300/50" /></div><div className="mt-5 flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">{tab} metric family</p><h2 className="mt-2 text-2xl font-black">Evidence status</h2></div><Badge variant="outline" className="border-white/10 text-amber-200">Source off</Badge></div><div className="mt-5 space-y-3">{activeMetrics.length === 0 ? <div className="rounded-xl border border-dashed border-white/15 p-8 text-center"><p className="font-semibold">No metric definitions match</p><p className="mt-2 text-sm text-slate-500">Change the local search query.</p></div> : activeMetrics.map((item) => <button key={item.name} onClick={() => setSelected(item.name)} className={`w-full rounded-xl border p-4 text-left ${selected === item.name ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-center justify-between gap-3"><p className="font-semibold">{item.name}</p><Badge variant="outline" className="border-white/10 text-amber-200">{item.value}</Badge></div><p className="mt-2 text-sm text-slate-500">{item.evidence}</p></button>)}</div><div className="mt-5 rounded-xl border border-white/10 p-4"><p className="text-xs text-slate-500">Selected definition</p><p className="mt-2 font-semibold">{selected}</p><p className="mt-2 text-sm leading-6 text-slate-500">Selected local definition only; no query, sample, percentile, timestamp, dashboard, alert, or export exists.</p></div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Production checklist</p><h2 className="mt-2 text-2xl font-black">Metrics must prove</h2><div className="mt-5 space-y-3">{["Instrumented source, event schema, timestamps, sampling, aggregation, retention, and access controls", "Clear definitions for latency, errors, throughput, availability, active users, conversion, and SLOs", "Reproducible queries, time-zone/window semantics, missing-data handling, and alert thresholds", "Privacy-safe telemetry, redaction, tenant isolation, audit, support, and incident response", "Dashboard/query tests and cross-checks against logs, traces, database health, and provider events"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LockKeyhole className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake observability</h2><p className="mt-3 text-sm leading-6 text-slate-400">Changing the domain, window, or selected metric changes local state only. It does not measure uptime, latency, users, errors, database health, or SLO compliance.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Metric families are useful", description: "API, database, and product outcome definitions organize future instrumentation work.", icon: BarChart3, status: "Architecture" }, { title: "Evidence state is explicit", description: "Unavailable, not measured, and not established labels prevent unsupported numbers.", icon: ShieldCheck, status: "Guardrail" }, { title: "Live telemetry is off", description: "No response-time, error-rate, user-count, uptime, or performance claim is fabricated.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>PerformanceMetrics</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">PerformanceMetrics</h1>
+            <p className="text-muted-foreground mt-2">System performance tracking</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

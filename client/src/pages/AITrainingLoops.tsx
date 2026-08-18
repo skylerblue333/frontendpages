@@ -1,18 +1,125 @@
+/**
+ * AITrainingLoops — Phase 9 AI Training & Feedback Economy
+ * Model improvement loops, training data economy, AI performance tracking
+ */
 import { useState } from "react";
-import { Activity, Brain, CheckCircle2, Database, FlaskConical, LockKeyhole, Pause, Play, RefreshCw, Shield, SlidersHorizontal, Sparkles, Workflow } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
+import { Link } from "wouter";
+import { ArrowLeft, Brain, RefreshCw, Database, TrendingUp, Zap, Activity } from "lucide-react";
 
-const MODELS = [
-  { name: "Intent parser", purpose: "Classify a user request into a reviewable task.", status: "Contract required" },
-  { name: "Action router", purpose: "Map an approved request to an allowed workflow.", status: "Contract required" },
-  { name: "Safety reviewer", purpose: "Surface uncertainty, risk, and escalation needs.", status: "Policy required" },
-  { name: "Feed ranker", purpose: "Explore transparent ranking inputs without hidden personalization claims.", status: "Data required" },
-  { name: "Content moderator", purpose: "Prepare human-review signals without automated enforcement claims.", status: "Policy required" },
+const TRAINING_LOOPS = [
+  { name: "Intent Parser", accuracy: 94.2, samples: "1.2M", lastTrain: "2h ago", trend: "+1.8%" },
+  { name: "Action Router", accuracy: 97.8, samples: "890K", lastTrain: "4h ago", trend: "+0.4%" },
+  { name: "Fraud Detector", accuracy: 99.1, samples: "340K", lastTrain: "1h ago", trend: "+0.2%" },
+  { name: "Feed Ranker", accuracy: 88.6, samples: "4.1M", lastTrain: "6h ago", trend: "+2.1%" },
+  { name: "Content Moderator", accuracy: 96.4, samples: "2.8M", lastTrain: "3h ago", trend: "+0.9%" },
 ];
-const ECONOMY_ITEMS = ["User consent and data purpose", "Privacy-safe collection and retention", "Human labeling and dispute paths", "Reward policy and accounting contract"];
-const PIPELINE = ["Collect", "Label", "Train", "Validate", "Deploy"];
 
-export default function AITrainingLoops() { const [tab, setTab] = useState("models"); const [running, setRunning] = useState(false); const [selected, setSelected] = useState(MODELS[0].name); return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Brain} eyebrow="AI & Automation · Training" title="Improve models only when the evidence loop is visible." description="Explore model cards, data-governance requirements, evaluation stages, and deployment gates. This screen does not claim training activity, accuracy, sample counts, rewards, model updates, or production rollout." badge="Preview training console"><div className="flex flex-wrap gap-2"><Button onClick={() => setRunning((value) => !value)} className={running ? "bg-rose-300 text-slate-950 hover:bg-rose-200" : "bg-cyan-300 text-slate-950 hover:bg-cyan-200"}>{running ? <><Pause className="mr-2 size-4" />Pause preview</> : <><Play className="mr-2 size-4" />Run preview loop</>}</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><LockKeyhole className="mr-2 size-4" />No production training</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Model surfaces", value: String(MODELS.length), hint: "Cataloged evaluation targets", icon: Brain }, { label: "Training state", value: running ? "Preview loop" : "Paused", hint: "No connected model job", icon: running ? Activity : Pause, tone: "violet" }, { label: "Data policy", value: "Required", hint: "Purpose, consent, retention", icon: Shield, tone: "amber" }, { label: "Deployment", value: "Gated", hint: "Validation and approval first", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Model-evidence boundary">Model cards, local selection, data-economy policy requirements, pipeline stages, and preview loop controls are available for UX review. The screen does not invent accuracy, samples, train cycles, reward amounts, user contributions, A/B outcomes, or production deployment state.</ScreenPreviewBanner><section><div className="mb-5 flex flex-wrap gap-2 rounded-xl border border-white/10 bg-white/[0.04] p-2">{[["models", "Model catalog"], ["economy", "Data policy"], ["pipeline", "Pipeline gates"]].map(([value, label]) => <Button key={value} size="sm" variant={tab === value ? "default" : "outline"} onClick={() => setTab(value)} className={tab === value ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "border-white/15 bg-white/5 text-slate-300 hover:bg-white/10"}>{label}</Button>)}</div>{tab === "models" && <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><div className="space-y-3">{MODELS.map((model) => <button key={model.name} onClick={() => setSelected(model.name)} className={`w-full rounded-xl border p-4 text-left transition ${selected === model.name ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-white/[0.04] hover:bg-white/[0.07]"}`}><div className="flex items-center justify-between gap-3"><span className="font-semibold">{model.name}</span><Badge variant="outline" className="border-amber-300/20 text-amber-200">{model.status}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-400">{model.purpose}</p></button>)}</div><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><div className="flex size-11 items-center justify-center rounded-xl bg-violet-300/10 text-violet-200"><Brain className="size-5" /></div><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Selected target</p><h2 className="mt-1 text-2xl font-bold">{selected}</h2></div></div><div className="mt-6 grid gap-3 sm:grid-cols-2">{["Evaluation dataset", "Baseline and comparison", "Error taxonomy", "Human review sample", "Rollback criteria", "Release owner"].map((item) => <div key={item} className="rounded-xl border border-white/10 bg-black/15 p-4"><SlidersHorizontal className="size-4 text-cyan-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Evidence required</p></div>)}</div><ScreenStatePanel type="unavailable" title="No model job connected" description="A real evaluation response must provide dataset scope, metrics, uncertainty, and version metadata before this panel can show results." /></CardContent></Card></div>}{tab === "economy" && <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Database className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Data contribution policy</p><h2 className="mt-1 text-2xl font-bold">Earn trust before rewards</h2></div></div><p className="mt-4 text-sm leading-6 text-slate-300">Any future contribution or reward system requires explicit consent, purpose limitation, privacy controls, quality review, dispute handling, and a verified accounting contract. No SKY rewards or balances are shown here.</p><div className="mt-5 space-y-3">{ECONOMY_ITEMS.map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4 text-sm text-slate-300"><CheckCircle2 className="size-4 text-emerald-300" />{item}</div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-300">Reward state</p><h2 className="mt-1 text-xl font-bold">Not connected</h2><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><LockKeyhole className="size-5 text-amber-300" /><p className="mt-3 text-sm leading-6 text-slate-300">The UI will not invent token payouts, contribution totals, quality scores, or accounting events.</p></div></CardContent></Card></div>}{tab === "pipeline" && <div className="grid gap-4 md:grid-cols-5">{PIPELINE.map((stage, index) => <Card key={stage} className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex items-center justify-between"><span className="flex size-9 items-center justify-center rounded-lg bg-violet-300/10 font-bold text-violet-200">{index + 1}</span><Badge variant="outline" className="border-slate-300/20 text-slate-400">Gated</Badge></div><h3 className="mt-5 font-semibold">{stage}</h3><p className="mt-2 text-sm leading-6 text-slate-400">Requires documented evidence and an owner before advancing.</p></CardContent></Card>)}</div>}</section><ScreenFeatureGrid features={[{ title: "Evaluation evidence", description: "Show datasets, baselines, uncertainty, error classes, and version metadata before claiming improvement.", icon: FlaskConical, status: "Required" }, { title: "Consent and privacy", description: "Treat interaction data as governed information with purpose, retention, and deletion controls.", icon: Shield, status: "Required" }, { title: "Release gates", description: "Require validation, rollback criteria, ownership, and approval before deployment.", icon: Workflow, status: "Required" }]} /></main></div>; }
+export default function AITrainingLoops() {
+  const [tab, setTab] = useState<"models" | "economy" | "pipeline">("models");
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border/50 px-4 py-3 flex items-center gap-3">
+        <Link href="/" className="p-2 rounded-lg hover:bg-secondary/50 transition-colors text-muted-foreground">
+          <ArrowLeft className="w-4 h-4" />
+        </Link>
+        <div>
+          <h1 className="font-bold text-lg flex items-center gap-2">
+            <Brain className="w-5 h-5 text-cyan-400" />
+            AI Training Loops
+          </h1>
+          <p className="text-xs text-muted-foreground">Continuous model improvement — Phase 9</p>
+        </div>
+      </div>
+
+      <div className="max-w-2xl mx-auto p-4 space-y-4">
+        <div className="grid grid-cols-3 gap-2">
+          {[
+            { label: "Total Samples", value: "9.3M", icon: Database, color: "text-blue-400" },
+            { label: "Avg Accuracy", value: "95.2%", icon: Activity, color: "text-green-400" },
+            { label: "Train Cycles", value: "1,842", icon: RefreshCw, color: "text-purple-400" },
+          ].map(s => (
+            <div key={s.label} className="card p-3 text-center">
+              <s.icon className={`w-4 h-4 ${s.color} mx-auto mb-1`} />
+              <div className="font-bold text-sm">{s.value}</div>
+              <div className="text-xs text-muted-foreground">{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex gap-1 bg-secondary/30 rounded-xl p-1">
+          {(["models", "economy", "pipeline"] as const).map(t => (
+            <button key={t} onClick={() => setTab(t)}
+              className={`flex-1 py-2 rounded-lg text-xs font-medium capitalize transition-colors ${tab === t ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"}`}>
+              {t}
+            </button>
+          ))}
+        </div>
+
+        {tab === "models" && (
+          <div className="space-y-3">
+            {TRAINING_LOOPS.map(m => (
+              <div key={m.name} className="card p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-medium text-sm">{m.name}</span>
+                  <span className="text-xs text-green-400">{m.trend}</span>
+                </div>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
+                    <div className="h-full bg-primary rounded-full" style={{ width: `${m.accuracy}%` }} />
+                  </div>
+                  <span className="text-xs font-mono font-bold w-12 text-right">{m.accuracy}%</span>
+                </div>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>{m.samples} samples</span>
+                  <span>Last trained {m.lastTrain}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === "economy" && (
+          <div className="space-y-3">
+            <div className="card p-4 bg-primary/5 border border-primary/20">
+              <h4 className="font-semibold text-sm mb-2">Data Economy</h4>
+              <p className="text-xs text-muted-foreground">Users who contribute quality interaction data earn SKY tokens. Better data = better AI = better platform for everyone.</p>
+            </div>
+            {[
+              { action: "Completing an action", reward: "+2 SKY" },
+              { action: "Rating AI response", reward: "+1 SKY" },
+              { action: "Flagging bad content", reward: "+3 SKY" },
+              { action: "Verified transaction", reward: "+5 SKY" },
+            ].map(r => (
+              <div key={r.action} className="card p-3 flex items-center justify-between">
+                <span className="text-sm">{r.action}</span>
+                <span className="text-sm font-bold text-green-400">{r.reward}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === "pipeline" && (
+          <div className="space-y-3">
+            <p className="text-sm text-muted-foreground">Continuous training pipeline — every interaction improves the system.</p>
+            {[
+              { step: "1. Collect", desc: "User interactions captured in real-time", status: "active" },
+              { step: "2. Label", desc: "AI + human labeling for quality signals", status: "active" },
+              { step: "3. Train", desc: "Incremental model updates every 4 hours", status: "active" },
+              { step: "4. Validate", desc: "A/B testing against production model", status: "active" },
+              { step: "5. Deploy", desc: "Gradual rollout with monitoring", status: "active" },
+            ].map(p => (
+              <div key={p.step} className="card p-3 flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse shrink-0" />
+                <div>
+                  <div className="font-medium text-sm">{p.step}</div>
+                  <div className="text-xs text-muted-foreground">{p.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

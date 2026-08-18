@@ -1,22 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Check, CircleDot, EyeOff, Filter, Fingerprint, GitBranch, LockKeyhole, Map, Pin, RefreshCw, Search, ShieldCheck, Users, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const NODES = [{ name: "Avery North", category: "Creator tools", distance: 1, note: "Synthetic path anchor" }, { name: "Blue Hour Lab", category: "Education", distance: 2, note: "Shared topic concept" }, { name: "Signal Commons", category: "Community", distance: 2, note: "Local group fixture" }, { name: "Orbit Studio", category: "Creative", distance: 3, note: "Interest overlap concept" }, { name: "Skyline Guild", category: "Gaming", distance: 3, note: "Room-planning fixture" }, { name: "Cyan Foundry", category: "Technology", distance: 4, note: "Topic bridge concept" }];
-const CATEGORIES = ["All", "Creator tools", "Education", "Community", "Creative", "Gaming", "Technology"];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
 export default function NetworkGraph() {
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("All");
-  const [distance, setDistance] = useState(4);
-  const [selected, setSelected] = useState(NODES[0].name);
-  const [pinned, setPinned] = useState<string[]>([]);
-  const [saved, setSaved] = useState(false);
-  const node = NODES.find((item) => item.name === selected) ?? NODES[0];
-  const visible = useMemo(() => NODES.filter((item) => (category === "All" || item.category === category) && item.distance <= distance && `${item.name} ${item.category} ${item.note}`.toLowerCase().includes(query.toLowerCase())), [category, distance, query]);
-  const reset = () => { setQuery(""); setCategory("All"); setDistance(4); setSelected(NODES[0].name); setPinned([]); setSaved(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={GitBranch} eyebrow="NetworkGraph · Relationship map" title="Explore the path without exposing the graph." description="Review synthetic nodes, category and distance filters, and local pinning against an illustrative relationship map. No account, identity, friendship, presence, mutuality, contact, graph edge, or recommendation is verified." badge="Graph preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Map plan saved locally" : "Save map plan"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset map</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Nodes", value: String(visible.length), hint: "Synthetic fixtures", icon: GitBranch }, { label: "Category", value: category, hint: "Local filter", icon: Filter, tone: "violet" }, { label: "Depth", value: `≤ ${distance}`, hint: "Illustrative hops", icon: Map, tone: "cyan" }, { label: "Presence", value: "Off", hint: "No live graph", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="NetworkGraph evidence boundary"><strong>Node names, categories, distance labels, shared-path language, pins, and map layout are synthetic relationship fixtures—not real identities, friendship or follower edges, mutual counts, live presence, contact availability, inferred interests, ranking, recommendation, or privacy-safe graph output.</strong> A production graph requires consent, data minimization, identity and relationship provenance, authorization, deletion, abuse controls, edge freshness, auditability, and careful handling of sensitive social data.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Search className="size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search synthetic nodes" className="w-full bg-transparent text-white outline-none placeholder:text-slate-500" /></div><div className="mt-4 flex gap-2 overflow-x-auto">{CATEGORIES.map((item) => <button key={item} onClick={() => setCategory(item)} className={`rounded-xl border px-3 py-2 text-xs whitespace-nowrap ${category === item ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-200" : "border-white/10 text-slate-500"}`}>{item}</button>)}</div><label className="mt-5 block"><div className="flex justify-between text-sm"><span className="font-semibold text-slate-300">Maximum illustrative distance</span><span className="text-cyan-200">{distance} hops</span></div><input type="range" min="1" max="4" value={distance} onChange={(event) => setDistance(Number(event.target.value))} className="mt-3 w-full accent-cyan-300" /></label><div className="relative mt-6 min-h-80 overflow-hidden rounded-2xl border border-cyan-300/15 bg-[radial-gradient(circle_at_center,rgba(34,211,238,0.12),transparent_46%),linear-gradient(135deg,rgba(15,23,42,0.9),rgba(30,41,59,0.55))]"><div className="absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:42px_42px]" /><div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"><div className="flex size-16 items-center justify-center rounded-full border border-cyan-300/50 bg-cyan-300/15 text-cyan-100 shadow-[0_0_40px_rgba(34,211,238,0.2)]"><CircleDot className="size-7" /></div><span className="mt-2 rounded-full bg-black/40 px-3 py-1 text-xs font-bold">You · local anchor</span></div>{visible.slice(0, 6).map((item, index) => { const positions = [[15, 20], [70, 18], [12, 68], [76, 66], [46, 10], [48, 82]][index] ?? [50, 50]; return <button key={item.name} onClick={() => setSelected(item.name)} className={`absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center ${selected === item.name ? "text-cyan-200" : "text-slate-300"}`} style={{ left: `${positions[0]}%`, top: `${positions[1]}%` }}><div className={`flex size-11 items-center justify-center rounded-full border ${selected === item.name ? "border-cyan-300 bg-cyan-300/20" : "border-white/20 bg-slate-900/80"}`}><Users className="size-4" /></div><span className="mt-1 max-w-24 truncate text-[10px]">{item.name}</span></button>; })}</div><div className="mt-4 space-y-2">{visible.map((item) => <button key={item.name} onClick={() => setSelected(item.name)} className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left ${selected === item.name ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10"}`}><div className="flex size-9 items-center justify-center rounded-full bg-cyan-300/10 text-cyan-200"><Users className="size-4" /></div><span className="flex-1"><span className="block text-sm font-semibold">{item.name}</span><span className="text-xs text-slate-500">{item.category} · {item.distance} hop{item.distance === 1 ? "" : "s"}</span></span>{pinned.includes(item.name) && <Pin className="size-4 text-amber-200" />}</button>)}{visible.length === 0 && <p className="py-8 text-center text-slate-500">No synthetic nodes match this filter.</p>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected path</p><h2 className="mt-2 text-3xl font-black">{node.name}</h2><p className="mt-3 text-slate-400">{node.note} · {node.category}</p><div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-5"><div className="grid gap-3 sm:grid-cols-2">{[{ label: "Identity", value: "Synthetic" }, { label: "Edge", value: "Illustrative" }, { label: "Presence", value: "Not read" }, { label: "Mutuality", value: "Not sourced" }, { label: "Contact", value: "Blocked" }, { label: "Privacy", value: "Unverified" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div></div><div className="mt-5 flex flex-wrap gap-2"><Button onClick={() => setPinned((current) => current.includes(node.name) ? current.filter((name) => name !== node.name) : [...current, node.name])} className="bg-violet-500 text-white hover:bg-violet-400"><Pin className="mr-2 size-4" />{pinned.includes(node.name) ? "Unpin locally" : "Pin locally"}</Button><Button disabled variant="outline" className="border-white/10 text-white/40">Open profile unavailable</Button></div><div className="mt-4 flex items-start gap-3 text-xs leading-5 text-slate-500"><LockKeyhole className="mt-0.5 size-4 shrink-0 text-cyan-300" />Local pins do not expose a person, change a graph, send a request, or notify an account.</div></CardContent></Card></section><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Graph readiness</p><h2 className="mt-2 text-2xl font-black">Required before graph claims</h2><div className="mt-5 space-y-3">{["Consent, identity, relationship provenance, and visibility policy", "Authorization, deletion, blocking, reporting, and abuse controls", "Edge freshness, duplicate handling, privacy review, and auditability", "No inferred attributes, sensitive relationship exposure, or unwanted discovery", "Support, appeals, export, and incident response"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><Fingerprint className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">No fake graph</h2><p className="mt-3 text-sm leading-6 text-slate-400">The map does not identify people, reveal social edges, compute mutuals, read presence, recommend contacts, or send messages.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A node is not a person", description: "Synthetic nodes preserve map UX without identity, relationship, or presence claims.", icon: Users, status: "Guardrail" }, { title: "Edges need consent", description: "Visibility, provenance, deletion, abuse controls, and privacy review need evidence.", icon: ShieldCheck, status: "Required" }, { title: "No fake discovery", description: "Local filters and pins do not expose profiles, notify accounts, or change the network.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>NetworkGraph</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">NetworkGraph</h1>
+            <p className="text-muted-foreground mt-2">Visualize connections</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

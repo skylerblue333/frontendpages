@@ -1,13 +1,186 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Check, Clipboard, Filter, Gift, LockKeyhole, RefreshCw, Search, Share2, ShieldAlert, TrendingUp, UsersRound, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const programs = [{ id: 1, name: "Community invite", category: "Community", detail: "A local invite concept awaiting attribution, consent, abuse controls, and verified signup events.", state: "Preview only" }, { id: 2, name: "Learning ambassador", category: "Education", detail: "An education referral concept that must not imply enrollment, completion, or payout.", state: "Unmeasured" }, { id: 3, name: "Builder referral", category: "Technology", detail: "A partner-growth concept awaiting terms, identities, conversion rules, and reconciliation.", state: "Needs evidence" }, { id: 4, name: "Commerce invite", category: "Commerce", detail: "A high-risk reward concept requiring purchase verification, fraud review, tax, and payout controls.", state: "Blocked" }];
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Copy, Share2, TrendingUp, Users, DollarSign } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+
 export default function Referrals() {
-  const [query, setQuery] = useState(""); const [category, setCategory] = useState("All"); const [selected, setSelected] = useState(1); const [channel, setChannel] = useState("Channel not configured"); const [copied, setCopied] = useState(false); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false);
-  const categories = ["All", ...Array.from(new Set(programs.map((item) => item.category)))]; const filtered = useMemo(() => programs.filter((item) => (category === "All" || item.category === category) && `${item.name} ${item.category} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [category, query]); const program = programs.find((item) => item.id === selected) ?? programs[0];
-  const reset = () => { setQuery(""); setCategory("All"); setSelected(1); setChannel("Channel not configured"); setCopied(false); setSaved(false); setShowGates(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={UsersRound} eyebrow="Referrals · Attribution preview" title="Prove the conversion before promising the reward." description="Explore local referral-program concepts with search, categories, invite-link intent, attribution, invitees, statuses, conversions, rewards, sharing, fraud controls, reporting, save, reset, and evidence gates. No live users, clicks, signups, purchases, balances, payouts, or growth claim is connected." badge="Referral workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "View saved locally" : "Save program locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review referral gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset program</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Programs", value: `${programs.length} local`, hint: "No referrals loaded", icon: UsersRound, tone: "cyan" }, { label: "Invitees", value: "Unavailable", hint: "No identity source", icon: Gift, tone: "violet" }, { label: "Conversions", value: "Unmeasured", hint: "No event source", icon: TrendingUp, tone: "amber" }, { label: "Rewards", value: "Blocked", hint: "No payout source", icon: ShieldAlert, tone: "slate" }]} /><ScreenPreviewBanner title="Referral evidence boundary"><strong>This is a local referral-program preview, not evidence of growth or compensation.</strong> Program cards, invite-link and channel intent, attribution posture, invitee state, conversion and reward concepts, copied state, saved state, fraud controls, and evidence gates are browser concepts. No user, click, signup, purchase, conversion, balance, payout, commission, tax, or growth outcome is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local referral programs" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-4 flex flex-wrap gap-2">{categories.map((entry) => <Button key={entry} onClick={() => setCategory(entry)} size="sm" variant="outline" className={category === entry ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100" : "border-white/10 text-slate-400"}><Filter className="mr-1 size-3" />{entry}</Button>)}</div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.state}</Badge></div><div className="mt-4"><Badge variant="outline" className="border-white/10 text-slate-500">{item.category}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected referral program</p><h2 className="mt-2 text-2xl font-black">{program.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{program.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Category", value: program.category }, { label: "State", value: program.state }, { label: "Invite code", value: "Unavailable" }, { label: "Invitees", value: "Unavailable" }, { label: "Conversions", value: "Unmeasured" }, { label: "Rewards", value: "Blocked" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><label className="mt-5 block text-sm text-slate-400">Share channel<select value={channel} onChange={(event) => setChannel(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Channel not configured</option><option>Copy-link intent</option><option>Message intent</option><option>Social-share intent</option></select></label><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><Clipboard className="mx-auto size-8 text-slate-600" /><p className="mt-3 font-semibold">No referral link loaded</p><p className="mt-2 text-sm text-slate-500">Connect a governed attribution and identity source before generating, copying, or sharing an invite link.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button onClick={() => setCopied(true)} variant="outline" className="border-white/10 text-white"><Clipboard className="mr-2 size-4" />{copied ? "Copied local state" : "Copy intent"}</Button><Button disabled className="bg-slate-700 text-slate-400"><Share2 className="mr-2 size-4" />Share unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">View referrals unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No conversion or payout claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A referral concept does not prove that an invite was sent, a person signed up, a purchase occurred, or a reward is owed.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Referral gates</p><h2 className="mt-2 text-2xl font-black">What a real referral program must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Identity, consent, age and jurisdiction boundaries, privacy, opt-out, deletion, and contact permissions", "Link generation, code uniqueness, attribution window, cookie/device rules, cross-device joins, and provenance", "Signup, activation, purchase, refund, chargeback, duplicate, fraud, bot, and abuse verification", "Reward terms, eligibility, currency, tax, wallet or bank details, payout status, reconciliation, and support", "Messaging, sharing, rate limits, spam controls, reputation, safety, moderation, and legal disclosures", "Analytics, experiments, growth claims, audit, appeals, incident response, rollback, and user-visible status"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Referral surface preserved", description: "Programs, search, categories, links, channels, attribution, invitees, statuses, conversions, rewards, sharing, fraud controls, save/reset, and gates remain interactive.", icon: UsersRound, status: "Local programs" }, { title: "No growth theater", description: "Users, clicks, signups, purchases, conversions, balances, payouts, commissions, tax, and growth outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Attribution before reward", description: "Real referral programs need consent, attribution provenance, fraud review, terms, payout controls, reconciliation, and support.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const { user } = useAuth();
+  const [copied, setCopied] = useState(false);
+
+  if (!user) return <div className="p-8 text-center">Please login to access Referral Program</div>;
+
+  const referralCode = `SKY-${user.id?.substring(0, 8).toUpperCase() || 'DEMO'}`;
+  const referralLink = `https://skycoin4444.com?ref=${referralCode}`;
+
+  const mockStats = {
+    totalReferrals: 47,
+    activeReferrals: 32,
+    totalEarnings: 4750,
+    pendingEarnings: 850,
+  };
+
+  const mockReferrals = [
+    { id: 1, name: "John Doe", email: "john@example.com", date: "2026-07-01", status: "active", earnings: 150 },
+    { id: 2, name: "Jane Smith", email: "jane@example.com", date: "2026-06-28", status: "active", earnings: 200 },
+    { id: 3, name: "Bob Wilson", email: "bob@example.com", date: "2026-06-25", status: "inactive", earnings: 0 },
+    { id: 4, name: "Alice Brown", email: "alice@example.com", date: "2026-06-20", status: "active", earnings: 175 },
+  ];
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(referralLink);
+    setCopied(true);
+    toast.success("Referral link copied!");
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="min-h-screen bg-background p-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2">Referral Program</h1>
+          <p className="text-muted-foreground">Earn 10% commission on every referral</p>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm">Total Referrals</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{mockStats.totalReferrals}</div>
+              <p className="text-xs text-muted-foreground">{mockStats.activeReferrals} active</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm">Total Earnings</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">${mockStats.totalEarnings}</div>
+              <p className="text-xs text-muted-foreground">All time</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm">Pending Earnings</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">${mockStats.pendingEarnings}</div>
+              <p className="text-xs text-muted-foreground">Next payout</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm">Commission Rate</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">10%</div>
+              <p className="text-xs text-muted-foreground">Per referral</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Referral Link */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Your Referral Link</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="p-4 bg-accent/5 rounded-lg">
+              <p className="text-sm text-muted-foreground mb-2">Referral Code</p>
+              <p className="font-mono font-bold text-lg">{referralCode}</p>
+            </div>
+            <div className="flex gap-2">
+              <Input value={referralLink} readOnly className="flex-1" />
+              <Button onClick={copyToClipboard} variant="outline">
+                <Copy className="h-4 w-4 mr-2" />
+                {copied ? "Copied!" : "Copy"}
+              </Button>
+              <Button>
+                <Share2 className="h-4 w-4 mr-2" />
+                Share
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* How It Works */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>How It Works</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="bg-blue-600/10 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3">
+                  <span className="text-lg font-bold text-blue-600">1</span>
+                </div>
+                <p className="font-semibold mb-2">Share Your Link</p>
+                <p className="text-sm text-muted-foreground">Send your unique referral link to friends</p>
+              </div>
+              <div className="text-center">
+                <div className="bg-purple-600/10 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3">
+                  <span className="text-lg font-bold text-purple-600">2</span>
+                </div>
+                <p className="font-semibold mb-2">They Sign Up</p>
+                <p className="text-sm text-muted-foreground">They create an account using your link</p>
+              </div>
+              <div className="text-center">
+                <div className="bg-green-600/10 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3">
+                  <span className="text-lg font-bold text-green-600">3</span>
+                </div>
+                <p className="font-semibold mb-2">Earn Commission</p>
+                <p className="text-sm text-muted-foreground">Get 10% of their first purchase</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Referrals List */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Your Referrals</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left py-3 px-4 font-semibold">Name</th>
+                    <th className="text-left py-3 px-4 font-semibold">Email</th>
+                    <th className="text-left py-3 px-4 font-semibold">Date</th>
+                    <th className="text-left py-3 px-4 font-semibold">Status</th>
+                    <th className="text-left py-3 px-4 font-semibold">Earnings</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {mockReferrals.map((ref) => (
+                    <tr key={ref.id} className="border-b hover:bg-accent/5">
+                      <td className="py-3 px-4">{ref.name}</td>
+                      <td className="py-3 px-4 text-muted-foreground">{ref.email}</td>
+                      <td className="py-3 px-4 text-muted-foreground">{ref.date}</td>
+                      <td className="py-3 px-4">
+                        <Badge variant={ref.status === "active" ? "default" : "secondary"}>
+                          {ref.status}
+                        </Badge>
+                      </td>
+                      <td className="py-3 px-4 font-semibold">${ref.earnings}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

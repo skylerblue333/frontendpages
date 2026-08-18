@@ -399,7 +399,7 @@ const MinerDashboard: React.FC = () => {
             <AlertTriangle className="w-5 h-5" />
             Alerts & Notifications
           </h2>
-          
+
           <Alert className="bg-slate-800 border-yellow-600">
             <AlertTriangle className="h-4 w-4 text-yellow-500" />
             <AlertDescription className="text-slate-300">

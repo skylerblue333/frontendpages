@@ -119,7 +119,7 @@ const MiningCalculator: React.FC = () => {
     // Calculate daily earnings
     const blocksPerDay = (86400 / coin.blockTime); // 86400 seconds in a day
     const totalHashrate = hashrate * quantity;
-    
+
     // Simplified calculation: proportion of blocks won based on hashrate
     // In reality, this depends on network hashrate, but we'll use a simplified model
     const dailyRewardCoins = (coin.blockReward * blocksPerDay * totalHashrate) / 1000000; // Simplified

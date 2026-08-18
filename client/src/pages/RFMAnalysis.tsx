@@ -1,20 +1,74 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Filter, LockKeyhole, RefreshCw, Search, ShieldAlert, Sparkles, Target, Users, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const segments = [{ id: 1, name: "Champions", definition: "Recent, frequent, high-value cohort concept", status: "Unmeasured", note: "Requires verified customer, order, revenue, and time-window data." }, { id: 2, name: "At risk", definition: "Previously engaged cohort with recency decline", status: "Blocked", note: "Requires longitudinal activity and an approved churn definition." }, { id: 3, name: "New customers", definition: "First-activity cohort concept", status: "Unmeasured", note: "Requires identity resolution, first-event logic, and consent boundaries." }, { id: 4, name: "Needs attention", definition: "Low-frequency or low-value cohort concept", status: "Unmeasured", note: "Requires denominator, currency, refunds, and exclusion policies." }];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
+
 export default function RFMAnalysis() {
-  const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState(1);
-  const [cohort, setCohort] = useState("Cohort not set");
-  const [window, setWindow] = useState("Window not set");
-  const [scoreRule, setScoreRule] = useState("Scoring not configured");
-  const [showGates, setShowGates] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const filtered = useMemo(() => segments.filter((segment) => `${segment.name} ${segment.definition} ${segment.note}`.toLowerCase().includes(query.toLowerCase())), [query]);
-  const segment = segments.find((item) => item.id === selected) ?? segments[0];
-  const reset = () => { setQuery(""); setSelected(1); setCohort("Cohort not set"); setWindow("Window not set"); setScoreRule("Scoring not configured"); setShowGates(false); setSaved(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Target} eyebrow="RFMAnalysis · Segmentation preview" title="Segment the evidence before targeting the customer." description="Explore local recency, frequency, and monetary segment concepts with cohort, window, score-rule, recommendation, export, and evidence gates. No customers, orders, revenue, rankings, churn, or analytics are connected." badge="RFM workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200">{saved ? "View saved locally" : "Save view locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review RFM gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset view</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Segments", value: `${segments.length} local`, hint: "Values unavailable", icon: Target, tone: "cyan" }, { label: "Recency", value: "Unmeasured", hint: "No activity source", icon: RefreshCw, tone: "violet" }, { label: "Frequency", value: "Unmeasured", hint: "No event source", icon: Sparkles, tone: "amber" }, { label: "Monetary", value: "Unavailable", hint: "No verified revenue", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="RFM evidence boundary"><strong>This is a local segmentation-definition preview, not customer analytics.</strong> Segment names, recency/frequency/monetary labels, cohort and window intent, score posture, saved state, and empty recommendation states are browser concepts. No customer, purchase, order count, revenue, currency, ranking, churn, propensity, ROI, or targeting conclusion is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local segments" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.definition}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.status}</Badge></div><p className="mt-3 text-xs leading-5 text-slate-500">{item.note}</p></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected segment</p><h2 className="mt-2 text-2xl font-black">{segment.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{segment.definition}. {segment.note}</p><div className="mt-6 grid gap-3 sm:grid-cols-3">{[{ label: "Recency", value: "Unavailable" }, { label: "Frequency", value: "Unavailable" }, { label: "Monetary", value: "Unavailable" }, { label: "Population", value: "Unknown" }, { label: "Score", value: scoreRule }, { label: "Confidence", value: "Not assessed" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-3"><label className="text-sm text-slate-400">Cohort<select value={cohort} onChange={(event) => setCohort(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Cohort not set</option><option>First activity intent</option><option>Returning intent</option><option>High-value intent</option></select></label><label className="text-sm text-slate-400">Window<select value={window} onChange={(event) => setWindow(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Window not set</option><option>30-day intent</option><option>90-day intent</option><option>12-month intent</option></select></label><label className="text-sm text-slate-400">Score rule<select value={scoreRule} onChange={(event) => setScoreRule(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Scoring not configured</option><option>Quintile intent</option><option>Rule-based intent</option><option>Custom threshold intent</option></select></label></div><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><Users className="mx-auto size-7 text-slate-600" /><p className="mt-3 font-semibold">No segment population loaded</p><p className="mt-2 text-sm text-slate-500">Connect governed customer and transaction data before ranking or targeting a segment.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Export unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Recommendations unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No customer analytics claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A segment label does not establish a customer population, financial value, churn probability, ranking, recommendation, or campaign eligibility.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">RFM gates</p><h2 className="mt-2 text-2xl font-black">What a real segment must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Identity resolution, consent, purpose limitation, access control, and customer-data ownership", "Recency event, time zone, freshness, deduplication, inactivity, and return definitions", "Frequency event grain, order policy, refunds, cancellations, repeat logic, and denominator", "Monetary currency, valuation date, tax, discounts, refunds, chargebacks, and revenue policy", "Scoring quantiles, thresholds, cohorts, missing data, uncertainty, bias, and validation", "Recommendations, exports, campaign controls, audit, retention, deletion, and rollback"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Segmentation surface preserved", description: "RFM cards, segment search, cohort, window, score rule, empty population state, export, recommendations, save/reset, and gates remain interactive.", icon: Target, status: "Local segments" }, { title: "No customer-data theater", description: "Customers, orders, revenue, currency, rankings, churn, propensity, ROI, targeting, and campaign eligibility are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Policy before targeting", description: "Real RFM analysis needs governed identity, transaction policy, currency, cohort rules, validation, privacy, and rollback.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>RFMAnalysis</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">RFMAnalysis</h1>
+            <p className="text-muted-foreground mt-2">RFM analysis</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

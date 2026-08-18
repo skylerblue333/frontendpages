@@ -1,19 +1,74 @@
-import { useMemo, useState } from "react";
-import { AlertTriangle, ArrowRight, Blocks, CheckCircle2, CircleDashed, Clock3, Copy, FileCheck2, Filter, Hash, History, Link2, RefreshCw, Search, ShieldCheck, Timer, WalletCards, WifiOff, XCircle } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-type TxStatus = "Plan preview" | "Awaiting source evidence" | "Destination evidence required" | "Failed preview";
-type BridgeTx = { id: string; source: string; destination: string; asset: string; amount: string; status: TxStatus; updated: string; evidence: string[]; issue?: string };
-const INITIAL_TRANSACTIONS: BridgeTx[] = [
-  { id: "preview-tx-01", source: "Ethereum preview", destination: "Skycoin preview", asset: "Asset unspecified", amount: "Not quoted", status: "Awaiting source evidence", updated: "Preview record", evidence: ["Source network", "Nonce and domain", "Message hash"] },
-  { id: "preview-tx-02", source: "Skycoin preview", destination: "Polygon preview", asset: "Asset unspecified", amount: "Not quoted", status: "Destination evidence required", updated: "Preview record", evidence: ["Recipient validation", "Mint or release policy", "Finality source"] },
-  { id: "preview-tx-03", source: "Ethereum preview", destination: "Arbitrum preview", asset: "Asset unspecified", amount: "Not quoted", status: "Failed preview", updated: "Preview record", evidence: ["Failure reason", "Retry policy", "Refund path"], issue: "No relayer or bridge adapter is connected." },
-];
-const FILTERS = ["All", "Plan preview", "Awaiting source evidence", "Destination evidence required", "Failed preview"] as const;
+export default function BridgeTransactions() {
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-export default function BridgeTransactions() { const [transactions, setTransactions] = useState(INITIAL_TRANSACTIONS); const [filter, setFilter] = useState<(typeof FILTERS)[number]>("All"); const [query, setQuery] = useState(""); const [selectedId, setSelectedId] = useState<string | null>("preview-tx-01"); const [prepared, setPrepared] = useState(false); const visible = useMemo(() => transactions.filter((tx) => { const matchesFilter = filter === "All" || tx.status === filter; const haystack = `${tx.id} ${tx.source} ${tx.destination} ${tx.asset} ${tx.status} ${tx.issue ?? ""}`.toLowerCase(); return matchesFilter && haystack.includes(query.toLowerCase()); }), [transactions, filter, query]); const selected = visible.find((tx) => tx.id === selectedId) ?? visible[0]; const prepareRetry = () => { if (!selected) return; setTransactions((current) => current.map((tx) => tx.id === selected.id ? { ...tx, status: "Plan preview", issue: "Retry plan prepared locally; no transaction was resubmitted." } : tx)); setPrepared(true); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Link2} eyebrow="Crypto Infrastructure · Reconciliation" title="Read a bridge transaction as evidence, not a spinner." description="Inspect synthetic cross-chain transaction records, lifecycle states, evidence requirements, and failure recovery. This page does not broadcast, poll, confirm, reconcile, refund, or report a transfer as successful." badge="Preview transaction console"><div className="flex flex-wrap gap-2"><Button onClick={prepareRetry} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><RefreshCw className="mr-2 size-4" />Prepare retry plan</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><History className="mr-2 size-4" />Lifecycle policy</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Visible transactions", value: String(visible.length), hint: "Synthetic records", icon: Link2 }, { label: "Source receipts", value: "Unavailable", hint: "No canonical chain source", icon: Blocks, tone: "amber" }, { label: "Confirmations", value: "Unverified", hint: "No finality provider", icon: CircleDashed, tone: "violet" }, { label: "Reconciliation", value: "Not run", hint: "No ledger or custody link", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="Transaction evidence boundary">Every record below is a synthetic preview. A production bridge console must verify identifiers, chain and asset scope, transaction hash format, source receipt, message nonce, relayer state, destination receipt, confirmations, reorg behavior, refund path, and immutable audit history. No hash, balance, ownership, success, or settlement claim is fabricated.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex flex-col gap-3 sm:flex-row"><div className="relative flex-1"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search transaction previews" aria-label="Search transaction previews" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="flex items-center gap-2 overflow-x-auto text-xs text-slate-500"><Filter className="size-4" />{FILTERS.slice(0, 3).map((item) => <button key={item} onClick={() => setFilter(item)} className={`whitespace-nowrap rounded-lg px-3 py-2 ${filter === item ? "bg-cyan-300/15 text-cyan-200" : "hover:text-white"}`}>{item}</button>)}</div></div><div className="mt-4 space-y-2">{visible.map((tx) => <button key={tx.id} onClick={() => { setSelectedId(tx.id); setPrepared(false); }} className={`w-full rounded-xl border p-4 text-left transition ${selected?.id === tx.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><Hash className="size-4 text-cyan-300" /><span className="font-mono text-sm">{tx.id}</span><Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">{tx.status}</Badge></div><div className="mt-3 flex items-center gap-2 text-sm text-slate-300"><span>{tx.source}</span><ArrowRight className="size-4 text-slate-500" /><span>{tx.destination}</span></div><div className="mt-2 flex flex-wrap gap-3 text-xs text-slate-500"><span>{tx.asset}</span><span>{tx.amount}</span><span>{tx.updated}</span></div></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No transaction previews match" description="Try a different lifecycle state or search term." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected transaction</p><h2 className="mt-2 font-mono text-xl font-bold">{selected.id}</h2><p className="mt-2 text-sm text-slate-400">{selected.source} <ArrowRight className="mx-1 inline size-3" /> {selected.destination}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><div className="mt-6 grid gap-3 sm:grid-cols-3"><Detail label="Asset" value={selected.asset} icon={WalletCards} /><Detail label="Amount" value={selected.amount} icon={Copy} /><Detail label="Updated" value={selected.updated} icon={Clock3} /></div><div className="mt-6 space-y-3">{selected.evidence.map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4"><FileCheck2 className="size-4 text-emerald-300" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-slate-500">Required</span></div>)}</div>{selected.issue && <div className="mt-5 rounded-xl border border-rose-300/20 bg-rose-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-rose-200"><XCircle className="size-4" />Failure state</div><p className="mt-2 text-sm leading-6 text-slate-300">{selected.issue}</p></div>}<div className="mt-6 flex flex-wrap gap-2"><Button onClick={prepareRetry} variant="outline" className="border-white/15 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Prepare local retry</Button><Button variant="outline" className="border-white/15 text-white hover:bg-white/10"><ShieldCheck className="mr-2 size-4" />Audit requirements</Button></div>{prepared && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-cyan-200"><CheckCircle2 className="size-4" />Retry plan prepared</div><p className="mt-2 text-sm leading-6 text-slate-300">No transaction was resubmitted, no gas was estimated, no receipt was polled, and no refund was initiated.</p></div>}</> : <ScreenStatePanel type="empty" title="Select a transaction preview" description="Inspect route, evidence, failure, and reconciliation requirements." />}</CardContent></Card></section><section className="grid gap-4 md:grid-cols-3"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><Timer className="size-5 text-cyan-300" /><h3 className="mt-3 font-semibold">Lifecycle clarity</h3><p className="mt-2 text-sm leading-6 text-slate-400">Plan, source pending, destination pending, failed, refunded, and settled are different states.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><ShieldCheck className="size-5 text-violet-300" /><h3 className="mt-3 font-semibold">Reconciliation evidence</h3><p className="mt-2 text-sm leading-6 text-slate-400">A user outcome needs source and destination receipts plus a durable audit trail.</p></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><AlertTriangle className="size-5 text-amber-300" /><h3 className="mt-3 font-semibold">No fake success</h3><p className="mt-2 text-sm leading-6 text-slate-400">A preview record is not a transaction hash, confirmation, balance change, or settlement.</p></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Evidence chain", description: "Source, message, destination, and settlement evidence should be linked and independently verifiable.", icon: FileCheck2, status: "Required" }, { title: "Failure is recoverable", description: "Retry, refund, timeout, reorg, and duplicate states need explicit user-facing outcomes.", icon: RefreshCw, status: "Required" }, { title: "Reconciliation over optimism", description: "Never show a completed bridge transfer until canonical receipts and finality rules agree.", icon: ShieldCheck, status: "Guardrail" }]} /></main></div>; }
-function Detail({ label, value, icon: Icon }: { label: string; value: string; icon: typeof WalletCards }) { return <div className="rounded-lg border border-white/10 bg-black/15 p-4"><Icon className="size-4 text-slate-400" /><p className="mt-3 text-xs uppercase tracking-wider text-slate-500">{label}</p><p className="mt-1 text-sm text-slate-200">{value}</p></div>; }
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>BridgeTransactions</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">BridgeTransactions</h1>
+            <p className="text-muted-foreground mt-2">Cross-chain bridge</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

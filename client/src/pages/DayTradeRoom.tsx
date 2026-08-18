@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
-import { Card } from "@/components/ui/card";
+import { Card, IconTile } from "@/components/ui/sk";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TrendingUp, Volume2, Zap, Mic } from "lucide-react";
@@ -144,7 +144,7 @@ export default function DayTradeRoom() {
             {/* AI Voice Partner */}
             <Card className="p-6 text-center">
               <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center transition-all ${
-                isVoiceOn 
+                isVoiceOn
                   ? "bg-gradient-to-br from-[var(--neon-cyan)] to-[var(--neon-magenta)] animate-pulse"
                   : "bg-gradient-to-br from-[var(--neon-cyan)] to-[var(--neon-magenta)]"
               }`}>

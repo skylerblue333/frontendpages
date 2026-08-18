@@ -1,13 +1,75 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Activity, BarChart3, Check, Filter, Gauge, LockKeyhole, RefreshCw, Search, ShieldAlert, Timer, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const monitors = [{ id: 1, name: "Public API baseline", category: "API", detail: "A local response-time concept awaiting governed request telemetry, route identity, sampling, and percentile computation.", state: "Draft" }, { id: 2, name: "Dashboard navigation", category: "Frontend", detail: "A browser-performance concept requiring real spans, device context, sampling policy, and user-impact boundaries.", state: "Needs evidence" }, { id: 3, name: "Wallet read path", category: "Financial", detail: "A sensitive-path concept that must not imply wallet availability, chain connectivity, or transaction performance.", state: "Unmeasured" }, { id: 4, name: "Learning content delivery", category: "Education", detail: "An education-delivery concept requiring privacy, learner context, accessibility, and content-source provenance.", state: "Blocked" }];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
+
 export default function ResponseTime() {
-  const [query, setQuery] = useState(""); const [category, setCategory] = useState("All"); const [selected, setSelected] = useState(1); const [window, setWindow] = useState("Window not configured"); const [comparison, setComparison] = useState("Comparison not configured"); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false);
-  const categories = ["All", ...Array.from(new Set(monitors.map((item) => item.category)))]; const filtered = useMemo(() => monitors.filter((item) => (category === "All" || item.category === category) && `${item.name} ${item.category} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [category, query]); const monitor = monitors.find((item) => item.id === selected) ?? monitors[0];
-  const reset = () => { setQuery(""); setCategory("All"); setSelected(1); setWindow("Window not configured"); setComparison("Comparison not configured"); setSaved(false); setShowGates(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Timer} eyebrow="ResponseTime · Telemetry preview" title="Prove the latency before reporting a number." description="Explore local response-time concepts with endpoint search, latency, percentiles, traces, comparisons, alerts, incidents, reporting, save, reset, and evidence gates. No live request telemetry, uptime, performance, or operational outcome is connected." badge="Performance workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "View saved locally" : "Save monitor locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review performance gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset monitor</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Monitors", value: `${monitors.length} local`, hint: "No telemetry source", icon: Timer, tone: "cyan" }, { label: "Latency", value: "Unavailable", hint: "No request source", icon: Gauge, tone: "violet" }, { label: "Percentiles", value: "Unmeasured", hint: "No sample source", icon: BarChart3, tone: "amber" }, { label: "Incidents", value: "Unknown", hint: "No incident source", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Performance evidence boundary"><strong>This is a local observability preview, not evidence that a request occurred, a latency value exists, or a service is healthy.</strong> Monitor cards, endpoint filters, p50/p95/p99 intent, traces, comparisons, alerts, incidents, saved state, and audit gates are browser concepts. No request, user, uptime, performance, or operational outcome is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local response-time monitors" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-4 flex flex-wrap gap-2">{categories.map((entry) => <Button key={entry} onClick={() => setCategory(entry)} size="sm" variant="outline" className={category === entry ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100" : "border-white/10 text-slate-400"}><Filter className="mr-1 size-3" />{entry}</Button>)}</div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.state}</Badge></div><div className="mt-4"><Badge variant="outline" className="border-white/10 text-slate-500">{item.category}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected response-time concept</p><h2 className="mt-2 text-2xl font-black">{monitor.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{monitor.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Category", value: monitor.category }, { label: "State", value: monitor.state }, { label: "Requests", value: "Unavailable" }, { label: "Latency", value: "Unmeasured" }, { label: "p95", value: "Unavailable" }, { label: "Alerts", value: "Unconnected" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2"><label className="text-sm text-slate-400">Reporting window<select value={window} onChange={(event) => setWindow(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Window not configured</option><option>Current-window intent</option><option>Hourly intent</option><option>Daily intent</option></select></label><label className="text-sm text-slate-400">Comparison<select value={comparison} onChange={(event) => setComparison(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Comparison not configured</option><option>Previous-window intent</option><option>Baseline intent</option><option>Release intent</option></select></label></div><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><Activity className="mx-auto size-8 text-slate-600" /><p className="mt-3 font-semibold">No response telemetry loaded</p><p className="mt-2 text-sm text-slate-500">Connect governed request logs, route identity, sampling, traces, privacy controls, alert rules, incident ownership, and audit before reporting latency.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Refresh unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Calculate unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Alert unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Export unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No latency or health claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A local monitor does not prove a request, response time, percentile, uptime, incident, user impact, or service health.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Performance gates</p><h2 className="mt-2 text-2xl font-black">What a real response-time workflow must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Request identity, route, method, status, timestamp, region, device, tenant, trace, and sampling boundaries", "Latency semantics, clock source, units, p50/p75/p90/p95/p99, outliers, retries, timeouts, and aggregation", "Privacy, consent, user impact, sensitive paths, wallet/financial operations, education, minors, and redaction", "Baseline, release, deployment, capacity, dependency, queue, cache, network, and comparison provenance", "Alert rules, thresholds, incidents, ownership, escalation, runbooks, support, and user-visible status", "Retention, export, audit, availability, recovery, rollback, localization, accessibility, and operational monitoring"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Performance surface preserved", description: "Monitors, search, endpoint filters, latency, percentiles, traces, comparisons, alerts, incidents, reporting, save/reset, and gates remain interactive.", icon: Timer, status: "Local concepts" }, { title: "No metric theater", description: "Requests, latency, percentiles, uptime, incidents, user impact, and health outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before reporting", description: "Real performance reporting needs traceable telemetry, defined semantics, privacy controls, alerts, ownership, and audit.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>ResponseTime</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">ResponseTime</h1>
+            <p className="text-muted-foreground mt-2">Response time tracking</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

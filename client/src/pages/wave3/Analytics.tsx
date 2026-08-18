@@ -6,7 +6,7 @@ import { useAuth } from '@/_core/hooks/useAuth';
 import { trpc } from '@/lib/trpc';
 
 const AnalyticsPage: React.FC = () => {
-  
+
   const [activeTab, setActiveTab] = useState<'user' | 'platform' | 'trading' | 'social' | 'marketplace' | 'learning'>('user');
 
   // Queries

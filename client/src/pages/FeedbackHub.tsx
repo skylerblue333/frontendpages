@@ -44,8 +44,8 @@ export default function FeedbackHub() {
     { name: 'Other', value: 5, color: '#6b7280' },
   ];
 
-  const filteredFeedback = selectedCategory === 'all' 
-    ? feedbackData 
+  const filteredFeedback = selectedCategory === 'all'
+    ? feedbackData
     : feedbackData.filter((f: any) => f.category === selectedCategory);
 
   return (
@@ -117,7 +117,7 @@ export default function FeedbackHub() {
                   <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                   <XAxis dataKey="date" stroke="#9ca3af" />
                   <YAxis stroke="#9ca3af" />
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
                     labelStyle={{ color: '#fff' }}
                   />
@@ -152,7 +152,7 @@ export default function FeedbackHub() {
                       <Cell key={`cell-${index}`} fill={entry.fill} />
                     ))}
                   </Pie>
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
                     labelStyle={{ color: '#fff' }}
                   />
@@ -174,7 +174,7 @@ export default function FeedbackHub() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                 <XAxis dataKey="name" stroke="#9ca3af" />
                 <YAxis stroke="#9ca3af" />
-                <Tooltip 
+                <Tooltip
                   contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
                   labelStyle={{ color: '#fff' }}
                 />
@@ -203,7 +203,7 @@ export default function FeedbackHub() {
               <div key={feedback.id} className="p-4 bg-slate-700/30 rounded-lg border border-slate-600 hover:border-slate-500 transition">
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <Badge 
+                    <Badge
                       variant="outline"
                       className={feedback.sentiment === 'positive' ? 'border-green-500 text-green-400' : 'border-red-500 text-red-400'}
                     >

@@ -1,21 +1,57 @@
-import { useMemo, useState } from "react";
-import { ArrowRight, Bug, CheckCircle2, Code2, Gift, LockKeyhole, MessageSquare, Rocket, Search, Shield, Star, TestTube2, Users, Vote, Wand2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
+import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/PageHeader";
+import { Rocket, Zap, Shield, Star, CheckCircle, ArrowRight, Users, Code2, Bug, Gift } from "lucide-react";
 
-type Feature = { id: string; name: string; area: string; status: "Preview" | "Testing plan" | "Contract required" | "Not verified"; description: string; evidence: string };
-const FEATURES: Feature[] = [
-  { id: "code", name: "AI Code Review", area: "Developer tools", status: "Testing plan", description: "A review workflow requiring repository access, model disclosure, human approval, and security evidence.", evidence: "No live repository or scanner connected" },
-  { id: "voice", name: "Voice-to-Post", area: "Community", status: "Preview", description: "A voice-input concept requiring transcription, consent, editable drafts, and moderation before publishing.", evidence: "No microphone or publishing service connected" },
-  { id: "bridge", name: "Cross-Chain Bridge", area: "Crypto", status: "Contract required", description: "A high-risk transfer surface requiring network validation, custody, signatures, confirmations, and failure handling.", evidence: "No bridge or wallet action enabled" },
-  { id: "dao", name: "DAO Delegation", area: "Governance", status: "Contract required", description: "A governance concept requiring identity, delegation scope, voting contract, and revocation evidence.", evidence: "No voting contract connected" },
-  { id: "collab", name: "Creator Collaboration", area: "Creators", status: "Preview", description: "A co-creation workspace requiring permissions, version history, attribution, and publishing approval.", evidence: "No collaboration workspace connected" },
-  { id: "signals", name: "Trading Signals", area: "Financial", status: "Not verified", description: "A research concept that must not show buy/sell signals, prices, returns, or suitability without a verified data and risk service.", evidence: "Market and advisory contracts unavailable" },
+const BETA_FEATURES = [
+  { label: "AI Code Review Bot", status: "testing", desc: "Automated PR reviews with security scanning" },
+  { label: "Voice-to-Post", status: "testing", desc: "Dictate social posts with voice commands" },
+  { label: "Cross-Chain Bridge", status: "coming", desc: "Bridge SKY444 across 5 blockchains" },
+  { label: "DAO Delegation", status: "testing", desc: "Delegate your voting power to trusted members" },
+  { label: "Creator Collab Tools", status: "coming", desc: "Co-create content with other creators" },
+  { label: "AI Trading Signals", status: "live", desc: "ML-powered buy/sell signals for SKY444" },
 ];
-const PERKS = ["Feedback channel", "Feature research sessions", "Release notes preview", "Test environment guidance", "Issue reporting path", "Eligibility policy review"];
 
-export default function Beta() { const [query, setQuery] = useState(""); const [selected, setSelected] = useState<Feature | null>(FEATURES[0]); const [interest, setInterest] = useState(false); const visible = useMemo(() => FEATURES.filter((feature) => `${feature.name} ${feature.area} ${feature.status} ${feature.description}`.toLowerCase().includes(query.toLowerCase())), [query]); return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Rocket} eyebrow="Program · Early Access" title="Test what is ready, and label what is not." description="Explore the beta feature catalog, evidence requirements, feedback workflow, and local interest state. This page does not claim invitations, production readiness, token rewards, fee discounts, trading advice, or access to live services." badge="Evidence-labeled beta preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setInterest(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Star className="mr-2 size-4" />{interest ? "Interest saved locally" : "Register local interest"}</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><MessageSquare className="mr-2 size-4" />Feedback unavailable</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Feature surfaces", value: String(FEATURES.length), hint: "Evidence-labeled catalog", icon: Rocket }, { label: "Production access", value: "Unavailable", hint: "No beta entitlement connected", icon: LockKeyhole, tone: "amber" }, { label: "Local interest", value: interest ? "Saved" : "Not saved", hint: "Browser preview only", icon: Star, tone: "violet" }, { label: "Financial rewards", value: "Not claimed", hint: "No token or fee promise", icon: Gift, tone: "slate" }]} /><ScreenPreviewBanner title="Beta evidence boundary">Feature cards, search, readiness labels, selected detail, local interest, feedback-unavailable state, and testing requirements are available for UX review. No invite was issued, no feature is declared production-ready, no token or discount was promised, and no user eligibility or tester count is fabricated.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search beta features" aria-label="Search beta features" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visible.map((feature) => <button key={feature.id} onClick={() => { setSelected(feature); setInterest(false); }} className={`w-full rounded-xl border p-4 text-left transition ${selected?.id === feature.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><TestTube2 className="size-4 text-cyan-300" /><span className="font-semibold">{feature.name}</span><Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">{feature.status}</Badge></div><p className="mt-2 text-xs uppercase tracking-wider text-slate-500">{feature.area}</p><p className="mt-2 text-sm leading-6 text-slate-400">{feature.description}</p></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No features match" description="Try another area, status, or search phrase." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected beta surface</p><h2 className="mt-1 text-2xl font-bold">{selected.name}</h2><p className="mt-2 text-sm text-slate-400">{selected.area} · {selected.status}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><p className="mt-5 text-sm leading-6 text-slate-300">{selected.description}</p><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-amber-200"><Shield className="size-4" />Evidence state</div><p className="mt-2 text-sm leading-6 text-slate-300">{selected.evidence}</p></div><div className="mt-6 grid gap-3 sm:grid-cols-2">{["Scope and eligibility", "Test environment", "Known limitations", "Feedback route", "Privacy and security", "Rollback or disable path"].map((item) => <div key={item} className="rounded-lg border border-white/10 bg-black/15 p-4"><CheckCircle2 className="size-4 text-emerald-300" /><p className="mt-3 text-sm text-slate-300">{item}</p><p className="mt-1 text-xs text-slate-500">Required before access</p></div>)}</div>{interest && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-cyan-200"><SparklesIcon />Local interest captured</div><p className="mt-2 text-sm leading-6 text-slate-300">This preference is not submitted, does not grant access, and does not create a tester record.</p></div>}</> : <ScreenStatePanel type="empty" title="Select a beta feature" description="Inspect readiness, evidence, limitations, eligibility, and feedback requirements." />}</CardContent></Card></section><section className="grid gap-6 lg:grid-cols-2"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Gift className="size-5 text-violet-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Program expectations</p><h2 className="mt-1 text-2xl font-bold">Useful feedback is the perk</h2></div></div><div className="mt-5 grid gap-3 sm:grid-cols-2">{PERKS.map((perk) => <div key={perk} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4 text-sm text-slate-300"><CheckCircle2 className="size-4 text-emerald-300" />{perk}</div>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Bug className="size-5 text-cyan-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Tester safety</p><h2 className="mt-1 text-2xl font-bold">Test in the right environment</h2></div></div><div className="mt-5 space-y-3">{["Never use beta previews for real funds", "Do not upload secrets or private keys", "Record reproducible steps and expected state", "Verify rollback before high-impact testing"].map((item) => <div key={item} className="flex items-start gap-3 rounded-lg border border-white/10 bg-black/15 p-4 text-sm leading-6 text-slate-300"><Shield className="mt-0.5 size-4 shrink-0 text-cyan-300" />{item}</div>)}</div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Readiness is proven", description: "Testing, contracts, security, support, and rollback evidence come before a live label.", icon: Code2, status: "Required" }, { title: "Feedback is consented", description: "Collect tester input through a clear scope and privacy-aware feedback path.", icon: MessageSquare, status: "Required" }, { title: "No fake perks", description: "A beta preview is not an invitation, token reward, fee discount, priority queue, or production entitlement.", icon: LockKeyhole, status: "Guardrail" }]} /></main></div>; }
-function SparklesIcon() { return <span aria-hidden="true">✦</span>; }
+export default function Beta() {
+  return (
+    <div className="container py-8 max-w-4xl animate-page-in">
+      <PageHeader backHref="/dashboard" icon={Rocket} title="Beta Program" subtitle="Early access to cutting-edge features before public launch" badge="Invite Only" badgeVariant="destructive" />
+      <div className="card p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 mb-8">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center shrink-0"><Gift className="w-6 h-6 text-primary" /></div>
+          <div>
+            <h3 className="font-bold text-lg mb-1">Beta Tester Perks</h3>
+            <div className="grid sm:grid-cols-2 gap-2 mt-3">
+              {["500 SKY444 bonus tokens", "Lifetime 30% fee discount", "Exclusive Beta badge", "Direct dev team access", "Early feature voting rights", "Priority support queue"].map(p => (
+                <div key={p} className="flex items-center gap-2 text-sm"><CheckCircle className="w-4 h-4 text-success shrink-0" />{p}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="space-y-3 mb-8">
+        <h3 className="font-semibold flex items-center gap-2"><Zap className="w-5 h-5 text-primary" />Beta Features</h3>
+        {BETA_FEATURES.map(f => (
+          <div key={f.label} className="card p-4 flex items-center gap-4">
+            <div className="flex-1">
+              <div className="font-medium text-sm">{f.label}</div>
+              <div className="text-xs text-muted-foreground">{f.desc}</div>
+            </div>
+            <Badge variant={f.status === "live" ? "default" : f.status === "testing" ? "secondary" : "outline"} className="text-xs shrink-0">
+              {f.status === "live" ? "Live" : f.status === "testing" ? "Testing" : "Coming Soon"}
+            </Badge>
+          </div>
+        ))}
+      </div>
+      <div className="card p-6 text-center">
+        <h3 className="font-bold text-lg mb-2">Apply for Beta Access</h3>
+        <p className="text-muted-foreground text-sm mb-4">Limited spots available. Must hold 100+ SKY444 tokens.</p>
+        <div className="flex gap-3 justify-center">
+          <Link href="/staking"><Button className="btn-primary gap-2"><Star className="w-4 h-4" />Apply Now</Button></Link>
+          <Link href="/crypto"><Button variant="outline" gap-2>Get SKY444 <ArrowRight className="w-4 h-4" /></Button></Link>
+        </div>
+      </div>
+    </div>
+  );
+}

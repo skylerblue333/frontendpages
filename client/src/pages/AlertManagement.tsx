@@ -1,19 +1,75 @@
-import { useMemo, useState } from "react";
-import { AlertTriangle, Bell, CheckCircle2, Clock3, Database, Filter, LockKeyhole, Mail, Plus, Search, Settings, Shield, Siren, Smartphone, Workflow } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-type Rule = { id: string; name: string; source: string; trigger: string; channel: string; status: "Draft rule" | "Delivery unavailable" | "Review required" };
-const RULES: Rule[] = [
-  { id: "error", name: "Error-rate threshold", source: "API telemetry", trigger: "Define threshold and freshness", channel: "On-call route", status: "Delivery unavailable" },
-  { id: "quota", name: "Quota approach", source: "Usage meter", trigger: "Define plan and account scope", channel: "Email or in-app", status: "Review required" },
-  { id: "auth", name: "Authentication failures", source: "Security events", trigger: "Define aggregation and abuse context", channel: "Security owner", status: "Delivery unavailable" },
-  { id: "dependency", name: "Dependency failure", source: "Health probes", trigger: "Define retries and stale-data policy", channel: "Incident workflow", status: "Draft rule" },
-];
-const REQUIREMENTS = ["Source and freshness", "Threshold and evaluation window", "Owner and escalation", "Retry and deduplication", "Redaction and audit", "Resolution and recovery message"];
+export default function AlertManagement() {
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-export default function AlertManagement() { const [query, setQuery] = useState(""); const [selected, setSelected] = useState<Rule | null>(null); const [rules, setRules] = useState(RULES); const [tab, setTab] = useState("rules"); const [drafted, setDrafted] = useState(false); const visible = useMemo(() => rules.filter((rule) => `${rule.name} ${rule.source} ${rule.trigger} ${rule.channel} ${rule.status}`.toLowerCase().includes(query.toLowerCase())), [query, rules]); const addRule = () => { const rule = { id: `draft-${rules.length + 1}`, name: `New alert rule ${rules.length + 1}`, source: "Define source", trigger: "Define trigger", channel: "Define channel", status: "Draft rule" as const }; setRules((current) => [rule, ...current]); setSelected(rule); setDrafted(true); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Bell} eyebrow="Operations · Alert Management" title="Turn signals into safe, accountable notifications." description="Explore alert-rule templates, thresholds, owners, escalation, retries, deduplication, and recovery messaging. This workspace does not claim live telemetry, active rules, incident delivery, or notification success." badge="Preview alert console"><div className="flex flex-wrap gap-2"><Button onClick={addRule} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Plus className="mr-2 size-4" />Add local rule</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Settings className="mr-2 size-4" />Alert settings</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Rule templates", value: String(rules.length), hint: "Local alert designs", icon: Bell }, { label: "Live delivery", value: "Unavailable", hint: "No email, push, or on-call service", icon: Smartphone, tone: "amber" }, { label: "Requirements", value: String(REQUIREMENTS.length), hint: "Evidence before enablement", icon: CheckCircle2, tone: "violet" }, { label: "Incident feed", value: "Unverified", hint: "No active incident claim", icon: Siren, tone: "slate" }]} /><ScreenPreviewBanner title="Alert management boundary">The rule catalog, search, local rule creation, selected detail, evaluation requirements, delivery-unavailable state, and escalation guidance are available for UX review. No alert fired, no notification was sent, no incident was created, and no threshold, volume, response time, or resolution is fabricated.</ScreenPreviewBanner><section><div className="mb-5 flex flex-wrap gap-2 rounded-xl border border-white/10 bg-white/[0.04] p-2">{[["rules", "Rule catalog"], ["channels", "Channels"], ["escalation", "Escalation"]].map(([value, label]) => <Button key={value} size="sm" variant={tab === value ? "default" : "outline"} onClick={() => setTab(value)} className={tab === value ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "border-white/15 bg-white/5 text-slate-300 hover:bg-white/10"}>{label}</Button>)}</div>{tab === "rules" && <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search alert rules" aria-label="Search alert rules" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visible.map((rule) => <button key={rule.id} onClick={() => { setSelected(rule); setDrafted(false); }} className={`w-full rounded-xl border p-4 text-left transition ${selected?.id === rule.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-center gap-2"><Bell className="size-4 text-cyan-300" /><span className="font-semibold">{rule.name}</span><Badge variant="outline" className="ml-auto border-amber-300/20 text-amber-200">{rule.status}</Badge></div><p className="mt-2 text-xs uppercase tracking-wider text-slate-500">{rule.source} · {rule.channel}</p><p className="mt-2 text-sm leading-6 text-slate-400">{rule.trigger}</p></button>)}{visible.length === 0 && <ScreenStatePanel type="empty" title="No rules match" description="Try another source, channel, or keyword." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected alert rule</p><h2 className="mt-1 text-2xl font-bold">{selected.name}</h2><p className="mt-2 text-sm text-slate-400">{selected.source} · {selected.channel}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><div className="mt-6 space-y-3">{REQUIREMENTS.map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4 text-sm text-slate-300"><CheckCircle2 className="size-4 text-emerald-300" />{item}<Badge variant="outline" className="ml-auto border-white/10 text-slate-500">Required</Badge></div>)}</div>{drafted && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-cyan-200"><SparklesIcon />Local draft created</div><p className="mt-2 text-sm leading-6 text-slate-300">This rule is only a frontend draft. It is not stored, enabled, evaluated, or delivered.</p></div>}</> : <ScreenStatePanel type="empty" title="Select an alert rule" description="Inspect source, threshold, ownership, delivery, retry, and recovery requirements." />}</CardContent></Card></div>}{tab === "channels" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><ScreenStatePanel type="unavailable" title="Notification channels are unavailable" description="No email, push, SMS, in-app, or on-call delivery connector is configured for this preview." /><div className="mt-5 grid gap-3 md:grid-cols-4">{[["Email", Mail], ["Push", Smartphone], ["In-app", Bell], ["On-call", Siren]].map(([label, ChannelIcon]) => { const Icon = ChannelIcon as typeof Mail; return <div key={label as string} className="rounded-xl border border-white/10 bg-black/15 p-4"><Icon className="size-4 text-cyan-300" /><p className="mt-3 text-sm text-slate-300">{label as string}</p><p className="mt-1 text-xs text-slate-500">Connector required</p></div>; })}</div></CardContent></Card>}{tab === "escalation" && <Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Workflow className="size-5 text-violet-300" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Escalation preview</p><h2 className="mt-1 text-2xl font-bold">Give every alert an owner and recovery path</h2></div></div><div className="mt-6 grid gap-3 md:grid-cols-3">{["Detect and deduplicate", "Assign and acknowledge", "Resolve and communicate"].map((item, index) => <div key={item} className="rounded-xl border border-white/10 bg-black/15 p-4"><div className="flex size-8 items-center justify-center rounded-lg bg-violet-300/10 text-violet-200">{index + 1}</div><h3 className="mt-4 font-semibold">{item}</h3><p className="mt-2 text-sm leading-6 text-slate-400">Example workflow requirement; no incident is implied.</p></div>)}</div></CardContent></Card>}</section><ScreenFeatureGrid features={[{ title: "Thresholds with freshness", description: "Evaluate signals with source, timestamp, window, stale-data behavior, and deduplication.", icon: Database, status: "Required" }, { title: "Human escalation", description: "Assign owners, acknowledge, record reasons, and provide a recovery message.", icon: Shield, status: "Required" }, { title: "No fake pages", description: "A rule draft never fires, pages, creates an incident, or claims delivery.", icon: AlertTriangle, status: "Guardrail" }]} /></main></div>; }
-function SparklesIcon() { return <span aria-hidden="true">✦</span>; }
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>AlertManagement</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">AlertManagement</h1>
+            <p className="text-muted-foreground mt-2">Set up data alerts and notifications</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

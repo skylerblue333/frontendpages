@@ -1,18 +1,52 @@
-import { useMemo, useState } from "react";
-import { useLocation } from "wouter";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { AlertCircle, Check, Compass, FileSearch, Home, LifeBuoy, RefreshCw, Search, ShieldCheck, WifiOff } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-
-const SUGGESTIONS = [{ label: "Dashboard", path: "/dashboard" }, { label: "Gaming Hub", path: "/gaming" }, { label: "AI Control Center", path: "/ai-control-center" }, { label: "Settings", path: "/settings" }];
+import { AlertCircle, Home } from "lucide-react";
+import { useLocation } from "wouter";
 
 export default function NotFound() {
   const [, setLocation] = useLocation();
-  const [query, setQuery] = useState("");
-  const [retried, setRetried] = useState(false);
-  const visible = useMemo(() => SUGGESTIONS.filter((item) => item.label.toLowerCase().includes(query.toLowerCase()) || item.path.includes(query.toLowerCase())), [query]);
-  const currentPath = typeof window === "undefined" ? "Unknown path" : window.location.pathname;
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Compass} eyebrow="404 · Recovery workspace" title="The route is not available here." description="Use the recovery controls to return to a known surface, search a small local suggestion set, or retry the current route. This page does not infer why a route failed or claim backend, authentication, deployment, or support status." badge="Recovery preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setLocation("/")} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Home className="mr-2 size-4" />Return home</Button><Button onClick={() => { setRetried(true); window.location.reload(); }} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />{retried ? "Retry requested" : "Retry route"}</Button></div></ScreenHero><main className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Status", value: "404", hint: "Route unavailable", icon: AlertCircle, tone: "amber" }, { label: "Path", value: currentPath, hint: "Browser context", icon: FileSearch }, { label: "Search", value: String(visible.length), hint: "Local suggestions", icon: Search, tone: "cyan" }, { label: "Backend", value: "Unknown", hint: "Not diagnosed", icon: WifiOff, tone: "slate" }]} /><ScreenPreviewBanner title="NotFound evidence boundary"><strong>404 and path text are local recovery context—not proof that a route was deleted, moved, unauthorized, disabled, unhealthy, or unavailable in production.</strong> A production recovery flow requires route registration, deployment/version visibility, error correlation, support ownership, access-aware messaging, and safe retry behavior.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><AlertCircle className="size-6 text-amber-200" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Route recovery</p><h2 className="mt-2 text-3xl font-black">Page not found</h2></div></div><p className="mt-4 text-slate-400">The current path is <code className="rounded bg-white/10 px-2 py-1 text-cyan-200">{currentPath}</code>. Choose a known surface or use a local suggestion.</p><label className="mt-5 flex items-center gap-3 rounded-xl border border-white/10 bg-black/20 px-3 py-3"><Search className="size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search known route suggestions" className="w-full bg-transparent text-white outline-none placeholder:text-slate-500" /></label><div className="mt-5 grid gap-3 sm:grid-cols-2">{visible.map((item) => <button key={item.path} onClick={() => setLocation(item.path)} className="rounded-xl border border-white/10 p-4 text-left hover:border-cyan-300/40 hover:bg-cyan-300/[0.05]"><p className="font-semibold">{item.label}</p><p className="mt-1 text-xs text-slate-500">{item.path}</p></button>)}{visible.length === 0 && <p className="col-span-full py-6 text-center text-slate-500">No local suggestions match.</p>}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><LifeBuoy className="size-5 text-cyan-300" /><h2 className="mt-4 text-xl font-black">Recovery checklist</h2><div className="mt-5 space-y-3">{["Confirm the path and spelling", "Try a known route or return home", "Retry only when a transient failure is plausible", "Do not repeat sensitive form submissions", "Capture evidence before escalating to support"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldCheck className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Guidance</span></div>)}</div><div className="mt-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/[0.06] p-5"><p className="font-black">No automatic diagnosis</p><p className="mt-2 text-sm leading-6 text-slate-400">The recovery screen does not inspect deployments, permissions, authentication, APIs, databases, or incident systems.</p></div></CardContent></Card></section><ScreenFeatureGrid features={[{ title: "A 404 is not a root cause", description: "Route context supports recovery without claiming deletion, outage, authorization, or deployment state.", icon: FileSearch, status: "Guardrail" }, { title: "Retry needs care", description: "Avoid duplicate submissions and preserve evidence before repeating sensitive actions.", icon: ShieldCheck, status: "Required" }, { title: "No fake diagnostics", description: "This surface makes no backend, route-registry, authentication, or incident query.", icon: WifiOff, status: "Unavailable" }]} /></main></div>;
+
+  const handleGoHome = () => {
+    setLocation("/");
+  };
+
+  return (
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+      <Card className="w-full max-w-lg mx-4 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+        <CardContent className="pt-8 pb-8 text-center">
+          <div className="flex justify-center mb-6">
+            <div className="relative">
+              <div className="absolute inset-0 bg-red-100 rounded-full animate-pulse" />
+              <AlertCircle className="relative h-16 w-16 text-red-500" />
+            </div>
+          </div>
+
+          <h1 className="text-4xl font-bold text-slate-900 mb-2">404</h1>
+
+          <h2 className="text-xl font-semibold text-slate-700 mb-4">
+            Page Not Found
+          </h2>
+
+          <p className="text-slate-600 mb-8 leading-relaxed">
+            Sorry, the page you are looking for doesn't exist.
+            <br />
+            It may have been moved or deleted.
+          </p>
+
+          <div
+            id="not-found-button-group"
+            className="flex flex-col sm:flex-row gap-3 justify-center"
+          >
+            <Button
+              onClick={handleGoHome}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
+            >
+              <Home className="w-4 h-4 mr-2" />
+              Go Home
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
 }

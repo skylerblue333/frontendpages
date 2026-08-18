@@ -39,7 +39,7 @@ const UpdatedLandingPage = () => {
           <h2 className="mb-12 text-center text-3xl font-bold text-white">
             Platform Facts & Specifications
           </h2>
-          
+
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {/* Card 1 */}
             <Card className="border-purple-600 bg-slate-800 p-6">
@@ -116,7 +116,7 @@ const UpdatedLandingPage = () => {
           <h2 className="mb-12 text-center text-3xl font-bold text-white">
             20 Major Categories
           </h2>
-          
+
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {[
               "E-Commerce (85 pages)",

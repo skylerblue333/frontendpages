@@ -1,19 +1,74 @@
-import { useMemo, useState } from "react";
-import { CheckCircle2, Cloud, Database, Globe, KeyRound, Link2, LockKeyhole, Plus, Search, Settings, Shield, SlidersHorizontal, Sparkles, Webhook } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
 
-type Integration = { id: string; name: string; category: string; description: string; icon: typeof Globe; status: "Template" | "Credential required" | "Review required" };
-const INTEGRATIONS: Integration[] = [
-  { id: "market", name: "Market data provider", category: "Finance", description: "Connect a verified source for prices, freshness, historical data, and failure states.", icon: Database, status: "Credential required" },
-  { id: "llm", name: "AI model provider", category: "AI", description: "Register provider, model, version, cost, data-use, and safety metadata before requests.", icon: Sparkles, status: "Review required" },
-  { id: "storage", name: "Object storage", category: "Infrastructure", description: "Document buckets, encryption, retention, upload validation, and access policy.", icon: Cloud, status: "Template" },
-  { id: "webhook", name: "Webhook receiver", category: "Automation", description: "Configure signing, replay protection, idempotency, retries, and observability.", icon: Webhook, status: "Review required" },
-  { id: "oauth", name: "OAuth provider", category: "Identity", description: "Define scopes, redirect URIs, token expiry, revocation, and account linking.", icon: Link2, status: "Credential required" },
-  { id: "analytics", name: "Analytics endpoint", category: "Observability", description: "Send privacy-safe events with retention and redaction rules.", icon: SlidersHorizontal, status: "Template" },
-];
+export default function APIIntegration() {
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-export default function APIIntegration() { const [query, setQuery] = useState(""); const [selected, setSelected] = useState<Integration | null>(null); const [drafts, setDrafts] = useState<string[]>([]); const [settings, setSettings] = useState(false); const visible = useMemo(() => INTEGRATIONS.filter((integration) => `${integration.name} ${integration.category} ${integration.description}`.toLowerCase().includes(query.toLowerCase())), [query]); const createDraft = (integration: Integration) => { setSelected(integration); setDrafts((current) => current.includes(integration.id) ? current : [...current, integration.id]); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Link2} eyebrow="Developer Platform · Integrations" title="Connect services without losing control of the boundary." description="Explore integration templates, credential requirements, webhook safety, and provider metadata. This workspace does not claim any third-party account is connected or any secret is stored." badge="Preview integration workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSettings((value) => !value)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Settings className="mr-2 size-4" />{settings ? "Close settings" : "Workspace settings"}</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><LockKeyhole className="mr-2 size-4" />Secrets stay server-side</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Integration templates", value: String(INTEGRATIONS.length), hint: "Searchable provider surfaces", icon: Link2 }, { label: "Local drafts", value: String(drafts.length), hint: "No credentials stored", icon: Plus, tone: "violet" }, { label: "Connected providers", value: "0", hint: "No live connection claim", icon: Cloud, tone: "amber" }, { label: "Secret handling", value: "Server only", hint: "Never expose keys to browser", icon: Shield, tone: "slate" }]} /><ScreenPreviewBanner title="Integration safety boundary">The provider catalog, search, local draft selection, settings preview, credential requirements, webhook guardrails, and status labels are available for UX review. No API key, OAuth token, external account, webhook delivery, provider uptime, or data transfer is fabricated.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search integrations" aria-label="Search integrations" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div><div className="mt-4 space-y-2">{visible.map((integration) => { const Icon = integration.icon; return <button key={integration.id} onClick={() => setSelected(integration)} className={`w-full rounded-xl border p-4 text-left transition ${selected?.id === integration.id ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-start gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-200"><Icon className="size-5" /></div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-2"><span className="font-semibold">{integration.name}</span><Badge variant="outline" className="border-white/10 text-slate-500">{integration.category}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-400">{integration.description}</p><Badge variant="outline" className="mt-3 border-amber-300/20 text-amber-200">{integration.status}</Badge></div></div></button>; })}{visible.length === 0 && <ScreenStatePanel type="empty" title="No integrations match" description="Try another provider or category keyword." />}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6">{selected ? <><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected integration</p><h2 className="mt-1 text-2xl font-bold">{selected.name}</h2><p className="mt-2 text-sm leading-6 text-slate-400">{selected.description}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selected.status}</Badge></div><div className="mt-6 space-y-3">{["Provider identity and environment", "Credential scope and rotation", "Request and response schema", "Timeout, retries, and idempotency", "Logging and sensitive-data redaction"].map((item) => <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4 text-sm text-slate-300"><CheckCircle2 className="size-4 text-emerald-300" />{item}</div>)}</div><Button onClick={() => createDraft(selected)} className="mt-6 w-full bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Plus className="mr-2 size-4" />{drafts.includes(selected.id) ? "Draft created locally" : "Create local integration draft"}</Button></> : <ScreenStatePanel type="empty" title="Select an integration template" description="Choose a provider surface to inspect its setup and safety checklist." />}{settings && <div className="mt-5 rounded-xl border border-violet-300/20 bg-violet-300/[0.06] p-4"><div className="flex items-center gap-2 font-medium text-violet-200"><Settings className="size-4" />Settings preview</div><p className="mt-2 text-sm leading-6 text-slate-300">Environment, ownership, permissions, and rotation settings require authenticated server-side configuration.</p></div>}</CardContent></Card></section><ScreenFeatureGrid features={[{ title: "Credential safety", description: "Keep keys and tokens in server-side secret storage with scope and rotation controls.", icon: KeyRound, status: "Required" }, { title: "Reliable webhooks", description: "Verify signatures, prevent replay, support idempotency, and expose retry state.", icon: Webhook, status: "Required" }, { title: "No fake connections", description: "A template remains a template until a verified provider handshake succeeds.", icon: LockKeyhole, status: "Guardrail" }]} /></main></div>; }
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>APIIntegration</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">APIIntegration</h1>
+            <p className="text-muted-foreground mt-2">Third-party APIs</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

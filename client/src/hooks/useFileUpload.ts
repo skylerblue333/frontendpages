@@ -1,23 +1,23 @@
 import { useCallback, useState } from "react";
 
-interface UploadResult {
+export type FileUploadResult = {
   key: string;
   url: string;
-}
+};
 
+/**
+ * Uploads are intentionally unavailable until the application exposes a
+ * verified authenticated storage endpoint. This boundary prevents callers
+ * from fabricating an uploaded URL or a successful persistence result.
+ */
 export function useFileUpload() {
-  const [uploading, setUploading] = useState(false);
+  const [uploading] = useState(false);
 
-  const upload = useCallback(async (_file: File): Promise<UploadResult> => {
-    setUploading(true);
-    try {
-      throw new Error("File uploads are not available until a server-side storage endpoint is configured.");
-    } finally {
-      setUploading(false);
-    }
+  const upload = useCallback(async (_file: File): Promise<FileUploadResult | null> => {
+    throw new Error(
+      "File upload is unavailable until an authenticated storage API is configured and verified.",
+    );
   }, []);
 
   return { upload, uploading };
 }
-
-export default useFileUpload;

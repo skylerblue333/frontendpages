@@ -1,19 +1,84 @@
-import { useState } from "react";
-import { Activity, BookOpen, CheckCircle2, ClipboardCheck, FileText, Gavel, LockKeyhole, Network, Scale, Search, Shield, SlidersHorizontal, Users } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
+import { Card } from "@/components/ui/card";
+import { PageHeader } from "@/components/PageHeader";
 
-const POLICIES = [
-  { title: "Human approval", description: "Require explicit authorization before an AI action creates an external side effect.", icon: Gavel, status: "Required" },
-  { title: "Data provenance", description: "Record source, purpose, retention, and permissions for information used by an AI workflow.", icon: FileText, status: "Review" },
-  { title: "Safety escalation", description: "Route uncertain, harmful, or high-impact outputs to a person before they are acted on.", icon: Shield, status: "Required" },
-  { title: "Model transparency", description: "Show provider, model, version, and limitations when a connected service responds.", icon: Network, status: "Planned" },
-  { title: "Access controls", description: "Separate who can configure, approve, observe, and audit AI capabilities.", icon: Users, status: "Review" },
-  { title: "Incident response", description: "Capture alerts, rollback paths, and post-incident evidence for AI-assisted changes.", icon: Activity, status: "Planned" },
-];
-const REVIEWS = ["New model connection", "Autonomous workflow request", "Sensitive data use", "High-impact recommendation"];
+export default function AIGovernance() {
+  return (
+    <div className="min-h-screen bg-background">
+      <PageHeader icon={Brain} title="AI Governance" subtitle="Advanced ai governance with cutting-edge technology" />
 
-export default function AIGovernance() { const [query, setQuery] = useState(""); const [selectedPolicy, setSelectedPolicy] = useState<string | null>(null); const [reviews, setReviews] = useState<string[]>([]); const visiblePolicies = POLICIES.filter((policy) => `${policy.title} ${policy.description}`.toLowerCase().includes(query.toLowerCase())); const toggleReview = (item: string) => setReviews((current) => current.includes(item) ? current.filter((value) => value !== item) : [...current, item]); return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Scale} eyebrow="AI & Automation · Governance" title="Make powerful AI reviewable by design." description="Explore policy controls, review queues, audit expectations, and approval boundaries for AI-enabled features. This console demonstrates governance UX; it does not claim certifications, uptime, throughput, or enforcement coverage." badge="Preview governance console"><div className="flex flex-wrap gap-2"><Button onClick={() => document.getElementById("governance-console")?.scrollIntoView({ behavior: "smooth" })} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><ClipboardCheck className="mr-2 size-4" />Open policy console</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><BookOpen className="mr-2 size-4" />Read governance guide</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Policy areas", value: String(POLICIES.length), hint: "Reviewable governance controls", icon: Scale }, { label: "Review queue", value: String(REVIEWS.length), hint: "Example approval scenarios", icon: ClipboardCheck, tone: "violet" }, { label: "Selected policies", value: String(selectedPolicy ? 1 : 0), hint: "Local detail state", icon: SlidersHorizontal, tone: "amber" }, { label: "Enforcement", value: "Not connected", hint: "No production control claim", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Governance evidence boundary">Policy cards, search, local selection, example review scenarios, audit expectations, and approval guardrails are available for UX review. Compliance certifications, live enforcement, model performance, incident counts, and production uptime are not invented here.</ScreenPreviewBanner><section id="governance-console" className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Policy library</p><h2 className="mt-1 text-2xl font-bold">Governance controls</h2><p className="mt-1 text-sm text-slate-400">Select a policy area to inspect its intended behavior and evidence needs.</p></div><div className="relative w-full sm:max-w-xs"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search policies" aria-label="Search governance policies" className="border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-500" /></div></div><div className="mt-5 grid gap-4 sm:grid-cols-2">{visiblePolicies.map((policy) => { const Icon = policy.icon; const selected = selectedPolicy === policy.title; return <button key={policy.title} onClick={() => setSelectedPolicy(selected ? null : policy.title)} className={`rounded-xl border p-4 text-left transition ${selected ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-black/15 hover:bg-white/[0.05]"}`}><div className="flex items-start justify-between gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-200"><Icon className="size-5" /></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{policy.status}</Badge></div><h3 className="mt-4 font-semibold">{policy.title}</h3><p className="mt-2 text-sm leading-6 text-slate-400">{policy.description}</p></button>; })}</div>{visiblePolicies.length === 0 && <div className="mt-5"><ScreenStatePanel type="empty" title="No policy matches" description="Try a different governance search." /></div>}</CardContent></Card><div className="space-y-6"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300">Approval queue</p><h2 className="mt-1 text-xl font-bold">Example reviews</h2></div><Badge variant="outline" className="border-violet-300/20 text-violet-200">Preview</Badge></div><div className="mt-4 space-y-2">{REVIEWS.map((item) => <button key={item} onClick={() => toggleReview(item)} className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left text-sm transition ${reviews.includes(item) ? "border-emerald-300/30 bg-emerald-300/[0.06] text-emerald-100" : "border-white/10 bg-black/15 text-slate-300 hover:bg-white/[0.05]"}`}>{reviews.includes(item) ? <CheckCircle2 className="size-4 text-emerald-300" /> : <ClipboardCheck className="size-4 text-violet-300" />}{item}<Badge variant="outline" className="ml-auto border-white/10 text-slate-500">Review</Badge></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-5"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-300">Evidence checklist</p><h2 className="mt-1 text-xl font-bold">Before activation</h2><div className="mt-4 space-y-3">{["Owner and escalation path", "Data sources and retention", "Permission and approval model", "Evaluation and rollback plan"].map((item) => <div key={item} className="flex items-center gap-3 text-sm text-slate-300"><CheckCircle2 className="size-4 text-amber-300" />{item}</div>)}</div></CardContent></Card></div></section><ScreenFeatureGrid features={[{ title: "Human-in-the-loop", description: "Keep high-impact AI actions reviewable and explicitly authorized.", icon: Users, status: "Required" }, { title: "Auditability", description: "Record policy changes, prompts, outputs, approvals, and action results with privacy-safe events.", icon: FileText, status: "Available" }, { title: "No fake certification", description: "The console does not imply compliance, uptime, or enforcement until evidence exists.", icon: LockKeyhole, status: "Guardrail" }]} /></main></div>; }
+      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+        {/* Main Content Area */}
+        <Card className="p-8 bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20">
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">AI Governance</h2>
+
+            {/* Advanced Features */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <Brain className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Advanced Analytics</h3>
+                  <p className="text-sm text-muted-foreground">Real-time data processing with AI insights</p>
+                  <Button size="sm" variant="outline" className="w-full">Explore</Button>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <Brain className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Automation Engine</h3>
+                  <p className="text-sm text-muted-foreground">Autonomous operations with intelligent decision making</p>
+                  <Button size="sm" variant="outline" className="w-full">Configure</Button>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-background/80 border border-primary/30 hover:border-primary/80 transition-all cursor-pointer hover:shadow-lg hover:shadow-primary/20">
+                <div className="space-y-3">
+                  <Brain className="w-8 h-8 text-primary" />
+                  <h3 className="font-bold text-lg">Security First</h3>
+                  <p className="text-sm text-muted-foreground">Robust encryption and protection</p>
+                  <Button size="sm" variant="outline" className="w-full">Secure</Button>
+                </div>
+              </Card>
+            </div>
+
+            {/* Performance Metrics */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Processing Speed</p>
+                <p className="text-2xl font-bold text-primary">99.9%</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Uptime</p>
+                <p className="text-2xl font-bold text-primary">24/7</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Latency</p>
+                <p className="text-2xl font-bold text-primary">&lt;50ms</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg border border-border/50">
+                <p className="text-xs text-muted-foreground">Throughput</p>
+                <p className="text-2xl font-bold text-primary">10K+/s</p>
+              </div>
+            </div>
+
+            {/* Action Section */}
+            <div className="flex gap-4 flex-wrap pt-6">
+              <Button size="lg" className="bg-primary hover:bg-primary/90">
+                Get Started Now
+              </Button>
+              <Button size="lg" variant="outline">
+                View Documentation
+              </Button>
+              <Button size="lg" variant="ghost">
+                Schedule Demo
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+}

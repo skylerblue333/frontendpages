@@ -1,17 +1,75 @@
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Check, FileCheck2, FileText, KeyRound, LockKeyhole, RefreshCw, ShieldAlert, Wallet, X } from "lucide-react";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const steps = [{ label: "Parties", detail: "Identity, authority, and consent", status: "Unconfigured" }, { label: "Due diligence", detail: "Title, inspection, disclosure, and tax evidence", status: "Blocked" }, { label: "Execution", detail: "Signatures, escrow, funds, and legal review", status: "Blocked" }, { label: "Record", detail: "Registration, confirmation, and support", status: "Blocked" }];
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Loader2, Plus, Search, Settings } from "lucide-react";
+
 export default function PropertyTransfer() {
-  const [selected, setSelected] = useState(steps[0].label);
-  const [done, setDone] = useState<string[]>([]);
-  const [note, setNote] = useState("");
-  const [saved, setSaved] = useState(false);
-  const [showGates, setShowGates] = useState(false);
-  const toggle = (label: string) => setDone((items) => items.includes(label) ? items.filter((item) => item !== label) : [...items, label]);
-  const reset = () => { setSelected(steps[0].label); setDone([]); setNote(""); setSaved(false); setShowGates(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={KeyRound} eyebrow="PropertyTransfer · Transaction-readiness preview" title="Map the transfer before anyone signs or pays." description="Review a local property-transfer sequence with parties, due diligence, execution, funds, record, and support gates. No ownership change, title transfer, identity verification, signature, escrow, payment, tax filing, legal execution, or transaction is available." badge="Transfer workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Plan saved locally" : "Save plan locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review transfer gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset transfer</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Transfer", value: "Not initiated", hint: "No transaction source", icon: KeyRound, tone: "cyan" }, { label: "Title", value: "Unverified", hint: "No registry source", icon: FileCheck2, tone: "violet" }, { label: "Funds", value: "Unavailable", hint: "No escrow source", icon: Wallet, tone: "amber" }, { label: "Record", value: "Not filed", hint: "No jurisdiction source", icon: FileText, tone: "slate" }]} /><ScreenPreviewBanner title="Property-transfer evidence boundary"><strong>This is a local transaction-readiness worksheet, not a conveyance service.</strong> Steps, local checkmarks, notes, and saved state are browser concepts. No parties, identity, authority, title, ownership, signature, escrow, payment, tax, registration, legal status, or transfer event is measured or persisted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.82fr_1.18fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Transfer sequence</p><h2 className="mt-2 text-2xl font-black">Choose a gate</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{done.length}/{steps.length} local</Badge></div><div className="mt-6 space-y-3">{steps.map((step, index) => <button key={step.label} onClick={() => setSelected(step.label)} className={`flex w-full items-center gap-3 rounded-xl border p-4 text-left ${selected === step.label ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><button aria-label={`toggle ${step.label}`} onClick={(event) => { event.stopPropagation(); toggle(step.label); }} className={`flex size-7 items-center justify-center rounded-full border ${done.includes(step.label) ? "border-cyan-300 bg-cyan-300 text-slate-950" : "border-white/20 text-slate-600"}`}>{done.includes(step.label) ? <Check className="size-3" /> : <span className="text-xs">{index + 1}</span>}</button><div className="flex-1"><p className="font-semibold">{step.label}</p><p className="mt-1 text-sm text-slate-500">{step.detail}</p></div><Badge variant="outline" className={done.includes(step.label) ? "border-cyan-300/30 text-cyan-200" : "border-white/10 text-amber-200"}>{done.includes(step.label) ? "Local reviewed" : step.status}</Badge></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected gate</p><h2 className="mt-2 text-2xl font-black">{selected}</h2><p className="mt-2 text-sm leading-6 text-slate-400">Use this local gate to document which evidence a qualified conveyance workflow would require.</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Identity", value: "Unavailable" }, { label: "Authority", value: "Unverified" }, { label: "Title", value: "Unverified" }, { label: "Funds", value: "Unavailable" }, { label: "Signature", value: "Not requested" }, { label: "Registration", value: "Not filed" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">Execution blocked</p><p className="mt-2 text-sm leading-6 text-slate-400">No identity provider, title registry, signing service, escrow, payment rail, tax workflow, jurisdiction, or recorder is connected.</p><Button disabled className="mt-4 bg-slate-700 text-slate-400">Execute transfer unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.05] p-4 text-sm leading-6 text-slate-400">Local review does not create consent, bind a party, transfer ownership, release funds, file a deed, or establish legal effect.</div>}</CardContent></Card></section><label className="block text-sm text-slate-400">Transfer note<textarea value={note} onChange={(event) => setNote(event.target.value)} rows={3} placeholder="Record what must be verified by qualified professionals..." className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none" /></label><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Transfer gates</p><h2 className="mt-2 text-2xl font-black">What a real property-transfer service must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Identity, authority, consent, capacity, fraud prevention, and role permissions", "Title, lien, survey, inspection, disclosure, tax, zoning, and jurisdiction evidence", "Contract version, legal review, signatures, witness/notary, and revocation behavior", "Escrow, funds source, payment, fees, tax, settlement, refund, and reconciliation", "Recorder filing, confirmation, ownership state, audit, support, and recovery", "No transfer, financing, tax, or legal conclusion without qualified professionals"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Transfer surface preserved", description: "Parties, due diligence, execution, record, local gates, notes, status posture, save/reset, and blocked execution remain interactive.", icon: KeyRound, status: "Local workflow" }, { title: "No conveyance theater", description: "Ownership, title, signatures, escrow, payments, taxes, legal status, filings, and transfer outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Qualified review before action", description: "Real transfers need identity, jurisdiction, legal, tax, title, payment, recorder, audit, and support infrastructure.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>PropertyTransfer</CardTitle>
+            <CardDescription>Sign in to access this feature</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Sign In</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">PropertyTransfer</h1>
+            <p className="text-muted-foreground mt-2">Transfer process</p>
+          </div>
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-sm"
+              />
+              <Button variant="outline" size="icon">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No data available. Start by creating a new item.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }
