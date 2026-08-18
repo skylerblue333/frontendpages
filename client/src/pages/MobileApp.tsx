@@ -1,221 +1,219 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { PageHeader } from "@/components/PageHeader";
 import {
-  Smartphone, Download, Star, Shield, Zap, Bell, Wifi,
-  Camera, Mic, Fingerprint, QrCode, ChevronRight, Apple,
-  Play, Globe, CheckCircle2, ArrowRight, Sparkles
+  Apple,
+  Ban,
+  CheckCircle2,
+  Download,
+  LockKeyhole,
+  Smartphone,
+  ShieldAlert,
 } from "lucide-react";
-import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { PageHeader } from "@/components/PageHeader";
 
-const FEATURES = [
-  { icon: Bell, label: "Push Notifications", desc: "Real-time alerts for messages, trades, and rewards" },
-  { icon: Fingerprint, label: "Biometric Auth", desc: "Face ID and fingerprint unlock for instant secure access" },
-  { icon: Camera, label: "AR Camera", desc: "Scan QR codes, NFTs, and physical items with AI overlay" },
-  { icon: Mic, label: "Voice Commands", desc: "Hands-free navigation and AI assistant via voice" },
-  { icon: Wifi, label: "Offline Mode", desc: "Browse your portfolio and DMs without internet" },
-  { icon: Zap, label: "Instant Swap", desc: "One-tap token swaps with best-route optimization" },
-  { icon: Shield, label: "Hardware Wallet", desc: "Connect Ledger and Trezor via Bluetooth" },
-  { icon: QrCode, label: "Wallet Connect", desc: "Scan to connect any dApp instantly" },
+type Platform = "iOS" | "Android";
+type Feature = {
+  name: string;
+  summary: string;
+  web: string;
+  mobile: string;
+  status: string;
+};
+const features: Feature[] = [
+  {
+    name: "Dashboard access",
+    summary:
+      "Mobile dashboard concept pending an installable package, API contract, session handling, and accessibility review.",
+    web: "Web state unavailable",
+    mobile: "Mobile state unavailable",
+    status: "Availability unavailable",
+  },
+  {
+    name: "Secure notifications",
+    summary:
+      "Notification concept pending permissions, consent, delivery service, and privacy controls.",
+    web: "Web state unavailable",
+    mobile: "Mobile state unavailable",
+    status: "Availability unavailable",
+  },
+  {
+    name: "Wallet experience",
+    summary:
+      "High-risk wallet concept pending secure key isolation, signing, network validation, and transaction review.",
+    web: "Web state unavailable",
+    mobile: "Mobile state unavailable",
+    status: "Availability unavailable",
+  },
 ];
-
-const STATS = [
-  { value: "4.9", label: "App Store Rating", sub: "12K reviews" },
-  { value: "500K+", label: "Downloads", sub: "iOS + Android" },
-  { value: "< 50ms", label: "Response Time", sub: "Global CDN" },
-  { value: "99.9%", label: "Uptime", sub: "SLA guaranteed" },
-];
-
-const COMPARISON = [
-  { feature: "Social Feed", web: true, mobile: true },
-  { feature: "Push Notifications", web: false, mobile: true },
-  { feature: "Biometric Login", web: false, mobile: true },
-  { feature: "Offline Mode", web: false, mobile: true },
-  { feature: "AR QR Scanner", web: false, mobile: true },
-  { feature: "Voice Commands", web: true, mobile: true },
-  { feature: "Hardware Wallet", web: true, mobile: true },
-  { feature: "Background Mining", web: false, mobile: true },
-  { feature: "Widget Support", web: false, mobile: true },
-  { feature: "Haptic Feedback", web: false, mobile: true },
-];
-
 export default function MobileApp() {
-  const [platform, setPlatform] = useState<"ios" | "android">("ios");
-
-  const handleDownload = (p: "ios" | "android") => {
-    toast.info(`${p === "ios" ? "App Store" : "Google Play"} — launching soon! Join the waitlist below.`);
-  };
-
+  const [platform, setPlatform] = useState<Platform>("iOS");
+  const [status, setStatus] = useState(
+    "Mobile service unavailable. Showing local platform-readiness information only."
+  );
+  const blocked = (action: string) =>
+    setStatus(
+      `${action} is unavailable locally. No download, store navigation, waitlist, account, notification, reward, or device operation was started.`
+    );
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       <PageHeader
-        title="ShadowChat Mobile"
-        subtitle="The full Web3 social OS in your pocket — iOS & Android"
+        icon={Smartphone}
+        title="Mobile app readiness"
+        subtitle="Review platform concepts without fabricated downloads, store listings, feature availability, waitlist counts, launch timing, or token rewards."
+        badge="Local preview"
+        badgeVariant="outline"
       />
-
-      <div className="container py-8 max-w-5xl space-y-12">
-
-        {/* Hero */}
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-purple-900/40 via-pink-900/20 to-cyan-900/30 border border-white/10 p-8 md:p-12">
-          <div className="absolute inset-0 dot-grid opacity-30" />
-          <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
-            <div className="flex-1 text-center md:text-left">
-              <Badge className="mb-4 bg-purple-500/20 text-purple-300 border-purple-500/30">
-                <Sparkles className="w-3 h-3 mr-1" /> Coming Soon — Join Waitlist
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-black mb-4 text-gradient-psychedelic">
-                SKYCOIN4444<br />on Mobile
-              </h1>
-              <p className="text-white/60 text-lg mb-6 max-w-md">
-                Trade crypto, chat with AI, earn rewards, stream, and govern — all from your phone. The most powerful Web3 app ever built.
+      <div className="mx-auto max-w-7xl space-y-8 px-4 py-8">
+        <div className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4 text-sm text-amber-100">
+          <strong>Mobile service unavailable.</strong> No signed package,
+          app-store listing, release channel, device integration, waitlist
+          endpoint, notification service, or reward ledger is connected.
+        </div>
+        <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+          <Card className="border-slate-800 bg-slate-900/75 p-6">
+            <div className="flex items-center gap-3">
+              <Smartphone className="h-5 w-5 text-cyan-200" />
+              <div>
+                <p className="text-xs uppercase tracking-widest text-slate-500">
+                  Readiness catalog
+                </p>
+                <h2 className="mt-1 text-2xl font-semibold">
+                  Review mobile concepts
+                </h2>
+              </div>
+            </div>
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              Local fixtures describe product structure only. They do not
+              indicate a working app, store approval, platform support,
+              production features, device permissions, user counts, launch
+              timing, or rewards.
+            </p>
+            <div className="mt-6 space-y-3">
+              {features.map(feature => (
+                <div
+                  className="rounded-xl border border-slate-800 bg-slate-950/60 p-5"
+                  key={feature.name}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="font-medium">{feature.name}</p>
+                    <Badge variant="outline">Unavailable</Badge>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-400">
+                    {feature.summary}
+                  </p>
+                  <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                    <div className="rounded-lg border border-slate-800 p-3">
+                      <p className="text-xs text-slate-500">Web</p>
+                      <p className="mt-1 text-sm">{feature.web}</p>
+                    </div>
+                    <div className="rounded-lg border border-slate-800 p-3">
+                      <p className="text-xs text-slate-500">Mobile</p>
+                      <p className="mt-1 text-sm">{feature.mobile}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+          <aside>
+            <Card className="border-slate-800 bg-slate-900/75 p-6">
+              <p className="text-xs uppercase tracking-widest text-slate-500">
+                Platform notes
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
+              <h2 className="mt-2 text-xl font-semibold">
+                {platform} readiness
+              </h2>
+              <div className="mt-5 flex gap-2">
                 <Button
-                  onClick={() => handleDownload("ios")}
-                  className="gap-2 bg-white text-black hover:bg-white/90 font-bold"
-                  size="lg"
+                  aria-pressed={platform === "iOS"}
+                  onClick={() => setPlatform("iOS")}
+                  size="sm"
+                  variant={platform === "iOS" ? "default" : "outline"}
                 >
-                  <Apple className="w-5 h-5" />
-                  App Store
+                  <Apple className="mr-2 h-4 w-4" /> iOS
                 </Button>
                 <Button
-                  onClick={() => handleDownload("android")}
-                  className="gap-2 bg-green-600 hover:bg-green-500 font-bold"
-                  size="lg"
+                  aria-pressed={platform === "Android"}
+                  onClick={() => setPlatform("Android")}
+                  size="sm"
+                  variant={platform === "Android" ? "default" : "outline"}
                 >
-                  <Play className="w-5 h-5 fill-white" />
-                  Google Play
-                </Button>
-                <Button
-                  variant="outline"
-                  className="gap-2 border-white/20 text-white/70 hover:text-white"
-                  size="lg"
-                  onClick={() => toast.info("PWA install: tap the share icon in your browser and select 'Add to Home Screen'")}
-                >
-                  <Globe className="w-5 h-5" />
-                  Install PWA
+                  <Smartphone className="mr-2 h-4 w-4" /> Android
                 </Button>
               </div>
-            </div>
-            <div className="flex-shrink-0">
-              <div className="w-48 h-80 rounded-3xl bg-gradient-to-b from-zinc-800 to-zinc-900 border border-white/20 shadow-2xl flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 gradient-tiedye opacity-10" />
-                <div className="text-center z-10">
-                  <Smartphone className="w-16 h-16 text-purple-400 mx-auto mb-3" />
-                  <div className="text-xs text-white/40">Preview</div>
-                  <div className="text-xs text-white/20">Coming Q3 2026</div>
-                </div>
+              <div className="mt-5 grid gap-2">
+                {(
+                  [
+                    ["Package", "Signed package unavailable"],
+                    ["Store", "Store listing unavailable"],
+                    ["Requirements", "Requirements unavailable"],
+                    ["Release", "Release state unavailable"],
+                  ] as Array<[string, string]>
+                ).map(([label, value]) => (
+                  <div
+                    className="rounded-lg border border-slate-800 p-3"
+                    key={label}
+                  >
+                    <p className="text-xs text-slate-500">{label}</p>
+                    <p className="mt-1 text-sm">{value}</p>
+                  </div>
+                ))}
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {STATS.map(s => (
-            <div key={s.label} className="stat-card text-center">
-              <div className="text-3xl font-black text-gradient mb-1">{s.value}</div>
-              <div className="text-sm font-semibold text-white/80">{s.label}</div>
-              <div className="text-xs text-white/40 mt-1">{s.sub}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Features */}
-        <div>
-          <h2 className="text-2xl font-bold text-white mb-6">Mobile-Exclusive Features</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            {FEATURES.map(f => (
-              <div key={f.label} className="feature-card p-5 hover:border-purple-500/40 transition-all group">
-                <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center mb-3 group-hover:bg-purple-500/30 transition-colors">
-                  <f.icon className="w-5 h-5 text-purple-400" />
-                </div>
-                <div className="font-semibold text-sm text-white mb-1">{f.label}</div>
-                <div className="text-xs text-white/50 leading-relaxed">{f.desc}</div>
+              <Button
+                className="mt-5 w-full"
+                onClick={() => blocked("Download mobile app")}
+                variant="outline"
+              >
+                <Download className="mr-2 h-4 w-4" /> Download unavailable
+              </Button>
+            </Card>
+            <Card className="mt-6 border-slate-800 bg-slate-900/75 p-6">
+              <div className="flex gap-3">
+                <LockKeyhole className="h-5 w-5 text-cyan-200" />
+                <p className="text-sm leading-6 text-slate-400">
+                  Mobile release requires signed artifacts, store review, secure
+                  sessions, privacy disclosures, platform permissions,
+                  accessibility testing, and release observability.
+                </p>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Web vs Mobile comparison */}
-        <div>
-          <h2 className="text-2xl font-bold text-white mb-6">Web vs Mobile</h2>
-          <div className="rounded-2xl border border-white/10 overflow-hidden">
-            <div className="grid grid-cols-3 bg-white/5 px-4 py-3 text-xs font-bold text-white/60 uppercase tracking-wider">
-              <div>Feature</div>
-              <div className="text-center">Web App</div>
-              <div className="text-center">Mobile App</div>
-            </div>
-            {COMPARISON.map((row, i) => (
-              <div key={row.feature} className={`grid grid-cols-3 px-4 py-3 text-sm ${i % 2 === 0 ? "bg-white/2" : ""} border-t border-white/5`}>
-                <div className="text-white/80">{row.feature}</div>
-                <div className="text-center">
-                  {row.web
-                    ? <CheckCircle2 className="w-4 h-4 text-green-400 mx-auto" />
-                    : <span className="text-white/20">—</span>}
-                </div>
-                <div className="text-center">
-                  {row.mobile
-                    ? <CheckCircle2 className="w-4 h-4 text-purple-400 mx-auto" />
-                    : <span className="text-white/20">—</span>}
-                </div>
+              <div className="mt-4 flex gap-3">
+                <ShieldAlert className="h-5 w-5 text-amber-200" />
+                <p className="text-sm leading-6 text-slate-400">
+                  No waitlist count, launch date, feature claim, device
+                  permission, notification, token reward, or production outcome
+                  is fabricated.
+                </p>
               </div>
-            ))}
-          </div>
+            </Card>
+          </aside>
         </div>
-
-        {/* Platform toggle */}
-        <div className="rounded-2xl border border-white/10 p-6">
-          <h2 className="text-xl font-bold text-white mb-4">System Requirements</h2>
-          <div className="flex gap-2 mb-6">
-            <Button
-              size="sm"
-              onClick={() => setPlatform("ios")}
-              className={platform === "ios" ? "bg-purple-600 text-white" : "bg-white/5 text-white/60 hover:bg-white/10"}
-            >
-              <Apple className="w-4 h-4 mr-1" /> iOS
-            </Button>
-            <Button
-              size="sm"
-              onClick={() => setPlatform("android")}
-              className={platform === "android" ? "bg-green-600 text-white" : "bg-white/5 text-white/60 hover:bg-white/10"}
-            >
-              <Play className="w-4 h-4 mr-1 fill-current" /> Android
-            </Button>
+        <Card className="border-slate-800 bg-slate-900/75 p-6">
+          <div className="flex items-start gap-3">
+            <Ban className="mt-0.5 h-5 w-5 text-slate-400" />
+            <div>
+              <h2 className="font-semibold">Early access</h2>
+              <p className="mt-1 text-sm leading-6 text-slate-400">
+                A waitlist service is not connected. This local preview does not
+                accept or retain contact details.
+              </p>
+              <Button
+                className="mt-4"
+                onClick={() => blocked("Join mobile waitlist")}
+                variant="outline"
+              >
+                <CheckCircle2 className="mr-2 h-4 w-4" /> Waitlist unavailable
+              </Button>
+            </div>
           </div>
-          {platform === "ios" ? (
-            <div className="space-y-2 text-sm text-white/70">
-              <div className="flex items-center gap-2"><ChevronRight className="w-4 h-4 text-purple-400" /> iOS 16.0 or later</div>
-              <div className="flex items-center gap-2"><ChevronRight className="w-4 h-4 text-purple-400" /> iPhone 11 or newer (A13 Bionic+)</div>
-              <div className="flex items-center gap-2"><ChevronRight className="w-4 h-4 text-purple-400" /> 150 MB storage</div>
-              <div className="flex items-center gap-2"><ChevronRight className="w-4 h-4 text-purple-400" /> Face ID or Touch ID recommended</div>
-            </div>
-          ) : (
-            <div className="space-y-2 text-sm text-white/70">
-              <div className="flex items-center gap-2"><ChevronRight className="w-4 h-4 text-green-400" /> Android 10.0 or later</div>
-              <div className="flex items-center gap-2"><ChevronRight className="w-4 h-4 text-green-400" /> 4 GB RAM minimum</div>
-              <div className="flex items-center gap-2"><ChevronRight className="w-4 h-4 text-green-400" /> 200 MB storage</div>
-              <div className="flex items-center gap-2"><ChevronRight className="w-4 h-4 text-green-400" /> Biometric sensor recommended</div>
-            </div>
-          )}
-        </div>
-
-        {/* CTA */}
-        <div className="rounded-3xl gradient-psychedelic p-8 text-center">
-          <h2 className="text-2xl font-black text-white mb-2">Be First in Line</h2>
-          <p className="text-white/80 mb-6">Join 50,000+ on the waitlist. Early access = 1,000 SKY444 bonus.</p>
-          <Button
-            size="lg"
-            className="bg-white text-purple-900 font-bold hover:bg-white/90 gap-2"
-            onClick={() => toast.success("You're on the waitlist! We'll notify you at launch.")}
+          <p
+            aria-live="polite"
+            className="mt-5 rounded-lg border border-slate-800 p-3 text-sm text-slate-400"
           >
-            <Star className="w-5 h-5" />
-            Join Waitlist — Free
-            <ArrowRight className="w-5 h-5" />
-          </Button>
-        </div>
-
+            {status}
+          </p>
+        </Card>
       </div>
     </div>
   );
