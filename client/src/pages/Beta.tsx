@@ -1,55 +1,234 @@
-import { Link } from "wouter";
+import { useState } from "react";
+import {
+  BadgeCheck,
+  Ban,
+  FlaskConical,
+  LockKeyhole,
+  Rocket,
+  ShieldAlert,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import { PageHeader } from "@/components/PageHeader";
-import { Rocket, Zap, Shield, Star, CheckCircle, ArrowRight, Users, Code2, Bug, Gift } from "lucide-react";
 
-const BETA_FEATURES = [
-  { label: "AI Code Review Bot", status: "testing", desc: "Automated PR reviews with security scanning" },
-  { label: "Voice-to-Post", status: "testing", desc: "Dictate social posts with voice commands" },
-  { label: "Cross-Chain Bridge", status: "coming", desc: "Bridge SKY444 across 5 blockchains" },
-  { label: "DAO Delegation", status: "testing", desc: "Delegate your voting power to trusted members" },
-  { label: "Creator Collab Tools", status: "coming", desc: "Co-create content with other creators" },
-  { label: "AI Trading Signals", status: "live", desc: "ML-powered buy/sell signals for SKY444" },
+type ReviewState = "All" | "Review" | "Planned" | "Unavailable";
+type BetaConcept = {
+  name: string;
+  state: Exclude<ReviewState, "All">;
+  summary: string;
+  access: string;
+  eligibility: string;
+  rewards: string;
+  financial: string;
+  application: string;
+};
+const concepts: BetaConcept[] = [
+  {
+    name: "AI-assisted development review",
+    state: "Review",
+    summary:
+      "Concept for security-aware code review; no connected repository, model, findings, or production availability is represented.",
+    access: "Access unavailable",
+    eligibility: "Eligibility unavailable",
+    rewards: "Rewards unavailable",
+    financial: "Financial terms unavailable",
+    application: "Application unavailable",
+  },
+  {
+    name: "Creator collaboration workspace",
+    state: "Planned",
+    summary:
+      "Concept for collaborative creator workflows; no invitations, accounts, content, permissions, or delivery service is connected.",
+    access: "Access unavailable",
+    eligibility: "Eligibility unavailable",
+    rewards: "Rewards unavailable",
+    financial: "Financial terms unavailable",
+    application: "Application unavailable",
+  },
+  {
+    name: "Cross-network asset transfer",
+    state: "Unavailable",
+    summary:
+      "High-risk blockchain concept pending network, custody, signing, transaction, monitoring, and incident-response infrastructure.",
+    access: "Access unavailable",
+    eligibility: "Eligibility unavailable",
+    rewards: "Rewards unavailable",
+    financial: "Financial terms unavailable",
+    application: "Application unavailable",
+  },
+  {
+    name: "AI trading signal research",
+    state: "Unavailable",
+    summary:
+      "Financial concept pending approved market-data sources, research methodology, risk disclosures, and authorization; no signal is provided.",
+    access: "Access unavailable",
+    eligibility: "Eligibility unavailable",
+    rewards: "Rewards unavailable",
+    financial: "Financial terms unavailable",
+    application: "Application unavailable",
+  },
 ];
-
 export default function Beta() {
+  const [state, setState] = useState<ReviewState>("All");
+  const [selected, setSelected] = useState(concepts[0]);
+  const [status, setStatus] = useState(
+    "Beta service unavailable. Showing local readiness concepts only."
+  );
+  const visible = concepts.filter(
+    item => state === "All" || item.state === state
+  );
+  const blocked = (action: string) =>
+    setStatus(
+      `${action} is unavailable locally. No eligibility check, account mutation, asset issuance, fee change, financial query, invitation, or application was started.`
+    );
   return (
-    <div className="container py-8 max-w-4xl animate-page-in">
-      <PageHeader backHref="/dashboard" icon={Rocket} title="Beta Program" subtitle="Early access to cutting-edge features before public launch" badge="Invite Only" badgeVariant="destructive" />
-      <div className="card p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 mb-8">
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center shrink-0"><Gift className="w-6 h-6 text-primary" /></div>
-          <div>
-            <h3 className="font-bold text-lg mb-1">Beta Tester Perks</h3>
-            <div className="grid sm:grid-cols-2 gap-2 mt-3">
-              {["500 SKY444 bonus tokens", "Lifetime 30% fee discount", "Exclusive Beta badge", "Direct dev team access", "Early feature voting rights", "Priority support queue"].map(p => (
-                <div key={p} className="flex items-center gap-2 text-sm"><CheckCircle className="w-4 h-4 text-success shrink-0" />{p}</div>
+    <div className="min-h-screen bg-background">
+      <PageHeader
+        backHref="/dashboard"
+        icon={Rocket}
+        title="Beta readiness"
+        subtitle="Review early-access concepts without fabricated rewards, financial claims, eligibility, availability, trading signals, or account actions."
+        badge="Local preview"
+        badgeVariant="outline"
+      />
+      <div className="mx-auto max-w-7xl space-y-8 px-4 py-8">
+        <div className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4 text-sm text-amber-100">
+          <strong>Beta service unavailable.</strong> No connected access
+          registry, eligibility source, reward ledger, financial terms,
+          repository integration, blockchain connector, or application endpoint
+          is available.
+        </div>
+        <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+          <Card className="border-slate-800 bg-slate-900/75 p-6">
+            <div className="flex items-center gap-3">
+              <FlaskConical className="h-5 w-5 text-cyan-200" />
+              <div>
+                <p className="text-xs uppercase tracking-widest text-slate-500">
+                  Readiness catalog
+                </p>
+                <h2 className="mt-1 text-2xl font-semibold">
+                  Review beta concepts
+                </h2>
+              </div>
+            </div>
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              Local fixtures describe review structure only. They do not
+              indicate live access, production readiness, account eligibility,
+              token balances, rewards, fee discounts, trading signals, or
+              partner availability.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {(
+                ["All", "Review", "Planned", "Unavailable"] as ReviewState[]
+              ).map(item => (
+                <Button
+                  key={item}
+                  aria-pressed={state === item}
+                  onClick={() => setState(item)}
+                  size="sm"
+                  variant={state === item ? "default" : "outline"}
+                >
+                  {item}
+                </Button>
               ))}
             </div>
-          </div>
-        </div>
-      </div>
-      <div className="space-y-3 mb-8">
-        <h3 className="font-semibold flex items-center gap-2"><Zap className="w-5 h-5 text-primary" />Beta Features</h3>
-        {BETA_FEATURES.map(f => (
-          <div key={f.label} className="card p-4 flex items-center gap-4">
-            <div className="flex-1">
-              <div className="font-medium text-sm">{f.label}</div>
-              <div className="text-xs text-muted-foreground">{f.desc}</div>
+            <div className="mt-6 space-y-3">
+              {visible.map(item => (
+                <button
+                  className={`w-full rounded-xl border p-5 text-left ${selected.name === item.name ? "border-cyan-400/35 bg-cyan-400/10" : "border-slate-800 bg-slate-950/60"}`}
+                  key={item.name}
+                  onClick={() => setSelected(item)}
+                  type="button"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="font-medium">{item.name}</p>
+                    <Badge
+                      variant={
+                        item.state === "Review" ? "secondary" : "outline"
+                      }
+                    >
+                      {item.state}
+                    </Badge>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-400">{item.summary}</p>
+                </button>
+              ))}
+              <p
+                aria-live="polite"
+                className="rounded-lg border border-slate-800 p-3 text-sm text-slate-400"
+              >
+                {status}
+              </p>
             </div>
-            <Badge variant={f.status === "live" ? "default" : f.status === "testing" ? "secondary" : "outline"} className="text-xs shrink-0">
-              {f.status === "live" ? "Live" : f.status === "testing" ? "Testing" : "Coming Soon"}
-            </Badge>
-          </div>
-        ))}
-      </div>
-      <div className="card p-6 text-center">
-        <h3 className="font-bold text-lg mb-2">Apply for Beta Access</h3>
-        <p className="text-muted-foreground text-sm mb-4">Limited spots available. Must hold 100+ SKY444 tokens.</p>
-        <div className="flex gap-3 justify-center">
-          <Link href="/staking"><Button className="btn-primary gap-2"><Star className="w-4 h-4" />Apply Now</Button></Link>
-          <Link href="/crypto"><Button variant="outline" gap-2>Get SKY444 <ArrowRight className="w-4 h-4" /></Button></Link>
+          </Card>
+          <aside>
+            <Card className="border-slate-800 bg-slate-900/75 p-6">
+              <p className="text-xs uppercase tracking-widest text-slate-500">
+                Selected concept
+              </p>
+              <h2 className="mt-2 text-xl font-semibold">{selected.name}</h2>
+              <div className="mt-5 grid gap-2">
+                {(
+                  [
+                    ["Access", selected.access],
+                    ["Eligibility", selected.eligibility],
+                    ["Rewards", selected.rewards],
+                    ["Financial terms", selected.financial],
+                    ["Application", selected.application],
+                  ] as Array<[string, string]>
+                ).map(([label, value]) => (
+                  <div
+                    className="rounded-lg border border-slate-800 p-3"
+                    key={label}
+                  >
+                    <p className="text-xs text-slate-500">{label}</p>
+                    <p className="mt-1 text-sm">{value}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-5 grid gap-2">
+                <Button
+                  onClick={() => blocked("Check eligibility")}
+                  variant="outline"
+                >
+                  <BadgeCheck className="mr-2 h-4 w-4" /> Eligibility
+                  unavailable
+                </Button>
+                <Button
+                  onClick={() => blocked("Apply for beta access")}
+                  variant="outline"
+                >
+                  <Rocket className="mr-2 h-4 w-4" /> Apply unavailable
+                </Button>
+              </div>
+            </Card>
+            <Card className="mt-6 border-slate-800 bg-slate-900/75 p-6">
+              <div className="flex gap-3">
+                <LockKeyhole className="h-5 w-5 text-cyan-200" />
+                <p className="text-sm leading-6 text-slate-400">
+                  Beta access requires a verified registry, explicit eligibility
+                  rules, privacy controls, authorization, auditability, and a
+                  supported application workflow.
+                </p>
+              </div>
+              <div className="mt-4 flex gap-3">
+                <ShieldAlert className="h-5 w-5 text-amber-200" />
+                <p className="text-sm leading-6 text-slate-400">
+                  No tokens, balances, rewards, fee discounts, trading signals,
+                  financial outcomes, or production availability are claimed.
+                </p>
+              </div>
+              <div className="mt-4 flex gap-3">
+                <Ban className="h-5 w-5 text-slate-500" />
+                <p className="text-sm leading-6 text-slate-400">
+                  No account, wallet, repository, blockchain, invitation,
+                  subscription, or application mutation is available from this
+                  preview.
+                </p>
+              </div>
+            </Card>
+          </aside>
         </div>
       </div>
     </div>
