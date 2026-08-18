@@ -1,20 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { FeatureUnavailable } from "@/components/FeatureUnavailable";
 
-const ComplianceChecking = () => {
+export default function ComplianceChecking() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">ComplianceChecking</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            ComplianceChecking feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
+    <FeatureUnavailable
+      title="Compliance checking is not active"
+      description="Compliance assessment is unavailable until the applicable control framework, evidence sources, test procedures, findings, remediation ownership, exception handling, review approvals, and report integrity are implemented and independently verified. A readiness label or successful build is not a certification."
+      capability="Compliance controls, evidence, and assessment reporting"
+      nextStep="Review the launch readiness status"
+    />
   );
-};
-
-export default ComplianceChecking;
+}
