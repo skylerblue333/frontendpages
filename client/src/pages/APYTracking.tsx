@@ -1,20 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { FeatureUnavailable } from "@/components/FeatureUnavailable";
 
-const APYTracking = () => {
+export default function APYTracking() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">APYTracking</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            APYTracking feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
+    <FeatureUnavailable
+      title="APY tracking is not active"
+      description="APY and staking reporting are unavailable until verified chain and contract identity, wallet and custody boundaries, lock periods, reward semantics, fee and price provenance, compounding rules, slashing, withdrawal, tax treatment, and reconciled settlement records are implemented and tested."
+      capability="Staking APY, rewards, and performance reporting"
+      nextStep="Review the launch readiness status"
+    />
   );
-};
-
-export default APYTracking;
+}
