@@ -19,3 +19,13 @@ Selecting the **Workspace** activity-type filter narrowed the fixture list to Wo
 Activating **Refresh unavailable** changed the live status to `Refresh activity is unavailable locally. No activity, identity, notification, engagement, or analytics request was started.` The Workspace filter and local fixture labeling remained visible, and no activity side effect occurred.
 
 **Safety evidence image:** `/home/ubuntu/screenshots/127_0_0_1_2026-08-17_14-10-27_6265.webp`
+
+
+## Current hardening checkpoint
+
+The route was re-verified after the current hardening pass. The layout now renders typed local activity-event concepts with Core, Community, and Financial area filters; Review, Unavailable, and Planned state filters; explicit actor/action/source/time/visibility/retention unavailable fields; and blocked Refresh and Export actions.
+
+Activating `Export unavailable` confirmed: `Export activity is unavailable locally. No event lookup, actor identity, notification, social action, analytics request, persistence, or external mutation was started.`
+
+Current initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_07-48-52_7555.webp`
+Current blocked-export screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_07-48-58_5354.webp`
