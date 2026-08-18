@@ -1,20 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { FeatureUnavailable } from "@/components/FeatureUnavailable";
 
-const MiningPoolSelector = () => {
+export default function MiningPoolSelector() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">MiningPoolSelector</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            MiningPoolSelector feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
+    <FeatureUnavailable
+      title="Mining pool selection is not active"
+      description="Pool selection is unavailable until provider connectivity, network validation, worker authorization, payout rules, monitoring, and verifiable reward reconciliation are implemented. This route does not connect to a pool or claim mining rewards."
+      capability="Mining pool connectivity and payout configuration"
+      nextStep="Return to the launch hub"
+    />
   );
-};
-
-export default MiningPoolSelector;
+}

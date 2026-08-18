@@ -1,20 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { FeatureUnavailable } from "@/components/FeatureUnavailable";
 
-const BulkOrdering = () => {
+export default function BulkOrdering() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">BulkOrdering</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            BulkOrdering feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
+    <FeatureUnavailable
+      title="Bulk ordering is not active"
+      description="Bulk purchasing is unavailable until catalog, inventory, pricing, tax, authorization, payment, fulfillment, cancellation, and reconciliation contracts are connected and tested. This route does not submit orders or imply payment success."
+      capability="Bulk ordering and commerce operations"
+      nextStep="Return to the launch hub"
+    />
   );
-};
-
-export default BulkOrdering;
+}
