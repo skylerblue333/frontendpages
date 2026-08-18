@@ -1,20 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { FeatureUnavailable } from "@/components/FeatureUnavailable";
 
-const BlockRewards = () => {
+export default function BlockRewards() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">BlockRewards</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            BlockRewards feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
+    <FeatureUnavailable
+      title="Block rewards are not active"
+      description="Block production and reward reporting are unavailable until verified chain identity, validator or miner participation, block provenance, consensus and finality, reward emission rules, wallet authorization, duplicate prevention, tax treatment, and reconciled payout records are implemented and tested."
+      capability="Blockchain block rewards and payout reporting"
+      nextStep="Review the launch readiness status"
+    />
   );
-};
-
-export default BlockRewards;
+}
