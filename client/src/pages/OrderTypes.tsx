@@ -1,20 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { FeatureUnavailable } from "@/components/FeatureUnavailable";
 
-const OrderTypes = () => {
+export default function OrderTypes() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">OrderTypes</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            OrderTypes feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
+    <FeatureUnavailable
+      title="Order types are not active"
+      description="Order creation and type selection are unavailable until real product or service contracts, inventory, merchant authorization, pricing, fulfillment, payment, cancellation, refund, and audit workflows are implemented and tested."
+      capability="Order type catalog and fulfillment workflows"
+      nextStep="Review the launch readiness status"
+    />
   );
-};
-
-export default OrderTypes;
+}
