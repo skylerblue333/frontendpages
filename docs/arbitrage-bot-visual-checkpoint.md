@@ -21,3 +21,13 @@ No market price, spread, balance, wallet, exchange, order, trade, fill, profit, 
 - Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_14-53-13_9858.webp`
 - Blocked-simulation screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_14-53-20_1251.webp`
 - Route text capture: `/home/ubuntu/page_texts/localhost_5175_arbitrage-bot.md`
+
+
+## Current hardening checkpoint
+
+The route was re-verified after the current financial-safety hardening pass. The layout now renders typed local strategy concepts with Review, Planned, and Unavailable lifecycle filters; explicit venue/market/risk/wallet/order/execution unavailable fields; and blocked Simulate and Execute actions.
+
+Activating `Simulate unavailable` confirmed: `Simulate strategy is unavailable locally. No market quote, spread, balance, wallet, exchange, order, trade, fill, profit, fee, slippage, transaction, or execution operation was started.`
+
+Current initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_08-02-37_9992.webp`
+Current blocked-simulate screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_08-02-46_3428.webp`
