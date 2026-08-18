@@ -1,20 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { FeatureUnavailable } from "@/components/FeatureUnavailable";
 
-const OrderPlacement = () => {
+export default function OrderPlacement() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">OrderPlacement</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            OrderPlacement feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
+    <FeatureUnavailable
+      title="Order placement is not active"
+      description="Order creation is unavailable until catalog, inventory, authorization, payment intent, idempotency, fulfillment, cancellation, refund, and reconciliation contracts are connected and tested. This route does not submit an order or claim payment success."
+      capability="Order placement and checkout"
+      nextStep="Return to the launch hub"
+    />
   );
-};
-
-export default OrderPlacement;
+}

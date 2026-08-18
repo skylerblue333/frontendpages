@@ -1,20 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { FeatureUnavailable } from "@/components/FeatureUnavailable";
 
-const PortfolioOptimization = () => {
+export default function PortfolioOptimization() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">PortfolioOptimization</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            PortfolioOptimization feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
+    <FeatureUnavailable
+      title="Portfolio optimization is not active"
+      description="Optimization is unavailable until verified holdings, market data, risk methodology, user suitability controls, calculation provenance, authorization, and tested failure handling are implemented. This route does not provide investment advice or claim an optimized allocation."
+      capability="Portfolio optimization and allocation analysis"
+      nextStep="Review the launch readiness status"
+    />
   );
-};
-
-export default PortfolioOptimization;
+}

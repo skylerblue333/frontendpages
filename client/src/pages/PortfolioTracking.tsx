@@ -1,20 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { FeatureUnavailable } from "@/components/FeatureUnavailable";
 
-const PortfolioTracking = () => {
+export default function PortfolioTracking() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">PortfolioTracking</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            PortfolioTracking feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
+    <FeatureUnavailable
+      title="Portfolio tracking is not active"
+      description="Tracking is unavailable until account-scoped holdings, authoritative prices, performance history, alerts, tax lots, and reconciliation are connected. This route does not display simulated returns or execute a rebalance."
+      capability="Portfolio tracking, performance, and alerts"
+      nextStep="Review the launch readiness status"
+    />
   );
-};
-
-export default PortfolioTracking;
+}
