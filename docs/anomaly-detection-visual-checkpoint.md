@@ -21,3 +21,13 @@ No anomaly signal, score, confidence, event, baseline, source, user identity, in
 - Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_14-50-30_7526.webp`
 - Blocked-investigate screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_14-50-40_2977.webp`
 - Route text capture: `/home/ubuntu/page_texts/localhost_5175_anomaly-detection.md`
+
+
+## Current hardening checkpoint
+
+The route was re-verified after the current hardening pass. The layout now renders typed local anomaly-signal concepts with Review, Unavailable, and Planned lifecycle filters; explicit source/score/confidence/identity/incident/remediation unavailable fields; and blocked Investigate and Remediate actions.
+
+Activating `Investigate unavailable` confirmed: `Investigate anomaly is unavailable locally. No signal, score, confidence, identity, incident, alert, remediation, query, report, or operational change was started.`
+
+Current initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_08-00-29_2936.webp`
+Current blocked-investigate screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_08-00-43_9665.webp`
