@@ -21,3 +21,13 @@ No assignment, student, instructor, course, progress percentage, deadline, submi
 - Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_14-55-45_7950.webp`
 - Blocked-submission screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_14-56-01_2747.webp`
 - Route text capture: `/home/ubuntu/page_texts/localhost_5175_assignment-tracker.md`
+
+
+## Current hardening checkpoint
+
+The route was re-verified after the current hardening pass. The layout now renders typed local assignment concepts with Review, Planned, and Unavailable lifecycle filters; explicit course/assignee/progress/deadline/submission/grading/completion unavailable fields; and blocked Submit and Complete actions.
+
+Activating `Submit unavailable` confirmed: `Submit assignment is unavailable locally. No assignment, student, instructor, course, progress, deadline, submission, grade, feedback, notification, certificate, or completion record was started.`
+
+Current initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_08-04-43_5027.webp`
+Current blocked-submit screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_08-04-50_5638.webp`
