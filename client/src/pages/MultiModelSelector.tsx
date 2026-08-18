@@ -1,20 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { FeatureUnavailable } from "@/components/FeatureUnavailable";
 
-const MultiModelSelector = () => {
+export default function MultiModelSelector() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">MultiModelSelector</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            MultiModelSelector feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
+    <FeatureUnavailable
+      title="Multi-model selection is not active"
+      description="Model selection is unavailable until approved providers, model identity and versioning, capability metadata, routing policy, cost controls, privacy boundaries, rate limits, and tested provider failure handling are implemented."
+      capability="Multi-model routing and selection"
+      nextStep="Review the launch readiness status"
+    />
   );
-};
-
-export default MultiModelSelector;
+}
