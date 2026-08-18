@@ -1,75 +1,8 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { Check, Filter, LockKeyhole, MessageSquareText, RefreshCw, Send, ShieldAlert, UsersRound, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
-
-export default function SMSCampaigns() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>SMSCampaigns</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">SMSCampaigns</h1>
-            <p className="text-muted-foreground mt-2">SMS marketing</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+import { Card, CardContent } from "@/components/ui/card";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+const campaigns = [{ id: 1, name: "Product update", category: "Lifecycle", detail: "A local campaign concept requiring an authorized audience, consent, message template, localization, quiet hours, opt-out, provider, and audit.", state: "Unconfigured" }, { id: 2, name: "Security notification", category: "Transactional", detail: "A sensitive notification concept requiring event provenance, identity, urgency policy, delivery status, retry, accessibility, and support.", state: "Needs evidence" }, { id: 3, name: "Learning reminder", category: "Education", detail: "An education-message concept requiring learner consent, safeguarding, schedule, content authority, accessibility, and privacy controls.", state: "Blocked" }, { id: 4, name: "Community announcement", category: "Community", detail: "A community concept requiring moderator approval, audience boundaries, anti-abuse controls, language support, and appeals.", state: "Preview" }];
+export default function SMSCampaigns() { const [query, setQuery] = useState(""); const [category, setCategory] = useState("All"); const [selected, setSelected] = useState(1); const [audience, setAudience] = useState("Audience not configured"); const [consent, setConsent] = useState("Consent not configured"); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false); const categories = ["All", ...Array.from(new Set(campaigns.map((item) => item.category)))]; const filtered = useMemo(() => campaigns.filter((item) => (category === "All" || item.category === category) && `${item.name} ${item.category} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [category, query]); const campaign = campaigns.find((item) => item.id === selected) ?? campaigns[0]; const reset = () => { setQuery(""); setCategory("All"); setSelected(1); setAudience("Audience not configured"); setConsent("Consent not configured"); setSaved(false); setShowGates(false); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={MessageSquareText} eyebrow="SMS campaigns · Messaging preview" title="Prove consent before sending a message." description="Explore local lifecycle, transactional, education, and community SMS campaign concepts with search, category filters, audience and consent intent, opt-out and delivery gates, save/reset, and blocked send actions. No phone numbers, recipients, consent, delivery, provider, campaign performance, or marketing outcome is connected." badge="Messaging governance workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Saved locally" : "Save campaign locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review messaging gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset campaign</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Campaigns", value: `${campaigns.length} local`, hint: "No audience source", icon: MessageSquareText, tone: "cyan" }, { label: "Recipients", value: "Unavailable", hint: "No phone source", icon: UsersRound, tone: "violet" }, { label: "Consent", value: "Unconfigured", hint: "No consent source", icon: ShieldAlert, tone: "amber" }, { label: "Delivery", value: "Blocked", hint: "No provider source", icon: Send, tone: "slate" }]} /><ScreenPreviewBanner title="SMS evidence boundary"><strong>This is a local messaging-governance preview, not evidence that recipients, phone numbers, consent, delivery, or campaign results exist.</strong> Campaign cards, filters, audience and consent intent, saved state, opt-out gates, and disabled send actions are browser concepts. No person, phone number, subscription, message, delivery, open, click, conversion, cost, or compliance outcome is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Filter className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local SMS campaigns" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-4 flex flex-wrap gap-2">{categories.map((entry) => <Button key={entry} onClick={() => setCategory(entry)} size="sm" variant="outline" className={category === entry ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100" : "border-white/10 text-slate-400"}>{entry}</Button>)}</div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.state}</Badge></div><div className="mt-4"><Badge variant="outline" className="border-white/10 text-slate-500">{item.category}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected campaign concept</p><h2 className="mt-2 text-2xl font-black">{campaign.name}</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{campaign.state}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-400">{campaign.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Category", value: campaign.category }, { label: "Audience", value: audience }, { label: "Consent", value: consent }, { label: "Template", value: "Unconfigured" }, { label: "Provider", value: "Unavailable" }, { label: "Opt-out", value: "Required" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2"><label className="text-sm text-slate-400">Audience intent<select value={audience} onChange={(event) => setAudience(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Audience not configured</option><option>Opted-in audience intent</option><option>Transactional audience intent</option><option>Course cohort intent</option><option>Moderator-approved intent</option></select></label><label className="text-sm text-slate-400">Consent intent<select value={consent} onChange={(event) => setConsent(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Consent not configured</option><option>Explicit opt-in intent</option><option>Transactional exception review</option><option>Consent refresh intent</option><option>Opt-out verification intent</option></select></label></div><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><Send className="mx-auto size-8 text-slate-600" /><p className="mt-3 font-semibold">No messaging evidence loaded</p><p className="mt-2 text-sm text-slate-500">Connect governed recipients, consent, templates, quiet hours, provider, localization, delivery status, retry, opt-out, privacy, rate limits, and audit before sending.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400"><Send className="mr-2 size-4" />Send unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Schedule unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Test unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Export unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No recipient, delivery, or marketing claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A campaign concept does not prove a phone number, recipient, consent, message send, delivery, provider status, opt-out, conversion, or regulatory compliance.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Messaging gates</p><h2 className="mt-2 text-2xl font-black">What a real SMS campaign system must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Authenticated recipient, phone provenance, tenant, consent, purpose, timestamp, locale, and opt-out history", "Template, sender identity, message policy, character limits, localization, accessibility, quiet hours, and review", "Provider, delivery, retry, failure, idempotency, rate limits, cost, status callbacks, and support ownership", "Privacy, sensitive data, retention, deletion, export, lawful communications, safeguarding, and incident response", "Transactional, marketing, education, community, security, financial, and user-impact claims require domain review", "Scheduling, approvals, test sends, cancellation, rollback, audit, abuse prevention, and accountable operation"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Campaign surface preserved", description: "Lifecycle, transactional, education, community campaigns, filters, audiences, consent, templates, scheduling, delivery, opt-out, testing, export, save/reset, and gates remain interactive.", icon: MessageSquareText, status: "Local campaigns" }, { title: "No messaging theater", description: "Recipients, phone numbers, consent, deliveries, provider outcomes, conversions, costs, and compliance are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Consent before send", description: "Real SMS requires governed recipient data, consent, templates, provider evidence, opt-out handling, privacy, rate limits, and audit.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>; }
