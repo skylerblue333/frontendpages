@@ -1,20 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { FeatureUnavailable } from "@/components/FeatureUnavailable";
 
-const ChainExplorer = () => {
+export default function ChainExplorer() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">ChainExplorer</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            ChainExplorer feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
+    <FeatureUnavailable
+      title="Chain explorer is not active"
+      description="Explorer lookup is unavailable until approved chain and RPC providers, network identity, indexed blocks and transactions, address privacy controls, confirmation and reorg semantics, rate limits, and provider failure handling are implemented and tested."
+      capability="Blockchain block, transaction, and address exploration"
+      nextStep="Review the launch readiness status"
+    />
   );
-};
-
-export default ChainExplorer;
+}
