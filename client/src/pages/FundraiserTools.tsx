@@ -1,20 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { FeatureUnavailable } from "@/components/FeatureUnavailable";
 
-const FundraiserTools = () => {
+export default function FundraiserTools() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">FundraiserTools</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            FundraiserTools feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
+    <FeatureUnavailable
+      title="Fundraising tools are not active"
+      description="Fundraising workflows are unavailable until campaign ownership, beneficiary verification, donor consent, payment custody, restricted-fund controls, disbursement approvals, refunds, tax and legal review, fraud monitoring, and independently reconciled reporting are implemented and tested."
+      capability="Fundraiser creation, donations, and disbursement reporting"
+      nextStep="Review the launch readiness status"
+    />
   );
-};
-
-export default FundraiserTools;
+}
