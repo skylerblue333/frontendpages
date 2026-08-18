@@ -1,75 +1,14 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import { BarChart3, Check, Download, Filter, GitCompareArrows, LockKeyhole, RefreshCw, Search, ShieldAlert, SlidersHorizontal, UsersRound, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
+const reports = [{ id: 1, name: "Activation cohort", category: "Cohort", detail: "A local definition for grouping accounts by an activation event. No users, event timestamps, retention percentage, or cohort outcome are connected.", state: "Definition only" }, { id: 2, name: "Early churn review", category: "Churn", detail: "A review concept for a defined inactivity threshold. It does not identify churned people or claim a churn rate.", state: "Needs event source" }, { id: 3, name: "Returning audience", category: "Segment", detail: "A segment concept requiring identity stitching, consent, deduplication, timezone, deletion, and a governed event schema.", state: "Unmeasured" }, { id: 4, name: "Retention experiment", category: "Experiment", detail: "An experiment definition requiring assignment, exposure, control, guardrails, sample size, analysis plan, and review.", state: "Blocked" }];
+const bars = [28, 44, 34, 52, 42, 64, 48, 58];
 export default function RetentionAnalytics() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>RetentionAnalytics</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">RetentionAnalytics</h1>
-            <p className="text-muted-foreground mt-2">Churn and retention tracking</p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
-              />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  const [query, setQuery] = useState(""); const [category, setCategory] = useState("All"); const [selected, setSelected] = useState(1); const [range, setRange] = useState("Window not configured"); const [comparison, setComparison] = useState("No comparison configured"); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false);
+  const categories = ["All", ...Array.from(new Set(reports.map((item) => item.category)))]; const filtered = useMemo(() => reports.filter((item) => (category === "All" || item.category === category) && `${item.name} ${item.category} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [category, query]); const report = reports.find((item) => item.id === selected) ?? reports[0];
+  const reset = () => { setQuery(""); setCategory("All"); setSelected(1); setRange("Window not configured"); setComparison("No comparison configured"); setSaved(false); setShowGates(false); };
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={BarChart3} eyebrow="Retention analytics · Preview" title="Define the cohort before reading the curve." description="Explore local retention analytics definitions with cohort and churn concepts, search, segments, date windows, comparison modes, preview bars, save, reset, export and alert boundaries. No live users, events, percentages, trends, or business outcomes are connected." badge="Analytics workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Saved locally" : "Save definition locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review evidence gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset analysis</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Definitions", value: `${reports.length} local`, hint: "No event source", icon: BarChart3, tone: "cyan" }, { label: "Users", value: "Unavailable", hint: "No identity source", icon: UsersRound, tone: "violet" }, { label: "Retention", value: "Unmeasured", hint: "No denominator", icon: GitCompareArrows, tone: "amber" }, { label: "Churn", value: "Unmeasured", hint: "No threshold source", icon: ShieldAlert, tone: "slate" }]} /><ScreenPreviewBanner title="Analytics evidence boundary"><strong>This is a local metric-definition preview, not a live retention report.</strong> Cohort cards, churn concepts, segments, date windows, comparisons, preview bars, saved state, export, and alert controls are browser concepts. No user count, event count, percentage, curve, trend, forecast, attribution, ranking, or business conclusion is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local analytics definitions" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-4 flex flex-wrap gap-2">{categories.map((entry) => <Button key={entry} onClick={() => setCategory(entry)} size="sm" variant="outline" className={category === entry ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100" : "border-white/10 text-slate-400"}><Filter className="mr-1 size-3" />{entry}</Button>)}</div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.state}</Badge></div><div className="mt-4"><Badge variant="outline" className="border-white/10 text-slate-500">{item.category}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected definition</p><h2 className="mt-2 text-2xl font-black">{report.name}</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{report.state}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-400">{report.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Category", value: report.category }, { label: "Window", value: range }, { label: "Comparison", value: comparison }, { label: "Users", value: "Unavailable" }, { label: "Events", value: "Unconnected" }, { label: "Outcome", value: "Unavailable" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2"><label className="text-sm text-slate-400">Analysis window<select value={range} onChange={(event) => setRange(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Window not configured</option><option>7-day intent</option><option>30-day intent</option><option>90-day intent</option></select></label><label className="text-sm text-slate-400">Comparison mode<select value={comparison} onChange={(event) => setComparison(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>No comparison configured</option><option>Prior-window intent</option><option>Control-group intent</option><option>Segment comparison intent</option></select></label></div><div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5"><div className="flex items-center justify-between"><div><p className="font-semibold">Illustrative curve shape</p><p className="mt-1 text-xs text-slate-500">Decorative preview only · not data</p></div><SlidersHorizontal className="size-4 text-slate-500" /></div><div className="mt-5 flex h-28 items-end gap-2">{bars.map((height, index) => <div key={index} className="flex-1 rounded-t-md bg-gradient-to-t from-cyan-400/60 to-violet-300/60" style={{ height: `${height}%` }} aria-label="Illustrative bar" />)}</div><div className="mt-2 flex justify-between text-[10px] uppercase tracking-wider text-slate-600"><span>Cohort start</span><span>Illustrative only</span><span>Later window</span></div></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400"><Download className="mr-2 size-4" />Export unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Refresh unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Create alert unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No analytics claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A metric definition and illustrative bars do not establish activity, growth, conversion, retention, engagement, performance, attribution, or business value.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Analytics gates</p><h2 className="mt-2 text-2xl font-black">What a real cohort or churn system must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Authenticated event schema, identity stitching, consent, privacy, deletion, and provenance", "Metric definitions, units, denominators, time zones, late events, deduplication, and backfills", "Funnels, cohorts, segments, filters, joins, attribution, sampling, missing data, and confidence", "Aggregation, comparisons, baselines, alert logic, anomaly handling, and reproducible queries", "Exports, access controls, redaction, audit, legal requests, cost controls, and incident response", "Product decisions, experiments, recommendations, forecasts, and business conclusions require review"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Analytics surface preserved", description: "Metric definitions, search, categories, windows, comparisons, cohorts, segments, preview bars, exports, alerts, save/reset, and gates remain interactive.", icon: BarChart3, status: "Local definitions" }, { title: "No analytics theater", description: "Users, events, counts, percentages, trends, conversion, attribution, rankings, forecasts, and business outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Event provenance before insight", description: "Real analytics needs governed events, identity, privacy, reproducible definitions, query review, and export controls.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
 }
