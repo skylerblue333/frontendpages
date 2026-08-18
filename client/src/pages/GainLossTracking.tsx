@@ -1,20 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { FeatureUnavailable } from "@/components/FeatureUnavailable";
 
-const GainLossTracking = () => {
+export default function GainLossTracking() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">GainLossTracking</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            GainLossTracking feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
+    <FeatureUnavailable
+      title="Gain/loss tracking is not active"
+      description="Gain and loss reporting is unavailable until verified account-scoped holdings, transaction history, cost-basis rules, market-price provenance, corporate actions, tax methodology, currency handling, privacy controls, and report reconciliation are implemented and tested."
+      capability="Portfolio gain/loss, cost basis, and tax reporting"
+      nextStep="Review the launch readiness status"
+    />
   );
-};
-
-export default GainLossTracking;
+}
