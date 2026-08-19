@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "5741d6d78d86150a78ee27a60af2f286be8ed887",
+  "generated_at_commit": "9c634984420dce8d9ee08f523fb3a453e92a3bb7",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 142,
-  "routes_with_visual_checkpoint": 142,
+  "routes_with_review": 143,
+  "routes_with_visual_checkpoint": 143,
   "routes_with_placeholder_signal": 786,
   "routes": [
     {
@@ -265,8 +265,8 @@
       "component": "APIManagement",
       "source": "client/src/pages/APIManagement.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
