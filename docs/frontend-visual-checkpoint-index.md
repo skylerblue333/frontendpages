@@ -380,6 +380,11 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-28-33_6497
 Blocked-calculation screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-28-44_7889.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_difficulty-tracking.md`
 
+## discord-integration-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-32-34_8079.webp`
+Blocked-connection screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-32-45_3715.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_discord-integration.md`
+
 ## discussion-forums-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-30-52_8152.webp`
 Detail-view screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-31-10_3476.webp`
