@@ -646,3 +646,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/access-control-mobile-390x844.png`
 ## accessibility-settings-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/accessibility-settings-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/accessibility-settings-mobile-390x844.png`
+
+## accordion-navigation-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/accordion-navigation-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/accordion-navigation-mobile-390x844.png`
