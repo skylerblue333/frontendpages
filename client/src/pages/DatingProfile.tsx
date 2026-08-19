@@ -29,6 +29,44 @@ interface DatingProfile {
   profileCompleteness: number;
 }
 
+type DatingFormData = {
+  age: string;
+  gender: string;
+  lookingFor: string;
+  bio: string;
+  interests: string[];
+  height: string;
+  bodyType: string;
+  ethnicity: string;
+  religion: string;
+  education: string;
+  occupation: string;
+  smoker: string;
+  drinker: string;
+  hasKids: boolean;
+  wantsKids: string;
+  relationshipGoal: string;
+};
+
+const toFormData = (profile: DatingProfile): DatingFormData => ({
+  age: profile.age?.toString() ?? "",
+  gender: profile.gender ?? "",
+  lookingFor: profile.lookingFor ?? "",
+  bio: profile.bio ?? "",
+  interests: Array.isArray(profile.interests) ? profile.interests : [],
+  height: profile.height ?? "",
+  bodyType: profile.bodyType ?? "",
+  ethnicity: profile.ethnicity ?? "",
+  religion: profile.religion ?? "",
+  education: profile.education ?? "",
+  occupation: profile.occupation ?? "",
+  smoker: profile.smoker ?? "",
+  drinker: profile.drinker ?? "",
+  hasKids: profile.hasKids,
+  wantsKids: profile.wantsKids ?? "",
+  relationshipGoal: profile.relationshipGoal ?? "",
+});
+
 export default function DatingProfile() {
   const { user } = useAuth();
   const [profile, setProfile] = useState<DatingProfile | null>(null);
@@ -37,6 +75,7 @@ export default function DatingProfile() {
   const [saving, setSaving] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     age: '',
@@ -69,14 +108,14 @@ export default function DatingProfile() {
       const data = await response.json();
       if (data.profile) {
         setProfile(data.profile);
-        setFormData({
-          ...data.profile,
-          age: data.profile.age ? data.profile.age.toString() : '',
-          interests: Array.isArray(data.profile.interests) ? data.profile.interests : [],
-        });
+        setFormData(toFormData(data.profile));
+      } else {
+        setError("No dating profile is available for this account yet.");
       }
+      if (!response.ok) throw new Error("Profile service unavailable");
     } catch (error) {
       console.error('Failed to load profile:', error);
+      setError("The profile service is unavailable. Your information was not loaded or changed.");
     } finally {
       setLoading(false);
     }
@@ -86,10 +125,12 @@ export default function DatingProfile() {
     try {
       const response = await fetch('/api/dating/profile/suggestions');
       const data = await response.json();
+      if (!response.ok) throw new Error("Suggestions service unavailable");
       setSuggestions(data.suggestions || []);
       setShowSuggestions(true);
     } catch (error) {
       console.error('Failed to load suggestions:', error);
+      setError("Profile suggestions are unavailable right now. No external change was made.");
     }
   };
 
@@ -102,6 +143,7 @@ export default function DatingProfile() {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
+      if (!response.ok || !data.success) throw new Error("Profile update was not accepted");
       if (data.success) {
         setProfile({
           ...profile,
@@ -112,6 +154,7 @@ export default function DatingProfile() {
       }
     } catch (error) {
       console.error('Failed to save profile:', error);
+      setError("Profile changes were not saved. Check your connection and try again.");
     } finally {
       setSaving(false);
     }
@@ -145,6 +188,14 @@ export default function DatingProfile() {
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-2xl mx-auto">
+        {error && (
+          <div role="alert" className="mb-6 rounded-xl border border-amber-300/40 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            <div className="flex items-start justify-between gap-4">
+              <span>{error}</span>
+              <Button type="button" variant="ghost" size="sm" onClick={() => { setError(null); void loadProfile(); }}>Retry</Button>
+            </div>
+          </div>
+        )}
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Dating Profile</h1>
@@ -378,7 +429,7 @@ export default function DatingProfile() {
                 <Button
                   onClick={() => {
                     setEditing(false);
-                    setFormData(profile as any);
+                    if (profile) setFormData(toFormData(profile));
                   }}
                   variant="outline"
                   className="flex-1"
