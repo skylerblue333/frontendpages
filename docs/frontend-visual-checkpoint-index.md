@@ -886,3 +886,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/chat-history-mobile-390x844.png`
 ## checkbox-group-form-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/checkbox-group-form-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/checkbox-group-form-mobile-390x844.png`
+
+## checkout-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/checkout-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/checkout-mobile-390x844.png`
