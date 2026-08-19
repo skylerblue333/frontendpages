@@ -1,0 +1,7 @@
+# CostAllocation review
+
+The former route presented an authenticated generic empty-state editor with misleading New and settings controls, an unused loading state, and no real ledger or budget contract. It has been replaced with a strictly typed, accessible, local-only finance-readiness workspace.
+
+The new screen states that no ledger, budget, cost center, currency, allocation rule, calculated amount, approval, variance, or saved result is loaded or persisted. Ledger loading, allocation creation, total calculation, and report export controls are disabled. The route documents ledger and account scope, reporting period, currency, cost center, source freshness, allocation drivers, weights, formulas, rounding, denominator, tax treatment, adjustments, preparer and reviewer authorization, segregation of duties, versioning, locks, change history, budgets, actuals, variances, forecasts, reconciliation, exceptions, report generation, and export. Its search field filters static capability notes only and never queries financial data, calculates an amount, changes a ledger, approves an allocation, exports a report, or persists a result.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows balanced allocation-state/release cards and a four-item capability map. Mobile evidence stacks the same content cleanly at 390×844 without clipping; source ledger, calculation, approval, variance, export, and unavailable-action disclosures remain readable.

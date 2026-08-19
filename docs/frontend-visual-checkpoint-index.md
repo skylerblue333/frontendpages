@@ -950,3 +950,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/context-menu-mobile-390x844.png`
 ## contract-a-b-i-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/contract-abi-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/contract-abi-mobile-390x844.png`
+
+## cost-allocation-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/cost-allocation-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/cost-allocation-mobile-390x844.png`
