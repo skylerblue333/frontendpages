@@ -362,6 +362,11 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-45-13_6447
 Blocked-copy screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-45-35_2201.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_referrals.md`
 
+## social-media-visual-checkpoint.md
+Loading screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-13-35_1002.webp`
+Error-state screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-13-51_9345.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_social-media.md`
+
 ## stream-clip-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-58-13_1506.webp`
 Blocked-create screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-58-31_1901.webp`
