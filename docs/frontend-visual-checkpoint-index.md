@@ -367,6 +367,12 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-58-13_1506
 Blocked-create screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-58-31_1901.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_stream-clip.md`
 
+## teaching-opportunities-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-09-13_5064.webp`
+Teach-tab screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-09-25_5954.webp`
+Blocked-load screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-09-40_7078.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_teaching-opportunities.md`
+
 ## todo-list-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-05-35_6058.webp`
 Blocked-new screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-05-49_9880.webp`
