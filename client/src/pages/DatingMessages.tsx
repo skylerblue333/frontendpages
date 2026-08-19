@@ -1,250 +1,217 @@
-import React, { useState, useEffect } from 'react';
-import { Send, Heart, Smile } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
-import { useAuth } from '@/_core/hooks/useAuth';
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import {
+  Clock3,
+  Heart,
+  LockKeyhole,
+  MessageCircleOff,
+  Send,
+  ShieldAlert,
+  Smile,
+  UserRound,
+  XCircle,
+} from "lucide-react";
 
-interface Match {
-  id: string;
-  userId: string;
-  displayName: string;
-  profileImageUrl: string;
-  lastMessage?: string;
-  lastMessageAt?: string;
-  unreadCount: number;
-}
-
-interface Message {
-  id: string;
-  fromUserId: string;
-  content: string;
-  createdAt: string;
-  isRead: boolean;
-}
+type DraftState = "empty" | "ready";
 
 export default function DatingMessages() {
-  const { user } = useAuth();
-  const [matches, setMatches] = useState<Match[]>([]);
-  const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    loadMatches();
-  }, []);
-
-  useEffect(() => {
-    if (selectedMatch) {
-      loadMessages(selectedMatch.id);
-    }
-  }, [selectedMatch]);
-
-  const loadMatches = async () => {
-    try {
-      const response = await fetch('/api/dating/matches');
-      const data = await response.json();
-      setMatches(data.matches || []);
-      if (data.matches && data.matches.length > 0) {
-        setSelectedMatch(data.matches[0]);
-      }
-    } catch (error) {
-      console.error('Failed to load matches:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadMessages = async (matchId: string) => {
-    try {
-      const response = await fetch(`/api/dating/messages/${matchId}`);
-      const data = await response.json();
-      setMessages(data.messages || []);
-    } catch (error) {
-      console.error('Failed to load messages:', error);
-    }
-  };
-
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newMessage.trim() || !selectedMatch) return;
-
-    try {
-      const response = await fetch('/api/dating/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          matchId: selectedMatch.id,
-          content: newMessage,
-        }),
-      });
-
-      if (response.ok) {
-        setNewMessage('');
-        loadMessages(selectedMatch.id);
-      }
-    } catch (error) {
-      console.error('Failed to send message:', error);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading messages...</div>
-      </div>
+  const [draft, setDraft] = useState("");
+  const [status, setStatus] = useState(
+    "Dating messaging service unavailable locally. No profile, match, message, presence, notification, or account mutation was started."
+  );
+  const draftState: DraftState = draft.trim() ? "ready" : "empty";
+  const announceUnavailable = (action: string) =>
+    setStatus(
+      `${action} is unavailable locally. No profile, match, message, presence, notification, or account mutation was started.`
     );
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto h-screen flex">
-        {/* Matches List */}
-        <div className="w-80 bg-white border-r border-gray-200 overflow-y-auto">
-          <div className="p-4 border-b border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-900">Messages</h2>
-          </div>
-
-          {matches.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
-              <p>No matches yet</p>
-              <p className="text-sm">Start swiping to find matches!</p>
+    <main
+      className="min-h-screen bg-background"
+      aria-labelledby="dating-messages-title"
+    >
+      <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+        <header className="space-y-3">
+          <Badge variant="outline" className="border-pink-400/30 text-pink-200">
+            MESSAGING READINESS PREVIEW
+          </Badge>
+          <h1
+            id="dating-messages-title"
+            className="flex items-center gap-2 text-3xl font-bold tracking-tight"
+          >
+            <Heart className="h-7 w-7 text-pink-300" aria-hidden="true" />
+            Dating messages
+          </h1>
+          <p className="max-w-3xl text-muted-foreground">
+            Review a local, draft-only messaging surface without inventing
+            participants, profile images, conversations, presence, unread state,
+            or delivery results.
+          </p>
+        </header>
+        <section className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5">
+          <div className="flex items-start gap-3">
+            <ShieldAlert
+              className="mt-0.5 h-5 w-5 shrink-0 text-amber-200"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="font-semibold text-amber-100">
+                Messaging service unavailable
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-amber-100/75">
+                No authenticated match provider, profile source, conversation
+                history, messaging transport, presence signal, moderation
+                service, notification route, or deletion workflow is connected.
+                This page cannot open or create a real conversation.
+              </p>
             </div>
-          ) : (
-            matches.map((match) => (
-              <div
-                key={match.id}
-                onClick={() => setSelectedMatch(match)}
-                className={`p-4 border-b border-gray-100 cursor-pointer transition-colors ${
-                  selectedMatch?.id === match.id
-                    ? 'bg-pink-50'
-                    : 'hover:bg-gray-50'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <img
-                    src={match.profileImageUrl}
-                    alt={match.displayName}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 truncate">
-                      {match.displayName}
-                    </h3>
-                    <p className="text-sm text-gray-500 truncate">
-                      {match.lastMessage || 'No messages yet'}
-                    </p>
-                  </div>
-                  {match.unreadCount > 0 && (
-                    <div className="bg-pink-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
-                      {match.unreadCount}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        {/* Chat Area */}
-        <div className="flex-1 flex flex-col bg-white">
-          {selectedMatch ? (
-            <>
-              {/* Header */}
-              <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={selectedMatch.profileImageUrl}
-                    alt={selectedMatch.displayName}
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                  <div>
-                    <h3 className="font-semibold text-gray-900">
-                      {selectedMatch.displayName}
-                    </h3>
-                    <p className="text-xs text-gray-500">Online</p>
-                  </div>
-                </div>
-                <Button variant="ghost" size="sm">
-                  <Heart className="w-5 h-5 text-pink-500" />
+          </div>
+        </section>
+        <section className="grid gap-4 md:grid-cols-3">
+          <Card className="border-border/40 bg-card/50 p-5">
+            <UserRound
+              className="mb-3 h-5 w-5 text-sky-300"
+              aria-hidden="true"
+            />
+            <p className="text-lg font-semibold">Participant unavailable</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No name, profile image, identity, age, match, or presence is
+              loaded.
+            </p>
+          </Card>
+          <Card className="border-border/40 bg-card/50 p-5">
+            <MessageCircleOff
+              className="mb-3 h-5 w-5 text-pink-300"
+              aria-hidden="true"
+            />
+            <p className="text-lg font-semibold">History unavailable</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No message content, timestamps, read state, or unread count is
+              displayed.
+            </p>
+          </Card>
+          <Card className="border-border/40 bg-card/50 p-5">
+            <Clock3
+              className="mb-3 h-5 w-5 text-amber-300"
+              aria-hidden="true"
+            />
+            <p className="text-lg font-semibold">Delivery unavailable</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No send, notification, delivery receipt, or response outcome is
+              claimed.
+            </p>
+          </Card>
+        </section>
+        <section className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+          <Card className="border-border/40 bg-card/40 p-5">
+            <div className="flex items-start gap-3">
+              <XCircle
+                className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <div>
+                <h2 className="font-semibold">No conversations available</h2>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  Matches and conversation history are unavailable until
+                  authenticated API contracts, authorization, moderation,
+                  retention, and deletion are verified.
+                </p>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="mt-4"
+                  onClick={() => announceUnavailable("Conversation loading")}
+                >
+                  Load conversations unavailable
                 </Button>
               </div>
-
-              {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {messages.length === 0 ? (
-                  <div className="h-full flex items-center justify-center text-gray-500">
-                    <div className="text-center">
-                      <Heart className="w-12 h-12 mx-auto mb-2 text-pink-300" />
-                      <p>Start the conversation!</p>
-                    </div>
-                  </div>
-                ) : (
-                  messages.map((msg) => (
-                    <div
-                      key={msg.id}
-                      className={`flex ${
-                        msg.fromUserId === user?.id?.toString()
-                          ? 'justify-end'
-                          : 'justify-start'
-                      }`}
-                    >
-                      <div
-                        className={`max-w-xs px-4 py-2 rounded-lg ${
-                          msg.fromUserId === user?.id?.toString()
-                            ? 'bg-pink-500 text-white'
-                            : 'bg-gray-100 text-gray-900'
-                        }`}
-                      >
-                        <p className="text-sm">{msg.content}</p>
-                        <p
-                          className={`text-xs mt-1 ${
-                            msg.fromUserId === user?.id?.toString()
-                              ? 'text-pink-100'
-                              : 'text-gray-500'
-                          }`}
-                        >
-                          {new Date(msg.createdAt).toLocaleTimeString()}
-                        </p>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-
-              {/* Input */}
-              <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-200">
-                <div className="flex gap-2">
-                  <Button type="button" variant="ghost" size="sm">
-                    <Smile className="w-5 h-5 text-gray-600" />
-                  </Button>
-                  <Input
-                    type="text"
-                    placeholder="Type a message..."
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    className="flex-1"
-                  />
-                  <Button
-                    type="submit"
-                    className="bg-pink-500 hover:bg-pink-600 text-white"
-                  >
-                    <Send className="w-5 h-5" />
-                  </Button>
-                </div>
-              </form>
-            </>
-          ) : (
-            <div className="flex-1 flex items-center justify-center text-gray-500">
-              <div className="text-center">
-                <Heart className="w-16 h-16 mx-auto mb-4 text-pink-300" />
-                <p className="text-lg">Select a match to start chatting</p>
-              </div>
             </div>
-          )}
-        </div>
+          </Card>
+          <Card className="border-border/40 bg-card/40 p-5">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <div>
+                <h2 className="text-xl font-semibold">Local draft composer</h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Draft memory is component-local only and is never posted.
+                </p>
+              </div>
+              <Badge
+                variant="outline"
+                className="border-violet-400/30 text-violet-200"
+              >
+                {draftState === "ready" ? "Draft ready" : "Empty draft"}
+              </Badge>
+            </div>
+            <label htmlFor="dating-message-draft" className="sr-only">
+              Local message draft
+            </label>
+            <textarea
+              id="dating-message-draft"
+              value={draft}
+              onChange={event => setDraft(event.target.value)}
+              placeholder="Write a local draft only"
+              rows={6}
+              className="w-full resize-y rounded-xl border border-border/40 bg-background/40 p-3 text-sm outline-none ring-primary/40 focus:ring-2"
+            />
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => announceUnavailable("Emoji and media controls")}
+              >
+                <Smile className="mr-2 h-4 w-4" aria-hidden="true" />
+                Media unavailable
+              </Button>
+              <Button
+                type="button"
+                onClick={() => announceUnavailable("Message delivery")}
+                disabled={!draft.trim()}
+              >
+                <Send className="mr-2 h-4 w-4" aria-hidden="true" />
+                Send unavailable
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setDraft("")}
+              >
+                Clear local draft
+              </Button>
+            </div>
+            <p className="mt-3 text-xs text-muted-foreground">
+              Do not enter real personal information, passwords, recovery codes,
+              seed phrases, or sensitive content. {draft.length} local
+              characters.
+            </p>
+          </Card>
+        </section>
+        <section className="rounded-2xl border border-border/40 bg-card/30 p-5">
+          <div className="flex items-start gap-3">
+            <LockKeyhole
+              className="mt-0.5 h-5 w-5 shrink-0 text-primary"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="font-semibold">Secure messaging requirements</h2>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                A production messaging flow needs authenticated participants,
+                authorization, encryption in transit and at rest, abuse
+                reporting, blocking, rate limits, safe attachments, delivery
+                states, notification controls, retention, deletion, and
+                structured non-sensitive logging.
+              </p>
+            </div>
+          </div>
+        </section>
+        <p
+          className="rounded-xl border border-border/30 bg-card/30 px-4 py-3 text-sm text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
+          {status}
+        </p>
       </div>
-    </div>
+    </main>
   );
 }
