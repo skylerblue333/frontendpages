@@ -369,6 +369,12 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-22-13_5458
 Blocked-discussion screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-22-27_3765.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_developer-community.md`
 
+## developer-protocol-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-25-25_3169.webp`
+Authentication screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-25-36_3589.webp`
+Blocked-key screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-25-56_4117.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_developer-protocol.md`
+
 ## discussion-forums-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-30-52_8152.webp`
 Detail-view screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-31-10_3476.webp`
