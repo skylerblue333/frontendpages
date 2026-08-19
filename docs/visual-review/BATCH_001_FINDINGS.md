@@ -13,3 +13,7 @@ The first direct capture of `/address-lookup` recorded a premature `Loading...` 
 ## Screenshot batch 002 correction
 
 The initial batch runner reused one output directory, so the mobile pass overwrote desktop filenames. The runner now writes to `screenshots/desktop/` and `screenshots/mobile/` separately and waits five seconds for lazy routes. A corrected desktop A/B testing capture renders at 1440×1000 with a complete two-column experiment-review layout, explicit unavailable-state banner, filters, hypothesis cards, and no fabricated experiment results. The paired mobile batch also completed for the same 24 routes. The prior overwritten flat-directory captures should not be used as evidence.
+
+## UnhiddenMode visual review
+
+The desktop capture at 1440×1000 renders a complete governed observability workspace with a sticky header, clear no-telemetry status, strong evidence-boundary hero, four status cards, seven expandable tool-surface cards, and no fabricated live event or operations data. The mobile capture completed successfully and is paired in `screenshots/upgrade-review/`. The page is visually substantial while keeping mutations, telemetry, financial flows, AI, wallet, workflow, and uptime claims explicitly unavailable or blocked.
