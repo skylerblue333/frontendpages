@@ -590,3 +590,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/document-editor-mobile-390x844.png`
 ## document-sharing-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/document-sharing-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/document-sharing-mobile-390x844.png`
+
+## document-management-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/document-management-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/document-management-mobile-390x844.png`
