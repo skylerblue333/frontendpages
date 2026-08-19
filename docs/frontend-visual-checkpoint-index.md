@@ -738,3 +738,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/backup-management-mobile-390x844.pn
 ## badges-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/badges-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/badges-mobile-390x844.png`
+
+## ban-suspend-user-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/ban-suspend-user-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/ban-suspend-user-mobile-390x844.png`
