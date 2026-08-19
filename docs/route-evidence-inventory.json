@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "faa283a9db287186658eb55da8db78b2307a986b",
+  "generated_at_commit": "ecdc0904f900ef57bb3e8a09f62ac753af667075",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 134,
-  "routes_with_visual_checkpoint": 134,
+  "routes_with_review": 135,
+  "routes_with_visual_checkpoint": 135,
   "routes_with_placeholder_signal": 786,
   "routes": [
     {
@@ -85,8 +85,8 @@
       "component": "AIAssistant",
       "source": "client/src/pages/AIAssistant.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
