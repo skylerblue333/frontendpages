@@ -914,3 +914,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/closing-checklist-mobile-390x844.pn
 ## code-quality-dashboard-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/code-quality-dashboard-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/code-quality-dashboard-mobile-390x844.png`
+
+## color-picker-dialog-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/color-picker-dialog-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/color-picker-dialog-mobile-390x844.png`
