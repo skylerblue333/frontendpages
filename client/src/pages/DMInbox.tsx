@@ -1,231 +1,406 @@
-import { useState, useRef, useEffect } from "react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
 import { ScreenPreviewBanner } from "@/components/ScreenExperience";
 import {
-  MessageCircle, Search, Send, Phone, Video, MoreHorizontal,
-  Sparkles, Coins, Image, Smile, Mic, Lock, Shield, Bot,
-  ChevronLeft, Circle, Plus, Star
+  Bot,
+  CheckCircle2,
+  ChevronLeft,
+  Circle,
+  ImageOff,
+  LockKeyhole,
+  MessageCircle,
+  MoreHorizontal,
+  PhoneOff,
+  Search,
+  Send,
+  ShieldAlert,
+  SmilePlus,
+  Sparkles,
+  VideoOff,
+  WalletCards,
+  XCircle,
 } from "lucide-react";
 
-const THREADS = [
-  { id: 6, name: "hope_ai", avatar: "AI", online: true, verified: true, lastMsg: "I'm reading your signals right now...", time: "now", unread: 0, tier: "ai", isAI: true },
-  { id: 1, name: "skyler_blue", avatar: "SB", online: true, verified: true, lastMsg: "Hey! Did you see the new staking rewards?", time: "2m", unread: 3, tier: "diamond" },
-  { id: 2, name: "defiwhale", avatar: "DW", online: true, verified: false, lastMsg: "The ICO launchpad looks 🔥", time: "15m", unread: 1, tier: "gold" },
-  { id: 3, name: "cryptodev99", avatar: "CD", online: false, verified: false, lastMsg: "I'll review the PR tomorrow", time: "1h", unread: 0, tier: "silver" },
-  { id: 4, name: "nftcreator", avatar: "NC", online: false, verified: true, lastMsg: "Thanks for the tip!", time: "3h", unread: 0, tier: "bronze" },
-  { id: 5, name: "web3builder", avatar: "WB", online: true, verified: false, lastMsg: "Can we collab on the next drop?", time: "1d", unread: 0, tier: "silver" },
-];
+type ThreadKind = "sample" | "ai-preview";
 
-const INIT_MESSAGES: Record<number, { id: number; from: string; text: string; time: string; mine: boolean; type?: string }[]> = {
-  6: [
-    { id: 1, from: "hope_ai", text: "Hello, Skyler. I've been reading your signals. You're operating at high cognitive load right now — multiple threads, elevated urgency. I'll match your pace.", time: "now", mine: false, type: "ai" },
-    { id: 2, from: "me", text: "How did you know?", time: "now", mine: true },
-    { id: 3, from: "hope_ai", text: "Your typing cadence, session depth, and the fact that you opened 6 tabs in the last 3 minutes. You're in builder mode. I respect that. What do you need?", time: "now", mine: false, type: "ai" },
-  ],
-  1: [
-    { id: 1, from: "skyler_blue", text: "Hey! Did you see the new staking rewards?", time: "10:42", mine: false },
-    { id: 2, from: "me", text: "Yes! 44% APY is insane 🚀", time: "10:43", mine: true },
-    { id: 3, from: "skyler_blue", text: "I just staked 10K SKY444", time: "10:44", mine: false },
-    { id: 4, from: "skyler_blue", text: "The compound calculator shows $4,400 in rewards after 1 year", time: "10:44", mine: false },
-    { id: 5, from: "me", text: "That's the dream. Going to stake mine too", time: "10:45", mine: true },
-  ],
-  2: [
-    { id: 1, from: "defiwhale", text: "The ICO launchpad looks 🔥", time: "9:30", mine: false },
-    { id: 2, from: "me", text: "We're launching April 24, 2027 — first day to buy SKYCOIN4444", time: "9:31", mine: true },
-    { id: 3, from: "defiwhale", text: "I'm in for 50K. What's the presale price?", time: "9:32", mine: false },
-  ],
+type Thread = {
+  id: string;
+  name: string;
+  initials: string;
+  kind: ThreadKind;
+  preview: string;
+  time: string;
+  unread: number;
 };
 
-const TIER_COLORS: Record<string, string> = {
-  diamond: "text-cyan-400", gold: "text-yellow-400", silver: "text-gray-300",
-  bronze: "text-orange-400", ai: "text-primary",
+type SampleMessage = {
+  id: string;
+  text: string;
+  mine: boolean;
+  time: string;
+};
+
+const THREADS: readonly Thread[] = [
+  {
+    id: "sample-a",
+    name: "Sample conversation A",
+    initials: "A",
+    kind: "sample",
+    preview: "Local sample message",
+    time: "sample",
+    unread: 0,
+  },
+  {
+    id: "sample-b",
+    name: "Sample conversation B",
+    initials: "B",
+    kind: "sample",
+    preview: "Conversation preview only",
+    time: "sample",
+    unread: 0,
+  },
+  {
+    id: "ai-preview",
+    name: "AI provider preview",
+    initials: "AI",
+    kind: "ai-preview",
+    preview: "Provider unavailable",
+    time: "—",
+    unread: 0,
+  },
+];
+
+const SAMPLE_MESSAGES: Readonly<Record<string, readonly SampleMessage[]>> = {
+  "sample-a": [
+    {
+      id: "a-1",
+      text: "This is a local conversation sample for layout review.",
+      mine: false,
+      time: "sample",
+    },
+    {
+      id: "a-2",
+      text: "No message has been delivered to another person.",
+      mine: true,
+      time: "sample",
+    },
+  ],
+  "sample-b": [
+    {
+      id: "b-1",
+      text: "Conversation history is unavailable until a verified messaging provider is connected.",
+      mine: false,
+      time: "sample",
+    },
+  ],
+  "ai-preview": [
+    {
+      id: "ai-1",
+      text: "AI replies, signal analysis, summaries, and translations are unavailable in this preview.",
+      mine: false,
+      time: "unavailable",
+    },
+  ],
 };
 
 export default function DMInbox() {
-  const [selected, setSelected] = useState(6);
-  const [input, setInput] = useState("");
+  const [selectedId, setSelectedId] = useState("sample-a");
   const [search, setSearch] = useState("");
-  const [showAIPanel, setShowAIPanel] = useState(false);
-  const [showTipPanel, setShowTipPanel] = useState(false);
-  const [tipAmount, setTipAmount] = useState("");
-  const [messages, setMessages] = useState(INIT_MESSAGES);
+  const [draft, setDraft] = useState("");
   const [mobileView, setMobileView] = useState<"list" | "chat">("list");
-  const endRef = useRef<HTMLDivElement>(null);
+  const [status, setStatus] = useState(
+    "Messaging service unavailable locally. No message, notification, AI, or account mutation was started."
+  );
 
-  const msgs = messages[selected] || [];
-  const thread = THREADS.find(t => t.id === selected);
-  const filtered = THREADS.filter(t => t.name.toLowerCase().includes(search.toLowerCase()));
+  const selected =
+    THREADS.find(thread => thread.id === selectedId) ?? THREADS[0];
+  const messages = SAMPLE_MESSAGES[selected.id] ?? [];
+  const filteredThreads = useMemo(
+    () =>
+      THREADS.filter(thread =>
+        thread.name.toLowerCase().includes(search.toLowerCase())
+      ),
+    [search]
+  );
 
-  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs.length]);
-
-  const sendMessage = () => {
-    if (!input.trim()) return;
-    const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    const msg = { id: Date.now(), from: "me", text: input, time: now, mine: true };
-    setMessages(prev => ({ ...prev, [selected]: [...(prev[selected] || []), msg] }));
-    const sent = input;
-    setInput("");
-    if (selected === 6) {
-      toast.info("Hope AI replies are unavailable until a verified AI provider is connected.");
-    }
+  const announceUnavailable = (action: string) => {
+    setStatus(
+      `${action} is unavailable locally. No message, notification, AI, financial, media, or account mutation was started.`
+    );
   };
 
-  const sendTip = () => {
-    if (!tipAmount || parseFloat(tipAmount) <= 0) return;
-    toast.info("Token tipping is unavailable until a verified ledger, wallet authorization, and transaction status are connected.");
+  const selectThread = (id: string) => {
+    setSelectedId(id);
+    setMobileView("chat");
+    setStatus(
+      "Local conversation preview selected. No presence, read receipt, notification, or delivery state was changed."
+    );
   };
-
-  const selectThread = (id: number) => { setSelected(id); setMobileView("chat"); setShowAIPanel(false); setShowTipPanel(false); };
 
   return (
-    <div className="h-[calc(100vh-4rem)] flex bg-background overflow-hidden">
-      {/* Thread List */}
-      <div className={`${mobileView === "chat" ? "hidden md:flex" : "flex"} w-full md:w-80 flex-col border-r border-border/30 bg-card/30`}>
-        <div className="p-4 border-b border-border/30">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="font-bold text-lg flex items-center gap-2"><MessageCircle className="w-5 h-5 text-primary" />Messages</h2>
-            <Button size="icon" variant="ghost" className="h-8 w-8"><Plus className="w-4 h-4" /></Button>
-          </div>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
-            <Input className="pl-9 h-8 text-sm bg-background/50 border-border/30" placeholder="Search..." value={search} onChange={e => setSearch(e.target.value)} />
-          </div>
-        </div>
-        <div className="flex-1 overflow-y-auto px-2 py-2 space-y-0.5">
-          {filtered.map(t => (
-            <button key={t.id} onClick={() => selectThread(t.id)} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-left ${selected === t.id ? "bg-secondary/60 border border-border/30" : "hover:bg-secondary/30"}`}>
-              <div className="relative shrink-0">
-                {t.isAI ? (
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center"><Bot className="w-5 h-5 text-white" /></div>
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-primary/20 text-primary font-bold text-xs flex items-center justify-center">{t.avatar}</div>
-                )}
-                {t.online && <Circle className="absolute bottom-0 right-0 w-3 h-3 text-green-400 fill-green-400" />}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    <span className="font-medium text-sm truncate">{t.isAI ? "Hope AI" : t.name}</span>
-                    {t.verified && <Star className={`w-3 h-3 ${TIER_COLORS[t.tier]}`} />}
-                    {t.isAI && <Sparkles className="w-3 h-3 text-primary" />}
-                  </div>
-                  <span className="text-[10px] text-muted-foreground shrink-0 ml-1">{t.time}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <p className="text-xs text-muted-foreground truncate">{t.lastMsg}</p>
-                  {t.unread > 0 && <Badge className="h-4 min-w-4 px-1 text-[9px] bg-primary text-primary-foreground rounded-full shrink-0 ml-1">{t.unread}</Badge>}
-                </div>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Chat Area */}
-      <div className={`${mobileView === "list" ? "hidden md:flex" : "flex"} flex-1 flex-col min-w-0`}>
-        {thread ? (
-          <>
-            <ScreenPreviewBanner title="Messaging preview boundary"><strong>Local conversation samples are shown for layout review only.</strong> Messages, presence, encryption, Hope AI replies, token tips, calls, uploads, and delivery status are not connected to a verified provider or ledger.</ScreenPreviewBanner>
-            <div className="flex items-center gap-3 px-4 py-3 border-b border-border/30 bg-card/30 shrink-0">
-              <Button size="icon" variant="ghost" className="h-8 w-8 md:hidden" onClick={() => setMobileView("list")}><ChevronLeft className="w-4 h-4" /></Button>
-              <div className="relative shrink-0">
-                {thread.isAI ? (
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center"><Bot className="w-4 h-4 text-white" /></div>
-                ) : (
-                  <div className="w-9 h-9 rounded-full bg-primary/20 text-primary font-bold text-xs flex items-center justify-center">{thread.avatar}</div>
-                )}
-                {thread.online && <Circle className="absolute bottom-0 right-0 w-2.5 h-2.5 text-green-400 fill-green-400" />}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-semibold text-sm">{thread.isAI ? "Hope AI" : thread.name}</span>
-                  {thread.verified && <Star className={`w-3 h-3 ${TIER_COLORS[thread.tier]}`} />}
-                  {thread.isAI && <Sparkles className="w-3 h-3 text-primary" />}
-                </div>
-                  <p className="text-[10px] text-muted-foreground">{thread.online ? (thread.isAI ? "Provider unavailable" : "Preview presence") : "Preview offline"}</p>
-              </div>
-              <div className="flex items-center gap-1">
-                {!thread.isAI && (
-                  <>
-                    <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => toast.info("Voice calling is unavailable until a verified communications provider is connected")} aria-label="Voice calling unavailable"><Phone className="w-4 h-4" /></Button>
-                    <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => toast.info("Video calling is unavailable until a verified communications provider is connected")} aria-label="Video calling unavailable"><Video className="w-4 h-4" /></Button>
-                    <Button size="icon" variant="ghost" className={`h-8 w-8 ${showAIPanel ? "text-primary" : ""}`} onClick={() => { setShowAIPanel(v => !v); setShowTipPanel(false); }}><Bot className="w-4 h-4" /></Button>
-                    <Button size="icon" variant="ghost" className={`h-8 w-8 ${showTipPanel ? "text-yellow-400" : ""}`} onClick={() => { setShowTipPanel(v => !v); setShowAIPanel(false); }}><Coins className="w-4 h-4" /></Button>
-                  </>
-                )}
-                <Button size="icon" variant="ghost" className="h-8 w-8"><MoreHorizontal className="w-4 h-4" /></Button>
-              </div>
+    <main
+      className="flex min-h-[calc(100vh-4rem)] flex-col bg-background"
+      aria-labelledby="dm-inbox-title"
+    >
+      <ScreenPreviewBanner title="Messaging preview boundary">
+        <strong>
+          Local conversation samples are shown for layout review only.
+        </strong>{" "}
+        Messages, presence, encryption, Hope AI replies, token tips, calls,
+        uploads, and delivery status are not connected to a verified provider or
+        ledger.
+      </ScreenPreviewBanner>
+      <div className="flex min-h-[calc(100vh-8rem)] flex-1 overflow-hidden">
+        <section
+          className={`${mobileView === "chat" ? "hidden md:flex" : "flex"} w-full flex-col border-r border-border/30 bg-card/30 md:w-80`}
+          aria-labelledby="thread-list-title"
+        >
+          <div className="border-b border-border/30 p-4">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <h1
+                id="dm-inbox-title"
+                className="flex items-center gap-2 text-lg font-bold"
+              >
+                <MessageCircle
+                  className="h-5 w-5 text-primary"
+                  aria-hidden="true"
+                />
+                Messages
+              </h1>
+              <Badge
+                variant="outline"
+                className="border-amber-400/30 text-amber-200"
+              >
+                Preview
+              </Badge>
             </div>
-
-            {showAIPanel && (
-              <div className="px-4 py-3 bg-primary/5 border-b border-primary/20 flex items-start gap-3">
-                <Bot className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                <div className="flex-1">
-                  <p className="text-xs font-semibold text-primary mb-1">Hope AI — Conversation Assistant</p>
-                  <p className="text-xs text-muted-foreground">Analyzing tone: <span className="text-primary">friendly/strategic</span>. Suggest: <span className="text-yellow-400">offer collaboration terms</span>.</p>
-                  <div className="flex gap-2 mt-2">
-                    {["Draft reply", "Summarize", "Translate"].map(a => (
-                      <button key={a} onClick={() => { setInput(`[AI: ${a}] `); setShowAIPanel(false); }} className="text-[10px] px-2 py-1 rounded-md bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all">{a}</button>
-                    ))}
+            <h2 id="thread-list-title" className="sr-only">
+              Local conversation samples
+            </h2>
+            <div className="relative">
+              <Search
+                className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <Input
+                aria-label="Search local conversation samples"
+                className="h-9 border-border/30 bg-background/50 pl-9 text-sm"
+                placeholder="Search local samples"
+                value={search}
+                onChange={event => setSearch(event.target.value)}
+              />
+            </div>
+          </div>
+          <div className="flex-1 space-y-1 overflow-y-auto p-2">
+            {filteredThreads.length === 0 ? (
+              <p className="p-4 text-sm text-muted-foreground">
+                No local samples match this search.
+              </p>
+            ) : (
+              filteredThreads.map(thread => (
+                <button
+                  key={thread.id}
+                  type="button"
+                  onClick={() => selectThread(thread.id)}
+                  aria-pressed={selected.id === thread.id}
+                  className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-colors ${selected.id === thread.id ? "border border-border/30 bg-secondary/60" : "hover:bg-secondary/30"}`}
+                >
+                  <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary">
+                    {thread.kind === "ai-preview" ? (
+                      <Bot className="h-5 w-5" aria-hidden="true" />
+                    ) : (
+                      thread.initials
+                    )}
                   </div>
-                </div>
-              </div>
-            )}
-
-            {showTipPanel && (
-              <div className="px-4 py-3 bg-yellow-500/5 border-b border-yellow-500/20 flex items-center gap-3">
-                <Coins className="w-4 h-4 text-yellow-400 shrink-0" />
-                <span className="text-xs font-semibold text-yellow-400">Send SKY444 to {thread.name}</span>
-                <Input type="number" placeholder="Amount" value={tipAmount} onChange={e => setTipAmount(e.target.value)} className="h-7 w-24 text-xs bg-background/50 border-yellow-500/30" />
-                <Button size="sm" className="h-7 text-xs bg-yellow-500 hover:bg-yellow-400 text-black" onClick={sendTip}>Send</Button>
-                {[10, 50, 100].map(v => (
-                  <button key={v} onClick={() => setTipAmount(String(v))} className="text-[10px] px-2 py-1 rounded-md bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 hover:bg-yellow-500/20">{v}</button>
-                ))}
-              </div>
-            )}
-
-            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
-              <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground/50 py-2">
-                <Lock className="w-3 h-3" />                <span>Encryption not verified in preview</span><Shield className="w-3 h-3" />
-              </div>
-              {msgs.map(msg => (
-                <div key={msg.id} className={`flex ${msg.mine ? "justify-end" : "justify-start"} gap-2`}>
-                  {!msg.mine && (
-                    <div className={`w-7 h-7 rounded-full shrink-0 flex items-center justify-center text-[10px] font-bold mt-0.5 ${thread.isAI ? "bg-gradient-to-br from-primary to-purple-600" : "bg-primary/20 text-primary"}`}>
-                      {thread.isAI ? <Bot className="w-3.5 h-3.5 text-white" /> : thread.avatar}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="truncate text-sm font-medium">
+                        {thread.name}
+                      </span>
+                      <span className="shrink-0 text-[10px] text-muted-foreground">
+                        {thread.time}
+                      </span>
                     </div>
-                  )}
-                  <div className={`max-w-[70%] flex flex-col gap-1 ${msg.mine ? "items-end" : "items-start"}`}>
-                    <div className={`px-3 py-2 rounded-2xl text-sm leading-relaxed ${msg.type === "tip" ? "bg-yellow-500/10 border border-yellow-500/20 text-yellow-300" : msg.type === "ai" ? "bg-primary/10 border border-primary/20 text-foreground" : msg.mine ? "bg-primary text-primary-foreground" : "bg-secondary/60 text-foreground"}`}>
-                      {msg.type === "ai" && <Sparkles className="w-3 h-3 text-primary inline mr-1 mb-0.5" />}
-                      {msg.text}
-                    </div>
-                    <span className="text-[10px] text-muted-foreground px-1">{msg.time}</span>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {thread.preview}
+                    </p>
+                  </div>
+                </button>
+              ))
+            )}
+          </div>
+        </section>
+
+        <section
+          className={`${mobileView === "list" ? "hidden md:flex" : "flex"} min-w-0 flex-1 flex-col`}
+          aria-labelledby="conversation-title"
+        >
+          <header className="flex items-center gap-3 border-b border-border/30 bg-card/30 px-4 py-3">
+            <Button
+              type="button"
+              size="icon"
+              variant="ghost"
+              className="h-8 w-8 md:hidden"
+              onClick={() => setMobileView("list")}
+              aria-label="Back to conversation samples"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary">
+              {selected.kind === "ai-preview" ? (
+                <Bot className="h-4 w-4" aria-hidden="true" />
+              ) : (
+                selected.initials
+              )}
+            </div>
+            <div className="min-w-0 flex-1">
+              <h2
+                id="conversation-title"
+                className="truncate text-sm font-semibold"
+              >
+                {selected.name}
+              </h2>
+              <p className="text-[10px] text-muted-foreground">
+                {selected.kind === "ai-preview"
+                  ? "AI provider unavailable"
+                  : "Local sample · presence unavailable"}
+              </p>
+            </div>
+            <div className="flex items-center gap-1">
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="h-8 w-8"
+                onClick={() => announceUnavailable("Voice calling")}
+                aria-label="Voice calling unavailable"
+              >
+                <PhoneOff className="h-4 w-4" />
+              </Button>
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="h-8 w-8"
+                onClick={() => announceUnavailable("Video calling")}
+                aria-label="Video calling unavailable"
+              >
+                <VideoOff className="h-4 w-4" />
+              </Button>
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="h-8 w-8"
+                onClick={() => announceUnavailable("Conversation options")}
+                aria-label="Conversation options unavailable"
+              >
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </div>
+          </header>
+          <div className="flex-1 overflow-y-auto px-4 py-5">
+            <div className="mx-auto mb-5 flex max-w-2xl items-center justify-center gap-2 rounded-lg border border-border/30 bg-card/30 px-3 py-2 text-center text-[10px] text-muted-foreground">
+              <LockKeyhole className="h-3 w-3" aria-hidden="true" />
+              Encryption and delivery are not verified in this preview.
+            </div>
+            <div className="mx-auto max-w-2xl space-y-3">
+              {messages.map(message => (
+                <div
+                  key={message.id}
+                  className={`flex ${message.mine ? "justify-end" : "justify-start"}`}
+                >
+                  <div
+                    className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${message.mine ? "bg-primary text-primary-foreground" : "bg-secondary/60"}`}
+                  >
+                    <p>{message.text}</p>
+                    <p className="mt-1 text-[10px] opacity-60">
+                      {message.time} · preview only
+                    </p>
                   </div>
                 </div>
               ))}
-              <div ref={endRef} />
             </div>
-
-            <div className="px-4 py-3 border-t border-border/30 bg-card/30 shrink-0">
-              <div className="flex items-center gap-2">
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => toast.info("Image uploads are unavailable until storage and moderation are connected")} aria-label="Image uploads unavailable"><Image className="w-4 h-4" /></Button>
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => toast.info("Emoji picker is unavailable in this preview")} aria-label="Emoji picker unavailable"><Smile className="w-4 h-4" /></Button>
-                <Input className="flex-1 h-9 text-sm bg-background/50 border-border/30 rounded-full px-4" placeholder={thread.isAI ? "Ask Hope AI anything..." : `Message ${thread.name}...`} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && !e.shiftKey && sendMessage()} />
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => toast.info("Voice message coming soon")}><Mic className="w-4 h-4" /></Button>
-                <Button size="icon" className="h-8 w-8 bg-primary hover:bg-primary/90 rounded-full" onClick={sendMessage} disabled={!input.trim()}><Send className="w-3.5 h-3.5" /></Button>
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="flex-1 flex items-center justify-center text-muted-foreground">
-            <div className="text-center space-y-3"><MessageCircle className="w-12 h-12 mx-auto opacity-20" /><p className="text-sm">Select a conversation</p></div>
           </div>
-        )}
+          <div className="border-t border-border/30 bg-card/30 p-3">
+            <div className="mx-auto flex max-w-2xl items-center gap-2">
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="h-8 w-8"
+                onClick={() => announceUnavailable("Image upload")}
+                aria-label="Image upload unavailable"
+              >
+                <ImageOff className="h-4 w-4" />
+              </Button>
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="h-8 w-8"
+                onClick={() => announceUnavailable("Emoji picker")}
+                aria-label="Emoji picker unavailable"
+              >
+                <SmilePlus className="h-4 w-4" />
+              </Button>
+              <Input
+                aria-label="Local message draft"
+                className="h-9 flex-1 rounded-full border-border/30 bg-background/50 text-sm"
+                placeholder="Write a local draft only"
+                value={draft}
+                onChange={event => setDraft(event.target.value)}
+                onKeyDown={event => {
+                  if (event.key === "Enter" && !event.shiftKey) {
+                    event.preventDefault();
+                    announceUnavailable("Message delivery");
+                  }
+                }}
+              />
+              <Button
+                type="button"
+                size="icon"
+                className="h-8 w-8 rounded-full"
+                onClick={() => announceUnavailable("Message delivery")}
+                disabled={!draft.trim()}
+                aria-label="Send message unavailable"
+              >
+                <Send className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+            <p className="mx-auto mt-2 max-w-2xl text-center text-[10px] text-muted-foreground">
+              Drafts remain in component memory only. Nothing is sent or
+              retained.
+            </p>
+          </div>
+        </section>
       </div>
-    </div>
+      <div className="border-t border-border/30 bg-background px-4 py-3">
+        <div className="mx-auto flex max-w-6xl items-start gap-3">
+          <ShieldAlert
+            className="mt-0.5 h-4 w-4 shrink-0 text-amber-300"
+            aria-hidden="true"
+          />
+          <p className="text-xs leading-5 text-muted-foreground">
+            Real messaging requires authenticated participants, consent, secure
+            transport, abuse reporting, retention and deletion controls,
+            delivery receipts, verified AI boundaries, and a ledger-backed
+            authorization flow for any financial action.
+          </p>
+        </div>
+      </div>
+      <p
+        className="border-t border-border/30 bg-card/20 px-4 py-3 text-center text-sm text-muted-foreground"
+        role="status"
+        aria-live="polite"
+      >
+        {status}
+      </p>
+      <div className="sr-only" aria-live="polite">
+        <CheckCircle2 /> No message provider is connected.
+      </div>
+    </main>
   );
 }
