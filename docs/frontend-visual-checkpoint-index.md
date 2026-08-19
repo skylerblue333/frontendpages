@@ -614,3 +614,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/ai-governance-mobile-390x844.png`
 ## a-i-matchmaker-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/ai-matchmaker-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/ai-matchmaker-mobile-390x844.png`
+
+## a-i-tools-hub-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/ai-tools-hub-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/ai-tools-hub-mobile-390x844.png`
