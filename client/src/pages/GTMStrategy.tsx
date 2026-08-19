@@ -1,136 +1,18 @@
-/**
- * GTMStrategy — Go-To-Market Strategy & Revenue Model
- * Growth channels, revenue streams, unit economics, scaling plan
- */
 import { useState } from "react";
+import { ArrowLeft, CheckCircle2, LockKeyhole, Megaphone, ShieldAlert, Target, TrendingUp } from "lucide-react";
 import { Link } from "wouter";
-import { ArrowLeft, Target, DollarSign, TrendingUp, Users, Megaphone, BarChart2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-const REVENUE_STREAMS = [
-  { name: "Action Fees", desc: "2.5% on every payment/transaction executed via chat", model: "Transaction", arr: "$420K", pct: 38 },
-  { name: "Creator Subscriptions", desc: "Creators pay $29–$299/mo for premium tools + analytics", model: "SaaS", arr: "$280K", pct: 25 },
-  { name: "AI Credits", desc: "Pay-per-use AI calls beyond free tier (100 free/mo)", model: "Usage", arr: "$190K", pct: 17 },
-  { name: "Marketplace Commissions", desc: "10% on all marketplace transactions", model: "Commission", arr: "$140K", pct: 13 },
-  { name: "Token/Staking Revenue", desc: "Protocol fees from SKY444 staking and swaps", model: "Protocol", arr: "$80K", pct: 7 },
-];
-
-const GROWTH_CHANNELS = [
-  { channel: "Creator Referrals", cac: "$8", ltv: "$340", ratio: "42x", priority: "high" },
-  { channel: "Viral Share Cards", cac: "$2", ltv: "$180", ratio: "90x", priority: "high" },
-  { channel: "X/Share2 as TwitterIcon Organic", cac: "$12", ltv: "$220", ratio: "18x", priority: "high" },
-  { channel: "Product Hunt Launch", cac: "$0", ltv: "$150", ratio: "∞", priority: "medium" },
-  { channel: "Dev Community (GitHub)", cac: "$15", ltv: "$480", ratio: "32x", priority: "medium" },
-  { channel: "Paid Social", cac: "$45", ltv: "$220", ratio: "4.9x", priority: "low" },
-];
-
-const MILESTONES = [
-  { target: "100 users", metric: "Validate action loop works", timeline: "Month 1" },
-  { target: "$1K MRR", metric: "First paying creators", timeline: "Month 2" },
-  { target: "1K users", metric: "Viral loop confirmed", timeline: "Month 3" },
-  { target: "$10K MRR", metric: "10 power creators", timeline: "Month 6" },
-  { target: "10K users", metric: "Network effects kicking in", timeline: "Month 9" },
-  { target: "$100K MRR", metric: "Series A ready", timeline: "Month 18" },
-];
+const sections = [
+  { id: "model", label: "Business model", title: "Define the offer before forecasting revenue", description: "Document capability scope, buyer, entitlement, provider, support, payment, tax, refund, settlement, and compliance before assigning a revenue stream." },
+  { id: "channels", label: "Growth channels", title: "Measure acquisition with real cohorts", description: "A channel plan needs source events, consent, campaign ownership, cost definitions, attribution, cohort windows, retention, and support impact. No CAC or LTV is prefilled." },
+  { id: "milestones", label: "Milestones", title: "Set acceptance gates, not invented outcomes", description: "Milestones should identify an owner, evidence artifact, acceptance threshold, rollback, and review date. User, revenue, and readiness targets are not claims." },
+] as const;
+type SectionId = (typeof sections)[number]["id"];
 
 export default function GTMStrategy() {
-  const [tab, setTab] = useState<"revenue" | "channels" | "milestones">("revenue");
-  const totalARR = REVENUE_STREAMS.reduce((s, r) => s + parseInt(r.arr.replace(/[$K]/g, "")) * 1000, 0);
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border/50 px-4 py-3 flex items-center gap-3">
-        <Link href="/" className="p-2 rounded-lg hover:bg-secondary/50 transition-colors text-muted-foreground">
-          <ArrowLeft className="w-4 h-4" />
-        </Link>
-        <div>
-          <h1 className="font-bold text-lg flex items-center gap-2">
-            <Target className="w-5 h-5 text-orange-400" />
-            GTM Strategy
-          </h1>
-          <p className="text-xs text-muted-foreground">Go-to-market & revenue model</p>
-        </div>
-        <div className="ml-auto text-right">
-          <div className="text-sm font-bold text-green-400">${(totalARR / 1000).toFixed(0)}K ARR</div>
-          <div className="text-xs text-muted-foreground">Projected Year 1</div>
-        </div>
-      </div>
-
-      <div className="max-w-2xl mx-auto p-4 space-y-4">
-        <div className="card p-4 bg-gradient-to-br from-orange-500/10 to-yellow-500/10 border border-orange-500/20">
-          <h3 className="font-bold text-sm mb-1">Core Thesis</h3>
-          <p className="text-sm text-foreground">"Every conversation should produce a real outcome — payment, match, task, or earning."</p>
-          <p className="text-xs text-muted-foreground mt-1">We monetize execution, not attention.</p>
-        </div>
-
-        <div className="flex gap-1 bg-secondary/30 rounded-xl p-1">
-          {(["revenue", "channels", "milestones"] as const).map(t => (
-            <button key={t} onClick={() => setTab(t)}
-              className={`flex-1 py-2 rounded-lg text-xs font-medium capitalize transition-colors ${tab === t ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"}`}>
-              {t}
-            </button>
-          ))}
-        </div>
-
-        {tab === "revenue" && (
-          <div className="space-y-3">
-            {REVENUE_STREAMS.map(r => (
-              <div key={r.name} className="card p-4">
-                <div className="flex items-start justify-between mb-1">
-                  <div>
-                    <div className="font-semibold text-sm">{r.name}</div>
-                    <div className="text-xs text-muted-foreground">{r.desc}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-bold text-green-400 text-sm">{r.arr}</div>
-                    <div className="text-xs text-muted-foreground">{r.model}</div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 mt-2">
-                  <div className="flex-1 h-1.5 bg-secondary rounded-full overflow-hidden">
-                    <div className="h-full bg-green-400 rounded-full" style={{ width: `${r.pct}%`, opacity: 0.7 }} />
-                  </div>
-                  <span className="text-xs text-muted-foreground">{r.pct}%</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {tab === "channels" && (
-          <div className="space-y-2">
-            <p className="text-xs text-muted-foreground mb-2">Ranked by LTV:CAC ratio — focus on highest ratio first.</p>
-            {GROWTH_CHANNELS.map(c => (
-              <div key={c.channel} className="card p-3 flex items-center gap-3">
-                <div className="flex-1">
-                  <div className="font-medium text-sm">{c.channel}</div>
-                  <div className="text-xs text-muted-foreground">CAC: {c.cac} · LTV: {c.ltv}</div>
-                </div>
-                <div className="text-right">
-                  <div className="font-bold text-primary text-sm">{c.ratio}</div>
-                  <span className={`text-xs ${c.priority === "high" ? "text-green-400" : c.priority === "medium" ? "text-yellow-400" : "text-muted-foreground"}`}>{c.priority}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {tab === "milestones" && (
-          <div className="space-y-2">
-            {MILESTONES.map((m, i) => (
-              <div key={i} className="card p-3 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary shrink-0">
-                  {i + 1}
-                </div>
-                <div className="flex-1">
-                  <div className="font-bold text-sm">{m.target}</div>
-                  <div className="text-xs text-muted-foreground">{m.metric}</div>
-                </div>
-                <span className="text-xs text-muted-foreground">{m.timeline}</span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  const [section, setSection] = useState<SectionId>("model");
+  const [saved, setSaved] = useState(false);
+  const active = sections.find(item => item.id === section) ?? sections[0];
+  return <main className="min-h-screen bg-[#070a16] text-white"><header className="border-b border-white/10 bg-[#070a16]/90 px-4 py-4 backdrop-blur-xl"><div className="mx-auto flex max-w-6xl items-center gap-3"><Link href="/"><Button variant="ghost" size="icon" aria-label="Back to home" className="text-slate-400 hover:text-white"><ArrowLeft className="size-4" /></Button></Link><div className="flex size-10 items-center justify-center rounded-2xl bg-orange-300/10 text-orange-200"><Target className="size-5" /></div><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-200/70">Commercial evidence</p><h1 className="text-xl font-black">Go-to-market workspace</h1></div><span className="ml-auto rounded-full border border-amber-300/20 bg-amber-300/[0.06] px-3 py-1 text-xs text-amber-100">No forecast asserted</span></div></header><section className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><div className="rounded-3xl border border-white/10 bg-gradient-to-br from-orange-400/[0.14] via-amber-400/[0.07] to-transparent p-6 sm:p-10"><div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-orange-200"><ShieldAlert className="size-4" />Truthful GTM planning</div><h2 className="mt-4 max-w-3xl text-4xl font-black tracking-tight sm:text-5xl">Plan the route to market without pretending the market is already won.</h2><p className="mt-5 max-w-3xl text-base leading-7 text-slate-300">Explore business-model, acquisition, and milestone planning concepts while keeping revenue, customers, CAC, LTV, growth, conversion, market size, and readiness claims explicitly unverified.</p><div className="mt-7 flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-orange-200 text-slate-950 hover:bg-orange-100">{saved ? "Plan saved locally" : "Save plan locally"}</Button><Button onClick={() => setSaved(false)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">Reset plan</Button></div></div><div className="grid gap-3 md:grid-cols-3">{sections.map(item => <button key={item.id} type="button" onClick={() => setSection(item.id)} className={`rounded-2xl border p-5 text-left transition ${item.id === section ? "border-orange-300/40 bg-orange-300/[0.08]" : "border-white/10 bg-white/[0.04] hover:border-white/20"}`}><div className="flex items-center gap-2 text-orange-200"><Megaphone className="size-4" /><span className="text-xs font-semibold uppercase tracking-widest">{item.label}</span></div><p className="mt-4 font-bold">{item.title}</p><p className="mt-2 text-sm leading-6 text-slate-500">{item.description}</p></button>)}</div><section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 sm:p-8"><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected plan area</p><h3 className="mt-2 text-3xl font-black">{active.title}</h3></div><TrendingUp className="size-6 text-orange-200" /></div><p className="mt-4 text-base leading-7 text-slate-300">{active.description}</p><div className="mt-8 rounded-2xl border border-dashed border-white/15 bg-black/20 p-10 text-center"><Target className="mx-auto size-10 text-slate-600" /><p className="mt-4 font-semibold">No market evidence loaded</p><p className="mt-2 text-sm leading-6 text-slate-500">Add a source, owner, period, definition, cost basis, cohort rule, and acceptance result before showing a commercial number or outcome.</p></div><div className="mt-6 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Run analysis unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Export unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Launch campaign unavailable</Button></div></div><aside className="rounded-2xl border border-white/10 bg-white/[0.04] p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Evidence register</p><h3 className="mt-2 text-2xl font-black">Before publishing a claim</h3><div className="mt-6 space-y-3">{["Claim owner and approval", "Source or research artifact", "Period and cohort definition", "Cost, currency, and accounting policy", "Privacy, consent, and attribution", "Rollback, correction, and support path"].map(item => <div key={item} className="flex items-start gap-3 rounded-xl border border-white/10 p-4 text-sm text-slate-300"><LockKeyhole className="mt-1 size-4 shrink-0 text-amber-200" />{item}<span className="ml-auto text-xs text-amber-200">Required</span></div>)}</div></aside></section><div className="grid gap-4 sm:grid-cols-4">{["ARR", "CAC", "LTV", "Customers"].map(label => <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5"><p className="text-xs uppercase tracking-widest text-slate-500">{label}</p><p className="mt-2 text-2xl font-black text-amber-200">Not asserted</p><p className="mt-1 text-sm text-slate-500">Evidence required</p></div>)}</div><div className="rounded-2xl border border-dashed border-white/15 bg-amber-300/[0.04] p-6 text-sm leading-6 text-slate-400"><strong className="text-amber-100">No commercial, growth, customer, revenue, or financial claim is made.</strong> This is a local GTM planning workspace and not a forecast, investment document, sales commitment, or business-performance report.</div><div className="flex items-center gap-3 text-sm text-slate-500"><CheckCircle2 className="size-4 text-emerald-200" />Local planning state only; no campaign, payment, customer, or external operation was started.</div></section></main>;
 }
