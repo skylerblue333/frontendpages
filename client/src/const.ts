@@ -8,6 +8,8 @@ export const getLoginUrl = () => {
   const appId = import.meta.env.VITE_APP_ID;
   const redirectUri = `${window.location.origin}/api/oauth/callback`;
 
+  if (!oauthPortalUrl || !appId) return "/login";
+
   const nonce = crypto.randomUUID();
   const state = encodeOAuthState({ redirectUri, nonce });
 
@@ -34,6 +36,11 @@ export const startLogin = () => {
   const oauthPortalUrl = import.meta.env.VITE_OAUTH_PORTAL_URL;
   const appId = import.meta.env.VITE_APP_ID;
   const redirectUri = `${window.location.origin}/api/oauth/callback`;
+
+  if (!oauthPortalUrl || !appId) {
+    window.location.href = "/login";
+    return;
+  }
 
   const nonce = crypto.randomUUID();
   document.cookie = `${OAUTH_STATE_COOKIE}=${nonce}; Path=/; Max-Age=600; SameSite=None; Secure`;
