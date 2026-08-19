@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "0d82b93bdc1974745de0b9a6e94143b5bb202e2e",
+  "generated_at_commit": "ebac5b2baed5c2650482181aa12ba1207dc1f2a0",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 219,
-  "routes_with_visual_checkpoint": 219,
+  "routes_with_review": 220,
+  "routes_with_visual_checkpoint": 220,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -1867,8 +1867,8 @@
       "component": "ContactUsForm",
       "source": "client/src/pages/ContactUsForm.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
