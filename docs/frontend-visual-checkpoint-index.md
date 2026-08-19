@@ -858,3 +858,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/certificate-manager-mobile-390x844.
 ## chain-explorer-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/chain-explorer-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/chain-explorer-mobile-390x844.png`
+
+## change-log-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/change-log-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/change-log-mobile-390x844.png`

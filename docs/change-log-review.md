@@ -1,0 +1,7 @@
+# ChangeLog review
+
+The former screen was a generic mock CRUD surface with an unused authentication gate, unused tRPC import, a fake loading state, and a `New` action despite no verified release-history source. It has been replaced with a strictly typed, local-only change-log readiness workspace.
+
+The new screen explicitly states that no version, commit, artifact, API change, security disclosure, approval, or publication state is loaded or persisted. All release-loading, version-filtering, migration-note, and publication actions are disabled. The route documents version/commit/artifact digest, environment, timestamps, author, signed provenance, API compatibility, migration and deprecation notes, rollout and rollback guidance, review approvals, security and dependency disclosures, incident linkage, access controls, correction policy, immutable history, structured metadata, publication workflow, reader access, and redacted operational logs. Its capability search filters static local notes only and never loads release records, inspects commits, infers versions, or publishes history.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows balanced release-state/requirements cards and a capability map. Mobile evidence stacks the same content cleanly at 390×844 without clipping; provenance, security, audit, and unavailable-action disclosures remain readable.
