@@ -2,8 +2,8 @@
 set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 MANIFEST="$ROOT/docs/visual-route-inventory.json"
-OUT="$ROOT/docs/visual-review/screenshots"
 MODE="${1:-desktop}"
+OUT="$ROOT/docs/visual-review/screenshots/$MODE"
 LIMIT="${2:-0}"
 BASE="${BASE_URL:-http://localhost:5173}"
 mkdir -p "$OUT" "$ROOT/docs/visual-review"

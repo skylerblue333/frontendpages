@@ -9,3 +9,7 @@ The screenshot pipeline is operational, but the current inventory includes 1,058
 ## AddressLookup follow-up
 
 The first direct capture of `/address-lookup` recorded a premature `Loading...` state because the route is lazy-loaded. This was a screenshot-pipeline issue, not a page implementation failure. Re-capturing with a 5-second virtual-time budget produced a complete 1440×1000 desktop screen and a complete 390×844 mobile screen. The corrected desktop render shows a substantial two-column workspace with clear hierarchy, readable evidence gates, responsive form controls, and explicit unavailable-state language. The capture runner must use an equivalent post-load wait for the full-route inventory.
+
+## Screenshot batch 002 correction
+
+The initial batch runner reused one output directory, so the mobile pass overwrote desktop filenames. The runner now writes to `screenshots/desktop/` and `screenshots/mobile/` separately and waits five seconds for lazy routes. A corrected desktop A/B testing capture renders at 1440×1000 with a complete two-column experiment-review layout, explicit unavailable-state banner, filters, hypothesis cards, and no fabricated experiment results. The paired mobile batch also completed for the same 24 routes. The prior overwritten flat-directory captures should not be used as evidence.
