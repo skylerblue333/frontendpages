@@ -1,20 +1,12 @@
-import React from "react";
+import { useState } from "react";
+import { CheckCircle2, FileCheck2, LockKeyhole, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
-const AgeVerification = () => {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">AgeVerification</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            AgeVerification feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
-  );
-};
+const controls = ["Jurisdiction and age threshold", "Consent and notice language", "Identity or age-assurance provider", "Data minimization, retention, and deletion", "Appeals, accessibility, support, and audit"];
 
-export default AgeVerification;
+export default function AgeVerification() {
+  const [acknowledged, setAcknowledged] = useState(false);
+  const [policy, setPolicy] = useState("Policy not configured");
+  return <main className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950/50 to-slate-900 p-6 text-white sm:p-10"><div className="mx-auto max-w-5xl"><div className="flex items-center gap-4"><div className="flex size-12 items-center justify-center rounded-2xl bg-cyan-300/10 text-cyan-200"><FileCheck2 className="size-6" /></div><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200/70">Trust and safety</p><h1 className="text-3xl font-black sm:text-4xl">Age-gating workspace</h1></div><span className="ml-auto rounded-full border border-amber-300/20 bg-amber-300/[0.06] px-3 py-1 text-xs text-amber-100">Verification unavailable</span></div><div className="mt-8 rounded-3xl border border-white/10 bg-gradient-to-br from-cyan-400/[0.14] via-purple-400/[0.08] to-transparent p-6 sm:p-10"><div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200"><ShieldAlert className="size-4" />Truthful verification boundary</div><h2 className="mt-4 max-w-3xl text-4xl font-black tracking-tight">Set the safety policy before asking for sensitive proof.</h2><p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">This local workspace helps review age-gating requirements and user-facing policy language. It does not verify a person’s age, identity, eligibility, jurisdiction, consent, or legal compliance, and it does not collect identity documents.</p><div className="mt-7 flex flex-wrap gap-2"><Button onClick={() => setAcknowledged(true)} className="bg-cyan-200 text-slate-950 hover:bg-cyan-100">{acknowledged ? "Acknowledged locally" : "Acknowledge policy locally"}</Button><Button onClick={() => setAcknowledged(false)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">Reset</Button></div></div><section className="mt-8 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04] p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Local policy intent</p><h2 className="mt-2 text-2xl font-black">Configure the review state</h2><label className="mt-6 block text-sm font-semibold text-slate-300">Policy status<select value={policy} onChange={event => setPolicy(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm font-normal text-white outline-none"><option>Policy not configured</option><option>Draft review intent</option><option>Legal review intent</option><option>Provider review intent</option><option>Production acceptance intent</option></select></label><div className="mt-6 grid gap-3 sm:grid-cols-3">{[{ label: "Age result", value: "Unavailable" }, { label: "Identity", value: "Not collected" }, { label: "Consent", value: "Not recorded" }].map(item => <div key={item.label} className="rounded-xl border border-white/10 p-4"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-6 rounded-2xl border border-dashed border-white/15 bg-black/20 p-8 text-center"><FileCheck2 className="mx-auto size-9 text-slate-600" /><p className="mt-3 font-semibold">No verification evidence loaded</p><p className="mt-2 text-sm leading-6 text-slate-500">Connect an approved age-assurance provider, jurisdiction policy, privacy review, consent flow, data-retention controls, and audit path before enabling a real gate.</p></div><div className="mt-6 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Verify unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Upload ID unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Continue unavailable</Button></div></Card><aside className="rounded-2xl border border-white/10 bg-white/[0.04] p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Safety controls</p><h2 className="mt-2 text-2xl font-black">Before enabling a gate</h2><div className="mt-6 space-y-3">{controls.map(item => <div key={item} className="flex items-start gap-3 rounded-xl border border-white/10 p-4 text-sm leading-6 text-slate-300"><LockKeyhole className="mt-1 size-4 shrink-0 text-amber-200" />{item}</div>)}</div></aside></section><div className="mt-8 flex items-center gap-3 text-sm leading-6 text-slate-500"><CheckCircle2 className="size-4 shrink-0 text-emerald-200" /><strong className="text-amber-100">No age, identity, consent, or compliance claim is made.</strong> This is a local safety-policy workspace.</div></div></main>;
+}
