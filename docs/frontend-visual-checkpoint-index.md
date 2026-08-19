@@ -367,6 +367,11 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-58-13_1506
 Blocked-create screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-58-31_1901.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_stream-clip.md`
 
+## todo-list-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-05-35_6058.webp`
+Blocked-new screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-05-49_9880.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_todo-list.md`
+
 ## transaction-history-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-35-26_8975.webp`
 Blocked-export screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-35-46_5162.webp`
