@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "71b07a9c1c915d68cc7766d035d09ff61603a638",
+  "generated_at_commit": "aeb5198c2e9acff5d709b4442a96861eb82bbef4",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 197,
-  "routes_with_visual_checkpoint": 197,
+  "routes_with_review": 198,
+  "routes_with_visual_checkpoint": 198,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -1363,8 +1363,8 @@
       "component": "CategoryManagement",
       "source": "client/src/pages/CategoryManagement.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
