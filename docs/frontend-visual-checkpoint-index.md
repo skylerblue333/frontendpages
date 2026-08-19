@@ -40,6 +40,11 @@ Blocked-acknowledge screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_0
 
 ## anomaly-detection-visual-checkpoint.md
 
+## anti-surveillance-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-27-16_3289.webp`
+Blocked-scan screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-27-23_3185.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_anti-surveillance.md`
+
 ## api-documentation-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_07-28-25_4721.webp`
 Blocked-publish screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_07-28-34_3464.webp`
