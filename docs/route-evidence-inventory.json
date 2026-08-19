@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "362cb9f275cc5208deb5adcb85d152e115319be0",
+  "generated_at_commit": "2c5262582b639df01a4ce4b09156198128d956be",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 191,
-  "routes_with_visual_checkpoint": 191,
+  "routes_with_review": 192,
+  "routes_with_visual_checkpoint": 192,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -1309,8 +1309,8 @@
       "component": "CampaignAnalytics",
       "source": "client/src/pages/CampaignAnalytics.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
