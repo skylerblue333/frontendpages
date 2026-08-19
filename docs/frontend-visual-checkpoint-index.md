@@ -337,6 +337,11 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-37-50_7100
 Create-draft screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-37-59_1655.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_livestream-dashboard.md`
 
+## memory-system-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-17-02_3005.webp`
+Blocked-store screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-17-17_2208.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_memory-system.md`
+
 ## mobile-app-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_08-16-21_5643.webp`
 Blocked-waitlist screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_08-16-28_9305.webp`
