@@ -726,3 +726,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/audio-player-mobile-390x844.png`
 ## audit-logs-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/audit-logs-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/audit-logs-mobile-390x844.png`
+
+## automation-workflows-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/automation-workflows-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/automation-workflows-mobile-390x844.png`
