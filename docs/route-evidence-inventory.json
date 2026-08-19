@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "5553355ea238bdc1a6d13a3ac21b185e295ff7d0",
+  "generated_at_commit": "acfcddf66ada4bf5c793fddc7167e86cb157daf5",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 200,
-  "routes_with_visual_checkpoint": 200,
+  "routes_with_review": 201,
+  "routes_with_visual_checkpoint": 201,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -1390,8 +1390,8 @@
       "component": "ChangeLog",
       "source": "client/src/pages/ChangeLog.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
