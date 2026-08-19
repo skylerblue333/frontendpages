@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "a733f5383ec6c5247624993d3e4291312d0719ca",
+  "generated_at_commit": "d02572b762d5d2a34f2bbb57ddc74b0b6cb2b32a",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 178,
-  "routes_with_visual_checkpoint": 178,
+  "routes_with_review": 179,
+  "routes_with_visual_checkpoint": 179,
   "routes_with_placeholder_signal": 786,
   "routes": [
     {
@@ -1147,8 +1147,8 @@
       "component": "BreadcrumbNavigation",
       "source": "client/src/pages/BreadcrumbNavigation.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
