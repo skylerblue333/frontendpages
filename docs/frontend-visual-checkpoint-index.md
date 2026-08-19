@@ -368,6 +368,12 @@ Route text capture: `/home/ubuntu/page_texts/localhost_5175_match-space.md`
 Cards screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-40-30_9889.webp`
 Blocked-like screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-40-42_7299.webp`
 
+## matching-algorithm-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-42-51_5636.webp`
+Selected-requirement screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-43-09_4217.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_matching-algorithm.md`
+Blocked-evaluation screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-43-40_9570.webp`
+
 ## memory-system-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-17-02_3005.webp`
 Blocked-store screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-17-17_2208.webp`
