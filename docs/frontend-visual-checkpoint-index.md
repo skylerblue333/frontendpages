@@ -850,3 +850,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/cash-flow-analysis-mobile-390x844.p
 ## category-management-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/category-management-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/category-management-mobile-390x844.png`
+
+## certificate-manager-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/certificate-manager-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/certificate-manager-mobile-390x844.png`
