@@ -288,6 +288,11 @@ Blocked-refresh screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_07-18
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_07-19-58_7902.webp`
 Blocked-run screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_07-20-06_6674.webp`
 
+## dating-discovery-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-53-48_7100.webp`
+Blocked-like screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-54-07_5606.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_dating-discovery.md`
+
 ## dating-home-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-50-11_7746.webp`
 Blocked-like screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-50-25_7538.webp`
