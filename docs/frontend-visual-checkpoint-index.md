@@ -874,3 +874,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/chart-analysis-mobile-390x844.png`
 ## chart-dashboard-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/chart-dashboard-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/chart-dashboard-mobile-390x844.png`
+
+## chat-bot-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/chat-bot-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/chat-bot-mobile-390x844.png`
