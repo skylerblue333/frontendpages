@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "96fee7487c1e9152bacae520e69e84575d7571d3",
+  "generated_at_commit": "cad08a7a655f83a459db038458f3dd81a0f350c2",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 203,
-  "routes_with_visual_checkpoint": 203,
+  "routes_with_review": 204,
+  "routes_with_visual_checkpoint": 204,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -1435,8 +1435,8 @@
       "component": "ChartDashboard",
       "source": "client/src/pages/ChartDashboard.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
