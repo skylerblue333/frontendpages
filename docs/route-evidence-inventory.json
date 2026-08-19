@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "034a7e2834804b46f93f2df12dc938b212655815",
+  "generated_at_commit": "efd38546ea5bde6dfb3b3d740faed842e41b81fd",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 157,
-  "routes_with_visual_checkpoint": 157,
+  "routes_with_review": 158,
+  "routes_with_visual_checkpoint": 158,
   "routes_with_placeholder_signal": 786,
   "routes": [
     {
@@ -634,8 +634,8 @@
       "component": "AgentDebate",
       "source": "client/src/pages/AgentDebate.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
