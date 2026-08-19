@@ -343,6 +343,11 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-06-43_4376
 Blocked-run screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-06-53_1984.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_deployment-pipeline.md`
 
+## deprecation-policy-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-09-20_8232.webp`
+Blocked-publication screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-09-32_3941.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_deprecation-policy.md`
+
 ## discussion-forums-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-30-52_8152.webp`
 Detail-view screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-31-10_3476.webp`
