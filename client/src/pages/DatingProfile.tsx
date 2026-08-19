@@ -1,445 +1,122 @@
-import React, { useState, useEffect } from 'react';
-import { Upload, Edit2, Save, X, Plus, Trash2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Spinner } from '@/components/ui/spinner';
-import { useAuth } from '@/_core/hooks/useAuth';
-
-interface DatingProfile {
-  id: number;
-  userId: number;
-  age: number | null;
-  gender: string | null;
-  lookingFor: string | null;
-  bio: string | null;
-  interests: string[];
-  photos: string[];
-  height: string | null;
-  bodyType: string | null;
-  ethnicity: string | null;
-  religion: string | null;
-  education: string | null;
-  occupation: string | null;
-  smoker: string | null;
-  drinker: string | null;
-  hasKids: boolean;
-  wantsKids: string | null;
-  relationshipGoal: string | null;
-  profileCompleteness: number;
-}
-
-type DatingFormData = {
-  age: string;
-  gender: string;
-  lookingFor: string;
-  bio: string;
-  interests: string[];
-  height: string;
-  bodyType: string;
-  ethnicity: string;
-  religion: string;
-  education: string;
-  occupation: string;
-  smoker: string;
-  drinker: string;
-  hasKids: boolean;
-  wantsKids: string;
-  relationshipGoal: string;
-};
-
-const toFormData = (profile: DatingProfile): DatingFormData => ({
-  age: profile.age?.toString() ?? "",
-  gender: profile.gender ?? "",
-  lookingFor: profile.lookingFor ?? "",
-  bio: profile.bio ?? "",
-  interests: Array.isArray(profile.interests) ? profile.interests : [],
-  height: profile.height ?? "",
-  bodyType: profile.bodyType ?? "",
-  ethnicity: profile.ethnicity ?? "",
-  religion: profile.religion ?? "",
-  education: profile.education ?? "",
-  occupation: profile.occupation ?? "",
-  smoker: profile.smoker ?? "",
-  drinker: profile.drinker ?? "",
-  hasKids: profile.hasKids,
-  wantsKids: profile.wantsKids ?? "",
-  relationshipGoal: profile.relationshipGoal ?? "",
-});
-
+import { useState } from "react";
+import {
+  CircleSlash2,
+  HeartOff,
+  LockKeyhole,
+  ShieldAlert,
+  UserRound,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { PageHeader } from "@/components/PageHeader";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 export default function DatingProfile() {
-  const { user } = useAuth();
-  const [profile, setProfile] = useState<DatingProfile | null>(null);
-  const [editing, setEditing] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const [formData, setFormData] = useState({
-    age: '',
-    gender: '',
-    lookingFor: '',
-    bio: '',
-    interests: [] as string[],
-    height: '',
-    bodyType: '',
-    ethnicity: '',
-    religion: '',
-    education: '',
-    occupation: '',
-    smoker: '',
-    drinker: '',
-    hasKids: false,
-    wantsKids: '',
-    relationshipGoal: '',
-  });
-
-  const [newInterest, setNewInterest] = useState('');
-
-  useEffect(() => {
-    loadProfile();
-  }, []);
-
-  const loadProfile = async () => {
-    try {
-      const response = await fetch('/api/dating/profile');
-      const data = await response.json();
-      if (data.profile) {
-        setProfile(data.profile);
-        setFormData(toFormData(data.profile));
-      } else {
-        setError("No dating profile is available for this account yet.");
-      }
-      if (!response.ok) throw new Error("Profile service unavailable");
-    } catch (error) {
-      console.error('Failed to load profile:', error);
-      setError("The profile service is unavailable. Your information was not loaded or changed.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadSuggestions = async () => {
-    try {
-      const response = await fetch('/api/dating/profile/suggestions');
-      const data = await response.json();
-      if (!response.ok) throw new Error("Suggestions service unavailable");
-      setSuggestions(data.suggestions || []);
-      setShowSuggestions(true);
-    } catch (error) {
-      console.error('Failed to load suggestions:', error);
-      setError("Profile suggestions are unavailable right now. No external change was made.");
-    }
-  };
-
-  const handleSaveProfile = async () => {
-    setSaving(true);
-    try {
-      const response = await fetch('/api/dating/profile', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      const data = await response.json();
-      if (!response.ok || !data.success) throw new Error("Profile update was not accepted");
-      if (data.success) {
-        setProfile({
-          ...profile,
-          ...formData,
-          age: parseInt(formData.age as string) || 0,
-        } as DatingProfile);
-        setEditing(false);
-      }
-    } catch (error) {
-      console.error('Failed to save profile:', error);
-      setError("Profile changes were not saved. Check your connection and try again.");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleAddInterest = () => {
-    if (newInterest.trim() && !formData.interests.includes(newInterest)) {
-      setFormData({
-        ...formData,
-        interests: [...formData.interests, newInterest],
-      });
-      setNewInterest('');
-    }
-  };
-
-  const handleRemoveInterest = (interest: string) => {
-    setFormData({
-      ...formData,
-      interests: formData.interests.filter((i) => i !== interest),
-    });
-  };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Spinner />
-      </div>
+  const [bio, setBio] = useState("");
+  const [status, setStatus] = useState(
+    "Dating profile service unavailable. Showing a local draft only."
+  );
+  const blocked = (a: string) =>
+    setStatus(
+      `${a} is unavailable locally. No identity, photo, matching, discovery, suggestion, notification, profile, or account mutation was started.`
     );
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <div className="max-w-2xl mx-auto">
-        {error && (
-          <div role="alert" className="mb-6 rounded-xl border border-amber-300/40 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-            <div className="flex items-start justify-between gap-4">
-              <span>{error}</span>
-              <Button type="button" variant="ghost" size="sm" onClick={() => { setError(null); void loadProfile(); }}>Retry</Button>
-            </div>
-          </div>
-        )}
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Dating Profile</h1>
-          {!editing && (
-            <Button onClick={() => setEditing(true)} className="gap-2">
-              <Edit2 className="w-4 h-4" />
-              Edit Profile
-            </Button>
-          )}
+    <div className="min-h-screen bg-background">
+      <PageHeader
+        icon={UserRound}
+        title="Dating profile"
+        subtitle="Review a local profile draft without fabricated identity, completeness, matching, discovery, photos, suggestions, or publication outcomes."
+        badge="Local preview"
+        badgeVariant="outline"
+      />
+      <div className="mx-auto max-w-5xl space-y-6 px-4 py-8">
+        <div className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4 text-sm text-amber-100">
+          <strong>Dating profile service unavailable.</strong> No identity, age
+          assurance, consent, moderation, media, matching, or profile
+          persistence service is connected.
         </div>
-
-        {/* Profile Completeness */}
-        {profile && (
-          <Card className="mb-6 p-6 bg-gradient-to-r from-pink-100 to-purple-100">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">Profile Completeness</h2>
-              <span className="text-2xl font-bold text-pink-600">{profile.profileCompleteness}%</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className="bg-gradient-to-r from-pink-500 to-purple-500 h-2 rounded-full transition-all"
-                style={{ width: `${profile.profileCompleteness}%` }}
-              />
-            </div>
-          </Card>
-        )}
-
-        {/* Suggestions */}
-        {!editing && (
-          <Button
-            onClick={loadSuggestions}
-            variant="outline"
-            className="mb-6 w-full"
-          >
-            Get Profile Improvement Suggestions
-          </Button>
-        )}
-
-        {showSuggestions && suggestions.length > 0 && (
-          <Card className="mb-6 p-6 bg-blue-50 border-blue-200">
-            <h3 className="font-semibold text-gray-900 mb-4">Suggestions to Improve Your Profile</h3>
-            <ul className="space-y-2">
-              {suggestions.map((suggestion, idx) => (
-                <li key={idx} className="flex gap-2 text-sm text-gray-700">
-                  <span className="text-blue-500">•</span>
-                  {suggestion}
-                </li>
-              ))}
-            </ul>
-            <Button
-              onClick={() => setShowSuggestions(false)}
-              variant="ghost"
-              className="mt-4"
-            >
-              Close
+        <Card className="border-slate-800 bg-slate-900/75 p-6">
+          <Badge variant="outline">Local draft</Badge>
+          <h2 className="mt-3 text-2xl font-semibold">
+            Profile details unavailable
+          </h2>
+          <p className="mt-2 text-sm text-slate-400">
+            Values remain in component memory only and are not published,
+            matched, retained, or sent to a service.
+          </p>
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            <Input aria-label="Age draft" placeholder="Age draft" />
+            <Input aria-label="Gender draft" placeholder="Gender draft" />
+            <Textarea
+              aria-label="Bio draft"
+              className="md:col-span-2"
+              onChange={e => setBio(e.target.value)}
+              placeholder="Bio draft only"
+              rows={5}
+              value={bio}
+            />
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Button onClick={() => blocked("Save profile")} variant="outline">
+              Save unavailable
             </Button>
-          </Card>
-        )}
-
-        {/* Profile Form */}
-        <Card className="p-6">
-          <div className="space-y-6">
-            {/* Basic Info */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Age</label>
-                <Input
-                  type="number"
-                  value={formData.age}
-                  onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-                  disabled={!editing}
-                  placeholder="Age"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
-                <select
-                  value={formData.gender}
-                  onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                  disabled={!editing}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                >
-                  <option value="">Select Gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="non-binary">Non-binary</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Bio */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Bio</label>
-              <textarea
-                value={formData.bio}
-                onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                disabled={!editing}
-                placeholder="Tell us about yourself..."
-                className="w-full px-3 py-2 border border-gray-300 rounded-md h-24"
-              />
-            </div>
-
-            {/* Interests */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Interests</label>
-              <div className="flex gap-2 mb-4">
-                <Input
-                  value={newInterest}
-                  onChange={(e) => setNewInterest(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      handleAddInterest();
-                    }
-                  }}
-                  disabled={!editing}
-                  placeholder="Add an interest..."
-                />
-                {editing && (
-                  <Button onClick={handleAddInterest} size="sm">
-                    <Plus className="w-4 h-4" />
-                  </Button>
-                )}
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {formData.interests.map((interest) => (
-                  <div
-                    key={interest}
-                    className="flex items-center gap-2 px-3 py-1 bg-pink-100 text-pink-700 rounded-full text-sm"
-                  >
-                    {interest}
-                    {editing && (
-                      <button
-                        onClick={() => handleRemoveInterest(interest)}
-                        className="hover:text-pink-900"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Physical Attributes */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Height</label>
-                <Input
-                  value={formData.height}
-                  onChange={(e) => setFormData({ ...formData, height: e.target.value })}
-                  disabled={!editing}
-                  placeholder="e.g., 5 feet 10 inches"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Body Type</label>
-                <Input
-                  value={formData.bodyType}
-                  onChange={(e) => setFormData({ ...formData, bodyType: e.target.value })}
-                  disabled={!editing}
-                  placeholder="e.g., Athletic"
-                />
-              </div>
-            </div>
-
-            {/* Background */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Education</label>
-                <Input
-                  value={formData.education}
-                  onChange={(e) => setFormData({ ...formData, education: e.target.value })}
-                  disabled={!editing}
-                  placeholder="e.g., Bachelors Degree"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Occupation</label>
-                <Input
-                  value={formData.occupation}
-                  onChange={(e) => setFormData({ ...formData, occupation: e.target.value })}
-                  disabled={!editing}
-                  placeholder="e.g., Software Engineer"
-                />
-              </div>
-            </div>
-
-            {/* Preferences */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Looking For</label>
-                <select
-                  value={formData.lookingFor}
-                  onChange={(e) => setFormData({ ...formData, lookingFor: e.target.value })}
-                  disabled={!editing}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                >
-                  <option value="">Select</option>
-                  <option value="male">Men</option>
-                  <option value="female">Women</option>
-                  <option value="everyone">Everyone</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Relationship Goal</label>
-                <select
-                  value={formData.relationshipGoal}
-                  onChange={(e) => setFormData({ ...formData, relationshipGoal: e.target.value })}
-                  disabled={!editing}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                >
-                  <option value="">Select</option>
-                  <option value="casual">Casual</option>
-                  <option value="serious">Serious</option>
-                  <option value="marriage">Marriage</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            {editing && (
-              <div className="flex gap-4 pt-4">
-                <Button
-                  onClick={handleSaveProfile}
-                  disabled={saving}
-                  className="flex-1 bg-pink-500 hover:bg-pink-600"
-                >
-                  {saving ? <Spinner className="w-4 h-4" /> : <Save className="w-4 h-4" />}
-                  Save Profile
-                </Button>
-                <Button
-                  onClick={() => {
-                    setEditing(false);
-                    if (profile) setFormData(toFormData(profile));
-                  }}
-                  variant="outline"
-                  className="flex-1"
-                >
-                  Cancel
-                </Button>
-              </div>
-            )}
+            <Button
+              onClick={() => blocked("Get suggestions")}
+              variant="outline"
+            >
+              Suggestions unavailable
+            </Button>
+            <Button
+              onClick={() => blocked("Publish profile")}
+              variant="outline"
+            >
+              Publish unavailable
+            </Button>
           </div>
         </Card>
+        <div className="grid gap-4 md:grid-cols-3">
+          {["Identity", "Completeness", "Matches"].map(label => (
+            <Card className="border-slate-800 bg-slate-900/75 p-5" key={label}>
+              <p className="text-xs uppercase tracking-widest text-slate-500">
+                {label}
+              </p>
+              <p className="mt-2 text-2xl font-semibold">Unavailable</p>
+              <Badge className="mt-3" variant="outline">
+                Source unavailable
+              </Badge>
+            </Card>
+          ))}
+        </div>
+        <Card className="border-slate-800 bg-slate-900/75 p-5">
+          <div className="flex gap-3">
+            <ShieldAlert className="h-5 w-5 text-amber-200" />
+            <p className="text-sm text-slate-400">
+              No age, gender, biography, photo, completeness, match, discovery,
+              or suggestion claim is fabricated.
+            </p>
+          </div>
+          <div className="mt-4 flex gap-3">
+            <LockKeyhole className="h-5 w-5 text-cyan-200" />
+            <p className="text-sm text-slate-400">
+              Production dating profiles require consent, age assurance,
+              privacy, safety moderation, retention, and deletion controls.
+            </p>
+          </div>
+          <div className="mt-4 flex gap-3">
+            <CircleSlash2 className="h-5 w-5 text-slate-500" />
+            <p className="text-sm text-slate-400">
+              No profile, photo, matching, notification, discovery, or account
+              operation is available locally.
+            </p>
+          </div>
+        </Card>
+        <p
+          aria-live="polite"
+          className="rounded-lg border border-slate-800 p-4 text-sm text-slate-400"
+        >
+          {status}
+        </p>
       </div>
     </div>
   );
