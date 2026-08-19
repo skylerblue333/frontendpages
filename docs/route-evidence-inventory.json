@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "79be5fb72c2c6f42ee24ffc2433a845e123276bb",
+  "generated_at_commit": "d5a94471eeb50daa1f2e9ea3617124fdace6f8bd",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 185,
-  "routes_with_visual_checkpoint": 185,
+  "routes_with_review": 186,
+  "routes_with_visual_checkpoint": 186,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -1246,8 +1246,8 @@
       "component": "CCPA",
       "source": "client/src/pages/CCPA.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
