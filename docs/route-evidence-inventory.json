@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "aeb5198c2e9acff5d709b4442a96861eb82bbef4",
+  "generated_at_commit": "39fc784085581be803d9c5ee85bb660da80e0a55",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 198,
-  "routes_with_visual_checkpoint": 198,
+  "routes_with_review": 199,
+  "routes_with_visual_checkpoint": 199,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -1372,8 +1372,8 @@
       "component": "CertificateManager",
       "source": "client/src/pages/CertificateManager.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
