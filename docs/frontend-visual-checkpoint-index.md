@@ -838,3 +838,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/campaign-creation-mobile-390x844.pn
 ## car-rental-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/car-rental-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/car-rental-mobile-390x844.png`
+
+## card-grid-view-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/card-grid-view-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/card-grid-view-mobile-390x844.png`
