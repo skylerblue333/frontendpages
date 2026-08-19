@@ -390,6 +390,11 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_04-53-09_5205
 Blocked-community screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_04-53-16_5486.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_discover.md`
 
+## discussion-board-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_04-54-37_4945.webp`
+Blocked-question screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_04-54-43_9420.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_discussion-board.md`
+
 ## discussion-forums-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-30-52_8152.webp`
 Detail-view screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-31-10_3476.webp`
