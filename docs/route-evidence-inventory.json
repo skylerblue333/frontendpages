@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "b148b3b23042314442353758d93b50b2736ec236",
+  "generated_at_commit": "a098c2041ea1e478978d0f81cf15384e05e37e8d",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 180,
-  "routes_with_visual_checkpoint": 180,
+  "routes_with_review": 181,
+  "routes_with_visual_checkpoint": 181,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -1183,8 +1183,8 @@
       "component": "BudgetPlanner",
       "source": "client/src/pages/BudgetPlanner.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
