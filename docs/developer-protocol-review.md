@@ -1,0 +1,5 @@
+# DeveloperProtocol review
+
+The `/developer-protocol` route presents an API v1 as live, claims a 99.9% uptime SLA, sub-50ms P99 latency, global regions, SOC 2 compliance, and lists REST endpoints for profiles, social posts, token prices, payments, NFTs, staking, marketplace orders, analytics, and AI. It includes an example response containing personal, reputation, financial balance, verification, and request metadata, claims OAuth2/JWT/API-key and HMAC webhook behavior, invents webhook events and rate-limit tiers, advertises SDK packages, copies commands and response data to the clipboard, and promises 20% partner revenue share.
+
+These are unsupported API, security, financial, privacy, compliance, performance, package, and commercial claims. The safe replacement should preserve protocol planning as an evidence-bounded documentation preview, label endpoints, authentication, webhooks, rate limits, SDKs, partner operations, and example data as unavailable, remove secrets and personal records, and make API-key, reference, copy, download, and partner actions explicit no-ops.
