@@ -1,0 +1,9 @@
+# AgentCoordination visual checkpoint
+
+Route: `/agent-coordination`
+
+Desktop screenshot: `/home/ubuntu/screenshots/agent-coordination-desktop-1440x1000.png`
+
+Mobile screenshot: `/home/ubuntu/screenshots/agent-coordination-mobile-390x844.png`
+
+Validation: The existing shared `FeatureUnavailable` surface was preserved. The desktop render presents a clear orchestration boundary, inactive status, service, provider, persistence, authorization, resource-limit, monitoring, and rollback requirements, truthful state, preserved scope, and launch-readiness navigation with strong visual hierarchy. The 390×844 render keeps the inactive label, provider boundary, truthful state, and requirements readable in a stacked layout without horizontal clipping. No agent identity, assignment, message, task status, metric, topology, deployment, execution, or collaboration success outcome is fabricated.
