@@ -810,3 +810,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/cdn-management-mobile-390x844.png`
 ## cache-management-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/cache-management-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/cache-management-mobile-390x844.png`
+
+## calculator-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/calculator-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/calculator-mobile-390x844.png`
