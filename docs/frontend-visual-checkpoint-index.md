@@ -375,6 +375,11 @@ Authentication screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-25-
 Blocked-key screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-25-56_4117.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_developer-protocol.md`
 
+## difficulty-tracking-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-28-33_6497.webp`
+Blocked-calculation screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-28-44_7889.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_difficulty-tracking.md`
+
 ## discussion-forums-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-30-52_8152.webp`
 Detail-view screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-31-10_3476.webp`
