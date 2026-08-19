@@ -421,6 +421,12 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_05-00-14_7915
 Blocked-signature-request screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_05-00-22_7717.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_document-signing.md`
 
+## documentation-visual-checkpoint.md
+Desktop initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_05-03-35_3785.webp`
+Desktop blocked-new-article screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_05-03-42_2817.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_documentation.md`
+Mobile render evidence: `/home/ubuntu/screenshots/documentation-mobile-390x844.png` at 390×844. The initial capture showed the lazy-loading shell; the capture script was corrected with a 5-second virtual-time budget, and the final screenshot rendered the Documentation readiness page. The mobile header, unavailable disclosure, cards, typography, and vertical stacking are readable with no horizontal clipping in the captured viewport. Mobile evidence is now valid for this route.
+
 ## engineer-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-42-48_8371.webp`
 Local-input screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-42-59_5299.webp`
