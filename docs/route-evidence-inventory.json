@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "f63e88d430f99c7783273078f9bac0286d986524",
+  "generated_at_commit": "f6c457f01cc5e5a31b9bd7df6364b9c7d679e83e",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 177,
-  "routes_with_visual_checkpoint": 177,
+  "routes_with_review": 178,
+  "routes_with_visual_checkpoint": 178,
   "routes_with_placeholder_signal": 786,
   "routes": [
     {
@@ -1138,8 +1138,8 @@
       "component": "BrandGuidelines",
       "source": "client/src/pages/BrandGuidelines.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {

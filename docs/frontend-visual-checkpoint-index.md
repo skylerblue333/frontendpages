@@ -770,3 +770,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/blog-editor-mobile-390x844.png`
 ## blog-publisher-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/blog-publisher-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/blog-publisher-mobile-390x844.png`
+
+## brand-guidelines-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/brand-guidelines-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/brand-guidelines-mobile-390x844.png`
