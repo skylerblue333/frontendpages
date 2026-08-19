@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "166fa451341f6cd0d5570a9f2a667ed90b7a815a",
+  "generated_at_commit": "c112a600e098be597ec303082904baec623dbce0",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 223,
-  "routes_with_visual_checkpoint": 223,
+  "routes_with_review": 224,
+  "routes_with_visual_checkpoint": 224,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -2056,8 +2056,8 @@
       "component": "CostAllocation",
       "source": "client/src/pages/CostAllocation.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
