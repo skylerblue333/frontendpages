@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "f256c56312346b9427760e2c056a32dbb58e0ccd",
+  "generated_at_commit": "9d0ebb719a26bfc807490d27caf7e45e20809d9e",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 145,
-  "routes_with_visual_checkpoint": 145,
+  "routes_with_review": 146,
+  "routes_with_visual_checkpoint": 146,
   "routes_with_placeholder_signal": 786,
   "routes": [
     {
@@ -346,8 +346,8 @@
       "component": "AccessibilitySettings",
       "source": "client/src/pages/AccessibilitySettings.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {

@@ -642,3 +642,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/apy-tracking-mobile-390x844.png`
 ## access-control-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/access-control-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/access-control-mobile-390x844.png`
+
+## accessibility-settings-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/accessibility-settings-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/accessibility-settings-mobile-390x844.png`
