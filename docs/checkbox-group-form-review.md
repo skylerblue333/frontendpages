@@ -1,0 +1,7 @@
+# CheckboxGroupForm review
+
+The former route used a generic shared placeholder that did not explain multi-selection schema, validation, consent, accessibility, or persistence risks. It has been replaced with a strictly typed, local-only checkbox-group form readiness workspace.
+
+The new screen explicitly states that no options, selected values, validation result, consent, submission, or persistence state is loaded or generated. All option-loading, validation, submission, and reset actions are disabled. The route documents typed option values, labels, ordering, defaults, required/minimum selections, disabled states, version, client/server validation, error association, consent language, lawful purpose, duplicate protection, recovery, group labeling, keyboard behavior, focus visibility, screen-reader errors, touch targets, mobile layout, account scope, permissions, sensitive values, audit history, submission status, and persistence semantics. Its capability search filters static local notes only and never loads options, accepts selections, validates input, submits values, or persists state.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows balanced form-state/release cards and a capability map. Mobile evidence stacks the same content cleanly at 390×844 without clipping; validation, consent, accessibility, authorization, and unavailable-action disclosures remain readable.
