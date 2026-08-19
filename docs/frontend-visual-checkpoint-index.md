@@ -890,3 +890,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/checkbox-group-form-mobile-390x844.
 ## checkout-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/checkout-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/checkout-mobile-390x844.png`
+
+## checkout-flow-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/checkout-flow-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/checkout-flow-mobile-390x844.png`

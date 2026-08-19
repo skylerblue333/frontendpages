@@ -1,0 +1,7 @@
+# CheckoutFlow review
+
+The former route used a shared unavailable boundary that did not provide a structured step-transition readiness view. It has been replaced with a strictly typed, local-only checkout-flow readiness workspace.
+
+The new screen explicitly states that no step, cart snapshot, address, shipping option, payment authorization, order, webhook, or completion state is loaded or advanced. All flow loading, shipping, payment, and order-completion actions are disabled. The route documents typed step sequencing, transition guards, cart and customer identity, shipping state, resumable sessions, address validation, inventory rechecks, price/tax recalculation, terms and consent, duplicate protection, provider authorization, token boundaries, idempotency, order state machines, webhooks, reconciliation, confirmation, shipping, cancellation, refunds, support, keyboard navigation, screen-reader step status, authorization, and audit. Its capability search filters static local notes only and never loads a flow, advances a step, recalculates totals, calls payment providers, or persists an order.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows balanced flow-state/release cards and a capability map. Mobile evidence stacks the same content cleanly at 390×844 without clipping; step, payment, fulfillment, accessibility, and unavailable-action disclosures remain readable.
