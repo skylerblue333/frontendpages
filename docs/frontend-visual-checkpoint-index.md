@@ -362,6 +362,11 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-37-50_7100
 Create-draft screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-37-59_1655.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_livestream-dashboard.md`
 
+## match-feed-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-48-33_8190.webp`
+Blocked-message screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-48-49_4267.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_match-feed.md`
+
 ## match-space-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-40-03_2944.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_match-space.md`
