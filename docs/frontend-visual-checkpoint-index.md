@@ -806,3 +806,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/ccpa-mobile-390x844.png`
 ## c-d-n-management-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/cdn-management-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/cdn-management-mobile-390x844.png`
+
+## cache-management-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/cache-management-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/cache-management-mobile-390x844.png`
