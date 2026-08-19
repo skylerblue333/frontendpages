@@ -658,3 +658,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/adaptive-personalization-mobile-390
 ## add-bank-account-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/add-bank-account-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/add-bank-account-mobile-390x844.png`
+
+## add-credit-card-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/add-credit-card-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/add-credit-card-mobile-390x844.png`
