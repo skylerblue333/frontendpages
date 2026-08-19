@@ -1,182 +1,442 @@
 import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
 import {
-  Ghost, Eye, EyeOff, Shuffle, RefreshCw, CheckCircle, AlertTriangle,
-  Monitor, Cpu, Globe, Fingerprint, User, Hash, Clock, Zap
+  AlertTriangle,
+  CheckCircle2,
+  Clock3,
+  EyeOff,
+  Fingerprint,
+  Globe2,
+  LockKeyhole,
+  Monitor,
+  RefreshCw,
+  ShieldAlert,
+  Shuffle,
+  SlidersHorizontal,
+  UserRound,
+  WifiOff,
+  XCircle,
 } from "lucide-react";
 
-const IDENTITY_LAYERS = [
-  { name: "Browser Fingerprint", description: "Canvas, WebGL, audio fingerprint randomization", active: false, risk: "high" },
-  { name: "User Agent", description: "Rotate between 50+ real browser user agents", active: false, risk: "high" },
-  { name: "Screen Resolution", description: "Report randomized screen dimensions", active: false, risk: "medium" },
-  { name: "Timezone Spoofing", description: "Mask your real timezone with a random one", active: false, risk: "medium" },
-  { name: "Language Masking", description: "Override Accept-Language headers", active: false, risk: "low" },
-  { name: "Font Fingerprint", description: "Randomize detected font list", active: false, risk: "high" },
-  { name: "WebRTC Leak Block", description: "Prevent real IP exposure via WebRTC", active: false, risk: "critical" },
-  { name: "Behavioral Noise", description: "Inject random mouse/keyboard timing noise", active: false, risk: "medium" },
+type RiskLevel = "critical" | "high" | "medium" | "low";
+
+type PrivacyLayer = {
+  name: string;
+  description: string;
+  risk: RiskLevel;
+};
+
+type IdentityPreview = {
+  name: string;
+  browser: string;
+  timezone: string;
+  viewport: string;
+  language: string;
+};
+
+const PRIVACY_LAYERS: readonly PrivacyLayer[] = [
+  {
+    name: "Browser fingerprint changes",
+    description:
+      "Canvas, WebGL, audio, font, and device signals cannot be changed by this page.",
+    risk: "critical",
+  },
+  {
+    name: "User-agent masking",
+    description:
+      "Changing browser headers requires a verified browser boundary and is unavailable here.",
+    risk: "high",
+  },
+  {
+    name: "Timezone and language spoofing",
+    description:
+      "A display preview cannot alter browser, network, or server-observed locale signals.",
+    risk: "high",
+  },
+  {
+    name: "WebRTC leak prevention",
+    description:
+      "No network interception, proxy, or IP leak control is connected to this route.",
+    risk: "critical",
+  },
+  {
+    name: "Behavioral noise",
+    description:
+      "This page does not inject synthetic mouse, keyboard, or browsing activity.",
+    risk: "medium",
+  },
 ];
 
-const GHOST_IDENTITIES = [
-  { name: "Shadow Walker", ua: "Chrome 121 / Windows 11", tz: "UTC+1 Berlin", screen: "1920x1080", lang: "de-DE" },
-  { name: "Neon Ghost", ua: "Firefox 122 / macOS 14", tz: "UTC+9 Tokyo", screen: "2560x1440", lang: "ja-JP" },
-  { name: "Phantom Node", ua: "Safari 17 / iOS 17", tz: "UTC-5 New York", screen: "390x844", lang: "en-US" },
-  { name: "Cipher Wraith", ua: "Edge 121 / Windows 10", tz: "UTC+8 Singapore", screen: "1366x768", lang: "zh-SG" },
+const IDENTITY_PREVIEWS: readonly IdentityPreview[] = [
+  {
+    name: "Neutral desktop preview",
+    browser: "Browser identity unavailable",
+    timezone: "Timezone unavailable",
+    viewport: "Viewport unavailable",
+    language: "Language unavailable",
+  },
+  {
+    name: "Neutral mobile preview",
+    browser: "Browser identity unavailable",
+    timezone: "Timezone unavailable",
+    viewport: "Viewport unavailable",
+    language: "Language unavailable",
+  },
+  {
+    name: "Custom preview",
+    browser: "No custom fingerprint stored",
+    timezone: "No custom timezone stored",
+    viewport: "No custom viewport stored",
+    language: "No custom language stored",
+  },
 ];
+
+const riskStyles: Record<RiskLevel, string> = {
+  critical: "border-red-500/30 text-red-300",
+  high: "border-orange-500/30 text-orange-300",
+  medium: "border-yellow-500/30 text-yellow-300",
+  low: "border-emerald-500/30 text-emerald-300",
+};
 
 export default function GhostMode() {
-  const [ghostActive, setGhostActive] = useState(false);
-  const [layers, setLayers] = useState(IDENTITY_LAYERS);
-  const [selectedIdentity, setSelectedIdentity] = useState(0);
-  const [noiseLevel, setNoiseLevel] = useState(50);
+  const [selectedPreview, setSelectedPreview] = useState(0);
+  const [noiseLevel, setNoiseLevel] = useState(0);
+  const [status, setStatus] = useState(
+    "Privacy controls are unavailable locally. No browser or network mutation was started."
+  );
 
-  const toggleLayer = (idx: number) => {
-    setLayers(prev => prev.map((l, i) => i === idx ? { ...l, active: !l.active } : l));
+  const announceUnavailable = (action: string) => {
+    setStatus(
+      `${action} is unavailable locally. No browser, network, identity, or account mutation was started.`
+    );
   };
 
-  const activateAll = () => {
-    setLayers(prev => prev.map(l => ({ ...l, active: true })));
-    setGhostActive(true);
-    toast.success("All Ghost Mode layers activated — you are invisible");
-  };
-
-  const deactivateAll = () => {
-    setLayers(prev => prev.map(l => ({ ...l, active: false })));
-    setGhostActive(false);
-    toast.info("Ghost Mode deactivated");
-  };
-
-  const activeCount = layers.filter(l => l.active).length;
+  const preview = IDENTITY_PREVIEWS[selectedPreview];
 
   return (
-    <div className="container py-8 max-w-5xl animate-page-in">
-      <div className="mb-8">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-purple-500/30 bg-purple-500/5 mb-4">
-          <Ghost className="w-3 h-3 text-purple-400" />
-          <span className="text-xs font-mono text-purple-400">IDENTITY MASKING SYSTEM</span>
+    <main
+      className="container max-w-6xl animate-page-in py-8"
+      aria-labelledby="ghost-mode-title"
+    >
+      <header className="mb-8 space-y-4">
+        <div className="inline-flex items-center gap-2 rounded-full border border-indigo-400/30 bg-indigo-400/10 px-3 py-1 text-xs font-mono text-indigo-200">
+          <EyeOff className="h-3.5 w-3.5" aria-hidden="true" /> LOCAL PRIVACY
+          READINESS
         </div>
-        <h1 className="text-4xl font-bold mb-2">Ghost Mode</h1>
-        <p className="text-muted-foreground">Randomize your browser fingerprint, mask your identity, and become invisible to tracking systems.</p>
-      </div>
+        <div className="max-w-3xl">
+          <h1
+            id="ghost-mode-title"
+            className="text-4xl font-bold tracking-tight"
+          >
+            Ghost Mode
+          </h1>
+          <p className="mt-2 text-muted-foreground">
+            Review privacy boundaries without claiming anonymity, browser
+            spoofing, or protection that this application cannot verify.
+          </p>
+        </div>
+      </header>
 
-      {/* Master Toggle */}
-      <Card className={`p-6 mb-6 border-2 transition-all ${ghostActive ? "border-purple-500/50 bg-purple-500/5" : "border-border/30"}`}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all ${ghostActive ? "bg-purple-500/20 animate-pulse" : "bg-secondary/50"}`}>
-              <Ghost className={`w-8 h-8 ${ghostActive ? "text-purple-400" : "text-muted-foreground"}`} />
-            </div>
+      <section
+        className="mb-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5"
+        aria-label="Unavailable privacy service notice"
+      >
+        <div className="flex items-start gap-3">
+          <AlertTriangle
+            className="mt-0.5 h-5 w-5 shrink-0 text-amber-200"
+            aria-hidden="true"
+          />
+          <div>
+            <h2 className="font-semibold text-amber-100">
+              Privacy protection service unavailable
+            </h2>
+            <p className="mt-1 text-sm leading-6 text-amber-100/75">
+              No browser isolation, proxy, header control, network interception,
+              identity store, or verified anonymity service is connected. The
+              controls below are review-only and do not change how this browser
+              or account is observed.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        className="mb-6 grid gap-4 md:grid-cols-3"
+        aria-label="Privacy readiness summary"
+      >
+        <Card className="border-border/40 bg-card/50 p-5">
+          <div className="mb-3 flex items-center gap-2 text-emerald-300">
+            <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+            <span className="text-xs font-semibold uppercase tracking-wide">
+              Local preview
+            </span>
+          </div>
+          <p className="text-lg font-semibold">No sensitive mutation</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Selections remain in component memory and are not retained,
+            transmitted, or applied.
+          </p>
+        </Card>
+        <Card className="border-border/40 bg-card/50 p-5">
+          <div className="mb-3 flex items-center gap-2 text-amber-300">
+            <ShieldAlert className="h-4 w-4" aria-hidden="true" />
+            <span className="text-xs font-semibold uppercase tracking-wide">
+              Protection status
+            </span>
+          </div>
+          <p className="text-lg font-semibold">Unavailable</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            No anonymity, fingerprint resistance, IP masking, or stealth
+            guarantee is available.
+          </p>
+        </Card>
+        <Card className="border-border/40 bg-card/50 p-5">
+          <div className="mb-3 flex items-center gap-2 text-sky-300">
+            <LockKeyhole className="h-4 w-4" aria-hidden="true" />
+            <span className="text-xs font-semibold uppercase tracking-wide">
+              Account safety
+            </span>
+          </div>
+          <p className="text-lg font-semibold">No account changes</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            No session, identity, notification, profile, or security setting is
+            changed by this screen.
+          </p>
+        </Card>
+      </section>
+
+      <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
+        <section className="space-y-4" aria-labelledby="layers-title">
+          <div className="flex items-center justify-between gap-3">
             <div>
-              <h2 className="text-xl font-bold mb-1">Ghost Mode {ghostActive ? "Active" : "Inactive"}</h2>
-              <p className="text-sm text-muted-foreground">
-                {ghostActive ? `${activeCount}/${layers.length} protection layers active` : "Enable to activate all identity protection layers"}
+              <h2
+                id="layers-title"
+                className="flex items-center gap-2 text-xl font-semibold"
+              >
+                <Fingerprint
+                  className="h-5 w-5 text-primary"
+                  aria-hidden="true"
+                />
+                Protection boundaries
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Each proposed layer is unavailable until a verified
+                implementation exists.
               </p>
-              {ghostActive && (
-                <div className="flex items-center gap-2 mt-2">
-                  <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-[10px]">INVISIBLE</Badge>
-                  <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-[10px]">PROTECTED</Badge>
-                </div>
-              )}
             </div>
+            <Badge
+              variant="outline"
+              className="shrink-0 border-amber-400/30 text-amber-200"
+            >
+              0 active
+            </Badge>
           </div>
-          <div className="flex gap-3">
-            {ghostActive ? (
-              <Button onClick={deactivateAll} variant="outline" className="border-red-500/30 text-red-400 hover:bg-red-500/10">
-                <Eye className="w-4 h-4 mr-2" />Deactivate
-              </Button>
-            ) : (
-              <Button onClick={activateAll} className="bg-purple-600 hover:bg-purple-500 text-white">
-                <Ghost className="w-4 h-4 mr-2" />Activate All
-              </Button>
-            )}
-          </div>
-        </div>
-      </Card>
-
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6">
-        {/* Protection Layers */}
-        <div className="space-y-4">
-          <h3 className="font-semibold flex items-center gap-2">
-            <Fingerprint className="w-4 h-4 text-primary" />
-            Protection Layers
-          </h3>
-          <div className="space-y-2">
-            {layers.map((layer, idx) => (
-              <div key={layer.name} className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${layer.active ? "border-purple-500/30 bg-purple-500/5" : "border-border/30 bg-card/30"}`}>
-                <div className={`w-2 h-2 rounded-full shrink-0 ${layer.risk === "critical" ? "bg-red-500" : layer.risk === "high" ? "bg-orange-500" : layer.risk === "medium" ? "bg-yellow-500" : "bg-green-500"}`} />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-sm">{layer.name}</span>
-                    <Badge variant="outline" className={`text-[9px] h-4 ${layer.risk === "critical" ? "border-red-500/30 text-red-400" : layer.risk === "high" ? "border-orange-500/30 text-orange-400" : layer.risk === "medium" ? "border-yellow-500/30 text-yellow-400" : "border-green-500/30 text-green-400"}`}>
-                      {layer.risk}
-                    </Badge>
+          <div className="space-y-3">
+            {PRIVACY_LAYERS.map(layer => (
+              <Card
+                key={layer.name}
+                className="border-border/40 bg-card/40 p-4"
+              >
+                <div className="flex items-start gap-4">
+                  <div
+                    className="mt-1 rounded-lg bg-secondary/60 p-2"
+                    aria-hidden="true"
+                  >
+                    <WifiOff className="h-4 w-4 text-muted-foreground" />
                   </div>
-                  <p className="text-xs text-muted-foreground">{layer.description}</p>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="font-medium">{layer.name}</h3>
+                      <Badge
+                        variant="outline"
+                        className={`text-[10px] uppercase ${riskStyles[layer.risk]}`}
+                      >
+                        {layer.risk} risk
+                      </Badge>
+                      <Badge
+                        variant="outline"
+                        className="border-muted-foreground/30 text-muted-foreground"
+                      >
+                        Unavailable
+                      </Badge>
+                    </div>
+                    <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                      {layer.description}
+                    </p>
+                  </div>
+                  <XCircle
+                    className="mt-1 h-4 w-4 shrink-0 text-muted-foreground"
+                    aria-label="Unavailable"
+                  />
                 </div>
-                <button
-                  onClick={() => toggleLayer(idx)}
-                  className={`w-10 h-5 rounded-full transition-all relative shrink-0 ${layer.active ? "bg-purple-500" : "bg-secondary"}`}
-                >
-                  <div className={`w-4 h-4 rounded-full bg-white absolute top-0.5 transition-all ${layer.active ? "left-5" : "left-0.5"}`} />
-                </button>
-              </div>
+              </Card>
             ))}
           </div>
-
-          {/* Noise Level */}
-          <Card className="p-4 border-border/30 bg-card/50">
-            <div className="flex items-center justify-between mb-3">
-              <h4 className="font-medium text-sm flex items-center gap-2"><Zap className="w-4 h-4 text-primary" />Behavioral Noise Level</h4>
-              <span className="text-sm font-bold text-primary">{noiseLevel}%</span>
+          <Card className="border-border/40 bg-card/50 p-5">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <h3 className="flex items-center gap-2 font-semibold">
+                <SlidersHorizontal
+                  className="h-4 w-4 text-primary"
+                  aria-hidden="true"
+                />
+                Behavioral noise preview
+              </h3>
+              <span className="text-sm font-semibold text-muted-foreground">
+                {noiseLevel}% local only
+              </span>
             </div>
-            <input type="range" min="0" max="100" value={noiseLevel} onChange={e => setNoiseLevel(parseInt(e.target.value))} className="w-full accent-purple-500" />
-            <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
-              <span>Subtle</span><span>Aggressive</span>
+            <input
+              aria-label="Local behavioral noise preview"
+              className="w-full accent-primary"
+              type="range"
+              min="0"
+              max="100"
+              value={noiseLevel}
+              onChange={event => setNoiseLevel(Number(event.target.value))}
+            />
+            <div className="mt-2 flex justify-between text-xs text-muted-foreground">
+              <span>None</span>
+              <span>No synthetic activity is sent</span>
+              <span>Maximum</span>
             </div>
           </Card>
-        </div>
+        </section>
 
-        {/* Identity Presets */}
-        <div className="space-y-4">
-          <h3 className="font-semibold flex items-center gap-2">
-            <User className="w-4 h-4 text-primary" />
-            Ghost Identities
-          </h3>
-          <div className="space-y-2">
-            {GHOST_IDENTITIES.map((id, idx) => (
-              <button key={id.name} onClick={() => { setSelectedIdentity(idx); toast.success(`Identity switched to ${id.name}`); }} className={`w-full p-3 rounded-xl border text-left transition-all ${selectedIdentity === idx ? "border-purple-500/50 bg-purple-500/10" : "border-border/30 bg-card/30 hover:bg-card/60"}`}>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-medium text-sm">{id.name}</span>
-                  {selectedIdentity === idx && <CheckCircle className="w-3.5 h-3.5 text-purple-400" />}
-                </div>
-                <div className="space-y-0.5">
-                  <p className="text-[10px] text-muted-foreground"><Monitor className="w-2.5 h-2.5 inline mr-1" />{id.ua}</p>
-                  <p className="text-[10px] text-muted-foreground"><Globe className="w-2.5 h-2.5 inline mr-1" />{id.tz}</p>
-                  <p className="text-[10px] text-muted-foreground"><Hash className="w-2.5 h-2.5 inline mr-1" />{id.screen} · {id.lang}</p>
-                </div>
-              </button>
-            ))}
-            <Button size="sm" variant="outline" className="w-full text-xs" onClick={() => toast.success("New random identity generated")}>
-              <Shuffle className="w-3 h-3 mr-1" />Generate Random Identity
-            </Button>
+        <aside className="space-y-4" aria-labelledby="identity-preview-title">
+          <div>
+            <h2
+              id="identity-preview-title"
+              className="flex items-center gap-2 text-xl font-semibold"
+            >
+              <UserRound className="h-5 w-5 text-primary" aria-hidden="true" />
+              Identity preview
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Illustrative labels only. No identity is generated or applied.
+            </p>
           </div>
-
-          {/* Session Timer */}
-          <Card className="p-4 border-border/30 bg-card/50">
-            <h4 className="font-medium text-sm mb-3 flex items-center gap-2"><Clock className="w-4 h-4 text-primary" />Session Rotation</h4>
-            <p className="text-xs text-muted-foreground mb-3">Auto-rotate identity every N minutes to prevent session correlation.</p>
-            <div className="flex gap-2">
-              {[15, 30, 60, 120].map(m => (
-                <button key={m} onClick={() => toast.success(`Identity rotation set to every ${m} minutes`)} className="flex-1 py-1.5 rounded-lg bg-secondary/40 text-xs hover:bg-secondary transition-all">
-                  {m}m
+          <Card className="border-border/40 bg-card/50 p-4">
+            <div className="space-y-2">
+              {IDENTITY_PREVIEWS.map((item, index) => (
+                <button
+                  key={item.name}
+                  type="button"
+                  aria-pressed={selectedPreview === index}
+                  onClick={() => setSelectedPreview(index)}
+                  className={`w-full rounded-xl border p-3 text-left transition-colors ${selectedPreview === index ? "border-primary/50 bg-primary/10" : "border-border/30 bg-secondary/20 hover:bg-secondary/40"}`}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-medium">{item.name}</span>
+                    {selectedPreview === index && (
+                      <CheckCircle2
+                        className="h-4 w-4 text-primary"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Preview selection only
+                  </p>
                 </button>
               ))}
             </div>
+            <div className="mt-4 space-y-3 rounded-xl border border-border/30 bg-background/30 p-4">
+              <div className="flex items-center gap-2 text-sm">
+                <Monitor
+                  className="h-4 w-4 text-muted-foreground"
+                  aria-hidden="true"
+                />
+                {preview.browser}
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <Globe2
+                  className="h-4 w-4 text-muted-foreground"
+                  aria-hidden="true"
+                />
+                {preview.timezone}
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <RefreshCw
+                  className="h-4 w-4 text-muted-foreground"
+                  aria-hidden="true"
+                />
+                {preview.viewport}
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <Fingerprint
+                  className="h-4 w-4 text-muted-foreground"
+                  aria-hidden="true"
+                />
+                {preview.language}
+              </div>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              className="mt-4 w-full"
+              onClick={() => announceUnavailable("Random identity generation")}
+            >
+              <Shuffle className="mr-2 h-4 w-4" aria-hidden="true" />
+              Generate identity unavailable
+            </Button>
           </Card>
-        </div>
+          <Card className="border-border/40 bg-card/50 p-4">
+            <h3 className="flex items-center gap-2 font-semibold">
+              <Clock3 className="h-4 w-4 text-primary" aria-hidden="true" />
+              Session rotation
+            </h3>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+              Automatic identity rotation is unavailable. No timer, session
+              mutation, or account operation is started.
+            </p>
+            <Button
+              type="button"
+              variant="outline"
+              className="mt-3 w-full"
+              onClick={() => announceUnavailable("Session rotation")}
+            >
+              <RefreshCw className="mr-2 h-4 w-4" aria-hidden="true" />
+              Rotation unavailable
+            </Button>
+          </Card>
+        </aside>
       </div>
-    </div>
+
+      <section
+        className="mt-6 rounded-2xl border border-border/40 bg-card/30 p-5"
+        aria-label="Privacy implementation requirements"
+      >
+        <div className="flex items-start gap-3">
+          <LockKeyhole
+            className="mt-0.5 h-5 w-5 shrink-0 text-primary"
+            aria-hidden="true"
+          />
+          <div>
+            <h2 className="font-semibold">
+              Before production privacy controls exist
+            </h2>
+            <p className="mt-1 text-sm leading-6 text-muted-foreground">
+              A real implementation needs an explicit threat model, consent,
+              browser or network isolation, verified failure states, secure
+              configuration, audit logs that exclude sensitive data, and clear
+              limits on what can be protected. This page currently provides none
+              of those controls.
+            </p>
+          </div>
+        </div>
+      </section>
+      <p
+        className="mt-4 rounded-xl border border-border/30 bg-background/30 px-4 py-3 text-sm text-muted-foreground"
+        role="status"
+        aria-live="polite"
+      >
+        {status}
+      </p>
+      <div className="sr-only" aria-live="polite">
+        No Ghost Mode protection is active.
+      </div>
+    </main>
   );
 }
