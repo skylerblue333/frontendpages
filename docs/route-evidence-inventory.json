@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "a8025ceda6817de88ff5d380a7546eefd5a957f3",
+  "generated_at_commit": "238fd48fd943e2b1b66a7fa85f7b9c1e1cac21cd",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 193,
-  "routes_with_visual_checkpoint": 193,
+  "routes_with_review": 194,
+  "routes_with_visual_checkpoint": 194,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -1327,8 +1327,8 @@
       "component": "CampaignCreation",
       "source": "client/src/pages/CampaignCreation.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
