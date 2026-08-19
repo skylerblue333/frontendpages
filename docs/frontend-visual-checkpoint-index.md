@@ -734,3 +734,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/automation-workflows-mobile-390x844
 ## backup-management-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/backup-management-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/backup-management-mobile-390x844.png`
+
+## badges-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/badges-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/badges-mobile-390x844.png`
