@@ -1,98 +1,23 @@
-import React, { useState } from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { useState } from "react";
+import { Bot, CheckCircle2, Coins, LockKeyhole, ShieldAlert, UsersRound } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const tabs = [
+  { id: "tools", label: "Creator tools", icon: Bot, title: "Build with disclosed capabilities", description: "Review tool concepts without claiming model access, generated assets, moderation outcomes, analytics, or automated publishing." },
+  { id: "guilds", label: "Guilds", icon: UsersRound, title: "Organize communities responsibly", description: "Explore creator-group concepts without claiming member counts, membership persistence, moderation coverage, or group performance." },
+  { id: "revenue", label: "Revenue", icon: Coins, title: "Keep creator finance evidence-based", description: "Review the requirements for payouts and revenue reporting without displaying creator earnings, tips, subscriptions, or growth figures." },
+] as const;
+
+type TabId = (typeof tabs)[number]["id"];
 
 export default function CreatorEconomy() {
-  const [activeTab, setActiveTab] = useState<'tools' | 'guilds' | 'revenue'>('tools');
-
-  const creators = [
-    { name: 'Luna', followers: 125000, earnings: 45230, growth: '+32%' },
-    { name: 'Alex', followers: 89000, earnings: 32150, growth: '+28%' },
-    { name: 'Jordan', followers: 156000, earnings: 67890, growth: '+45%' },
-  ];
+  const [activeTab, setActiveTab] = useState<TabId>("tools");
+  const [saved, setSaved] = useState(false);
+  const active = tabs.find(tab => tab.id === activeTab) ?? tabs[0];
+  const Icon = active.icon;
+  const requirements = activeTab === "tools" ? ["Model/provider availability and disclosure", "User consent, privacy, and content ownership", "Generation limits, evaluation, moderation, and support", "Publishing authorization and reversible actions"] : activeTab === "guilds" ? ["Authenticated creator and organization identity", "Membership persistence, roles, moderation, and safeguarding", "Content provenance, privacy, reporting, and appeals", "Notifications, discovery, and cross-device consistency"] : ["Settled transactions, entitlement, and payout provenance", "Fees, taxes, refunds, chargebacks, and reconciliation", "Ledger integrity, currency rules, and creator support", "Financial access control, retention, and audit evidence"];
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold mb-2">CREATOR ECONOMY</h1>
-          <p className="text-gray-400">AI-powered tools, guilds, and revenue sharing for creators</p>
-        </div>
-
-        {/* Tabs */}
-        <div className="flex gap-4 mb-8">
-          {(['tools', 'guilds', 'revenue'] as const).map((tab) => (
-            <Button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={tab === activeTab ? 'bg-cyan-600' : 'bg-gray-700'}
-            >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </Button>
-          ))}
-        </div>
-
-        {activeTab === 'tools' && (
-          <div className="grid grid-cols-3 gap-6 mb-12">
-            {[
-              { name: 'AI Content Generator', desc: 'Auto-generate posts, videos, captions' },
-              { name: 'Analytics Dashboard', desc: 'Real-time engagement and revenue tracking' },
-              { name: 'Community Manager', desc: 'AI-powered moderation and engagement' },
-            ].map((tool) => (
-              <Card key={tool.name} className="bg-gray-900 border-gray-800 p-6">
-                <h3 className="font-bold text-lg mb-2">{tool.name}</h3>
-                <p className="text-gray-400 text-sm mb-4">{tool.desc}</p>
-                <Button className="w-full bg-cyan-600 hover:bg-cyan-700">Use Tool</Button>
-              </Card>
-            ))}
-          </div>
-        )}
-
-        {activeTab === 'guilds' && (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">CREATOR GUILDS</h2>
-            {[
-              { name: 'Gaming Creators', members: 1250, revenue: 125000 },
-              { name: 'Music Producers', members: 890, revenue: 98000 },
-              { name: 'Tech Educators', members: 650, revenue: 76000 },
-            ].map((guild) => (
-              <Card key={guild.name} className="bg-gray-900 border-gray-800 p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-lg">{guild.name}</h3>
-                    <p className="text-gray-400">{guild.members} members</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-yellow-400">${guild.revenue.toLocaleString()}</p>
-                    <p className="text-xs text-gray-500">monthly revenue</p>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        )}
-
-        {activeTab === 'revenue' && (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">TOP CREATORS</h2>
-            {creators.map((creator) => (
-              <Card key={creator.name} className="bg-gray-900 border-gray-800 p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-lg">{creator.name}</h3>
-                    <p className="text-gray-400">{creator.followers.toLocaleString()} followers</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-green-400">${creator.earnings.toLocaleString()}</p>
-                    <Badge className="bg-green-600 mt-2">{creator.growth}</Badge>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
+    <main className="min-h-screen bg-[#070a16] text-white"><header className="border-b border-white/10 bg-[#070a16]/90 px-4 py-5 backdrop-blur-xl"><div className="mx-auto flex max-w-6xl items-center gap-3"><div className="flex size-10 items-center justify-center rounded-2xl bg-fuchsia-300/10 text-fuchsia-200"><Icon className="size-5" /></div><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-200/70">Creator governance</p><h1 className="text-xl font-black">Creator economy</h1></div><span className="ml-auto rounded-full border border-amber-300/20 bg-amber-300/[0.06] px-3 py-1 text-xs text-amber-100">Evidence required</span></div></header><section className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><div className="rounded-3xl border border-white/10 bg-gradient-to-br from-fuchsia-400/[0.14] via-violet-400/[0.08] to-transparent p-6 sm:p-10"><div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-200"><ShieldAlert className="size-4" />Truthful creator workspace</div><h2 className="mt-4 max-w-3xl text-4xl font-black tracking-tight sm:text-5xl">Support creators without inventing their outcomes.</h2><p className="mt-5 max-w-3xl text-base leading-7 text-slate-300">This screen preserves the creator-tool, guild, and revenue planning surfaces while clearly separating local concepts from verified provider behavior. No creator, follower, member, earning, payout, engagement, or growth result is asserted.</p><div className="mt-7 flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-fuchsia-200 text-slate-950 hover:bg-fuchsia-100">{saved ? "Plan saved locally" : "Save plan locally"}</Button><Button onClick={() => setSaved(false)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">Reset workspace</Button></div></div><div className="grid gap-3 sm:grid-cols-3">{tabs.map(tab => { const TabIcon = tab.icon; return <button type="button" key={tab.id} onClick={() => setActiveTab(tab.id)} className={`rounded-2xl border p-5 text-left transition ${activeTab === tab.id ? "border-fuchsia-300/40 bg-fuchsia-300/[0.08]" : "border-white/10 bg-white/[0.04] hover:border-white/20"}`}><TabIcon className="size-5 text-fuchsia-200" /><p className="mt-4 font-bold">{tab.label}</p><p className="mt-2 text-sm leading-6 text-slate-500">{tab.description}</p></button>; })}</div><section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6"><div className="flex items-start gap-4"><div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-fuchsia-300/10 text-fuchsia-200"><Icon className="size-6" /></div><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected workspace</p><h3 className="mt-2 text-2xl font-black">{active.title}</h3><p className="mt-3 text-sm leading-6 text-slate-400">{active.description}</p></div></div><div className="mt-7 rounded-2xl border border-dashed border-white/15 bg-black/20 p-8 text-center"><Icon className="mx-auto size-10 text-slate-600" /><p className="mt-4 font-semibold">No creator evidence loaded</p><p className="mt-2 text-sm leading-6 text-slate-500">Connect the appropriate identity, provider, persistence, moderation, ledger, payment, support, privacy, and audit systems before showing live creator outcomes.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Open unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Publish unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Payout unavailable</Button></div></div><div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Evidence gates</p><h3 className="mt-2 text-2xl font-black">Before showing a result</h3><div className="mt-6 space-y-3">{requirements.map(item => <div key={item} className="flex items-start gap-3 rounded-xl border border-white/10 p-4 text-sm leading-6 text-slate-300"><LockKeyhole className="mt-1 size-4 shrink-0 text-amber-200" />{item}<span className="ml-auto text-xs text-amber-200">Required</span></div>)}</div></div></section><div className="grid gap-4 sm:grid-cols-3">{["Creators", "Members", "Earnings"].map(label => <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5"><p className="text-xs uppercase tracking-widest text-slate-500">{label}</p><p className="mt-2 text-2xl font-black text-amber-200">Unavailable</p><p className="mt-1 text-sm text-slate-500">No authoritative source</p></div>)}</div><div className="rounded-2xl border border-dashed border-white/15 bg-amber-300/[0.04] p-6 text-sm leading-6 text-slate-400"><strong className="text-amber-100">No creator-economy or financial claim is made.</strong> A planning surface does not establish creators, followers, guild members, engagement, tips, subscriptions, payouts, revenue, growth, or business performance.</div><div className="flex items-center gap-3 text-sm text-slate-500"><CheckCircle2 className="size-4 text-emerald-200" />Local governance state only; no external operation was started.</div></section></main>
   );
 }
