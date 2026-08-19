@@ -1,0 +1,5 @@
+# BrandGuidelines review
+
+The `/brand-guidelines` route is not production-ready. It imports `trpc`, `Tabs`, `TabsContent`, `TabsList`, `TabsTrigger`, and `Settings` without establishing a real contract. The authentication gate renders a nonfunctional `Sign In` button, while the authenticated view exposes no-op `New` and settings controls, an unused `isLoading` state, and an empty data state. There is no verified brand profile, logo or asset source, color or typography rule set, usage example, approval workflow, version history, permissions, export, or persistence contract.
+
+The route must not imply that official brand guidance exists. It should be converted to a strictly typed local design-system readiness workspace that allows only truthful local search state and clearly discloses unavailable new, edit, approval, export, asset, version, and settings actions. No official asset, rule, approval, version, or design-system outcome may be fabricated. The revised route requires TypeScript/build validation and desktop/mobile visual evidence.
