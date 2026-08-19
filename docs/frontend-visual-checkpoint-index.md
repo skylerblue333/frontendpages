@@ -670,3 +670,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/address-book-mobile-390x844.png`
 ## address-lookup-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/address-lookup-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/address-lookup-mobile-390x844.png`
+
+## admin-orders-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/admin-orders-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/admin-orders-mobile-390x844.png`
