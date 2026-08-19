@@ -376,6 +376,12 @@ Route text capture: `/home/ubuntu/page_texts/localhost_5175_mobile-app.md`
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_08-17-44_4555.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_platform-map.md`
 
+## power-user-tools-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-36-52_9845.webp`
+Local-selection screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-37-02_3493.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_power-user-tools.md`
+Blocked-export screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-37-26_3370.webp`
+
 ## profile-edit-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_17-28-47_1105.webp`
 Blocked-wallet screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_17-28-55_1224.webp`
