@@ -686,3 +686,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/advanced-admin-panel-mobile-390x844
 ## agent-builder-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/agent-builder-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/agent-builder-mobile-390x844.png`
+
+## agent-coordination-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/agent-coordination-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/agent-coordination-mobile-390x844.png`
