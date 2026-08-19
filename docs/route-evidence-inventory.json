@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "8786aa5da1431b4101a025f9307a95f508865470",
+  "generated_at_commit": "e7da7a646a8e71edc0f949500b3e5dc0d6a9f486",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 147,
-  "routes_with_visual_checkpoint": 147,
+  "routes_with_review": 148,
+  "routes_with_visual_checkpoint": 148,
   "routes_with_placeholder_signal": 786,
   "routes": [
     {
@@ -427,8 +427,8 @@
       "component": "AdaptivePersonalization",
       "source": "client/src/pages/AdaptivePersonalization.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
