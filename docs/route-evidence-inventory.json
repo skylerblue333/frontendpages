@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "82de75d43dcfe8b278a0995a254aa04a8b8056c7",
+  "generated_at_commit": "8bfd07ef6477bd8518d34cde8a5716f776cafb69",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 206,
-  "routes_with_visual_checkpoint": 206,
+  "routes_with_review": 207,
+  "routes_with_visual_checkpoint": 207,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -1471,8 +1471,8 @@
       "component": "CheckboxGroupForm",
       "source": "client/src/pages/CheckboxGroupForm.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
