@@ -930,3 +930,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/compliance-checking-mobile-390x844.
 ## confirmation-dialog-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/confirmation-dialog-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/confirmation-dialog-mobile-390x844.png`
+
+## connected-apps-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/connected-apps-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/connected-apps-mobile-390x844.png`
