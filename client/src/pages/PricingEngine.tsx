@@ -1,238 +1,38 @@
-/**
- * PricingEngine — Phase 30 Pricing + Conversion Engine
- * Action price matrix, value gap engine, AI upsell, conversion triggers
- */
 import { useState } from "react";
 import { Link } from "wouter";
-import { ArrowLeft, DollarSign, Lock, Zap, TrendingUp, RefreshCw, Crown, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, CheckCircle2, ClipboardCheck, Lock, RefreshCw, ShieldAlert, TrendingUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-const ACTION_TIERS = [
-  {
-    tier: "A",
-    name: "Basic Actions",
-    price: "Free",
-    color: "text-green-400",
-    bg: "bg-green-500/10 border-green-500/20",
-    desc: "Hook users with partial value",
-    examples: ["Preview output", "Partial result", "Suggestions only"],
-    conversion: "Creates desire for full result",
-  },
-  {
-    tier: "B",
-    name: "Standard Actions",
-    price: "$0.99 – $4.99",
-    color: "text-blue-400",
-    bg: "bg-blue-500/10 border-blue-500/20",
-    desc: "Full AI output + usable asset",
-    examples: ["Full AI output", "Downloadable result", "Usable asset"],
-    conversion: "Low friction, high volume",
-  },
-  {
-    tier: "C",
-    name: "Premium Actions",
-    price: "$5 – $20",
-    color: "text-purple-400",
-    bg: "bg-purple-500/10 border-purple-500/20",
-    desc: "Multi-step execution + automation",
-    examples: ["Multi-step execution", "AI does the work", "Optimization + refinement"],
-    conversion: "Power users, creators",
-  },
-  {
-    tier: "D",
-    name: "Power Actions",
-    price: "$20+",
-    color: "text-yellow-400",
-    bg: "bg-yellow-500/10 border-yellow-500/20",
-    desc: "Full workflows + agent execution",
-    examples: ["Full workflows", "Agent execution", "Multi-system actions"],
-    conversion: "Scalable, high-value users",
-  },
+const tabs = ["matrix", "value", "governance"] as const;
+type Tab = (typeof tabs)[number];
+
+const tiers = [
+  { name: "Preview", status: "Local concept", description: "A non-transactional preview of a supported surface with no entitlement or outcome claim." },
+  { name: "Standard", status: "Requires evidence", description: "A potential paid capability requiring product scope, access rules, provider contracts, support, and refund policy." },
+  { name: "Advanced", status: "Requires review", description: "A multi-step capability requiring execution authorization, data handling, observability, and rollback." },
+  { name: "Enterprise", status: "Blocked", description: "A governed offering requiring commercial contracts, security evidence, service ownership, and operational acceptance." },
 ];
 
-const VALUE_GAP_EXAMPLES = [
-  {
-    prompt: "Find me a job",
-    free: "3 generic job search tips",
-    paid: "AI applies to 20 jobs + optimizes resume + sends personalized pitches",
-    paidPrice: "$12.99",
-  },
-  {
-    prompt: "Help me sell something",
-    free: "Basic selling tips template",
-    paid: "SEO listing + pricing analysis + 10 photo prompts + marketplace comparison",
-    paidPrice: "$9.99",
-  },
-  {
-    prompt: "Make me a logo",
-    free: "3 generic logo ideas described in text",
-    paid: "10 custom concepts + SVG files + brand palette + usage guidelines",
-    paidPrice: "$9.99",
-  },
-  {
-    prompt: "Write my bio",
-    free: "Generic bio template with your name",
-    paid: "5 platform-specific bios + headline variations + keyword optimization",
-    paidPrice: "$6.99",
-  },
-];
-
-const UPSELL_CHAIN = [
-  { step: 1, action: "User asks for logo", trigger: "AI generates free preview" },
-  { step: 2, action: "User unlocks full logo ($9.99)", trigger: "AI suggests: 'Want a brand kit?'" },
-  { step: 3, action: "User buys brand kit ($24.99)", trigger: "AI suggests: 'Want social media templates?'" },
-  { step: 4, action: "User buys templates ($14.99)", trigger: "AI suggests: 'Want me to post for you?'" },
-  { step: 5, action: "User subscribes ($25/mo)", trigger: "Recurring revenue locked in" },
-];
-
-const CONVERSION_FLOW = [
-  "User enters",
-  "AI welcome prompt",
-  "Instant suggestion",
-  "Paid action offer",
-  "1-click payment",
-  "Result delivered",
-  "Upsell next action",
+const gates = [
+  "Define the actual capability, user entitlement, provider dependency, and measurable outcome before assigning a price.",
+  "Validate currency, tax, payment, refunds, chargebacks, regional availability, accessibility, and customer support ownership.",
+  "Prove authorization, idempotency, auditability, rate limits, data minimization, and safe failure for every paid action.",
+  "Use real demand, conversion, retention, cost, and support evidence; never infer business performance from a pricing mockup.",
+  "Keep financial, token, AI, marketplace, education, and enterprise claims separately reviewed and explicitly sourced.",
+  "Do not use dark patterns, forced upsells, misleading scarcity, or claims that a user must pay to receive an outcome.",
 ];
 
 export default function PricingEngine() {
-  const [activeTab, setActiveTab] = useState<"matrix" | "gap" | "upsell" | "flow">("matrix");
+  const [activeTab, setActiveTab] = useState<Tab>("matrix");
+  const [reviewed, setReviewed] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border/50 px-4 py-3 flex items-center gap-3">
-        <Link href="/" className="p-2 rounded-lg hover:bg-secondary/50 transition-colors text-muted-foreground">
-          <ArrowLeft className="w-4 h-4" />
-        </Link>
-        <div>
-          <h1 className="font-bold text-lg flex items-center gap-2">
-            <DollarSign className="w-5 h-5 text-green-400" />
-            Pricing Engine
-          </h1>
-          <p className="text-xs text-muted-foreground">Phase 30 — Every interaction is a monetizable action</p>
-        </div>
-      </div>
-
-      <div className="max-w-2xl mx-auto p-4 space-y-4">
-        <div className="card p-4 bg-gradient-to-br from-green-500/10 to-cyan-500/10 border border-green-500/20">
-          <h3 className="font-bold text-sm mb-1">Core Thesis</h3>
-          <p className="text-sm">"A value extraction system where every interaction is a monetizable action."</p>
-          <p className="text-xs text-muted-foreground mt-1">You don't wait for users. You design triggers that force value decisions immediately.</p>
-        </div>
-
-        <div className="flex gap-1 bg-secondary/30 rounded-xl p-1">
-          {(["matrix", "gap", "upsell", "flow"] as const).map(t => (
-            <button key={t} onClick={() => setActiveTab(t)}
-              className={`flex-1 py-2 rounded-lg text-xs font-medium capitalize transition-colors ${activeTab === t ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"}`}>
-              {t === "matrix" ? "Price Matrix" : t === "gap" ? "Value Gap" : t === "upsell" ? "Upsell Chain" : "Conv. Flow"}
-            </button>
-          ))}
-        </div>
-
-        {activeTab === "matrix" && (
-          <div className="space-y-3">
-            {ACTION_TIERS.map(tier => (
-              <div key={tier.tier} className={`card p-4 border ${tier.bg}`}>
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <span className={`text-lg font-black ${tier.color}`}>{tier.tier}</span>
-                    <span className="font-semibold text-sm">{tier.name}</span>
-                  </div>
-                  <span className={`font-bold text-sm ${tier.color}`}>{tier.price}</span>
-                </div>
-                <p className="text-xs text-muted-foreground mb-2">{tier.desc}</p>
-                <div className="flex flex-wrap gap-1 mb-2">
-                  {tier.examples.map(ex => (
-                    <span key={ex} className="text-xs px-2 py-0.5 rounded-full bg-background/50 text-muted-foreground">{ex}</span>
-                  ))}
-                </div>
-                <div className="text-xs text-foreground flex items-center gap-1">
-                  <TrendingUp className="w-3 h-3 text-green-400" />
-                  {tier.conversion}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {activeTab === "gap" && (
-          <div className="space-y-3">
-            <p className="text-xs text-muted-foreground">The gap between free and paid is where revenue lives. Design it deliberately.</p>
-            {VALUE_GAP_EXAMPLES.map((ex, i) => (
-              <div key={i} className="card p-4">
-                <div className="font-semibold text-sm mb-3 flex items-center gap-2">
-                  <span className="text-primary">"{ex.prompt}"</span>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="p-3 rounded-lg bg-secondary/30 border border-border/30">
-                    <div className="text-xs font-medium text-green-400 mb-1 flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3" /> Free
-                    </div>
-                    <p className="text-xs text-muted-foreground">{ex.free}</p>
-                  </div>
-                  <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
-                    <div className="text-xs font-medium text-primary mb-1 flex items-center gap-1">
-                      <Lock className="w-3 h-3" /> Paid {ex.paidPrice}
-                    </div>
-                    <p className="text-xs">{ex.paid}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {activeTab === "upsell" && (
-          <div className="space-y-2">
-            <p className="text-xs text-muted-foreground mb-3">One action = chain of monetization. AI always suggests the next paid step.</p>
-            {UPSELL_CHAIN.map((step, i) => (
-              <div key={i} className="card p-3 flex items-start gap-3">
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-bold ${i === UPSELL_CHAIN.length - 1 ? "bg-yellow-500/20 text-yellow-400" : "bg-primary/20 text-primary"}`}>
-                  {step.step}
-                </div>
-                <div className="flex-1">
-                  <div className="font-medium text-sm">{step.action}</div>
-                  <div className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
-                    <Zap className="w-3 h-3 text-yellow-400" />
-                    {step.trigger}
-                  </div>
-                </div>
-              </div>
-            ))}
-            <div className="card p-3 bg-green-500/10 border border-green-500/20 text-center">
-              <Crown className="w-5 h-5 text-yellow-400 mx-auto mb-1" />
-              <div className="text-sm font-bold">Total from one logo request: $74.97</div>
-              <div className="text-xs text-muted-foreground">+ $25/mo recurring</div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === "flow" && (
-          <div className="space-y-2">
-            <p className="text-xs text-muted-foreground mb-3">First-time user monetization flow — designed to convert on first visit.</p>
-            {CONVERSION_FLOW.map((step, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold ${i === 0 ? "bg-blue-500/20 text-blue-400" : i === CONVERSION_FLOW.length - 1 ? "bg-green-500/20 text-green-400" : "bg-primary/20 text-primary"}`}>
-                  {i + 1}
-                </div>
-                <div className={`flex-1 p-3 rounded-lg border ${i === 4 ? "bg-primary/5 border-primary/20 font-medium" : "bg-secondary/20 border-border/30"}`}>
-                  <span className="text-sm">{step}</span>
-                  {i === 4 && <span className="text-xs text-primary ml-2">← Revenue moment</span>}
-                </div>
-                {i < CONVERSION_FLOW.length - 1 && (
-                  <div className="text-muted-foreground text-xs">↓</div>
-                )}
-              </div>
-            ))}
-            <div className="card p-3 bg-gradient-to-r from-green-500/10 to-cyan-500/10 border border-green-500/20 mt-4">
-              <div className="flex items-center gap-2">
-                <RefreshCw className="w-4 h-4 text-cyan-400" />
-                <span className="text-sm font-semibold">Continuous Loop</span>
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">After result delivery, AI immediately suggests next paid action. Loop never ends.</p>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+    <main className="min-h-screen bg-[#070a16] text-white">
+      <header className="sticky top-0 z-10 border-b border-white/10 bg-[#070a16]/85 px-4 py-3 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-5xl items-center gap-3"><Link href="/"><Button variant="ghost" size="icon" aria-label="Back to home" className="text-slate-400 hover:text-white"><ArrowLeft className="size-4" /></Button></Link><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200/70">Commercial governance</p><h1 className="text-lg font-bold">Pricing workspace</h1></div><span className="ml-auto rounded-full border border-amber-300/20 bg-amber-300/[0.06] px-3 py-1 text-xs text-amber-100">Evidence required</span></div>
+      </header>
+      <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6"><div className="rounded-3xl border border-white/10 bg-gradient-to-br from-cyan-400/[0.12] via-purple-400/[0.08] to-transparent p-6 sm:p-10"><div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200"><ShieldAlert className="size-4" />Truthful pricing boundary</div><h2 className="mt-4 max-w-3xl text-4xl font-black tracking-tight sm:text-5xl">Design fair offers only after the value and delivery are real.</h2><p className="mt-5 max-w-3xl text-base leading-7 text-slate-300">This workspace preserves pricing and commercial-planning concepts without asserting prices, revenue, conversion, subscriptions, AI execution, customer demand, or financial outcomes. No checkout, payment, upsell, or entitlement operation is connected.</p><div className="mt-7 flex flex-wrap gap-2"><Button onClick={() => setReviewed(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><ClipboardCheck className="mr-2 size-4" />{reviewed ? "Review recorded locally" : "Mark review locally"}</Button><Button onClick={() => setReviewed(false)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset</Button></div></div></section>
+      <section className="mx-auto max-w-5xl space-y-8 px-4 pb-14 sm:px-6"><div className="grid gap-4 sm:grid-cols-3"><div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5"><p className="text-xs uppercase tracking-widest text-slate-500">Prices</p><p className="mt-2 text-2xl font-black text-amber-200">Unconfigured</p><p className="mt-1 text-sm text-slate-500">No currency or catalog source</p></div><div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5"><p className="text-xs uppercase tracking-widest text-slate-500">Revenue</p><p className="mt-2 text-2xl font-black text-amber-200">Not claimed</p><p className="mt-1 text-sm text-slate-500">No financial evidence</p></div><div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5"><p className="text-xs uppercase tracking-widest text-slate-500">Checkout</p><p className="mt-2 text-2xl font-black text-amber-200">Blocked</p><p className="mt-1 text-sm text-slate-500">No payment provider</p></div></div><div className="flex gap-1 rounded-2xl border border-white/10 bg-white/[0.03] p-1">{tabs.map(tab => <button key={tab} type="button" onClick={() => setActiveTab(tab)} className={`flex-1 rounded-xl px-3 py-3 text-sm font-semibold capitalize transition ${activeTab === tab ? "bg-white/10 text-white" : "text-slate-500 hover:text-slate-300"}`}>{tab === "matrix" ? "Capability matrix" : tab === "value" ? "Value evidence" : "Governance gates"}</button>)}</div>{activeTab === "matrix" && <div className="grid gap-4 md:grid-cols-2">{tiers.map((tier, index) => <article key={tier.name} className="rounded-2xl border border-white/10 bg-white/[0.04] p-6"><div className="flex items-center justify-between"><div className="flex items-center gap-3"><span className="flex size-8 items-center justify-center rounded-full bg-cyan-300/10 text-cyan-200">{index + 1}</span><h3 className="font-bold">{tier.name}</h3></div><span className="text-xs text-amber-200">{tier.status}</span></div><p className="mt-4 text-sm leading-6 text-slate-400">{tier.description}</p><div className="mt-5 flex items-center gap-2 text-xs text-slate-500"><TrendingUp className="size-4 text-cyan-200" />No conversion or revenue claim</div></article>)}</div>}{activeTab === "value" && <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6"><h3 className="text-2xl font-black">Value evidence before price</h3><p className="mt-3 max-w-3xl text-sm leading-6 text-slate-400">A fair offer needs a defined capability, user need, delivery path, support commitment, accessibility standard, cancellation path, and evidence that the outcome can be delivered. A price label alone does not prove value or demand.</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{["Capability scope and limitations", "User research and consent", "Provider and fulfillment contract", "Cost and support ownership", "Refund and cancellation policy", "Measured outcome evidence"].map(item => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-4 text-sm text-slate-300"><CheckCircle2 className="size-4 text-cyan-200" />{item}<span className="ml-auto text-xs text-amber-200">Required</span></div>)}</div></div>}{activeTab === "governance" && <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6"><h3 className="text-2xl font-black">Commercial governance gates</h3><div className="mt-6 space-y-3">{gates.map(gate => <div key={gate} className="flex items-start gap-3 rounded-xl border border-white/10 p-4 text-sm leading-6 text-slate-300"><Lock className="mt-1 size-4 shrink-0 text-amber-200" />{gate}</div>)}</div></div>}<div className="rounded-2xl border border-dashed border-white/15 bg-amber-300/[0.04] p-6 text-sm leading-6 text-slate-400"><strong className="text-amber-100">No pricing or financial claim is made.</strong> This screen is a local governance workspace. It does not establish a live price, subscription, payment, customer, conversion, revenue, valuation, or business-performance result.</div></section>
+    </main>
   );
 }
