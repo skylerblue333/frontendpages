@@ -702,3 +702,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/agent-detail-mobile-390x844.png`
 ## agent-sprint-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/agent-sprint-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/agent-sprint-mobile-390x844.png`
+
+## agents-dashboard-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/agents-dashboard-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/agents-dashboard-mobile-390x844.png`
