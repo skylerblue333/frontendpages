@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "27b8fccf4fca23abe94068bbac6e6c49bf6210f1",
+  "generated_at_commit": "033354b27931133503f3e18d4c8623a94e91ad6d",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 170,
-  "routes_with_visual_checkpoint": 170,
+  "routes_with_review": 171,
+  "routes_with_visual_checkpoint": 171,
   "routes_with_placeholder_signal": 786,
   "routes": [
     {
@@ -1030,8 +1030,8 @@
       "component": "BillingHistory",
       "source": "client/src/pages/BillingHistory.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
