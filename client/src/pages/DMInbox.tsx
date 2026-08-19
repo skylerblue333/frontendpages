@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { ScreenPreviewBanner } from "@/components/ScreenExperience";
 import {
   MessageCircle, Search, Send, Phone, Video, MoreHorizontal,
   Sparkles, Coins, Image, Smile, Mic, Lock, Shield, Bot,
@@ -68,20 +69,13 @@ export default function DMInbox() {
     const sent = input;
     setInput("");
     if (selected === 6) {
-      setTimeout(() => {
-        const reply = { id: Date.now() + 1, from: "hope_ai", text: `Processing your intent: "${sent.slice(0, 40)}..." — I see strategic energy here. Let me think with you.`, time: now, mine: false, type: "ai" };
-        setMessages(prev => ({ ...prev, [selected]: [...(prev[selected] || []), reply] }));
-      }, 1200);
+      toast.info("Hope AI replies are unavailable until a verified AI provider is connected.");
     }
   };
 
   const sendTip = () => {
     if (!tipAmount || parseFloat(tipAmount) <= 0) return;
-    toast.success(`Sent ${tipAmount} SKY444 to ${thread?.name}`);
-    const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    const msg = { id: Date.now(), from: "me", text: `💸 Sent ${tipAmount} SKY444`, time: now, mine: true, type: "tip" };
-    setMessages(prev => ({ ...prev, [selected]: [...(prev[selected] || []), msg] }));
-    setTipAmount(""); setShowTipPanel(false);
+    toast.info("Token tipping is unavailable until a verified ledger, wallet authorization, and transaction status are connected.");
   };
 
   const selectThread = (id: number) => { setSelected(id); setMobileView("chat"); setShowAIPanel(false); setShowTipPanel(false); };
@@ -134,6 +128,7 @@ export default function DMInbox() {
       <div className={`${mobileView === "list" ? "hidden md:flex" : "flex"} flex-1 flex-col min-w-0`}>
         {thread ? (
           <>
+            <ScreenPreviewBanner title="Messaging preview boundary"><strong>Local conversation samples are shown for layout review only.</strong> Messages, presence, encryption, Hope AI replies, token tips, calls, uploads, and delivery status are not connected to a verified provider or ledger.</ScreenPreviewBanner>
             <div className="flex items-center gap-3 px-4 py-3 border-b border-border/30 bg-card/30 shrink-0">
               <Button size="icon" variant="ghost" className="h-8 w-8 md:hidden" onClick={() => setMobileView("list")}><ChevronLeft className="w-4 h-4" /></Button>
               <div className="relative shrink-0">
@@ -150,13 +145,13 @@ export default function DMInbox() {
                   {thread.verified && <Star className={`w-3 h-3 ${TIER_COLORS[thread.tier]}`} />}
                   {thread.isAI && <Sparkles className="w-3 h-3 text-primary" />}
                 </div>
-                <p className="text-[10px] text-muted-foreground">{thread.online ? (thread.isAI ? "Always watching. Always learning." : "Online") : "Offline"}</p>
+                  <p className="text-[10px] text-muted-foreground">{thread.online ? (thread.isAI ? "Provider unavailable" : "Preview presence") : "Preview offline"}</p>
               </div>
               <div className="flex items-center gap-1">
                 {!thread.isAI && (
                   <>
-                    <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => toast.info("Voice call coming soon")}><Phone className="w-4 h-4" /></Button>
-                    <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => toast.info("Video call coming soon")}><Video className="w-4 h-4" /></Button>
+                    <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => toast.info("Voice calling is unavailable until a verified communications provider is connected")} aria-label="Voice calling unavailable"><Phone className="w-4 h-4" /></Button>
+                    <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => toast.info("Video calling is unavailable until a verified communications provider is connected")} aria-label="Video calling unavailable"><Video className="w-4 h-4" /></Button>
                     <Button size="icon" variant="ghost" className={`h-8 w-8 ${showAIPanel ? "text-primary" : ""}`} onClick={() => { setShowAIPanel(v => !v); setShowTipPanel(false); }}><Bot className="w-4 h-4" /></Button>
                     <Button size="icon" variant="ghost" className={`h-8 w-8 ${showTipPanel ? "text-yellow-400" : ""}`} onClick={() => { setShowTipPanel(v => !v); setShowAIPanel(false); }}><Coins className="w-4 h-4" /></Button>
                   </>
@@ -194,7 +189,7 @@ export default function DMInbox() {
 
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
               <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground/50 py-2">
-                <Lock className="w-3 h-3" /><span>End-to-end encrypted</span><Shield className="w-3 h-3" />
+                <Lock className="w-3 h-3" />                <span>Encryption not verified in preview</span><Shield className="w-3 h-3" />
               </div>
               {msgs.map(msg => (
                 <div key={msg.id} className={`flex ${msg.mine ? "justify-end" : "justify-start"} gap-2`}>
@@ -217,8 +212,8 @@ export default function DMInbox() {
 
             <div className="px-4 py-3 border-t border-border/30 bg-card/30 shrink-0">
               <div className="flex items-center gap-2">
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => toast.info("Image upload coming soon")}><Image className="w-4 h-4" /></Button>
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => toast.info("Emoji picker coming soon")}><Smile className="w-4 h-4" /></Button>
+                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => toast.info("Image uploads are unavailable until storage and moderation are connected")} aria-label="Image uploads unavailable"><Image className="w-4 h-4" /></Button>
+                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => toast.info("Emoji picker is unavailable in this preview")} aria-label="Emoji picker unavailable"><Smile className="w-4 h-4" /></Button>
                 <Input className="flex-1 h-9 text-sm bg-background/50 border-border/30 rounded-full px-4" placeholder={thread.isAI ? "Ask Hope AI anything..." : `Message ${thread.name}...`} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && !e.shiftKey && sendMessage()} />
                 <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => toast.info("Voice message coming soon")}><Mic className="w-4 h-4" /></Button>
                 <Button size="icon" className="h-8 w-8 bg-primary hover:bg-primary/90 rounded-full" onClick={sendMessage} disabled={!input.trim()}><Send className="w-3.5 h-3.5" /></Button>
