@@ -826,3 +826,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/calendar-view-mobile-390x844.png`
 ## campaign-analytics-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/campaign-analytics-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/campaign-analytics-mobile-390x844.png`
+
+## campaign-builder-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/campaign-builder-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/campaign-builder-mobile-390x844.png`
