@@ -902,3 +902,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/churn-prediction-mobile-390x844.png
 ## classroom-management-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/classroom-management-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/classroom-management-mobile-390x844.png`
+
+## client-libraries-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/client-libraries-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/client-libraries-mobile-390x844.png`
