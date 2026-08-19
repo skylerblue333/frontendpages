@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "b75dbed90646e0da574086da93a3cd7d7b67861b",
+  "generated_at_commit": "71eab57ea59e98fbc1ec5e3a3dba67f3e1447b9a",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 154,
-  "routes_with_visual_checkpoint": 154,
+  "routes_with_review": 155,
+  "routes_with_visual_checkpoint": 155,
   "routes_with_placeholder_signal": 786,
   "routes": [
     {
@@ -526,8 +526,8 @@
       "component": "AdvancedAdminPanel",
       "source": "client/src/pages/AdvancedAdminPanel.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {

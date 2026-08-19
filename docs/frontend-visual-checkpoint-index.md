@@ -678,3 +678,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/admin-orders-mobile-390x844.png`
 ## admin-wallet-manager-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/admin-wallet-manager-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/admin-wallet-manager-mobile-390x844.png`
+
+## advanced-admin-panel-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/advanced-admin-panel-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/advanced-admin-panel-mobile-390x844.png`
