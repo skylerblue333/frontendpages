@@ -754,3 +754,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/block-rewards-mobile-390x844.png`
 ## block-user-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/block-user-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/block-user-mobile-390x844.png`
+
+## blockchain-monitor-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/blockchain-monitor-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/blockchain-monitor-mobile-390x844.png`
