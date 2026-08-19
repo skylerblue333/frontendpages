@@ -766,3 +766,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/blocked-users-mobile-390x844.png`
 ## blog-editor-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/blog-editor-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/blog-editor-mobile-390x844.png`
+
+## blog-publisher-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/blog-publisher-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/blog-publisher-mobile-390x844.png`
