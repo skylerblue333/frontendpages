@@ -419,6 +419,11 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-55-01_1778
 Blocked-join screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-55-26_6512.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_translation-enabled-community.md`
 
+## two-factor-setup-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-29-34_2367.webp`
+Enrollment-boundary screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-29-41_3792.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_two-factor-setup.md`
+
 ## unified-messaging-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-28-09_2300.webp`
 Blocked-call screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-28-15_2230.webp`
