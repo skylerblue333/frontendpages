@@ -362,6 +362,12 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-37-50_7100
 Create-draft screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-37-59_1655.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_livestream-dashboard.md`
 
+## match-space-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-40-03_2944.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_match-space.md`
+Cards screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-40-30_9889.webp`
+Blocked-like screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-40-42_7299.webp`
+
 ## memory-system-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-17-02_3005.webp`
 Blocked-store screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-17-17_2208.webp`
