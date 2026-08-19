@@ -303,6 +303,11 @@ Detail-view screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-31-10_
 Blocked-like screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-31-18_2537.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_discussion-forums.md`
 
+## dm-inbox-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-22-31_9887.webp`
+Blocked-delivery screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-22-44_4359.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_d-m-inbox.md`
+
 ## engineer-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-42-48_8371.webp`
 Local-input screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-42-59_5299.webp`
