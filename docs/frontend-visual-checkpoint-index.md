@@ -786,3 +786,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/budget-planner-mobile-390x844.png`
 ## bug-reporting-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/bug-reporting-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/bug-reporting-mobile-390x844.png`
+
+## bulk-operations-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/bulk-operations-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/bulk-operations-mobile-390x844.png`
