@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "8ea96210fb70b740fbf409b0c27bc8f36207d356",
+  "generated_at_commit": "3ebd6a4800bcc6b3490d23d42f7ba2ab1296a000",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 210,
-  "routes_with_visual_checkpoint": 210,
+  "routes_with_review": 211,
+  "routes_with_visual_checkpoint": 211,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -1543,8 +1543,8 @@
       "component": "ClassroomManagement",
       "source": "client/src/pages/ClassroomManagement.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
