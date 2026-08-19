@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "02c8150111e434606fe2df63ef817872809cf2a3",
+  "generated_at_commit": "6bc286a8294314341529d419e99b160c4e9f0ce2",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 188,
-  "routes_with_visual_checkpoint": 188,
+  "routes_with_review": 189,
+  "routes_with_visual_checkpoint": 189,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -1282,8 +1282,8 @@
       "component": "Calculator",
       "source": "client/src/pages/Calculator.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
