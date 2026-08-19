@@ -18,6 +18,7 @@ export default function CreateArticle() {
   const [preview, setPreview] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [status, setStatus] = useState("Local editor only. No draft or publication provider is connected.");
 
   const addTag = () => {
     const t = tagInput.trim().toLowerCase().replace(/\s+/g, "-");
@@ -27,12 +28,11 @@ export default function CreateArticle() {
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = () => {
     setSaving(true);
-    await new Promise(r => setTimeout(r, 800));
-    setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    setSaved(false);
+    setStatus("Draft saving is unavailable until authenticated persistence is connected. No external write was started.");
+    window.setTimeout(() => setSaving(false), 250);
   };
 
   const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
@@ -49,7 +49,7 @@ export default function CreateArticle() {
         </Link>
         <div className="flex-1 flex items-center gap-2">
           <Badge variant="outline" className="text-xs font-mono">Article</Badge>
-          {saved && <span className="text-xs text-purple-400">Saved ✓</span>}
+          {saved && <span className="text-xs text-purple-400">Saved locally ✓</span>}
         </div>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" className="gap-1" onClick={() => setPreview(p => !p)}>
@@ -58,12 +58,13 @@ export default function CreateArticle() {
           <Button variant="outline" size="sm" className="gap-1" onClick={handleSave} disabled={saving}>
             <Save className="h-4 w-4" />{saving ? "Saving..." : "Save Draft"}
           </Button>
-          <Button size="sm" className="bg-primary text-primary-foreground gap-1" disabled={!title || !content}>
-            <Send className="h-4 w-4" />Publish
+          <Button size="sm" className="bg-primary text-primary-foreground gap-1" disabled={!title || !content} onClick={() => setStatus("Publication is unavailable until authenticated content, moderation, visibility, and provider workflows are connected.")}>
+            <Send className="h-4 w-4" />Publish unavailable
           </Button>
         </div>
       </div>
 
+      <div className="border-b border-amber-300/15 bg-amber-300/[0.05] px-4 py-3 text-center text-xs text-amber-100/80" aria-live="polite">{status}</div>
       <div className="flex flex-1">
         {/* Editor */}
         <div className="flex-1 max-w-3xl mx-auto px-4 py-8 w-full">
@@ -146,15 +147,10 @@ export default function CreateArticle() {
             </div>
           </div>
 
-          {/* Monetization */}
-          <div className="rounded-xl border border-yellow-500/30 bg-yellow-500/5 p-4">
-            <p className="text-sm font-semibold text-yellow-400 mb-1">💰 Monetization</p>
-            <p className="text-xs text-muted-foreground mb-3">Earn SKY444 from tips and subscriber reads.</p>
-            <div className="space-y-2 text-xs text-muted-foreground">
-              <div className="flex justify-between"><span>Tip button</span><span className="text-purple-400">Enabled</span></div>
-              <div className="flex justify-between"><span>Subscriber bonus</span><span className="text-purple-400">+20%</span></div>
-              <div className="flex justify-between"><span>Est. per 1K reads</span><span className="text-yellow-400">~44 SKY444</span></div>
-            </div>
+          {/* Monetization boundary */}
+          <div className="rounded-xl border border-amber-300/20 bg-amber-300/[0.05] p-4">
+            <p className="text-sm font-semibold text-amber-200 mb-1">Monetization boundary</p>
+            <p className="text-xs leading-5 text-muted-foreground">Tips, subscriber access, revenue share, token rewards, and payout estimates are not shown until a verified ledger, identity, entitlement, payment, tax, and settlement provider is connected.</p>
           </div>
         </div>
       </div>
