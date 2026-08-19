@@ -364,6 +364,11 @@ AI-agent screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-18-30_714
 Blocked-execution screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-18-47_2042.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_developer-area.md`
 
+## developer-community-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-22-13_5458.webp`
+Blocked-discussion screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-22-27_3765.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_developer-community.md`
+
 ## discussion-forums-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-30-52_8152.webp`
 Detail-view screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-31-10_3476.webp`
