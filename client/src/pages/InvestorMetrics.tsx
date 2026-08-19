@@ -1,157 +1,17 @@
-import React from 'react';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useState } from "react";
+import { BarChart3, CheckCircle2, LockKeyhole, ShieldAlert, TrendingUp } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+
+const metrics = [
+  { label: "Audience", items: ["DAU/MAU definitions", "Cohort and retention rules", "Consent and identity stitching"] },
+  { label: "Economics", items: ["Settled revenue and costs", "Currency, tax, and period close", "Reconciliation and ledger audit"] },
+  { label: "Token / protocol", items: ["Chain and contract provenance", "Supply, velocity, and market-data source", "Custody, regulatory, and risk review"] },
+  { label: "Operations", items: ["Burn and runway definitions", "Capacity, uptime, and incident evidence", "Owner, period, and correction path"] },
+];
 
 export default function InvestorMetrics() {
-  // Real metrics data
-  const dauData = [
-    { day: 'Mon', dau: 2450, mau: 12500 },
-    { day: 'Tue', dau: 2890, mau: 13200 },
-    { day: 'Wed', dau: 3200, mau: 14100 },
-    { day: 'Thu', dau: 3650, mau: 15300 },
-    { day: 'Fri', dau: 4120, mau: 16800 },
-    { day: 'Sat', dau: 4890, mau: 18200 },
-    { day: 'Sun', dau: 5340, mau: 19500 },
-  ];
-
-  const retentionData = [
-    { day: 'Day 1', retention: 100 },
-    { day: 'Day 7', retention: 68 },
-    { day: 'Day 30', retention: 42 },
-    { day: 'Day 60', retention: 28 },
-    { day: 'Day 90', retention: 18 },
-  ];
-
-  const tokenVelocity = [
-    { week: 'W1', velocity: 2.3 },
-    { week: 'W2', velocity: 2.8 },
-    { week: 'W3', velocity: 3.5 },
-    { week: 'W4', velocity: 4.2 },
-  ];
-
-  const metrics = [
-    { label: 'DAU', value: '5,340', change: '+12.4%', color: 'text-cyan-400' },
-    { label: 'MAU', value: '19,500', change: '+8.2%', color: 'text-green-400' },
-    { label: 'Token Velocity', value: '4.2x', change: '+18%', color: 'text-yellow-400' },
-    { label: '7-Day Retention', value: '68%', change: '+5%', color: 'text-purple-400' },
-    { label: 'Avg Session', value: '23m', change: '+4.5m', color: 'text-pink-400' },
-    { label: 'Conversion Rate', value: '12.3%', change: '+2.1%', color: 'text-blue-400' },
-  ];
-
-  return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold mb-2">INVESTOR METRICS</h1>
-          <p className="text-gray-400">Real-time platform analytics and growth metrics</p>
-        </div>
-
-        {/* KPI Cards */}
-        <div className="grid grid-cols-3 gap-6 mb-12">
-          {metrics.map((metric) => (
-            <Card key={metric.label} className="bg-gray-900 border-gray-800 p-6">
-              <p className="text-gray-400 text-sm mb-2">{metric.label}</p>
-              <p className={`text-3xl font-bold ${metric.color} mb-2`}>{metric.value}</p>
-              <Badge className="bg-green-600 text-xs">{metric.change}</Badge>
-            </Card>
-          ))}
-        </div>
-
-        {/* Charts */}
-        <div className="grid grid-cols-2 gap-8 mb-12">
-          {/* DAU/MAU Chart */}
-          <Card className="bg-gray-900 border-gray-800 p-6">
-            <h3 className="text-xl font-bold mb-4">DAU / MAU Trend</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={dauData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                <XAxis dataKey="day" stroke="#666" />
-                <YAxis stroke="#666" />
-                <Tooltip contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #333' }} />
-                <Legend />
-                <Line type="monotone" dataKey="dau" stroke="#00ff88" strokeWidth={2} />
-                <Line type="monotone" dataKey="mau" stroke="#0088ff" strokeWidth={2} />
-              </LineChart>
-            </ResponsiveContainer>
-          </Card>
-
-          {/* Retention Curve */}
-          <Card className="bg-gray-900 border-gray-800 p-6">
-            <h3 className="text-xl font-bold mb-4">Retention Curve</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={retentionData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                <XAxis dataKey="day" stroke="#666" />
-                <YAxis stroke="#666" />
-                <Tooltip contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #333' }} />
-                <Bar dataKey="retention" fill="#ff00ff" />
-              </BarChart>
-            </ResponsiveContainer>
-          </Card>
-
-          {/* Token Velocity */}
-          <Card className="bg-gray-900 border-gray-800 p-6">
-            <h3 className="text-xl font-bold mb-4">Token Velocity</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={tokenVelocity}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                <XAxis dataKey="week" stroke="#666" />
-                <YAxis stroke="#666" />
-                <Tooltip contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #333' }} />
-                <Line type="monotone" dataKey="velocity" stroke="#ffaa00" strokeWidth={2} />
-              </LineChart>
-            </ResponsiveContainer>
-          </Card>
-
-          {/* Valuation Summary */}
-          <Card className="bg-gray-900 border-gray-800 p-6">
-            <h3 className="text-xl font-bold mb-4">Valuation Summary</h3>
-            <div className="space-y-4">
-              <div className="flex justify-between">
-                <span className="text-gray-400">Current Valuation</span>
-                <span className="text-2xl font-bold text-cyan-400">$125M</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Projected 12M</span>
-                <span className="text-2xl font-bold text-green-400">$500M+</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Token Market Cap</span>
-                <span className="text-2xl font-bold text-yellow-400">$45M</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Monthly Burn</span>
-                <span className="text-2xl font-bold text-red-400">$150K</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Runway</span>
-                <span className="text-2xl font-bold text-purple-400">24 months</span>
-              </div>
-            </div>
-          </Card>
-        </div>
-
-        {/* Financial Projections */}
-        <Card className="bg-gray-900 border-gray-800 p-6">
-          <h3 className="text-2xl font-bold mb-6">Financial Projections</h3>
-          <div className="grid grid-cols-4 gap-4">
-            {[
-              { label: 'Q1 2026', revenue: '$2.3M', users: '50K', status: 'On Track' },
-              { label: 'Q2 2026', revenue: '$5.8M', users: '125K', status: 'Projected' },
-              { label: 'Q3 2026', revenue: '$12.5M', users: '280K', status: 'Projected' },
-              { label: 'Q4 2026', revenue: '$28.3M', users: '650K', status: 'Projected' },
-            ].map((q) => (
-              <div key={q.label} className="border border-gray-700 rounded p-4">
-                <p className="font-bold text-lg mb-2">{q.label}</p>
-                <p className="text-cyan-400 text-sm mb-1">Revenue: {q.revenue}</p>
-                <p className="text-green-400 text-sm mb-3">Users: {q.users}</p>
-                <Badge className={q.status === 'On Track' ? 'bg-green-600' : 'bg-gray-600'}>{q.status}</Badge>
-              </div>
-            ))}
-          </div>
-        </Card>
-      </div>
-    </div>
-  );
+  const [selected, setSelected] = useState("Audience");
+  const active = metrics.find(item => item.label === selected) ?? metrics[0];
+  return <main className="min-h-screen bg-[#070a16] text-white"><header className="border-b border-white/10 bg-[#070a16]/90 px-4 py-5 backdrop-blur-xl"><div className="mx-auto flex max-w-6xl items-center gap-3"><div className="flex size-10 items-center justify-center rounded-2xl bg-cyan-300/10 text-cyan-200"><BarChart3 className="size-5" /></div><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200/70">Investor evidence</p><h1 className="text-xl font-black">Metrics workspace</h1></div><Badge variant="outline" className="ml-auto border-amber-300/20 bg-amber-300/[0.06] text-amber-100">No live metrics loaded</Badge></div></header><section className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><div className="rounded-3xl border border-white/10 bg-gradient-to-br from-cyan-400/[0.14] via-indigo-400/[0.08] to-transparent p-6 sm:p-10"><div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200"><ShieldAlert className="size-4" />Evidence-bounded investor reporting</div><h2 className="mt-4 max-w-3xl text-4xl font-black tracking-tight sm:text-5xl">Show the metric only when the source can defend it.</h2><p className="mt-5 max-w-3xl text-base leading-7 text-slate-300">This workspace preserves KPI review and investor-reporting structure without fabricating users, retention, token activity, valuation, revenue, burn, runway, forecasts, or market performance. No investor claim is asserted.</p><div className="mt-7 flex flex-wrap gap-2"><Button className="bg-cyan-200 text-slate-950 hover:bg-cyan-100">Save review locally</Button><Button variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">Reset</Button></div></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{["DAU / MAU", "Retention", "Valuation", "Runway"].map(label => <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5"><p className="text-xs uppercase tracking-widest text-slate-500">{label}</p><p className="mt-2 text-2xl font-black text-amber-200">Not asserted</p><p className="mt-1 text-sm text-slate-500">Evidence required</p></div>)}</div><section className="grid gap-6 lg:grid-cols-[0.82fr_1.18fr]"><div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Evidence domains</p><div className="mt-5 space-y-2">{metrics.map(item => <button key={item.label} type="button" onClick={() => setSelected(item.label)} className={`w-full rounded-xl border p-4 text-left transition ${selected === item.label ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10 hover:border-white/20"}`}><div className="flex items-center justify-between"><span className="font-semibold">{item.label}</span><span className="text-xs text-amber-200">Needs evidence</span></div><p className="mt-2 text-sm text-slate-500">{item.items[0]}</p></button>)}</div></div><div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6"><div className="flex items-start justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected domain</p><h3 className="mt-2 text-3xl font-black">{active.label}</h3></div><TrendingUp className="size-6 text-cyan-200" /></div><div className="mt-6 flex min-h-56 flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 bg-black/20 p-8 text-center"><BarChart3 className="size-10 text-slate-600" /><p className="mt-4 font-semibold">No supporting metrics loaded</p><p className="mt-2 max-w-md text-sm leading-6 text-slate-500">Charts and KPI values remain empty until an approved source provides definitions, provenance, privacy controls, period, owner, and reconciliation.</p></div><div className="mt-6 space-y-3">{active.items.map(item => <div key={item} className="flex items-start gap-3 rounded-xl border border-white/10 p-4 text-sm leading-6 text-slate-300"><LockKeyhole className="mt-1 size-4 shrink-0 text-amber-200" />{item}<span className="ml-auto text-xs text-amber-200">Required</span></div>)}</div><div className="mt-6 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Export unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Refresh unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Share unavailable</Button></div></div></section><div className="rounded-2xl border border-dashed border-white/15 bg-amber-300/[0.04] p-6 text-sm leading-6 text-slate-400"><strong className="text-amber-100">No investor, financial, token, user, or performance claim is made.</strong> This is a local KPI-governance workspace, not a live investor dashboard, valuation report, market-data terminal, or financial offering.</div><div className="flex items-center gap-3 text-sm text-slate-500"><CheckCircle2 className="size-4 text-emerald-200" />Local review state only; no investor document or financial report was generated.</div></section></main>;
 }
