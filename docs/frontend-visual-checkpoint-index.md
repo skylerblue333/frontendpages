@@ -333,6 +333,11 @@ Blocked-credential screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_07-21-53_5026.webp`
 Blocked-manage screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_07-22-02_8482.webp`
 
+## dependency-graph-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-03-42_3652.webp`
+Blocked-new-task screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-04-01_6271.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_dependency-graph.md`
+
 ## discussion-forums-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-30-52_8152.webp`
 Detail-view screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-31-10_3476.webp`
