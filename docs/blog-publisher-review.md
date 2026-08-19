@@ -1,0 +1,5 @@
+# BlogPublisher review
+
+The `/blog-publisher` route is not production-ready. It imports `trpc`, `Tabs`, `TabsContent`, `TabsList`, `TabsTrigger`, and `Settings` without establishing a real contract. The authentication gate renders a nonfunctional `Sign In` button, while the authenticated view exposes no-op `New` and settings controls, an unused `isLoading` state, and an empty data state. There is no verified article identity, author scope, publication target, scheduling model, SEO metadata, moderation state, delivery status, revision history, rollback, permissions, persistence, or error/retry contract.
+
+The route must not imply that an article can be scheduled or published. It should be converted to a strictly typed local publication-readiness workspace that allows only truthful local search state and clearly discloses unavailable new, schedule, publish, preview, metadata, media, and settings actions. No article, author, publication, audience, delivery, engagement, or persistence outcome may be fabricated. The revised route requires TypeScript/build validation and desktop/mobile visual evidence.
