@@ -706,3 +706,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/agent-sprint-mobile-390x844.png`
 ## agents-dashboard-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/agents-dashboard-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/agents-dashboard-mobile-390x844.png`
+
+## alert-dialog-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/alert-dialog-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/alert-dialog-mobile-390x844.png`
