@@ -27,7 +27,7 @@ with result_path.open('w', encoding='utf-8') as log:
         slug = re.sub(r'[^a-zA-Z0-9]+', '-', path.strip('/')).strip('-') or 'home'
         target = Path(out) / f"{index:04d}-{slug}.png"
         url = base.rstrip('/') + (path if path.startswith('/') else '/' + path)
-        cmd = ['chromium', '--headless', '--no-sandbox', '--disable-gpu', '--hide-scrollbars', f'--window-size={width},{height}', '--run-all-compositor-stages-before-draw', f'--screenshot={target}', url]
+        cmd = ['chromium', '--headless', '--no-sandbox', '--disable-gpu', '--hide-scrollbars', f'--window-size={width},{height}', '--run-all-compositor-stages-before-draw', '--virtual-time-budget=5000', f'--screenshot={target}', url]
         started = time.time()
         try:
             proc = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=25)
