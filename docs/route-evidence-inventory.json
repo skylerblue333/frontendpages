@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "5657c08837e5e89f8ce79dfc30a348cb364c883a",
+  "generated_at_commit": "5741d6d78d86150a78ee27a60af2f286be8ed887",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 141,
-  "routes_with_visual_checkpoint": 141,
+  "routes_with_review": 142,
+  "routes_with_visual_checkpoint": 142,
   "routes_with_placeholder_signal": 786,
   "routes": [
     {
@@ -256,8 +256,8 @@
       "component": "APILogs",
       "source": "client/src/pages/APILogs.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {

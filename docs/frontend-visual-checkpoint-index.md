@@ -626,3 +626,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/ai-training-loops-mobile-390x844.pn
 ## a-p-i-docs-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/api-docs-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/api-docs-mobile-390x844.png`
+
+## a-p-i-logs-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/api-logs-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/api-logs-mobile-390x844.png`
