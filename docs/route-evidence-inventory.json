@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "74776ce8380c9fe192db8a8299e6d9bdd60a8eba",
+  "generated_at_commit": "d1798e312ae1310196b3390c6b1a24a8981ff3f4",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 150,
-  "routes_with_visual_checkpoint": 150,
+  "routes_with_review": 151,
+  "routes_with_visual_checkpoint": 151,
   "routes_with_placeholder_signal": 786,
   "routes": [
     {
@@ -463,8 +463,8 @@
       "component": "AddressBook",
       "source": "client/src/pages/AddressBook.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
