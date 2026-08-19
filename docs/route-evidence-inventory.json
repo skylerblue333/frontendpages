@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "71eab57ea59e98fbc1ec5e3a3dba67f3e1447b9a",
+  "generated_at_commit": "b3ed30bfff2358fa1166c320f26d1c1509a071fc",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 155,
-  "routes_with_visual_checkpoint": 155,
+  "routes_with_review": 156,
+  "routes_with_visual_checkpoint": 156,
   "routes_with_placeholder_signal": 786,
   "routes": [
     {
@@ -598,8 +598,8 @@
       "component": "AgentBuilder",
       "source": "client/src/pages/AgentBuilder.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {

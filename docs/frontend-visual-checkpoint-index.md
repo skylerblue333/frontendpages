@@ -682,3 +682,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/admin-wallet-manager-mobile-390x844
 ## advanced-admin-panel-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/advanced-admin-panel-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/advanced-admin-panel-mobile-390x844.png`
+
+## agent-builder-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/agent-builder-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/agent-builder-mobile-390x844.png`
