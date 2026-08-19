@@ -1,295 +1,288 @@
-import { useState, useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useMemo, useState } from "react";
+import {
+  ArrowDownLeft,
+  ArrowUpRight,
+  CircleSlash2,
+  Download,
+  FileClock,
+  Filter,
+  LockKeyhole,
+  RefreshCw,
+  ShieldAlert,
+  WalletCards,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowUpRight, ArrowDownLeft, Download, Filter, Search, TrendingUp, TrendingDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { PageHeader } from "@/components/PageHeader";
 
-interface Transaction {
+type TransactionType =
+  "All" | "Send" | "Receive" | "Stake" | "Swap" | "Purchase";
+type TransactionStatus = "All" | "Completed" | "Pending" | "Failed";
+type TransactionConcept = {
   id: string;
-  type: "send" | "receive" | "stake" | "unstake" | "swap" | "purchase";
-  amount: number;
-  currency: string;
-  counterparty: string;
-  timestamp: Date;
-  status: "completed" | "pending" | "failed";
-  hash: string;
-  fee?: number;
-}
-
-const mockTransactions: Transaction[] = [
+  type: Exclude<TransactionType, "All">;
+  summary: string;
+};
+const concepts: TransactionConcept[] = [
   {
-    id: "1",
-    type: "stake",
-    amount: 1000,
-    currency: "SKY4",
-    counterparty: "Staking Pool",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60),
-    status: "completed",
-    hash: "0x123abc...",
-    fee: 0.5,
+    id: "send",
+    type: "Send",
+    summary:
+      "Outbound transaction concept pending wallet ownership, signing, network, and receipt verification.",
   },
   {
-    id: "2",
-    type: "receive",
-    amount: 50,
-    currency: "DOGE",
-    counterparty: "Referral Bonus",
-    timestamp: new Date(Date.now() - 2000 * 60 * 60),
-    status: "completed",
-    hash: "0x456def...",
+    id: "receive",
+    type: "Receive",
+    summary:
+      "Inbound transaction concept pending indexed ledger data, address ownership, and confirmation status.",
   },
   {
-    id: "3",
-    type: "swap",
-    amount: 100,
-    currency: "ETH",
-    counterparty: "SKY4",
-    timestamp: new Date(Date.now() - 3000 * 60 * 60),
-    status: "completed",
-    hash: "0x789ghi...",
-    fee: 2,
+    id: "stake",
+    type: "Stake",
+    summary:
+      "Staking concept pending chain support, lock terms, validator data, and verified rewards.",
   },
   {
-    id: "4",
-    type: "send",
-    amount: 25,
-    currency: "SKY4",
-    counterparty: "0x7a2b...c9d8",
-    timestamp: new Date(Date.now() - 4000 * 60 * 60),
-    status: "pending",
-    hash: "0xabc123...",
-    fee: 0.1,
+    id: "swap",
+    type: "Swap",
+    summary:
+      "Swap concept pending exchange routing, quote freshness, slippage, signing, and settlement.",
   },
   {
-    id: "5",
-    type: "purchase",
-    amount: 99.99,
-    currency: "USD",
-    counterparty: "Marketplace",
-    timestamp: new Date(Date.now() - 5000 * 60 * 60),
-    status: "completed",
-    hash: "0xdef456...",
+    id: "purchase",
+    type: "Purchase",
+    summary:
+      "Purchase concept pending merchant, payment, order, and fulfillment contracts.",
   },
 ];
-
-export function TransactionHistory() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState("all");
-  const [filterStatus, setFilterStatus] = useState("all");
-  const [sortBy, setSortBy] = useState("recent");
-
-  const filteredTransactions = useMemo(() => {
-    let filtered = mockTransactions;
-
-    if (searchTerm) {
-      filtered = filtered.filter(
-        (tx) =>
-          tx.counterparty.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          tx.hash.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    if (filterType !== "all") {
-      filtered = filtered.filter((tx) => tx.type === filterType);
-    }
-
-    if (filterStatus !== "all") {
-      filtered = filtered.filter((tx) => tx.status === filterStatus);
-    }
-
-    if (sortBy === "recent") {
-      filtered.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
-    } else if (sortBy === "oldest") {
-      filtered.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
-    } else if (sortBy === "highest") {
-      filtered.sort((a, b) => b.amount - a.amount);
-    } else if (sortBy === "lowest") {
-      filtered.sort((a, b) => a.amount - b.amount);
-    }
-
-    return filtered;
-  }, [searchTerm, filterType, filterStatus, sortBy]);
-
-  const stats = useMemo(() => {
-    const totalSent = mockTransactions
-      .filter((tx) => tx.type === "send")
-      .reduce((sum, tx) => sum + tx.amount, 0);
-    const totalReceived = mockTransactions
-      .filter((tx) => tx.type === "receive")
-      .reduce((sum, tx) => sum + tx.amount, 0);
-    const totalFees = mockTransactions.reduce((sum, tx) => sum + (tx.fee || 0), 0);
-
-    return { totalSent, totalReceived, totalFees };
-  }, []);
-
-  const getTypeIcon = (type: string) => {
-    return type === "send" || type === "unstake" ? (
-      <ArrowUpRight className="w-4 h-4 text-red-400" />
-    ) : (
-      <ArrowDownLeft className="w-4 h-4 text-green-400" />
+export default function TransactionHistory() {
+  const [type, setType] = useState<TransactionType>("All");
+  const [statusFilter, setStatusFilter] = useState<TransactionStatus>("All");
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState(
+    "Ledger service unavailable. Showing local transaction concepts only."
+  );
+  const filtered = useMemo(
+    () =>
+      concepts.filter(
+        item =>
+          (type === "All" || item.type === type) &&
+          `${item.type} ${item.summary}`
+            .toLowerCase()
+            .includes(query.toLowerCase())
+      ),
+    [query, type]
+  );
+  const blocked = (action: string) =>
+    setStatus(
+      `${action} is unavailable locally. No wallet, ledger, balance, signing, transaction, order, export, or account operation was started.`
     );
-  };
-
-  const getStatusBadge = (status: string) => {
-    if (status === "completed") return <Badge className="bg-green-500/20 text-green-400">Completed</Badge>;
-    if (status === "pending") return <Badge className="bg-yellow-500/20 text-yellow-400">Pending</Badge>;
-    return <Badge className="bg-red-500/20 text-red-400">Failed</Badge>;
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
-      <div className="max-w-6xl mx-auto space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Transaction History</h1>
-          <p className="text-slate-400">View and manage all your transactions</p>
+    <div className="min-h-screen bg-background">
+      <PageHeader
+        icon={FileClock}
+        title="Transaction history"
+        subtitle="Review local financial transaction concepts without fabricated balances, amounts, counterparties, hashes, timestamps, statuses, or settlement outcomes."
+        badge="Local preview"
+        badgeVariant="outline"
+      />
+      <div className="mx-auto max-w-7xl space-y-8 px-4 py-8">
+        <div className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4 text-sm text-amber-100">
+          <strong>Ledger service unavailable.</strong> No verified wallet,
+          blockchain indexer, exchange, merchant, payment, staking, or
+          transaction receipt service is connected.
         </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="border-slate-700 bg-slate-800/50">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-slate-400">Total Sent</p>
-                  <p className="text-2xl font-bold text-red-400">${stats.totalSent.toFixed(2)}</p>
-                </div>
-                <TrendingUp className="w-8 h-8 text-red-400/50" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-slate-700 bg-slate-800/50">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-slate-400">Total Received</p>
-                  <p className="text-2xl font-bold text-green-400">${stats.totalReceived.toFixed(2)}</p>
-                </div>
-                <TrendingDown className="w-8 h-8 text-green-400/50" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-slate-700 bg-slate-800/50">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-slate-400">Total Fees</p>
-                  <p className="text-2xl font-bold text-purple-400">${stats.totalFees.toFixed(2)}</p>
-                </div>
-                <Filter className="w-8 h-8 text-purple-400/50" />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Filters */}
-        <Card className="border-slate-700 bg-slate-800/50">
-          <CardContent className="pt-6">
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-3 w-4 h-4 text-slate-500" />
-                <Input
-                  placeholder="Search by address or hash..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 bg-slate-700 border-slate-600 text-white"
-                />
-              </div>
-
-              <Select value={filterType} onValueChange={setFilterType}>
-                <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
-                  <SelectValue placeholder="Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
-                  <SelectItem value="send">Send</SelectItem>
-                  <SelectItem value="receive">Receive</SelectItem>
-                  <SelectItem value="stake">Stake</SelectItem>
-                  <SelectItem value="swap">Swap</SelectItem>
-                  <SelectItem value="purchase">Purchase</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select value={filterStatus} onValueChange={setFilterStatus}>
-                <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="failed">Failed</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
-                  <SelectValue placeholder="Sort" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="recent">Most Recent</SelectItem>
-                  <SelectItem value="oldest">Oldest First</SelectItem>
-                  <SelectItem value="highest">Highest Amount</SelectItem>
-                  <SelectItem value="lowest">Lowest Amount</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Button className="bg-purple-600 hover:bg-purple-700">
-                <Download className="w-4 h-4 mr-2" />
-                Export
+        <Card className="border-slate-800 bg-slate-900/75 p-6">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="text-xs uppercase tracking-widest text-slate-500">
+                Local ledger structure
+              </p>
+              <h2 className="mt-1 text-2xl font-semibold">
+                Transaction concepts
+              </h2>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                onClick={() => blocked("Export transaction history")}
+                size="sm"
+                variant="outline"
+              >
+                <Download className="mr-2 h-4 w-4" /> Export unavailable
+              </Button>
+              <Button
+                onClick={() => blocked("Refresh transaction history")}
+                size="sm"
+                variant="outline"
+              >
+                <RefreshCw className="mr-2 h-4 w-4" /> Refresh unavailable
               </Button>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Transactions List */}
-        <Card className="border-slate-700 bg-slate-800/50">
-          <CardHeader>
-            <CardTitle className="text-white">
-              Transactions ({filteredTransactions.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {filteredTransactions.length === 0 ? (
-                <p className="text-center text-slate-400 py-8">No transactions found</p>
-              ) : (
-                filteredTransactions.map((tx) => (
-                  <div
-                    key={tx.id}
-                    className="flex items-center justify-between p-4 bg-slate-700/50 rounded-lg hover:bg-slate-700 transition"
-                  >
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className="p-2 bg-slate-600 rounded-lg">{getTypeIcon(tx.type)}</div>
-                      <div className="flex-1">
-                        <p className="font-medium text-white capitalize">{tx.type}</p>
-                        <p className="text-sm text-slate-400">{tx.counterparty}</p>
-                      </div>
-                    </div>
-
-                    <div className="text-right">
-                      <p className="font-bold text-white">
-                        {tx.type === "send" || tx.type === "unstake" ? "-" : "+"}
-                        {tx.amount} {tx.currency}
-                      </p>
-                      <p className="text-sm text-slate-400">
-                        {tx.timestamp.toLocaleDateString()} {tx.timestamp.toLocaleTimeString()}
-                      </p>
-                    </div>
-
-                    <div className="ml-4">{getStatusBadge(tx.status)}</div>
-                  </div>
-                ))
-              )}
+          </div>
+          <p className="mt-3 text-sm leading-6 text-slate-400">
+            Filters are local controls. No real transaction query, wallet
+            lookup, balance calculation, or receipt verification occurs.
+          </p>
+          <div className="mt-6 grid gap-4 md:grid-cols-[1fr_auto_auto]">
+            <div className="relative">
+              <Filter className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
+              <Input
+                aria-label="Search transactions"
+                className="pl-9"
+                onChange={event => setQuery(event.target.value)}
+                placeholder="Search local concepts"
+                value={query}
+              />
             </div>
-          </CardContent>
+            <div className="flex flex-wrap gap-2">
+              {(
+                [
+                  "All",
+                  "Send",
+                  "Receive",
+                  "Stake",
+                  "Swap",
+                  "Purchase",
+                ] as TransactionType[]
+              ).map(item => (
+                <Button
+                  aria-pressed={type === item}
+                  key={item}
+                  onClick={() => setType(item)}
+                  size="sm"
+                  variant={type === item ? "default" : "outline"}
+                >
+                  {item}
+                </Button>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {(
+                ["All", "Completed", "Pending", "Failed"] as TransactionStatus[]
+              ).map(item => (
+                <Button
+                  aria-pressed={statusFilter === item}
+                  key={item}
+                  onClick={() => setStatusFilter(item)}
+                  size="sm"
+                  variant={statusFilter === item ? "default" : "outline"}
+                >
+                  {item}
+                </Button>
+              ))}
+            </div>
+          </div>
         </Card>
+        <Card className="border-slate-800 bg-slate-900/75 p-6">
+          <div className="mb-5 flex items-center justify-between">
+            <div>
+              <p className="text-xs uppercase tracking-widest text-slate-500">
+                Ledger
+              </p>
+              <h2 className="mt-1 text-xl font-semibold">
+                {filtered.length} local concepts
+              </h2>
+            </div>
+            <Badge variant="outline">Status source unavailable</Badge>
+          </div>
+          <div className="space-y-3">
+            {filtered.map(item => (
+              <div
+                className="rounded-xl border border-slate-800 bg-slate-950/50 p-5"
+                key={item.id}
+              >
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-800">
+                      {item.type === "Receive" ? (
+                        <ArrowDownLeft className="h-5 w-5 text-emerald-300" />
+                      ) : (
+                        <ArrowUpRight className="h-5 w-5 text-cyan-200" />
+                      )}
+                    </div>
+                    <div>
+                      <p className="font-medium">
+                        {item.type} transaction concept
+                      </p>
+                      <p className="mt-1 text-sm text-slate-400">
+                        {item.summary}
+                      </p>
+                    </div>
+                  </div>
+                  <Badge variant="outline">Unavailable</Badge>
+                </div>
+                <div className="mt-4 grid gap-2 sm:grid-cols-4">
+                  {(
+                    [
+                      ["Amount", "Unavailable"],
+                      ["Counterparty", "Unavailable"],
+                      ["Timestamp", "Unavailable"],
+                      ["Hash / receipt", "Unavailable"],
+                    ] as Array<[string, string]>
+                  ).map(([label, value]) => (
+                    <div
+                      className="rounded-lg border border-slate-800 p-3"
+                      key={label}
+                    >
+                      <p className="text-xs text-slate-500">{label}</p>
+                      <p className="mt-1 text-sm">{value}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+            {filtered.length === 0 && (
+              <div className="rounded-xl border border-slate-800 p-8 text-center text-sm text-slate-400">
+                No local concepts match the current filters.
+              </div>
+            )}
+          </div>
+        </Card>
+        <div className="grid gap-6 md:grid-cols-3">
+          <Card className="border-slate-800 bg-slate-900/75 p-5">
+            <WalletCards className="h-5 w-5 text-cyan-200" />
+            <h2 className="mt-3 font-semibold">No balance claims</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-400">
+              No balance, token amount, fiat value, fee, reward, or portfolio
+              effect is calculated.
+            </p>
+          </Card>
+          <Card className="border-slate-800 bg-slate-900/75 p-5">
+            <ShieldAlert className="h-5 w-5 text-amber-200" />
+            <h2 className="mt-3 font-semibold">No settlement claims</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-400">
+              No transaction status, hash, confirmation, failure, order, or
+              receipt is fabricated.
+            </p>
+          </Card>
+          <Card className="border-slate-800 bg-slate-900/75 p-5">
+            <CircleSlash2 className="h-5 w-5 text-slate-500" />
+            <h2 className="mt-3 font-semibold">No financial mutation</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-400">
+              No wallet connection, signing, transfer, swap, stake, purchase,
+              export, or account operation is available locally.
+            </p>
+          </Card>
+        </div>
+        <Card className="border-slate-800 bg-slate-900/75 p-5">
+          <div className="flex gap-3">
+            <LockKeyhole className="h-5 w-5 text-cyan-200" />
+            <p className="text-sm leading-6 text-slate-400">
+              Production transaction history requires network validation,
+              address ownership, receipt verification, replay protection,
+              immutable audit records, and secure key boundaries.
+            </p>
+          </div>
+        </Card>
+        <p
+          aria-live="polite"
+          className="rounded-lg border border-slate-800 p-4 text-sm text-slate-400"
+        >
+          {status}
+        </p>
       </div>
     </div>
   );
 }
-
-export default TransactionHistory;
