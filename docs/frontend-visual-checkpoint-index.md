@@ -790,3 +790,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/bug-reporting-mobile-390x844.png`
 ## bulk-operations-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/bulk-operations-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/bulk-operations-mobile-390x844.png`
+
+## bulk-ordering-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/bulk-ordering-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/bulk-ordering-mobile-390x844.png`
