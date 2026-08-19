@@ -385,6 +385,11 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-32-34_8079
 Blocked-connection screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-32-45_3715.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_discord-integration.md`
 
+## discover-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_04-53-09_5205.webp`
+Blocked-community screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_04-53-16_5486.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_discover.md`
+
 ## discussion-forums-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-30-52_8152.webp`
 Detail-view screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-31-10_3476.webp`
