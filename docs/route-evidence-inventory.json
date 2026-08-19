@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "abe252f5f2de26488cdd7b0899df7bc66cd2dc90",
+  "generated_at_commit": "4a8257e10ebc9470daa62bb1cb65f6952ccd2a8f",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 174,
-  "routes_with_visual_checkpoint": 174,
+  "routes_with_review": 175,
+  "routes_with_visual_checkpoint": 175,
   "routes_with_placeholder_signal": 786,
   "routes": [
     {
@@ -1084,8 +1084,8 @@
       "component": "BlockedUsers",
       "source": "client/src/pages/BlockedUsers.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
