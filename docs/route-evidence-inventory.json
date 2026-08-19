@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "dba9b8f82092e6be49ea2a2b2363a448dbd5bf3b",
+  "generated_at_commit": "b258711ba23438c33595b9ec43b6de430be0e165",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 182,
-  "routes_with_visual_checkpoint": 182,
+  "routes_with_review": 183,
+  "routes_with_visual_checkpoint": 183,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -1219,8 +1219,8 @@
       "component": "BulkOperations",
       "source": "client/src/pages/BulkOperations.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
