@@ -318,6 +318,12 @@ Route text capture: `/home/ubuntu/page_texts/localhost_5175_escrow-shop.md`
 
 ## experiment-factory-visual-checkpoint.md
 
+## ghost-mode-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-20-26_1793.webp`
+Mobile preview screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-20-34_8408.webp`
+Blocked-generation screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-20-40_8434.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_ghost-mode.md`
+
 ## guilds-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-40-35_5105.webp`
 Leaderboard screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-40-56_3483.webp`
