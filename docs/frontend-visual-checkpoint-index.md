@@ -910,3 +910,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/client-libraries-mobile-390x844.png
 ## closing-checklist-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/closing-checklist-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/closing-checklist-mobile-390x844.png`
+
+## code-quality-dashboard-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/code-quality-dashboard-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/code-quality-dashboard-mobile-390x844.png`

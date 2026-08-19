@@ -1,187 +1,258 @@
-// @ts-nocheck
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { useMemo, useState } from "react";
+import {
+  Accessibility,
+  BadgeCheck,
+  Code2,
+  Database,
+  FileCheck2,
+  LockKeyhole,
+  Search,
+  ShieldCheck,
+  TerminalSquare,
+} from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Code2, Zap, TrendingUp, AlertCircle, CheckCircle, Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+
+type QualityCapability = {
+  title: string;
+  description: string;
+  icon: typeof Database;
+};
+
+const qualityCapabilities: QualityCapability[] = [
+  {
+    title: "Repository and scope",
+    description:
+      "No repository, commit, branch, language, dependency graph, generated-file policy, or scan scope is connected to this dashboard.",
+    icon: Database,
+  },
+  {
+    title: "Evidence and tool provenance",
+    description:
+      "No formatter, linter, type checker, test runner, build, coverage, benchmark, timestamp, tool version, or reproducible artifact is available.",
+    icon: TerminalSquare,
+  },
+  {
+    title: "Security and maintainability",
+    description:
+      "Dependency advisories, secret detection, authorization review, complexity, duplication, accessibility, and maintainability findings are not verified.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Review and remediation",
+    description:
+      "No issue severity, quality score, grade, recommendation, auto-fix, approval, comparison, or persisted remediation state is configured.",
+    icon: BadgeCheck,
+  },
+];
 
 export default function CodeQualityDashboard() {
-  const [code, setCode] = useState("");
-  const [language, setLanguage] = useState("typescript");
-  const [evaluating, setEvaluating] = useState(false);
-  const [result, setResult] = useState<any>(null);
-
-  const evaluateMutation = trpc.codeQuality.evaluateCode.useMutation();
-
-  const handleEvaluate = async () => {
-    setEvaluating(true);
-    try {
-      const res = await evaluateMutation.mutateAsync({ code, language });
-      setResult(res);
-    } finally {
-      setEvaluating(false);
-    }
-  };
-
-  const getGradeColor = (grade: string) => {
-    switch (grade) {
-      case "A": return "text-purple-400 bg-purple-600/20";
-      case "B": return "text-blue-400 bg-blue-500/20";
-      case "C": return "text-yellow-400 bg-yellow-500/20";
-      default: return "text-red-400 bg-red-500/20";
-    }
-  };
+  const [searchQuery, setSearchQuery] = useState("");
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const visibleCapabilities = useMemo(
+    () =>
+      qualityCapabilities.filter(({ title, description }) =>
+        `${title} ${description}`.toLowerCase().includes(normalizedQuery)
+      ),
+    [normalizedQuery]
+  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg">
-              <Code2 className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold text-white">Code Quality Dashboard</h1>
-              <p className="text-slate-400">AI-powered code evaluation & improvement</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-3 gap-6">
-          {/* Input Section */}
-          <div className="col-span-2 space-y-4">
-            <Card className="bg-slate-800/50 border-slate-700/50 p-6">
-              <label className="block text-sm font-semibold text-white mb-3">Paste Your Code</label>
-              <Textarea
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                placeholder="Paste your code here..."
-                className="bg-slate-900 border-slate-700 text-white font-mono text-sm h-64 resize-none"
-              />
-
-              <div className="flex gap-4 mt-4">
-                <Select value={language} onValueChange={setLanguage}>
-                  <SelectTrigger className="w-40 bg-slate-900 border-slate-700">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="typescript">TypeScript</SelectItem>
-                    <SelectItem value="javascript">JavaScript</SelectItem>
-                    <SelectItem value="python">Python</SelectItem>
-                    <SelectItem value="rust">Rust</SelectItem>
-                    <SelectItem value="go">Go</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Button
-                  onClick={handleEvaluate}
-                  disabled={!code || evaluating}
-                  className="flex-1 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700"
-                >
-                  <Zap className="w-4 h-4 mr-2" />
-                  {evaluating ? "Evaluating..." : "Evaluate Code"}
-                </Button>
+    <main
+      className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 lg:px-8"
+      aria-labelledby="code-quality-dashboard-title"
+    >
+      <div className="mx-auto max-w-6xl space-y-6">
+        <header className="rounded-2xl border border-border/70 bg-card/80 p-6 shadow-sm sm:p-8">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+            <div className="space-y-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="outline" className="gap-2">
+                  <LockKeyhole className="size-3.5" aria-hidden="true" />
+                  Engineering evidence boundary
+                </Badge>
+                <Badge variant="secondary">Not active</Badge>
               </div>
-            </Card>
-
-            {/* Suggestions */}
-            {result?.suggestions && (
-              <Card className="bg-slate-800/50 border-slate-700/50 p-6">
-                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                  <AlertCircle className="w-5 h-5 text-yellow-400" />
-                  Suggestions for Improvement
-                </h3>
-                <div className="space-y-3">
-                  {result.suggestions.map((s: string, i: number) => (
-                    <div key={i} className="flex gap-3 p-3 bg-slate-900/50 rounded-lg border border-slate-700/50">
-                      <CheckCircle className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-slate-300">{s}</span>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            )}
+              <div>
+                <h1
+                  id="code-quality-dashboard-title"
+                  className="text-3xl font-semibold tracking-tight sm:text-4xl"
+                >
+                  Code quality dashboard readiness
+                </h1>
+                <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground sm:text-base">
+                  This route documents reproducible engineering-quality evidence
+                  without pretending that a repository was scanned or that
+                  scores, grades, issues, or auto-fixes are authoritative.
+                </p>
+              </div>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              disabled
+              aria-disabled="true"
+            >
+              Load quality evidence unavailable
+            </Button>
           </div>
+        </header>
 
-          {/* Results Section */}
-          <div className="space-y-4">
-            {result ? (
-              <>
-                {/* Quality Score */}
-                <Card className="bg-gradient-to-br from-purple-900/30 to-pink-900/30 border-purple-500/30 p-6">
-                  <div className="text-center">
-                    <div className={`text-5xl font-bold mb-2 ${getGradeColor(result.grade)}`}>
-                      {result.grade}
-                    </div>
-                    <div className="text-3xl font-bold text-white mb-1">{result.qualityScore}/100</div>
-                    <p className="text-slate-400 text-sm">Quality Score</p>
-                  </div>
-                </Card>
+        <section
+          className="grid gap-6 lg:grid-cols-[1.35fr_1fr]"
+          aria-label="Code quality dashboard status"
+        >
+          <Card>
+            <CardHeader>
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <ShieldCheck
+                      className="size-5 text-primary"
+                      aria-hidden="true"
+                    />
+                    Truthful quality state
+                  </CardTitle>
+                  <CardDescription className="mt-2">
+                    No repository, scan, metric, quality score, grade, issue,
+                    recommendation, or remediation state is loaded or generated.
+                  </CardDescription>
+                </div>
+                <Code2 className="size-5 text-amber-500" aria-hidden="true" />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="rounded-xl border border-dashed border-border bg-muted/30 p-5">
+                <h2 className="font-medium">
+                  No verified code-quality scanning service is available
+                </h2>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  A real contract must define repository scope, tool and version
+                  provenance, reproducible lint/type/test/build evidence,
+                  security and privacy handling, severity semantics, review
+                  ownership, and remediation controls before this route can
+                  report quality findings.
+                </p>
+              </div>
+              <div
+                className="flex flex-wrap gap-2"
+                aria-label="Unavailable quality actions"
+              >
+                {[
+                  "Load repository",
+                  "Run quality scan",
+                  "Review findings",
+                  "Auto-fix code",
+                ].map(label => (
+                  <Button
+                    key={label}
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled
+                    aria-disabled="true"
+                  >
+                    {label}
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
 
-                {/* Ratings */}
-                <Card className="bg-slate-800/50 border-slate-700/50 p-6">
-                  <h3 className="font-semibold text-white mb-4">Ratings</h3>
-                  <div className="space-y-3">
-                    {Object.entries(result.ratings).map(([key, value]: [string, any]) => (
-                      <div key={key}>
-                        <div className="flex justify-between mb-1">
-                          <span className="text-sm text-slate-400 capitalize">{key}</span>
-                          <span className="text-sm font-semibold text-cyan-400">{value}/5</span>
-                        </div>
-                        <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"
-                            style={{ width: `${(value / 5) * 100}%` }}
-                          />
-                        </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Release requirements</CardTitle>
+              <CardDescription>
+                These safeguards must be verified before quality controls are
+                enabled.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4 text-sm text-muted-foreground">
+              <p>
+                Repository commit, branch, scope, language, dependencies,
+                generated files, and reproducible scan inputs.
+              </p>
+              <p>
+                Formatter, linter, type checker, tests, build, coverage,
+                benchmark, timestamps, versions, and artifacts.
+              </p>
+              <p>
+                Dependency advisories, secrets, authorization, complexity,
+                duplication, accessibility, and maintainability.
+              </p>
+              <p>
+                Severity, score/grade semantics, issue ownership, review,
+                approvals, remediation, comparison, and audit.
+              </p>
+            </CardContent>
+          </Card>
+        </section>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Code quality capability map</CardTitle>
+            <CardDescription>
+              Search is local-only and does not read a repository, run tools,
+              calculate metrics, expose issues, generate fixes, or persist
+              remediation.
+            </CardDescription>
+            <div className="relative max-w-md pt-2">
+              <Search
+                className="pointer-events-none absolute left-3 top-4 size-4 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <Input
+                aria-label="Search code quality capability notes"
+                placeholder="Search capability notes"
+                value={searchQuery}
+                onChange={event => setSearchQuery(event.target.value)}
+                className="pl-9"
+              />
+            </div>
+          </CardHeader>
+          <CardContent>
+            {visibleCapabilities.length > 0 ? (
+              <div className="grid gap-3 sm:grid-cols-2">
+                {visibleCapabilities.map(
+                  ({ title, description, icon: Icon }) => (
+                    <div
+                      key={title}
+                      className="rounded-xl border border-border/70 p-4"
+                    >
+                      <div className="flex items-center gap-2 font-medium">
+                        <Icon
+                          className="size-4 text-primary"
+                          aria-hidden="true"
+                        />
+                        {title}
                       </div>
-                    ))}
-                  </div>
-                </Card>
-
-                {/* Issues */}
-                <Card className="bg-slate-800/50 border-slate-700/50 p-6">
-                  <h3 className="font-semibold text-white mb-4">Issues Found</h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center p-2 bg-red-500/10 rounded border border-red-500/20">
-                      <span className="text-sm text-red-300">Critical</span>
-                      <Badge className="bg-red-500/20 text-red-300">{result.issues.critical}</Badge>
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                        {description}
+                      </p>
                     </div>
-                    <div className="flex justify-between items-center p-2 bg-yellow-500/10 rounded border border-yellow-500/20">
-                      <span className="text-sm text-yellow-300">Warnings</span>
-                      <Badge className="bg-yellow-500/20 text-yellow-300">{result.issues.warning}</Badge>
-                    </div>
-                    <div className="flex justify-between items-center p-2 bg-blue-500/10 rounded border border-blue-500/20">
-                      <span className="text-sm text-blue-300">Info</span>
-                      <Badge className="bg-blue-500/20 text-blue-300">{result.issues.info}</Badge>
-                    </div>
-                  </div>
-                </Card>
-
-                {/* Actions */}
-                <div className="space-y-2">
-                  <Button className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700">
-                    <Star className="w-4 h-4 mr-2" />
-                    Auto-Improve Code
-                  </Button>
-                  <Button variant="outline" className="w-full border-slate-700 hover:bg-slate-800">
-                    Compare Versions
-                  </Button>
-                </div>
-              </>
+                  )
+                )}
+              </div>
             ) : (
-              <Card className="bg-slate-800/50 border-slate-700/50 p-6 text-center">
-                <Code2 className="w-12 h-12 mx-auto mb-3 text-slate-500" />
-                <p className="text-slate-400 text-sm">Paste code and click Evaluate to get started</p>
-              </Card>
+              <div
+                className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground"
+                role="status"
+              >
+                No capability notes match “{searchQuery}”.
+              </div>
             )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
-    </div>
+    </main>
   );
 }

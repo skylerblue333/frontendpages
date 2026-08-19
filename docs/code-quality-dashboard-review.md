@@ -1,0 +1,7 @@
+# CodeQualityDashboard review
+
+The former route accepted pasted code, called an unverified mutation, displayed fabricated or untyped quality scores, grades, ratings, issue counts, suggestions, and enabled an auto-improvement action. It has been replaced with a strictly typed, local-only code-quality readiness workspace.
+
+The new screen explicitly states that no repository, scan, metric, quality score, grade, issue, recommendation, or remediation state is loaded or generated. All repository-loading, scanning, findings-review, and auto-fix actions are disabled. The route documents repository commit, branch, scope, language, dependencies, generated files, reproducible scan inputs, formatter/linter/type-checker/tests/build/coverage/benchmark evidence, timestamps, tool versions, artifacts, dependency advisories, secret detection, authorization, complexity, duplication, accessibility, maintainability, severity and score semantics, issue ownership, review, approvals, remediation, comparison, and audit. Its capability search filters static local notes only and never reads a repository, runs tools, calculates metrics, exposes issues, generates fixes, or persists remediation.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows balanced quality-state/release cards and a capability map. Mobile evidence stacks the same content cleanly at 390×844 without clipping; repository, tool provenance, security, maintainability, review, and unavailable-action disclosures remain readable.
