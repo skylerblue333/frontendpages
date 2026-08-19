@@ -209,6 +209,11 @@ Blocked-edit screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_16-12-10
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_16-14-03_6495.webp`
 Blocked-view screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_16-14-10_1601.webp`
 
+## create-article-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-01-58_8905.webp`
+Preview screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-02-50_4136.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_create-article.md`
+
 ## creator-funding-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_16-15-53_1831.webp`
 Blocked-apply screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_16-16-01_3592.webp`
