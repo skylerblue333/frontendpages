@@ -1,20 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import FeatureUnavailable from "@/components/FeatureUnavailable";
 
-const TypingIndicators = () => {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">TypingIndicators</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            TypingIndicators feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
-  );
-};
+const TypingIndicators = () => (
+  <FeatureUnavailable
+    title="Typing Indicators"
+    description="Typing Indicators is intentionally held at a truthful release boundary until its real provider, authorization, persistence, monitoring, and acceptance evidence are complete."
+    capability="Typing Indicators on /typing-indicators"
+    nextStep="Return to the launch hub"
+  />
+);
 
 export default TypingIndicators;

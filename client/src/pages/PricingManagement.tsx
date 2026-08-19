@@ -1,20 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import FeatureUnavailable from "@/components/FeatureUnavailable";
 
-const PricingManagement = () => {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">PricingManagement</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            PricingManagement feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
-  );
-};
+const PricingManagement = () => (
+  <FeatureUnavailable
+    title="Pricing Management"
+    description="Pricing Management is intentionally held at a truthful release boundary until its real provider, authorization, persistence, monitoring, and acceptance evidence are complete."
+    capability="Pricing Management on /pricing-management"
+    nextStep="Return to the launch hub"
+  />
+);
 
 export default PricingManagement;

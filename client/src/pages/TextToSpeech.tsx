@@ -1,20 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import FeatureUnavailable from "@/components/FeatureUnavailable";
 
-const TextToSpeech = () => {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">TextToSpeech</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            TextToSpeech feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
-  );
-};
+const TextToSpeech = () => (
+  <FeatureUnavailable
+    title="Text To Speech"
+    description="Text To Speech is intentionally held at a truthful release boundary until its real provider, authorization, persistence, monitoring, and acceptance evidence are complete."
+    capability="Text To Speech on /text-to-speech"
+    nextStep="Return to the launch hub"
+  />
+);
 
 export default TextToSpeech;

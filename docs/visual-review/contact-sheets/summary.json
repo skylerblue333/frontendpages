@@ -1,0 +1,19 @@
+{
+  "route_count": 1058,
+  "sets": {
+    "placeholder-marked": 83,
+    "boundary-signals": 652,
+    "auth-external": 507,
+    "source-missing": 4
+  },
+  "contact_sheets": [
+    "docs/visual-review/contact-sheets/auth-external-desktop.jpg",
+    "docs/visual-review/contact-sheets/auth-external-mobile.jpg",
+    "docs/visual-review/contact-sheets/boundary-signals-desktop.jpg",
+    "docs/visual-review/contact-sheets/boundary-signals-mobile.jpg",
+    "docs/visual-review/contact-sheets/placeholder-marked-desktop.jpg",
+    "docs/visual-review/contact-sheets/placeholder-marked-mobile.jpg",
+    "docs/visual-review/contact-sheets/source-missing-desktop.jpg",
+    "docs/visual-review/contact-sheets/source-missing-mobile.jpg"
+  ]
+}
