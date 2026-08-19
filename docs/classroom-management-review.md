@@ -1,0 +1,7 @@
+# ClassroomManagement review
+
+The former route was a mock authenticated CRUD shell with a misleading sign-in gate, fake loading state, and no verified education-record contract. It has been replaced with a strictly typed, local-only classroom-management readiness workspace.
+
+The new screen explicitly states that no classroom, roster, student, enrollment, assignment, grade, attendance, or permission state is loaded or persisted. All class-loading, roster, enrollment, and grade actions are disabled. The route documents class, instructor, student, guardian, roster, enrollment, attendance and account-scoped record contracts; instructor permissions, student privacy, guardian access, moderation, safeguarding, consent, suspension and audit; course membership, assignments, grading, feedback, accommodations, progress, certificates and grade history; plus keyboard navigation, screen-reader labels, language support, accessible materials, notifications and contact boundaries. Its capability search filters static local notes only and never reads students, exposes rosters, changes enrollment, records grades, or persists classroom state.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows balanced classroom-state/release cards and a capability map. Mobile evidence stacks the same content cleanly at 390×844 without clipping; student privacy, safeguarding, accessibility, and unavailable-action disclosures remain readable.
