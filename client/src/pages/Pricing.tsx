@@ -1,141 +1,19 @@
-import React from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { useState } from "react";
+import { CheckCircle2, CreditCard, LockKeyhole, ShieldAlert, Sparkles } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+
+const plans = [
+  { name: "Foundation", description: "A local capability grouping for core account and community surfaces.", requirements: ["Authenticated account scope", "Supported feature inventory", "Accessibility and support expectations"] },
+  { name: "Creator", description: "A local planning grouping for creator tools and governed publishing workflows.", requirements: ["Creator identity and content ownership", "Provider contracts and usage limits", "Moderation, payout, tax, and support policy"] },
+  { name: "Organization", description: "A local planning grouping for larger teams and managed access.", requirements: ["Organization identity and role controls", "Security, privacy, SLA, and service ownership", "Contract, billing, support, and audit evidence"] },
+];
+
+const questions = ["Are the capabilities implemented and supported today?", "Which provider, entitlement, payment, tax, refund, and support contracts apply?", "What data is collected, retained, exported, and deleted?", "What happens when a capability is unavailable, fails, or is cancelled?", "Who owns pricing approval, customer support, reconciliation, and incident response?"];
 
 export default function Pricing() {
-  const tiers = [
-    {
-      name: 'Citizen',
-      price: 'Free',
-      description: 'Start your journey',
-      features: [
-        'Digital Twin',
-        'Memory Graph (basic)',
-        'HOPE AI Companion',
-        'Community Access',
-        'Basic Analytics',
-        'Max 2 AI Agents',
-      ],
-      cta: 'Get Started',
-      highlighted: false,
-    },
-    {
-      name: 'Builder',
-      price: '$9.99',
-      period: '/month',
-      description: 'Create & earn',
-      features: [
-        'Everything in Citizen',
-        'Creator Tools',
-        'Max 10 AI Agents',
-        'Advanced Memory Graph',
-        'Startup Generator',
-        'Revenue Sharing (5%)',
-        'Priority Support',
-      ],
-      cta: 'Start Free Trial',
-      highlighted: true,
-    },
-    {
-      name: 'Scalable',
-      price: 'Custom',
-      description: 'Scale your impact',
-      features: [
-        'Everything in Builder',
-        'Unlimited AI Agents',
-        'API Access',
-        'Custom Integrations',
-        'Dedicated Account Manager',
-        'Revenue Sharing (10%)',
-        'SLA Support',
-      ],
-      cta: 'Contact Sales',
-      highlighted: false,
-    },
-  ];
-
-  return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold mb-4">Simple, Transparent Pricing</h1>
-          <p className="text-xl text-gray-400">Choose the plan that fits your journey</p>
-        </div>
-
-        <div className="grid grid-cols-3 gap-8 mb-16">
-          {tiers.map((tier) => (
-            <Card
-              key={tier.name}
-              className={`p-8 flex flex-col ${
-                tier.highlighted
-                  ? 'bg-gradient-to-b from-cyan-900 to-gray-900 border-cyan-500 ring-2 ring-cyan-500'
-                  : 'bg-gray-900 border-gray-800'
-              }`}
-            >
-              {tier.highlighted && (
-                <Badge className="w-fit mb-4 bg-cyan-600">Most Popular</Badge>
-              )}
-              <h3 className="text-2xl font-bold mb-2">{tier.name}</h3>
-              <p className="text-gray-400 text-sm mb-6">{tier.description}</p>
-
-              <div className="mb-6">
-                <span className="text-4xl font-bold">{tier.price}</span>
-                {tier.period && <span className="text-gray-400">{tier.period}</span>}
-              </div>
-
-              <Button
-                className={`w-full mb-8 ${
-                  tier.highlighted
-                    ? 'bg-cyan-600 hover:bg-cyan-700'
-                    : 'bg-gray-700 hover:bg-gray-600'
-                }`}
-              >
-                {tier.cta}
-              </Button>
-
-              <div className="space-y-4 flex-1">
-                {tier.features.map((feature) => (
-                  <div key={feature} className="flex items-start">
-                    <span className="text-cyan-400 mr-3">✓</span>
-                    <span className="text-sm">{feature}</span>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          ))}
-        </div>
-
-        {/* FAQ */}
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold mb-8 text-center">Frequently Asked Questions</h2>
-          <div className="space-y-6">
-            {[
-              {
-                q: 'Can I upgrade or downgrade anytime?',
-                a: 'Yes, you can change your plan at any time. Changes take effect immediately.',
-              },
-              {
-                q: 'What payment methods do you accept?',
-                a: 'We accept all major credit cards, PayPal, and SKY444 tokens.',
-              },
-              {
-                q: 'Is there a free trial for paid plans?',
-                a: 'Yes, all paid plans include a 14-day free trial. No credit card required.',
-              },
-              {
-                q: 'What does Revenue Sharing mean?',
-                a: 'Earn a percentage of revenue generated by your AI agents, creators, or apps.',
-              },
-            ].map((item, i) => (
-              <Card key={i} className="bg-gray-900 border-gray-800 p-6">
-                <h4 className="font-bold mb-2">{item.q}</h4>
-                <p className="text-gray-400">{item.a}</p>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  const [selected, setSelected] = useState("Foundation");
+  const [saved, setSaved] = useState(false);
+  const plan = plans.find(item => item.name === selected) ?? plans[0];
+  return <main className="min-h-screen bg-[#070a16] p-6 text-white sm:p-8"><div className="mx-auto max-w-6xl"><div className="mb-12 text-center"><div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-cyan-300/10 text-cyan-200"><Sparkles className="size-6" /></div><p className="mt-5 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200">Commercial governance</p><h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">Compare capabilities before publishing a price.</h1><p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-400">This plan-comparison workspace preserves product packaging UX without claiming that subscriptions, trials, payment methods, revenue sharing, entitlements, SLAs, or customer outcomes are available.</p></div><div className="mb-10 rounded-2xl border border-amber-300/20 bg-amber-300/[0.05] p-5 text-sm leading-6 text-slate-300"><div className="flex items-start gap-3"><ShieldAlert className="mt-1 size-5 shrink-0 text-amber-200" /><p><strong className="text-amber-100">No commercial offer is active.</strong> Prices, currency, billing, trial, payment, cancellation, tax, refunds, discounts, revenue share, feature entitlement, and support terms require approved provider and business evidence.</p></div></div><div className="grid gap-6 lg:grid-cols-3">{plans.map(planItem => <button key={planItem.name} type="button" onClick={() => setSelected(planItem.name)} className={`rounded-3xl border p-7 text-left transition ${selected === planItem.name ? "border-cyan-300/40 bg-cyan-300/[0.08]" : "border-white/10 bg-white/[0.04] hover:border-white/20"}`}><Badge variant="outline" className="border-amber-300/20 text-amber-100">Evidence required</Badge><h2 className="mt-5 text-2xl font-black">{planItem.name}</h2><p className="mt-3 min-h-14 text-sm leading-6 text-slate-400">{planItem.description}</p><div className="mt-6 rounded-2xl border border-dashed border-white/15 bg-black/20 p-4"><p className="text-xs uppercase tracking-widest text-slate-500">Price</p><p className="mt-2 text-3xl font-black text-amber-200">Unconfigured</p><p className="mt-1 text-xs text-slate-500">No billing source</p></div><Button disabled className="mt-6 w-full bg-slate-700 text-slate-400">Select unavailable</Button><div className="mt-6 space-y-3">{planItem.requirements.map(item => <div key={item} className="flex items-start gap-2 text-sm leading-6 text-slate-300"><CheckCircle2 className="mt-1 size-4 shrink-0 text-cyan-200" />{item}</div>)}</div></button>)}</div><section className="mt-10 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected plan concept</p><h2 className="mt-2 text-3xl font-black">{plan.name}</h2><p className="mt-3 text-sm leading-6 text-slate-400">{plan.description}</p><div className="mt-6 flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-200 text-slate-950 hover:bg-cyan-100">{saved ? "Saved locally" : "Save comparison locally"}</Button><Button onClick={() => setSaved(false)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">Reset</Button></div><div className="mt-6 flex items-center gap-3 rounded-xl border border-dashed border-white/15 p-4 text-sm text-slate-400"><CreditCard className="size-5 text-amber-200" />Checkout, payment, trial, billing, upgrade, and cancellation are unavailable.</div></div><aside className="rounded-2xl border border-white/10 bg-white/[0.04] p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Plan publication gates</p><h2 className="mt-2 text-2xl font-black">Before going live</h2><div className="mt-6 space-y-3">{questions.map(item => <div key={item} className="flex items-start gap-3 rounded-xl border border-white/10 p-4 text-sm leading-6 text-slate-300"><LockKeyhole className="mt-1 size-4 shrink-0 text-amber-200" />{item}</div>)}</div></aside></section><div className="mt-10 text-center text-sm leading-6 text-slate-500"><strong className="text-amber-100">No subscription, pricing, payment, or revenue claim is made.</strong> This is a local packaging and governance workspace, not a checkout, sales offer, or customer entitlement system.</div></div></main>;
 }
