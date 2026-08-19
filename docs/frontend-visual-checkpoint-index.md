@@ -746,3 +746,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/ban-suspend-user-mobile-390x844.png
 ## billing-history-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/billing-history-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/billing-history-mobile-390x844.png`
+
+## block-rewards-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/block-rewards-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/block-rewards-mobile-390x844.png`
