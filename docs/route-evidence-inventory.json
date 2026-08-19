@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "0f30080f9189e602c42783affef2087c45e15f55",
+  "generated_at_commit": "4798f52a848ff3d17603bd0f1da37bda8c4e1be7",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 130,
-  "routes_with_visual_checkpoint": 130,
+  "routes_with_review": 132,
+  "routes_with_visual_checkpoint": 132,
   "routes_with_placeholder_signal": 786,
   "routes": [
     {
@@ -2884,8 +2884,8 @@
       "component": "DocumentEditor",
       "source": "client/src/pages/DocumentEditor.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -2902,8 +2902,8 @@
       "component": "DocumentSharing",
       "source": "client/src/pages/DocumentSharing.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {

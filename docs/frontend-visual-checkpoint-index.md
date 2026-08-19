@@ -582,3 +582,11 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_17-35-40_1605
 Blocked-live-test screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_17-35-50_9684.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_voice-commands-registry.md`
 
+
+## document-editor-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/document-editor-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/document-editor-mobile-390x844.png`
+
+## document-sharing-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/document-sharing-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/document-sharing-mobile-390x844.png`
