@@ -1,0 +1,5 @@
+# BlogEditor review
+
+The `/blog-editor` route is not production-ready. It imports `trpc`, `Tabs`, `TabsContent`, `TabsList`, `TabsTrigger`, and `Settings` without establishing a real contract. The authentication gate renders a nonfunctional `Sign In` button, while the authenticated view exposes no-op `New` and settings controls, an unused `isLoading` state, and an empty data state. There is no verified draft identity, author scope, content body, rich-text model, autosave, validation, media handling, preview, revision history, scheduling, publishing, permissions, moderation, persistence, or error/retry contract.
+
+The route must not imply that a draft can be created or published. It should be converted to a strictly typed local readiness workspace that allows only truthful local search state and clearly discloses unavailable new, edit, save, preview, media, schedule, publish, and settings actions. No blog content, author, draft, revision, publication, engagement, or delivery outcome may be fabricated. The revised route requires TypeScript/build validation and desktop/mobile visual evidence.
