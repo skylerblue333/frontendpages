@@ -8,6 +8,10 @@ Generated from committed visual checkpoint documents. Each completed screen has 
 
 ## about-visual-checkpoint.md
 
+## account-settings-visual-checkpoint.md
+Notifications screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-32-21_6024.webp`
+Danger-zone screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-32-41_5536.webp`
+
 ## achievements-visual-checkpoint.md
 
 ## activity-feed-visual-checkpoint.md
