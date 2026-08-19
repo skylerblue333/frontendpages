@@ -654,3 +654,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/accordion-navigation-mobile-390x844
 ## adaptive-personalization-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/adaptive-personalization-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/adaptive-personalization-mobile-390x844.png`
+
+## add-bank-account-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/add-bank-account-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/add-bank-account-mobile-390x844.png`
