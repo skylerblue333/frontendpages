@@ -1,0 +1,7 @@
+# ConfirmationDialog review
+
+The former route was a generic unavailable placeholder with no action-confirmation contract. It has been replaced with a strictly typed, local-only confirmation-readiness workspace.
+
+The new screen explicitly states that no target, action intent, actor, permission, confirmation text, submission, or post-action state is loaded or persisted. All action-loading, confirmation, cancellation, and audit-view actions are disabled. The route documents target and account scope, action intent, affected records, dependency impact, reversible classification, permission checks, step-up authentication, CSRF protection, confirmation text, rate limits, idempotency, destructive-action policy, cancel, timeout, retry, rollback, partial failure, duplicate prevention, post-action state, focus management, keyboard semantics, screen-reader announcements, error messaging, actor identity, evidence, and audit history. Its capability search filters static local notes only and never loads an action, verifies a permission, submits a confirmation, mutates data, or persists an outcome.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows balanced confirmation-state/release cards and a capability map. Mobile evidence stacks the same content cleanly at 390×844 without clipping; target, authorization, cancellation, recovery, accessibility, audit, and unavailable-action disclosures remain readable.
