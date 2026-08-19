@@ -778,3 +778,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/brand-guidelines-mobile-390x844.png
 ## bridge-transactions-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/bridge-transactions-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/bridge-transactions-mobile-390x844.png`
+
+## budget-planner-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/budget-planner-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/budget-planner-mobile-390x844.png`
