@@ -1,220 +1,338 @@
-/**
- * DatingPremium — Dating System Monetization
- * Boost, super likes, AI profile optimization, visibility ranking
- */
-import { Crown, Flame, Star, Brain, Eye, Shield, Zap, Check, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import {
+  Brain,
+  CheckCircle2,
+  Crown,
+  CreditCard,
+  Info,
+  LockKeyhole,
+  ShieldAlert,
+  Sparkles,
+  XCircle,
+  Zap,
+} from "lucide-react";
 
-const PLANS = [
+type Capability = {
+  title: string;
+  description: string;
+  icon: typeof CreditCard;
+};
+type Plan = { name: string; description: string; capabilities: string[] };
+const PLANS: readonly Plan[] = [
   {
-    id: "basic",
-    name: "Basic",
-    price: "$0",
-    period: "forever",
-    color: "border-border",
-    badge: null,
-    features: [
-      "5 likes per day",
-      "Basic match feed",
-      "Standard visibility",
-      "Text chat only",
+    name: "Free plan concept",
+    description: "Baseline access concept; current entitlement is unavailable.",
+    capabilities: [
+      "Core product access",
+      "Standard settings",
+      "No billing record",
     ],
-    cta: "Current Plan",
-    ctaDisabled: true,
   },
   {
-    id: "plus",
-    name: "Plus",
-    price: "$9.99",
-    period: "per month",
-    color: "border-blue-500",
-    badge: "Popular",
-    badgeColor: "bg-blue-500",
-    features: [
-      "Unlimited likes",
-      "5 Super Likes/day",
-      "See who liked you",
-      "Rewind last swipe",
-      "Passport (any location)",
-      "AI icebreaker suggestions",
+    name: "Subscription concept",
+    description:
+      "Recurring billing and premium entitlement are not configured.",
+    capabilities: [
+      "Premium feature concepts",
+      "Provider checkout required",
+      "Cancellation and refunds required",
     ],
-    cta: "Upgrade to Plus",
-    ctaDisabled: false,
   },
   {
-    id: "gold",
-    name: "Gold",
-    price: "$24.99",
-    period: "per month",
-    color: "border-yellow-500",
-    badge: "Best Value",
-    badgeColor: "bg-yellow-500",
-    features: [
-      "Everything in Plus",
-      "1 Boost per week",
-      "AI profile optimization",
-      "Priority in match queue",
-      "Full compatibility reports",
-      "Relationship roadmap",
-      "VIP support",
+    name: "Add-on concept",
+    description:
+      "Boosts and interaction add-ons have no active catalog or wallet.",
+    capabilities: [
+      "Catalog and price source required",
+      "Receipt and entitlement required",
+      "Spend controls required",
     ],
-    cta: "Upgrade to Gold",
-    ctaDisabled: false,
   },
 ];
-
-const BOOSTS = [
-  { name: "1 Boost", price: "$2.99", desc: "30 min of 10x visibility", icon: "🔥" },
-  { name: "5 Boosts", price: "$9.99", desc: "Save 33% — best for weekends", icon: "⚡" },
-  { name: "10 Boosts", price: "$14.99", desc: "Save 50% — power user pack", icon: "👑" },
-];
-
-const SUPER_LIKES = [
-  { name: "5 Super Likes", price: "$4.99", desc: "Stand out instantly", icon: "⭐" },
-  { name: "25 Super Likes", price: "$14.99", desc: "Save 40%", icon: "🌟" },
-];
-
-const PREMIUM_FEATURES = [
-  { icon: Eye, title: "See Who Liked You", desc: "Know your admirers before swiping", color: "text-pink-400" },
-  { icon: Brain, title: "AI Profile Coach", desc: "Optimize bio, photos, and first impressions", color: "text-purple-400" },
-  { icon: Flame, title: "Boost Visibility", desc: "10x more profile views for 30 minutes", color: "text-orange-400" },
-  { icon: Star, title: "Super Likes", desc: "Show extra interest — 3x more likely to match", color: "text-yellow-400" },
-  { icon: Shield, title: "Advanced Filters", desc: "Filter by trust score, verified status, intent", color: "text-blue-400" },
-  { icon: Zap, title: "Priority Queue", desc: "Appear first in other users' feeds", color: "text-cyan-400" },
+const CAPABILITIES: readonly Capability[] = [
+  {
+    title: "Billing provider",
+    description:
+      "Checkout, tax, payment method, receipt, refund, and cancellation flows are unavailable.",
+    icon: CreditCard,
+  },
+  {
+    title: "Entitlement service",
+    description:
+      "No account has an authoritative subscription, boost, super-like, or feature entitlement.",
+    icon: Crown,
+  },
+  {
+    title: "Outcome evidence",
+    description:
+      "No visibility, match likelihood, ranking, trust, or response metric is claimed.",
+    icon: Sparkles,
+  },
+  {
+    title: "AI profile tools",
+    description:
+      "No profile audit, rewrite, model, prompt, or generated content is connected.",
+    icon: Brain,
+  },
 ];
 
 export default function DatingPremium() {
-  const handleUpgrade = (plan: string) => {
-    toast.success(`Upgrading to ${plan}...`);
-  };
-
-  const handleBuy = (item: string) => {
-    toast.success(`Purchasing ${item}...`);
-  };
-
+  const [selected, setSelected] = useState<string | null>(null);
+  const [status, setStatus] = useState(
+    "Premium billing unavailable locally. No price, checkout, payment, subscription, entitlement, refund, or account mutation was started."
+  );
+  const announceUnavailable = (action: string) =>
+    setStatus(
+      `${action} is unavailable locally. No price, checkout, payment, subscription, entitlement, refund, or account mutation was started.`
+    );
   return (
-    <div className="min-h-screen bg-background p-4 max-w-lg mx-auto space-y-6">
-      {/* Header */}
-      <div className="text-center py-4">
-        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center mx-auto mb-3">
-          <Crown className="w-8 h-8 text-white" />
-        </div>
-        <h1 className="text-2xl font-bold">ShadowMatch Premium</h1>
-        <p className="text-sm text-muted-foreground mt-1">Find your match faster with AI-powered tools</p>
-      </div>
-
-      {/* Premium features grid */}
-      <div className="grid grid-cols-2 gap-2">
-        {PREMIUM_FEATURES.map(feat => {
-          const FeatIcon = feat.icon;
-          return (
-            <div key={feat.title} className="card p-3">
-              <FeatIcon className={`w-5 h-5 ${feat.color} mb-2`} />
-              <div className="text-sm font-semibold">{feat.title}</div>
-              <div className="text-xs text-muted-foreground">{feat.desc}</div>
+    <main
+      className="min-h-screen bg-background"
+      aria-labelledby="dating-premium-title"
+    >
+      <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+        <header className="space-y-3">
+          <Badge
+            variant="outline"
+            className="border-amber-400/30 text-amber-200"
+          >
+            BILLING READINESS PREVIEW
+          </Badge>
+          <h1
+            id="dating-premium-title"
+            className="flex items-center gap-2 text-3xl font-bold tracking-tight"
+          >
+            <Crown className="h-7 w-7 text-amber-300" aria-hidden="true" />
+            Dating premium
+          </h1>
+          <p className="max-w-3xl text-muted-foreground">
+            Review premium capability and billing requirements without inventing
+            prices, purchases, subscriptions, entitlements, or performance
+            outcomes.
+          </p>
+        </header>
+        <section className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5">
+          <div className="flex items-start gap-3">
+            <ShieldAlert
+              className="mt-0.5 h-5 w-5 shrink-0 text-amber-200"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="font-semibold text-amber-100">
+                Premium service unavailable
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-amber-100/75">
+                No authoritative catalog, currency and tax source, payment
+                processor, subscription service, entitlement record, receipt,
+                refund path, or AI provider is connected. No plan price or
+                purchase outcome is presented as current.
+              </p>
             </div>
-          );
-        })}
-      </div>
-
-      {/* Plans */}
-      <div className="space-y-3">
-        <h2 className="font-semibold text-sm">Choose Your Plan</h2>
-        {PLANS.map(plan => (
-          <div key={plan.id} className={`card p-4 border-2 ${plan.color} relative`}>
-            {plan.badge && (
-              <Badge className={`${plan.badgeColor} text-white text-xs absolute -top-2 left-4`}>
-                {plan.badge}
-              </Badge>
-            )}
-            <div className="flex items-start justify-between mb-3">
-              <div>
-                <div className="font-bold text-base">{plan.name}</div>
-                <div className="text-xs text-muted-foreground">{plan.period}</div>
-              </div>
-              <div className="text-right">
-                <div className="text-xl font-bold">{plan.price}</div>
-              </div>
-            </div>
-            <div className="space-y-1.5 mb-3">
-              {plan.features.map(feat => (
-                <div key={feat} className="flex items-center gap-2 text-xs">
-                  <Check className="w-3 h-3 text-green-400 shrink-0" />
-                  <span className="text-muted-foreground">{feat}</span>
-                </div>
-              ))}
+          </div>
+        </section>
+        <section className="grid gap-4 md:grid-cols-3">
+          <Card className="border-border/40 bg-card/50 p-5">
+            <CreditCard
+              className="mb-3 h-5 w-5 text-sky-300"
+              aria-hidden="true"
+            />
+            <p className="text-lg font-semibold">Checkout unavailable</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No payment method, charge, receipt, tax, or refund is available.
+            </p>
+          </Card>
+          <Card className="border-border/40 bg-card/50 p-5">
+            <Crown className="mb-3 h-5 w-5 text-amber-300" aria-hidden="true" />
+            <p className="text-lg font-semibold">Entitlements unavailable</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No subscription, add-on, boost, or premium access is active.
+            </p>
+          </Card>
+          <Card className="border-border/40 bg-card/50 p-5">
+            <Zap className="mb-3 h-5 w-5 text-violet-300" aria-hidden="true" />
+            <p className="text-lg font-semibold">Outcomes unmeasured</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No visibility, ranking, match, trust, or response benefit is
+              asserted.
+            </p>
+          </Card>
+        </section>
+        <section aria-labelledby="plans-title">
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 id="plans-title" className="text-xl font-semibold">
+                Plan concepts
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                These are planning concepts, not offers or current prices.
+              </p>
             </div>
             <Button
-              className={`w-full ${plan.ctaDisabled ? "" : "bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400"}`}
-              variant={plan.ctaDisabled ? "outline" : "default"}
-              disabled={plan.ctaDisabled}
-              onClick={() => !plan.ctaDisabled && handleUpgrade(plan.name)}
+              type="button"
+              variant="outline"
+              onClick={() => announceUnavailable("Plan catalog")}
             >
-              {plan.cta}
+              Catalog unavailable
             </Button>
           </div>
-        ))}
-      </div>
-
-      {/* Boosts */}
-      <div>
-        <h2 className="font-semibold text-sm mb-3">Profile Boosts</h2>
-        <div className="space-y-2">
-          {BOOSTS.map(boost => (
-            <div key={boost.name} className="card p-3 flex items-center gap-3">
-              <span className="text-2xl">{boost.icon}</span>
-              <div className="flex-1">
-                <div className="text-sm font-semibold">{boost.name}</div>
-                <div className="text-xs text-muted-foreground">{boost.desc}</div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm font-bold">{boost.price}</div>
-                <Button size="sm" variant="outline" className="mt-1 text-xs h-7" onClick={() => handleBuy(boost.name)}>
-                  Buy
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Super Likes */}
-      <div>
-        <h2 className="font-semibold text-sm mb-3">Super Likes</h2>
-        <div className="space-y-2">
-          {SUPER_LIKES.map(sl => (
-            <div key={sl.name} className="card p-3 flex items-center gap-3">
-              <span className="text-2xl">{sl.icon}</span>
-              <div className="flex-1">
-                <div className="text-sm font-semibold">{sl.name}</div>
-                <div className="text-xs text-muted-foreground">{sl.desc}</div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm font-bold">{sl.price}</div>
-                <Button size="sm" variant="outline" className="mt-1 text-xs h-7" onClick={() => handleBuy(sl.name)}>
-                  Buy
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* AI Profile Optimization CTA */}
-      <div className="card p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/20">
-        <div className="flex items-center gap-3">
-          <Brain className="w-8 h-8 text-purple-400 shrink-0" />
-          <div className="flex-1">
-            <div className="font-semibold text-sm">AI Profile Optimizer</div>
-            <div className="text-xs text-muted-foreground">Get a personalized profile audit + rewrite suggestions</div>
+          <div className="grid gap-4 lg:grid-cols-3">
+            {PLANS.map(plan => {
+              const active = selected === plan.name;
+              return (
+                <Card
+                  key={plan.name}
+                  className={`border p-5 ${active ? "border-primary/50 bg-primary/10" : "border-border/40 bg-card/40"}`}
+                >
+                  <button
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => setSelected(active ? null : plan.name)}
+                    className="w-full text-left"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="font-semibold">{plan.name}</h3>
+                      <Badge
+                        variant="outline"
+                        className="border-muted-foreground/30 text-muted-foreground"
+                      >
+                        Unpriced
+                      </Badge>
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                      {plan.description}
+                    </p>
+                    <div className="mt-4 space-y-2">
+                      {plan.capabilities.map(item => (
+                        <div
+                          key={item}
+                          className="flex items-start gap-2 text-sm text-muted-foreground"
+                        >
+                          <CheckCircle2
+                            className="mt-0.5 h-4 w-4 shrink-0 text-primary"
+                            aria-hidden="true"
+                          />
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                  </button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="mt-5 w-full"
+                    onClick={() => announceUnavailable(`${plan.name} checkout`)}
+                  >
+                    Checkout unavailable
+                  </Button>
+                </Card>
+              );
+            })}
           </div>
-          <Button size="sm" className="bg-purple-500 hover:bg-purple-400 shrink-0" onClick={() => toast("AI Profile Optimizer requires Gold plan")}>
-            <ChevronRight className="w-4 h-4" />
-          </Button>
-        </div>
+        </section>
+        {selected && (
+          <section
+            className="rounded-2xl border border-primary/30 bg-primary/5 p-5"
+            aria-live="polite"
+          >
+            <div className="flex items-start gap-3">
+              <Info
+                className="mt-0.5 h-5 w-5 shrink-0 text-primary"
+                aria-hidden="true"
+              />
+              <div>
+                <h2 className="font-semibold">Plan concept selected locally</h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {selected} is a planning concept only. No price, billing
+                  event, subscription, or entitlement changed.
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
+        <section aria-labelledby="capabilities-title">
+          <h2 id="capabilities-title" className="mb-4 text-xl font-semibold">
+            Premium capability requirements
+          </h2>
+          <div className="grid gap-4 md:grid-cols-2">
+            {CAPABILITIES.map(capability => {
+              const Icon = capability.icon;
+              return (
+                <Card
+                  key={capability.title}
+                  className="border-border/40 bg-card/40 p-5"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="rounded-xl bg-secondary/60 p-3">
+                      <Icon
+                        className="h-5 w-5 text-primary"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="font-semibold">{capability.title}</h3>
+                        <Badge
+                          variant="outline"
+                          className="border-muted-foreground/30 text-muted-foreground"
+                        >
+                          Unavailable
+                        </Badge>
+                      </div>
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                        {capability.description}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        </section>
+        <section className="grid gap-4 md:grid-cols-2">
+          <Card className="border-border/40 bg-card/30 p-5">
+            <div className="flex items-start gap-3">
+              <LockKeyhole
+                className="mt-0.5 h-5 w-5 shrink-0 text-primary"
+                aria-hidden="true"
+              />
+              <div>
+                <h2 className="font-semibold">Safe billing boundary</h2>
+                <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                  A production purchase needs authenticated account ownership,
+                  clear offer terms, secure checkout, idempotency, receipts,
+                  taxes, refunds, cancellation, access revocation, and
+                  non-sensitive audit logs.
+                </p>
+              </div>
+            </div>
+          </Card>
+          <Card className="border-border/40 bg-card/30 p-5">
+            <div className="flex items-start gap-3">
+              <XCircle
+                className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <div>
+                <h2 className="font-semibold">No purchase claim</h2>
+                <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                  No payment, plan activation, boost, super-like, AI result, or
+                  premium access is available from this screen.
+                </p>
+              </div>
+            </div>
+          </Card>
+        </section>
+        <p
+          className="rounded-xl border border-border/30 bg-card/30 px-4 py-3 text-sm text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
+          {status}
+        </p>
       </div>
-    </div>
+    </main>
   );
 }
