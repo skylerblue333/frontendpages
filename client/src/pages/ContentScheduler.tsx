@@ -1,429 +1,432 @@
-import { useState } from "react";
-import { Link } from "wouter";
-import { useAuth } from "@/hooks/useAuth";
+import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { toast } from "sonner";
 import {
-  Calendar, Clock, ArrowLeft, Plus, Trash2, Edit3,
-  Image, Video, FileText, Send, CheckCircle, AlertCircle,
-  Share2 as InstagramIcon, Share2 as TwitterIcon, Globe, Zap, Eye, BarChart3
+  BarChart3,
+  CalendarClock,
+  CheckCircle2,
+  Clock3,
+  FileText,
+  ImageOff,
+  Info,
+  LockKeyhole,
+  Plus,
+  Send,
+  Trash2,
+  VideoOff,
+  XCircle,
 } from "lucide-react";
 
-interface ScheduledPost {
+type ContentType = "text" | "image" | "video";
+type SampleStatus = "sample scheduled" | "sample published" | "local draft";
+
+type SamplePost = {
   id: string;
-  content: string;
-  mediaType: "text" | "image" | "video";
-  platforms: string[];
-  scheduledAt: Date;
-  status: "scheduled" | "published" | "failed" | "draft";
-  views?: number;
-  engagement?: number;
-}
-
-const DEMO_QUEUE: ScheduledPost[] = [
-  {
-    id: "1",
-    content: "🚀 Big announcement coming tomorrow! Stay tuned for something that will change the game. #SKY444 #Web3",
-    mediaType: "text",
-    platforms: ["shadowchat", "twitter"],
-    scheduledAt: new Date(Date.now() + 3600000 * 2),
-    status: "scheduled",
-  },
-  {
-    id: "2",
-    content: "New tutorial: How to stake SKY444 tokens and earn 24% APY. Full guide dropping at 3PM EST 🔥",
-    mediaType: "image",
-    platforms: ["shadowchat", "instagram"],
-    scheduledAt: new Date(Date.now() + 3600000 * 5),
-    status: "scheduled",
-  },
-  {
-    id: "3",
-    content: "Going live in 30 minutes! Crypto market breakdown + SKY444 price analysis. Don't miss it 📈",
-    mediaType: "video",
-    platforms: ["shadowchat"],
-    scheduledAt: new Date(Date.now() - 3600000 * 2),
-    status: "published",
-    views: 4820,
-    engagement: 312,
-  },
-  {
-    id: "4",
-    content: "Draft: Community AMA session recap — top questions answered by the team...",
-    mediaType: "text",
-    platforms: ["shadowchat"],
-    scheduledAt: new Date(Date.now() + 3600000 * 24),
-    status: "draft",
-  },
-];
-
-const PLATFORMS = [
-  { id: "shadowchat", label: "ShadowChat", icon: "🌑", color: "purple" },
-  { id: "twitter", label: "Share2 as TwitterIcon/X", icon: "𝕏", color: "blue" },
-  { id: "instagram", label: "Share2 as InstagramIcon", icon: "📸", color: "pink" },
-  { id: "tiktok", label: "TikTok", icon: "🎵", color: "red" },
-];
-
-const statusConfig = {
-  scheduled: { label: "Scheduled", color: "bg-blue-500/20 text-blue-400 border-blue-500/30", icon: Clock },
-  published: { label: "Published", color: "bg-green-500/20 text-green-400 border-green-500/30", icon: CheckCircle },
-  failed: { label: "Failed", color: "bg-red-500/20 text-red-400 border-red-500/30", icon: AlertCircle },
-  draft: { label: "Draft", color: "bg-gray-500/20 text-gray-400 border-gray-500/30", icon: Edit3 },
+  body: string;
+  type: ContentType;
+  platforms: readonly string[];
+  status: SampleStatus;
+  timing: string;
 };
 
-export default function ContentScheduler() {
-  const { user } = useAuth();
-  const [queue, setQueue] = useState<ScheduledPost[]>(DEMO_QUEUE);
-  const [content, setContent] = useState("");
-  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(["shadowchat"]);
-  const [scheduledDate, setScheduledDate] = useState("");
-  const [scheduledTime, setScheduledTime] = useState("");
-  const [mediaType, setMediaType] = useState<"text" | "image" | "video">("text");
-  const [activeTab, setActiveTab] = useState("queue");
+const SAMPLE_POSTS: readonly SamplePost[] = [
+  {
+    id: "sample-1",
+    body: "Local sample announcement for layout review.",
+    type: "text",
+    platforms: ["Platform preview"],
+    status: "sample scheduled",
+    timing: "Timing unavailable",
+  },
+  {
+    id: "sample-2",
+    body: "Media post preview; no asset is uploaded or published.",
+    type: "image",
+    platforms: ["Platform preview"],
+    status: "sample published",
+    timing: "Publication unavailable",
+  },
+  {
+    id: "sample-3",
+    body: "Draft content remains an example and is not connected to a creator account.",
+    type: "video",
+    platforms: ["Platform preview"],
+    status: "local draft",
+    timing: "No schedule stored",
+  },
+];
 
-  const togglePlatform = (id: string) => {
-    setSelectedPlatforms(prev =>
-      prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
+const CONTENT_TYPES: readonly ContentType[] = ["text", "image", "video"];
+
+export default function ContentScheduler() {
+  const [activeView, setActiveView] = useState<
+    "queue" | "create" | "analytics"
+  >("queue");
+  const [content, setContent] = useState("");
+  const [selectedType, setSelectedType] = useState<ContentType>("text");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [status, setStatus] = useState(
+    "Publishing service unavailable locally. No schedule, post, analytics, media, or account mutation was started."
+  );
+
+  const draftCount = useMemo(() => (content.trim() ? 1 : 0), [content]);
+  const announceUnavailable = (action: string) => {
+    setStatus(
+      `${action} is unavailable locally. No post, job, platform, analytics, media, notification, or account mutation was started.`
     );
   };
 
-  const handleSchedule = () => {
-    if (!content.trim()) { toast.error("Add some content first"); return; }
-    if (!scheduledDate || !scheduledTime) { toast.error("Set a date and time"); return; }
-    if (selectedPlatforms.length === 0) { toast.error("Select at least one platform"); return; }
-
-    const scheduledAt = new Date(`${scheduledDate}T${scheduledTime}`);
-    if (scheduledAt <= new Date()) { toast.error("Scheduled time must be in the future"); return; }
-
-    const newPost: ScheduledPost = {
-      id: Math.random().toString(36).slice(2),
-      content,
-      mediaType,
-      platforms: selectedPlatforms,
-      scheduledAt,
-      status: "scheduled",
-    };
-
-    setQueue(prev => [newPost, ...prev]);
-    setContent("");
-    setScheduledDate("");
-    setScheduledTime("");
-    toast.success("Post scheduled successfully! 📅");
-    setActiveTab("queue");
-  };
-
-  const handleDelete = (id: string) => {
-    setQueue(prev => prev.filter(p => p.id !== id));
-    toast.success("Post removed from queue");
-  };
-
-  const scheduledCount = queue.filter(p => p.status === "scheduled").length;
-  const publishedCount = queue.filter(p => p.status === "published").length;
-  const totalViews = queue.filter(p => p.status === "published").reduce((a, p) => a + (p.views || 0), 0);
-
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white">
-      {/* Header */}
-      <div className="border-b border-white/10 bg-black/40 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-3">
-          <Link href="/creator">
-            <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white">
-              <ArrowLeft className="w-4 h-4 mr-1" /> Back
-            </Button>
-          </Link>
-          <Calendar className="w-5 h-5 text-blue-400" />
-          <h1 className="text-lg font-bold">Content Scheduler</h1>
-          <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 text-xs">
-            {scheduledCount} queued
+    <main
+      className="min-h-screen bg-background"
+      aria-labelledby="content-scheduler-title"
+    >
+      <header className="sticky top-0 z-10 border-b border-border/30 bg-background/95 px-4 py-4 backdrop-blur">
+        <div className="mx-auto flex max-w-5xl items-center gap-3">
+          <CalendarClock className="h-5 w-5 text-primary" aria-hidden="true" />
+          <div className="min-w-0 flex-1">
+            <h1 id="content-scheduler-title" className="text-lg font-bold">
+              Content Scheduler
+            </h1>
+            <p className="text-xs text-muted-foreground">
+              Local planning preview · publishing unavailable
+            </p>
+          </div>
+          <Badge
+            variant="outline"
+            className="border-amber-400/30 text-amber-200"
+          >
+            No jobs connected
           </Badge>
         </div>
-      </div>
-
-      <div className="max-w-5xl mx-auto px-4 py-6">
-        {/* Stats row */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          {[
-            { label: "Scheduled", value: scheduledCount, icon: Clock, color: "text-blue-400", bg: "bg-blue-500/10" },
-            { label: "Published", value: publishedCount, icon: CheckCircle, color: "text-green-400", bg: "bg-green-500/10" },
-            { label: "Total Views", value: totalViews.toLocaleString(), icon: Eye, color: "text-purple-400", bg: "bg-purple-500/10" },
-          ].map(stat => (
-            <Card key={stat.label} className={`${stat.bg} border-white/10`}>
-              <CardContent className="p-4 flex items-center gap-3">
-                <stat.icon className={`w-6 h-6 ${stat.color}`} />
-                <div>
-                  <div className={`text-xl font-bold ${stat.color}`}>{stat.value}</div>
-                  <div className="text-xs text-gray-400">{stat.label}</div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="bg-white/5 border border-white/10 mb-4">
-            <TabsTrigger value="queue" className="data-[state=active]:bg-purple-600">
-              <Calendar className="w-3 h-3 mr-1" /> Queue ({queue.length})
-            </TabsTrigger>
-            <TabsTrigger value="create" className="data-[state=active]:bg-purple-600">
-              <Plus className="w-3 h-3 mr-1" /> Schedule Post
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="data-[state=active]:bg-purple-600">
-              <BarChart3 className="w-3 h-3 mr-1" /> Analytics
-            </TabsTrigger>
-          </TabsList>
-
-          {/* Queue */}
-          <TabsContent value="queue">
-            <div className="space-y-3">
-              {queue.length === 0 ? (
-                <Card className="bg-black/40 border-white/10">
-                  <CardContent className="p-12 text-center">
-                    <Calendar className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-                    <p className="text-gray-400">No scheduled posts yet</p>
-                    <Button
-                      onClick={() => setActiveTab("create")}
-                      className="mt-4 bg-purple-600 hover:bg-purple-500"
-                    >
-                      <Plus className="w-4 h-4 mr-2" /> Schedule your first post
-                    </Button>
-                  </CardContent>
-                </Card>
-              ) : (
-                queue.map(post => {
-                  const cfg = statusConfig[post.status];
-                  const StatusIcon = cfg.icon;
-                  return (
-                    <Card key={post.id} className="bg-black/40 border-white/10 hover:border-white/20 transition-colors">
-                      <CardContent className="p-4">
-                        <div className="flex items-start gap-3">
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-2 flex-wrap">
-                              <Badge className={`text-xs ${cfg.color}`}>
-                                <StatusIcon className="w-3 h-3 mr-1" />
-                                {cfg.label}
-                              </Badge>
-                              {post.platforms.map(p => {
-                                const plt = PLATFORMS.find(pl => pl.id === p);
-                                return plt ? (
-                                  <Badge key={p} className="text-xs bg-white/10 text-gray-300 border-white/20">
-                                    {plt.icon} {plt.label}
-                                  </Badge>
-                                ) : null;
-                              })}
-                              <Badge className="text-xs bg-white/5 text-gray-400 border-white/10">
-                                {post.mediaType === "text" ? <FileText className="w-3 h-3 mr-1" /> :
-                                 post.mediaType === "image" ? <Image className="w-3 h-3 mr-1" /> :
-                                 <Video className="w-3 h-3 mr-1" />}
-                                {post.mediaType}
-                              </Badge>
-                            </div>
-                            <p className="text-sm text-gray-300 line-clamp-2">{post.content}</p>
-                            <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
-                              <span className="flex items-center gap-1">
-                                <Clock className="w-3 h-3" />
-                                {post.scheduledAt.toLocaleString()}
-                              </span>
-                              {post.views !== undefined && (
-                                <span className="flex items-center gap-1 text-green-400">
-                                  <Eye className="w-3 h-3" /> {post.views.toLocaleString()} views
-                                </span>
-                              )}
-                              {post.engagement !== undefined && (
-                                <span className="flex items-center gap-1 text-blue-400">
-                                  <Zap className="w-3 h-3" /> {post.engagement} engagements
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          {post.status !== "published" && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDelete(post.id)}
-                              className="text-red-400 hover:text-red-300 hover:bg-red-500/10 shrink-0"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })
-              )}
+      </header>
+      <div className="mx-auto max-w-5xl px-4 py-6">
+        <section
+          className="mb-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5"
+          aria-label="Publishing unavailable notice"
+        >
+          <div className="flex items-start gap-3">
+            <Info
+              className="mt-0.5 h-5 w-5 shrink-0 text-amber-200"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="font-semibold text-amber-100">
+                Publishing integrations unavailable
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-amber-100/75">
+                No verified social platform connection, creator identity, media
+                storage, scheduler, notification service, or analytics event
+                source is connected. All items below are local layout samples.
+              </p>
             </div>
-          </TabsContent>
+          </div>
+        </section>
+        <section
+          className="mb-6 grid gap-4 md:grid-cols-3"
+          aria-label="Scheduler status summary"
+        >
+          <Card className="border-border/40 bg-card/50">
+            <CardContent className="p-4">
+              <Clock3
+                className="mb-3 h-5 w-5 text-sky-300"
+                aria-hidden="true"
+              />
+              <p className="text-xl font-bold">Unavailable</p>
+              <p className="text-xs text-muted-foreground">Scheduled jobs</p>
+            </CardContent>
+          </Card>
+          <Card className="border-border/40 bg-card/50">
+            <CardContent className="p-4">
+              <CheckCircle2
+                className="mb-3 h-5 w-5 text-emerald-300"
+                aria-hidden="true"
+              />
+              <p className="text-xl font-bold">Unavailable</p>
+              <p className="text-xs text-muted-foreground">Published posts</p>
+            </CardContent>
+          </Card>
+          <Card className="border-border/40 bg-card/50">
+            <CardContent className="p-4">
+              <BarChart3
+                className="mb-3 h-5 w-5 text-violet-300"
+                aria-hidden="true"
+              />
+              <p className="text-xl font-bold">No data</p>
+              <p className="text-xs text-muted-foreground">
+                Views and engagement
+              </p>
+            </CardContent>
+          </Card>
+        </section>
+        <nav className="mb-5 flex flex-wrap gap-2" aria-label="Scheduler views">
+          {(["queue", "create", "analytics"] as const).map(view => (
+            <Button
+              key={view}
+              type="button"
+              variant={activeView === view ? "default" : "outline"}
+              onClick={() => setActiveView(view)}
+            >
+              <>
+                {view === "queue" ? (
+                  <CalendarClock className="mr-2 h-4 w-4" aria-hidden="true" />
+                ) : view === "create" ? (
+                  <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
+                ) : (
+                  <BarChart3 className="mr-2 h-4 w-4" aria-hidden="true" />
+                )}
+              </>
+              {view === "queue"
+                ? "Local queue"
+                : view === "create"
+                  ? "Draft a post"
+                  : "Analytics unavailable"}
+            </Button>
+          ))}
+        </nav>
 
-          {/* Create */}
-          <TabsContent value="create">
-            <Card className="bg-black/40 border-white/10">
+        {activeView === "queue" && (
+          <section className="space-y-3" aria-labelledby="queue-title">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h2 id="queue-title" className="text-xl font-semibold">
+                  Local queue samples
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Nothing here is scheduled, published, or delivered.
+                </p>
+              </div>
+              <Badge
+                variant="outline"
+                className="border-muted-foreground/30 text-muted-foreground"
+              >
+                {SAMPLE_POSTS.length} samples
+              </Badge>
+            </div>
+            {SAMPLE_POSTS.map(post => (
+              <Card key={post.id} className="border-border/40 bg-card/40">
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-3">
+                    <div
+                      className="mt-1 rounded-lg bg-secondary/60 p-2"
+                      aria-hidden="true"
+                    >
+                      {post.type === "text" ? (
+                        <FileText className="h-4 w-4" />
+                      ) : post.type === "image" ? (
+                        <ImageOff className="h-4 w-4" />
+                      ) : (
+                        <VideoOff className="h-4 w-4" />
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="mb-2 flex flex-wrap items-center gap-2">
+                        <Badge
+                          variant="outline"
+                          className="border-muted-foreground/30 text-muted-foreground"
+                        >
+                          {post.status}
+                        </Badge>
+                        <Badge
+                          variant="outline"
+                          className="border-border/40 text-muted-foreground"
+                        >
+                          {post.type} preview
+                        </Badge>
+                        {post.platforms.map(platform => (
+                          <Badge
+                            key={platform}
+                            variant="outline"
+                            className="border-border/40 text-muted-foreground"
+                          >
+                            {platform}
+                          </Badge>
+                        ))}
+                      </div>
+                      <p className="text-sm leading-6">{post.body}</p>
+                      <p className="mt-2 text-xs text-muted-foreground">
+                        <Clock3
+                          className="mr-1 inline h-3 w-3"
+                          aria-hidden="true"
+                        />
+                        {post.timing} · metrics unavailable
+                      </p>
+                    </div>
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => announceUnavailable("Post deletion")}
+                      aria-label="Post deletion unavailable"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </section>
+        )}
+
+        {activeView === "create" && (
+          <section aria-labelledby="draft-title">
+            <Card className="border-border/40 bg-card/40">
               <CardHeader>
-                <CardTitle className="text-sm">Schedule a New Post</CardTitle>
+                <CardTitle id="draft-title" className="text-lg">
+                  Draft a local post preview
+                </CardTitle>
+                <p className="text-sm font-normal text-muted-foreground">
+                  This form does not create a job, upload media, publish
+                  content, or notify a platform.
+                </p>
               </CardHeader>
-              <CardContent className="space-y-4">
-                {/* Media type */}
+              <CardContent className="space-y-5">
                 <div>
-                  <label className="text-xs text-gray-400 mb-2 block">Content Type</label>
-                  <div className="flex gap-2">
-                    {(["text", "image", "video"] as const).map(type => (
-                      <button
-                        key={type}
-                        onClick={() => setMediaType(type)}
-                        className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${
-                          mediaType === type
-                            ? "border-purple-500 bg-purple-500/20 text-purple-300"
-                            : "border-white/10 bg-white/5 text-gray-400 hover:border-white/20"
-                        }`}
-                      >
-                        {type === "text" ? <FileText className="w-4 h-4" /> :
-                         type === "image" ? <Image className="w-4 h-4" /> :
-                         <Video className="w-4 h-4" />}
-                        {type.charAt(0).toUpperCase() + type.slice(1)}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div>
-                  <label className="text-xs text-gray-400 mb-2 block">Post Content</label>
+                  <label
+                    htmlFor="post-content"
+                    className="mb-2 block text-sm font-medium"
+                  >
+                    Post content
+                  </label>
                   <Textarea
-                    placeholder="What do you want to share? Use #hashtags and @mentions..."
+                    id="post-content"
+                    placeholder="Write a local draft only"
                     value={content}
-                    onChange={e => setContent(e.target.value)}
-                    rows={4}
-                    className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-purple-500/50 resize-none"
+                    onChange={event => setContent(event.target.value)}
+                    rows={5}
                   />
-                  <div className="flex justify-between mt-1">
-                    <span className="text-xs text-gray-500">
-                      {content.length}/500 characters
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      {content.split(" ").filter(w => w.startsWith("#")).length} hashtags
-                    </span>
-                  </div>
-                </div>
-
-                {/* Platforms */}
-                <div>
-                  <label className="text-xs text-gray-400 mb-2 block">Publish To</label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {PLATFORMS.map(platform => (
-                      <button
-                        key={platform.id}
-                        onClick={() => togglePlatform(platform.id)}
-                        className={`flex items-center gap-3 p-3 rounded-xl border text-sm transition-all ${
-                          selectedPlatforms.includes(platform.id)
-                            ? "border-purple-500/50 bg-purple-500/10 text-white"
-                            : "border-white/10 bg-white/5 text-gray-400 hover:border-white/20"
-                        }`}
-                      >
-                        <span className="text-lg">{platform.icon}</span>
-                        <span className="font-medium">{platform.label}</span>
-                        {selectedPlatforms.includes(platform.id) && (
-                          <CheckCircle className="w-4 h-4 text-purple-400 ml-auto" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Date & Time */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-xs text-gray-400 mb-2 block">Date</label>
-                    <Input
-                      type="date"
-                      value={scheduledDate}
-                      onChange={e => setScheduledDate(e.target.value)}
-                      min={new Date().toISOString().split("T")[0]}
-                      className="bg-white/5 border-white/10 text-white focus:border-purple-500/50"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs text-gray-400 mb-2 block">Time</label>
-                    <Input
-                      type="time"
-                      value={scheduledTime}
-                      onChange={e => setScheduledTime(e.target.value)}
-                      className="bg-white/5 border-white/10 text-white focus:border-purple-500/50"
-                    />
-                  </div>
-                </div>
-
-                {/* Best times hint */}
-                <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20">
-                  <p className="text-xs text-blue-300 flex items-center gap-2">
-                    <Zap className="w-3 h-3" />
-                    <strong>Best times to post:</strong> 9AM, 12PM, 7PM EST — highest engagement windows
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {content.length}/500 characters ·{" "}
+                    {draftCount ? "local draft present" : "no draft"}
                   </p>
                 </div>
-
+                <div>
+                  <span className="mb-2 block text-sm font-medium">
+                    Content type
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {CONTENT_TYPES.map(type => (
+                      <Button
+                        key={type}
+                        type="button"
+                        variant={selectedType === type ? "default" : "outline"}
+                        onClick={() => setSelectedType(type)}
+                        aria-pressed={selectedType === type}
+                      >
+                        {type === "text" ? (
+                          <FileText
+                            className="mr-2 h-4 w-4"
+                            aria-hidden="true"
+                          />
+                        ) : type === "image" ? (
+                          <ImageOff
+                            className="mr-2 h-4 w-4"
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <VideoOff
+                            className="mr-2 h-4 w-4"
+                            aria-hidden="true"
+                          />
+                        )}
+                        {type}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="schedule-date"
+                      className="mb-2 block text-sm font-medium"
+                    >
+                      Local date preview
+                    </label>
+                    <Input
+                      id="schedule-date"
+                      type="date"
+                      value={date}
+                      onChange={event => setDate(event.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="schedule-time"
+                      className="mb-2 block text-sm font-medium"
+                    >
+                      Local time preview
+                    </label>
+                    <Input
+                      id="schedule-time"
+                      type="time"
+                      value={time}
+                      onChange={event => setTime(event.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="rounded-xl border border-border/30 bg-background/30 p-4 text-sm text-muted-foreground">
+                  <LockKeyhole
+                    className="mr-2 inline h-4 w-4 text-primary"
+                    aria-hidden="true"
+                  />
+                  Platforms, media storage, scheduling, publishing, and delivery
+                  are unavailable.
+                </div>
                 <Button
-                  onClick={handleSchedule}
-                  className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold rounded-xl"
+                  type="button"
+                  onClick={() => announceUnavailable("Post scheduling")}
+                  disabled={!content.trim()}
                 >
-                  <Send className="w-4 h-4 mr-2" /> Schedule Post
+                  <Send className="mr-2 h-4 w-4" aria-hidden="true" />
+                  Schedule unavailable
                 </Button>
               </CardContent>
             </Card>
-          </TabsContent>
+          </section>
+        )}
 
-          {/* Analytics */}
-          <TabsContent value="analytics">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card className="bg-black/40 border-white/10">
-                <CardHeader><CardTitle className="text-sm">Best Performing Posts</CardTitle></CardHeader>
-                <CardContent className="space-y-3">
-                  {queue.filter(p => p.status === "published").map(post => (
-                    <div key={post.id} className="p-3 rounded-lg bg-white/5 space-y-1">
-                      <p className="text-xs text-gray-300 line-clamp-1">{post.content}</p>
-                      <div className="flex gap-3 text-xs">
-                        <span className="text-green-400">👁 {post.views?.toLocaleString()}</span>
-                        <span className="text-blue-400">⚡ {post.engagement}</span>
-                        <span className="text-gray-500">{post.scheduledAt.toLocaleDateString()}</span>
-                      </div>
-                    </div>
-                  ))}
-                  {queue.filter(p => p.status === "published").length === 0 && (
-                    <p className="text-gray-500 text-sm text-center py-4">No published posts yet</p>
-                  )}
-                </CardContent>
-              </Card>
-              <Card className="bg-black/40 border-white/10">
-                <CardHeader><CardTitle className="text-sm">Platform Performance</CardTitle></CardHeader>
-                <CardContent className="space-y-3">
-                  {PLATFORMS.map(platform => {
-                    const count = queue.filter(p => p.platforms.includes(platform.id)).length;
-                    return (
-                      <div key={platform.id} className="flex items-center gap-3">
-                        <span className="text-lg">{platform.icon}</span>
-                        <div className="flex-1">
-                          <div className="flex justify-between text-xs mb-1">
-                            <span>{platform.label}</span>
-                            <span className="text-gray-400">{count} posts</span>
-                          </div>
-                          <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
-                              style={{ width: `${Math.min(100, (count / Math.max(1, queue.length)) * 100)}%` }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-        </Tabs>
+        {activeView === "analytics" && (
+          <section aria-labelledby="analytics-title">
+            <Card className="border-border/40 bg-card/40">
+              <CardContent className="p-10 text-center">
+                <XCircle
+                  className="mx-auto mb-4 h-10 w-10 text-muted-foreground"
+                  aria-hidden="true"
+                />
+                <h2 id="analytics-title" className="text-xl font-semibold">
+                  Analytics unavailable
+                </h2>
+                <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
+                  No verified platform event source, published-post identifier,
+                  view counter, engagement stream, or attribution model is
+                  connected. No performance number is shown.
+                </p>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="mt-5"
+                  onClick={() => announceUnavailable("Analytics retrieval")}
+                >
+                  <BarChart3 className="mr-2 h-4 w-4" aria-hidden="true" />
+                  Analytics unavailable
+                </Button>
+              </CardContent>
+            </Card>
+          </section>
+        )}
+
+        <div
+          className="mt-6 rounded-xl border border-border/30 bg-card/30 p-4 text-sm text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
+          {status}
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
