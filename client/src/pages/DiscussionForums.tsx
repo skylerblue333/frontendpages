@@ -1,570 +1,332 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useMemo, useState } from "react";
+import {
+  Bookmark,
+  CheckCircle2,
+  CircleSlash2,
+  Clock3,
+  EyeOff,
+  HeartOff,
+  LockKeyhole,
+  MessageCircle,
+  MessageCircleOff,
+  PinOff,
+  Search,
+  ShieldAlert,
+  Tag,
+  UserRound,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useAuth } from "@/_core/hooks/useAuth";
-import { toast } from "sonner";
-import {
-  MessageCircle, ThumbsUp, Share2, Flag, Reply, Search, Filter, TrendingUp,
-  Clock, User, Award, Bookmark, Heart, Send, X, Edit2, Trash2, Pin,
-  AlertCircle, CheckCircle, HelpCircle, Lightbulb, Bug, Zap, Eye
-} from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 
-interface Post {
+type Category = "All" | "Education" | "Community" | "Product";
+type Discussion = {
   id: string;
-  author: {
-    name: string;
-    avatar: string;
-    role: "instructor" | "student" | "moderator";
-  };
   title: string;
-  content: string;
-  category: "general" | "question" | "bug" | "suggestion" | "resource";
-  course: string;
-  lesson: string;
-  createdAt: Date;
-  updatedAt: Date;
-  likes: number;
-  replies: number;
-  views: number;
-  isPinned: boolean;
-  isResolved: boolean;
-  tags: string[];
-}
-
-interface Reply {
-  id: string;
-  author: {
-    name: string;
-    avatar: string;
-    role: "instructor" | "student" | "moderator";
-  };
-  content: string;
-  createdAt: Date;
-  likes: number;
-  isAnswer: boolean;
-}
-
-// Mock data
-const MOCK_POSTS: Post[] = [
+  category: Exclude<Category, "All">;
+  summary: string;
+  status: string;
+};
+const discussions: Discussion[] = [
   {
-    id: "p1",
-    author: {
-      name: "Alice Johnson",
-      avatar: "👩‍💻",
-      role: "student"
-    },
-    title: "How do I deploy a smart contract to mainnet?",
-    content: "I've written my smart contract and tested it on testnet. What are the steps to deploy it to Ethereum mainnet? Any best practices I should follow?",
-    category: "question",
-    course: "blockchain-101",
-    lesson: "Smart Contracts Intro",
-    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    updatedAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    likes: 12,
-    replies: 5,
-    views: 89,
-    isPinned: false,
-    isResolved: true,
-    tags: ["smart-contracts", "deployment", "mainnet"]
+    id: "education",
+    title: "Education discussion concept",
+    category: "Education",
+    summary:
+      "Local discussion concept pending verified authorship, moderation, timestamps, and reply persistence.",
+    status: "Discussion unavailable",
   },
   {
-    id: "p2",
-    author: {
-      name: "Bob Smith",
-      avatar: "👨‍🏫",
-      role: "instructor"
-    },
-    title: "New lesson: Advanced Solidity Patterns",
-    content: "I've just released a new lesson covering advanced Solidity patterns including proxy patterns, access control, and gas optimization. Check it out in the course materials!",
-    category: "resource",
-    course: "blockchain-101",
-    lesson: "Smart Contracts Intro",
-    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-    updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-    likes: 45,
-    replies: 8,
-    views: 234,
-    isPinned: true,
-    isResolved: false,
-    tags: ["solidity", "patterns", "advanced"]
+    id: "community",
+    title: "Community discussion concept",
+    category: "Community",
+    summary:
+      "Local community thread concept pending identity, abuse prevention, privacy, and notification services.",
+    status: "Discussion unavailable",
   },
   {
-    id: "p3",
-    author: {
-      name: "Carol Davis",
-      avatar: "👩‍💼",
-      role: "student"
-    },
-    title: "Bug: Quiz not submitting answers",
-    content: "When I try to submit my quiz answers, I get an error message. The page shows 'Error submitting quiz' but doesn't tell me what went wrong. This happened in the Blockchain Fundamentals quiz.",
-    category: "bug",
-    course: "blockchain-101",
-    lesson: "Final Assessment",
-    createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
-    updatedAt: new Date(Date.now() - 1 * 60 * 60 * 1000),
-    likes: 3,
-    replies: 2,
-    views: 24,
-    isPinned: false,
-    isResolved: false,
-    tags: ["bug", "quiz", "technical-issue"]
+    id: "product",
+    title: "Product feedback concept",
+    category: "Product",
+    summary:
+      "Local feedback thread concept pending ownership, issue tracking, moderation, and durable records.",
+    status: "Discussion unavailable",
   },
-  {
-    id: "p4",
-    author: {
-      name: "David Lee",
-      avatar: "👨‍💻",
-      role: "student"
-    },
-    title: "Suggestion: Add interactive coding challenges",
-    content: "It would be great if the courses included interactive coding challenges where we can write and test code directly in the browser. This would help reinforce the concepts we're learning.",
-    category: "suggestion",
-    course: "python-dev",
-    lesson: "Functions & Modules",
-    createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
-    updatedAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
-    likes: 28,
-    replies: 6,
-    views: 156,
-    isPinned: false,
-    isResolved: false,
-    tags: ["feature-request", "interactive", "coding"]
-  }
 ];
-
-const CATEGORY_ICONS: Record<string, React.ReactNode> = {
-  general: <MessageCircle className="w-4 h-4" />,
-  question: <HelpCircle className="w-4 h-4" />,
-  bug: <Bug className="w-4 h-4" />,
-  suggestion: <Lightbulb className="w-4 h-4" />,
-  resource: <Award className="w-4 h-4" />
-};
-
-const CATEGORY_COLORS: Record<string, string> = {
-  general: "bg-blue-500/20 text-blue-300 border-blue-500/30",
-  question: "bg-purple-500/20 text-purple-300 border-purple-500/30",
-  bug: "bg-red-500/20 text-red-300 border-red-500/30",
-  suggestion: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
-  resource: "bg-green-500/20 text-green-300 border-green-500/30"
-};
-
 export default function DiscussionForums() {
-  const { isAuthenticated, user } = useAuth();
-  const [posts, setPosts] = useState<Post[]>(MOCK_POSTS);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [showNewPostForm, setShowNewPostForm] = useState(false);
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-  const [replyContent, setReplyContent] = useState("");
-  const [newPost, setNewPost] = useState({
-    title: "",
-    content: "",
-    category: "question" as const,
-    course: "blockchain-101",
-    lesson: "General"
-  });
-
-  const handleCreatePost = () => {
-    if (!newPost.title || !newPost.content) {
-      toast.error("Please fill in all fields");
-      return;
-    }
-
-    const post: Post = {
-      id: `p${posts.length + 1}`,
-      author: {
-        name: user?.name || "Anonymous",
-        avatar: "👤",
-        role: "student"
-      },
-      ...newPost,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      likes: 0,
-      replies: 0,
-      views: 0,
-      isPinned: false,
-      isResolved: false,
-      tags: newPost.title.toLowerCase().split(" ").slice(0, 3)
-    };
-
-    setPosts([post, ...posts]);
-    setNewPost({
-      title: "",
-      content: "",
-      category: "question",
-      course: "blockchain-101",
-      lesson: "General"
-    });
-    setShowNewPostForm(false);
-    toast.success("Post created successfully!");
-  };
-
-  const handleLikePost = (id: string) => {
-    setPosts(posts.map(p =>
-      p.id === id ? { ...p, likes: p.likes + 1 } : p
-    ));
-  };
-
-  const handleReply = () => {
-    if (!replyContent.trim()) {
-      toast.error("Please enter a reply");
-      return;
-    }
-
-    if (selectedPost) {
-      setPosts(posts.map(p =>
-        p.id === selectedPost.id ? { ...p, replies: p.replies + 1 } : p
-      ));
-      setReplyContent("");
-      toast.success("Reply posted!");
-    }
-  };
-
-  const filteredPosts = posts.filter(p => {
-    const matchesSearch = p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         p.content.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "all" || p.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
-
-  // Post Detail View
-  if (selectedPost) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 p-6">
-        <div className="max-w-4xl mx-auto">
-          {/* Back Button */}
-          <Button
-            variant="ghost"
-            onClick={() => setSelectedPost(null)}
-            className="text-slate-400 hover:text-white mb-6"
-          >
-            ← Back to Forums
-          </Button>
-
-          {/* Post */}
-          <Card className="bg-slate-900/50 border border-white/10 mb-6">
-            <CardContent className="p-8">
-              {/* Header */}
-              <div className="flex items-start justify-between mb-6">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-4">
-                    <h1 className="text-2xl font-bold text-white">{selectedPost.title}</h1>
-                    {selectedPost.isPinned && (
-                      <Pin className="w-5 h-5 text-yellow-400" />
-                    )}
-                    {selectedPost.isResolved && (
-                      <CheckCircle className="w-5 h-5 text-green-400" />
-                    )}
-                  </div>
-                  <div className="flex items-center gap-4 text-sm text-slate-400">
-                    <span className="flex items-center gap-1">
-                      <User className="w-4 h-4" />
-                      {selectedPost.author.name}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
-                      {selectedPost.createdAt.toLocaleDateString()}
-                    </span>
-                    <span>{selectedPost.views} views</span>
-                  </div>
-                </div>
-                <Badge className={`text-xs px-3 py-1 ${CATEGORY_COLORS[selectedPost.category]}`}>
-                  {CATEGORY_ICONS[selectedPost.category]}
-                  <span className="ml-1">{selectedPost.category.toUpperCase()}</span>
-                </Badge>
-              </div>
-
-              {/* Content */}
-              <p className="text-slate-300 text-lg leading-relaxed mb-6">{selectedPost.content}</p>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                {selectedPost.tags.map(tag => (
-                  <Badge key={tag} variant="outline" className="border-slate-600 text-slate-400">
-                    #{tag}
+  const [category, setCategory] = useState<Category>("All");
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState<Discussion | null>(null);
+  const [draft, setDraft] = useState("");
+  const [status, setStatus] = useState(
+    "Community service unavailable. Showing local discussion concepts only."
+  );
+  const visible = useMemo(
+    () =>
+      discussions.filter(
+        item =>
+          (category === "All" || item.category === category) &&
+          `${item.title} ${item.summary}`
+            .toLowerCase()
+            .includes(query.toLowerCase())
+      ),
+    [category, query]
+  );
+  const blocked = (action: string) =>
+    setStatus(
+      `${action} is unavailable locally. No post, reply, like, bookmark, notification, moderation, identity, or account mutation was started.`
+    );
+  return (
+    <div className="min-h-screen bg-background">
+      <PageHeader
+        icon={MessageCircle}
+        title="Discussion forums"
+        subtitle="Review local discussion concepts without fabricated authors, timestamps, views, likes, replies, resolution, bookmarks, or community outcomes."
+        badge="Local preview"
+        badgeVariant="outline"
+      />
+      <div className="mx-auto max-w-7xl space-y-8 px-4 py-8">
+        <div className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4 text-sm text-amber-100">
+          <strong>Community service unavailable.</strong> No authenticated
+          identity, discussion store, moderation queue, notification endpoint,
+          abuse controls, or engagement source is connected.
+        </div>
+        {selected ? (
+          <div className="space-y-6">
+            <Button onClick={() => setSelected(null)} variant="ghost">
+              ← Back to discussions
+            </Button>
+            <Card className="border-slate-800 bg-slate-900/75 p-6">
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <Badge variant="outline">
+                    {selected.category} · Unavailable
                   </Badge>
+                  <h2 className="mt-3 text-2xl font-semibold">
+                    {selected.title}
+                  </h2>
+                  <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-400">
+                    {selected.summary}
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => blocked("Like discussion")}
+                    variant="outline"
+                  >
+                    <HeartOff className="mr-2 h-4 w-4" /> Like unavailable
+                  </Button>
+                  <Button
+                    onClick={() => blocked("Bookmark discussion")}
+                    variant="outline"
+                  >
+                    <Bookmark className="mr-2 h-4 w-4" /> Save unavailable
+                  </Button>
+                </div>
+              </div>
+              <div className="mt-6 grid gap-3 sm:grid-cols-4">
+                {(
+                  [
+                    ["Author", "Unavailable"],
+                    ["Created", "Unavailable"],
+                    ["Views", "Unavailable"],
+                    ["Replies", "Unavailable"],
+                  ] as Array<[string, string]>
+                ).map(([label, value]) => (
+                  <div
+                    className="rounded-lg border border-slate-800 p-3"
+                    key={label}
+                  >
+                    <p className="text-xs text-slate-500">{label}</p>
+                    <p className="mt-1 text-sm">{value}</p>
+                  </div>
                 ))}
               </div>
-
-              {/* Actions */}
-              <div className="flex gap-4 pt-6 border-t border-slate-700">
-                <Button
-                  variant="ghost"
-                  className="text-slate-400 hover:text-cyan-400"
-                  onClick={() => handleLikePost(selectedPost.id)}
-                >
-                  <ThumbsUp className="w-4 h-4 mr-2" />
-                  {selectedPost.likes} Likes
-                </Button>
-                <Button variant="ghost" className="text-slate-400 hover:text-cyan-400">
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  {selectedPost.replies} Replies
-                </Button>
-                <Button variant="ghost" className="text-slate-400 hover:text-cyan-400">
-                  <Bookmark className="w-4 h-4 mr-2" />
-                  Save
-                </Button>
+              <div className="mt-6 rounded-xl border border-dashed border-slate-700 p-10 text-center">
+                <MessageCircleOff className="mx-auto h-8 w-8 text-slate-500" />
+                <h2 className="mt-4 text-xl font-semibold">
+                  Discussion content unavailable
+                </h2>
+                <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-400">
+                  No post body, tags, author, timestamp, view count, resolution,
+                  moderation outcome, or reply history is available.
+                </p>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Reply Form */}
-          <Card className="bg-slate-900/50 border border-white/10 mb-6">
-            <CardHeader>
-              <CardTitle className="text-white">Your Reply</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Textarea
-                placeholder="Share your thoughts, answer, or suggestion..."
-                value={replyContent}
-                onChange={(e) => setReplyContent(e.target.value)}
-                className="bg-slate-800/50 border-slate-700 text-white min-h-32"
-              />
-              <div className="flex gap-3">
-                <Button
-                  className="flex-1 bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300"
-                  onClick={handleReply}
-                >
-                  <Send className="w-4 h-4 mr-2" />
-                  Post Reply
-                </Button>
-                <Button
-                  variant="outline"
-                  className="border-slate-600"
-                  onClick={() => setReplyContent("")}
-                >
-                  Clear
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Replies */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold text-white mb-4">{selectedPost.replies} Replies</h2>
-            {[1, 2].map(i => (
-              <Card key={i} className="bg-slate-900/50 border border-white/10">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="text-2xl">👤</div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <p className="font-semibold text-white">Reply Author {i}</p>
-                        {i === 1 && (
-                          <Badge className="bg-green-500/20 text-green-300 border-green-500/30 text-xs px-2 py-0.5">
-                            ANSWER
-                          </Badge>
-                        )}
-                      </div>
-                      <p className="text-slate-300 mb-3">This is a helpful reply to the question. The author has provided a solution or insight.</p>
-                      <div className="flex gap-4 text-sm">
-                        <Button variant="ghost" size="sm" className="text-slate-400 hover:text-cyan-400">
-                          <ThumbsUp className="w-4 h-4 mr-1" />
-                          {i === 1 ? "12" : "5"}
-                        </Button>
-                        <Button variant="ghost" size="sm" className="text-slate-400 hover:text-cyan-400">
-                          <Reply className="w-4 h-4 mr-1" />
-                          Reply
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Forums List View
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Discussion Forums</h1>
-          <p className="text-slate-400">Connect with fellow learners, ask questions, and share knowledge</p>
-        </div>
-
-        {/* New Post Button */}
-        <div className="mb-8">
-          <Button
-            className="bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 border border-cyan-500/30"
-            onClick={() => setShowNewPostForm(!showNewPostForm)}
-          >
-            <MessageCircle className="w-4 h-4 mr-2" />
-            New Discussion
-          </Button>
-        </div>
-
-        {/* New Post Form */}
-        {showNewPostForm && (
-          <Card className="bg-slate-900/50 border border-cyan-500/30 mb-8">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-white">Start a New Discussion</CardTitle>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowNewPostForm(false)}
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <label className="text-sm text-slate-300 block mb-2">Title</label>
-                <Input
-                  placeholder="What's your question or topic?"
-                  value={newPost.title}
-                  onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-                  className="bg-slate-800/50 border-slate-700 text-white"
-                />
-              </div>
-              <div>
-                <label className="text-sm text-slate-300 block mb-2">Description</label>
-                <Textarea
-                  placeholder="Provide details and context..."
-                  value={newPost.content}
-                  onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
-                  className="bg-slate-800/50 border-slate-700 text-white min-h-32"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm text-slate-300 block mb-2">Category</label>
-                  <select
-                    value={newPost.category}
-                    onChange={(e) => setNewPost({ ...newPost, category: e.target.value as any })}
-                    className="w-full bg-slate-800/50 border border-slate-700 text-white rounded p-2"
-                  >
-                    <option value="question">Question</option>
-                    <option value="bug">Bug Report</option>
-                    <option value="suggestion">Suggestion</option>
-                    <option value="resource">Resource</option>
-                    <option value="general">General</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="text-sm text-slate-300 block mb-2">Course</label>
-                  <select
-                    value={newPost.course}
-                    onChange={(e) => setNewPost({ ...newPost, course: e.target.value })}
-                    className="w-full bg-slate-800/50 border border-slate-700 text-white rounded p-2"
-                  >
-                    <option value="blockchain-101">Blockchain Fundamentals</option>
-                    <option value="python-dev">Python for Builders</option>
-                    <option value="js-mastery">JavaScript & React</option>
-                  </select>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <Button
-                  className="flex-1 bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300"
-                  onClick={handleCreatePost}
-                >
-                  Post Discussion
-                </Button>
-                <Button
-                  variant="outline"
-                  className="flex-1 border-slate-600"
-                  onClick={() => setShowNewPostForm(false)}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Search and Filter */}
-        <div className="flex gap-4 mb-8">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-3 w-5 h-5 text-slate-500" />
-            <Input
-              placeholder="Search discussions..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-slate-800/50 border-slate-700 text-white"
-            />
-          </div>
-          <div className="flex gap-2">
-            {["all", "question", "bug", "suggestion", "resource"].map(cat => (
-              <Button
-                key={cat}
-                variant={selectedCategory === cat ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectedCategory(cat)}
-                className={selectedCategory === cat ? "bg-cyan-500/20 text-cyan-300" : "border-slate-600"}
-              >
-                {cat.charAt(0).toUpperCase() + cat.slice(1)}
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        {/* Posts List */}
-        <div className="space-y-4">
-          {filteredPosts.map(post => (
-            <Card
-              key={post.id}
-              className="bg-slate-900/50 border border-white/10 hover:border-cyan-500/50 transition-all cursor-pointer"
-              onClick={() => setSelectedPost(post)}
-            >
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <div className="text-3xl">{post.author.avatar}</div>
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h3 className="text-lg font-semibold text-white hover:text-cyan-300 transition-colors">
-                            {post.title}
-                          </h3>
-                          {post.isPinned && <Pin className="w-4 h-4 text-yellow-400" />}
-                          {post.isResolved && <CheckCircle className="w-4 h-4 text-green-400" />}
-                        </div>
-                        <p className="text-slate-400 text-sm mb-3">{post.content.substring(0, 150)}...</p>
-                      </div>
-                      <Badge className={`text-xs px-2 py-1 shrink-0 ${CATEGORY_COLORS[post.category]}`}>
-                        {post.category}
-                      </Badge>
-                    </div>
-                    <div className="flex items-center justify-between text-sm text-slate-400">
-                      <div className="flex gap-4">
-                        <span className="flex items-center gap-1">
-                          <User className="w-4 h-4" />
-                          {post.author.name}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          {post.createdAt.toLocaleDateString()}
-                        </span>
-                      </div>
-                      <div className="flex gap-4">
-                        <span className="flex items-center gap-1">
-                          <ThumbsUp className="w-4 h-4" />
-                          {post.likes}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <MessageCircle className="w-4 h-4" />
-                          {post.replies}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
             </Card>
-          ))}
+            <Card className="border-slate-800 bg-slate-900/75 p-6">
+              <div className="flex items-center gap-3">
+                <MessageCircle className="h-5 w-5 text-cyan-200" />
+                <div>
+                  <h2 className="font-semibold">Local reply draft</h2>
+                  <p className="mt-1 text-sm text-slate-400">
+                    This field remains in component memory and cannot be
+                    submitted or notified.
+                  </p>
+                </div>
+              </div>
+              <div className="mt-5 flex gap-2">
+                <Textarea
+                  aria-label="Reply draft"
+                  onChange={event => setDraft(event.target.value)}
+                  placeholder="Reply draft only"
+                  rows={3}
+                  value={draft}
+                />
+                <Button
+                  disabled={!draft.trim()}
+                  onClick={() => blocked("Reply to discussion")}
+                  variant="outline"
+                >
+                  Reply unavailable
+                </Button>
+              </div>
+            </Card>
+          </div>
+        ) : (
+          <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
+            <Card className="border-slate-800 bg-slate-900/75 p-6">
+              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-widest text-slate-500">
+                    Discussion catalog
+                  </p>
+                  <h2 className="mt-1 text-2xl font-semibold">
+                    Local community concepts
+                  </h2>
+                </div>
+                <div className="relative w-full md:max-w-sm">
+                  <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
+                  <Input
+                    aria-label="Search discussions"
+                    className="pl-9"
+                    onChange={event => setQuery(event.target.value)}
+                    placeholder="Search discussions"
+                    value={query}
+                  />
+                </div>
+              </div>
+              <p className="mt-3 text-sm leading-6 text-slate-400">
+                Local entries describe forum structure only. They do not
+                represent real authors, community activity, content, engagement,
+                or moderation outcomes.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {(
+                  ["All", "Education", "Community", "Product"] as Category[]
+                ).map(item => (
+                  <Button
+                    aria-pressed={category === item}
+                    key={item}
+                    onClick={() => setCategory(item)}
+                    size="sm"
+                    variant={category === item ? "default" : "outline"}
+                  >
+                    {item}
+                  </Button>
+                ))}
+              </div>
+              <div className="mt-6 space-y-3">
+                {visible.map(item => (
+                  <button
+                    className="w-full rounded-xl border border-slate-800 bg-slate-950/60 p-5 text-left transition hover:border-cyan-400/30"
+                    key={item.id}
+                    onClick={() => setSelected(item)}
+                    type="button"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-medium">{item.title}</p>
+                        <p className="mt-1 text-xs text-slate-500">
+                          {item.category} · Author unavailable · Timestamp
+                          unavailable
+                        </p>
+                      </div>
+                      <Badge variant="outline">Unavailable</Badge>
+                    </div>
+                    <p className="mt-3 text-sm leading-6 text-slate-400">
+                      {item.summary}
+                    </p>
+                  </button>
+                ))}
+                {visible.length === 0 && (
+                  <div className="rounded-xl border border-slate-800 p-8 text-center text-sm text-slate-400">
+                    No local discussions match this query.
+                  </div>
+                )}
+              </div>
+              <Button
+                className="mt-5"
+                onClick={() => blocked("Create discussion")}
+                variant="outline"
+              >
+                New discussion unavailable
+              </Button>
+            </Card>
+            <aside>
+              <Card className="border-slate-800 bg-slate-900/75 p-6">
+                <p className="text-xs uppercase tracking-widest text-slate-500">
+                  Forum boundaries
+                </p>
+                <h2 className="mt-2 text-xl font-semibold">Not connected</h2>
+                <div className="mt-5 grid gap-2">
+                  {(
+                    [
+                      ["Identity", "Unavailable"],
+                      ["Content", "Unavailable"],
+                      ["Engagement", "Unavailable"],
+                      ["Moderation", "Unavailable"],
+                      ["Notifications", "Unavailable"],
+                    ] as Array<[string, string]>
+                  ).map(([label, value]) => (
+                    <div
+                      className="rounded-lg border border-slate-800 p-3"
+                      key={label}
+                    >
+                      <p className="text-xs text-slate-500">{label}</p>
+                      <p className="mt-1 text-sm">{value}</p>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+              <Card className="mt-6 border-slate-800 bg-slate-900/75 p-6">
+                <div className="flex gap-3">
+                  <LockKeyhole className="h-5 w-5 text-cyan-200" />
+                  <p className="text-sm leading-6 text-slate-400">
+                    A real forum requires authenticated authorship, content
+                    policy, moderation, rate limits, privacy, retention,
+                    deletion, and auditable mutations.
+                  </p>
+                </div>
+                <div className="mt-4 flex gap-3">
+                  <ShieldAlert className="h-5 w-5 text-amber-200" />
+                  <p className="text-sm leading-6 text-slate-400">
+                    No views, likes, replies, pinned or resolved status,
+                    timestamps, author, or social proof is claimed.
+                  </p>
+                </div>
+                <div className="mt-4 flex gap-3">
+                  <CircleSlash2 className="h-5 w-5 text-slate-500" />
+                  <p className="text-sm leading-6 text-slate-400">
+                    No post, reply, like, bookmark, notification, moderation, or
+                    account operation is available locally.
+                  </p>
+                </div>
+              </Card>
+            </aside>
+          </div>
+        )}
+        <p
+          aria-live="polite"
+          className="rounded-lg border border-slate-800 p-4 text-sm text-slate-400"
+        >
+          {status}
+        </p>
+        <div className="flex items-center gap-2 text-xs text-slate-500">
+          <CheckCircle2 className="h-4 w-4 text-emerald-300" /> Local discussion
+          catalog; no community mutation occurred.
         </div>
       </div>
     </div>
