@@ -195,7 +195,7 @@ Route text capture: `/home/ubuntu/page_texts/localhost_5175_content-scheduler.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_15-59-32_3614.webp`
 Blocked-create screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_15-59-40_7681.webp`
 
-## contract-abi-visual-checkpoint.md
+## contract-a-b-i-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_16-01-54_7793.webp`
 Blocked-inspect screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_16-02-03_8198.webp`
 
@@ -947,6 +947,6 @@ Mobile screenshot: `/home/ubuntu/screenshots/content-vault-mobile-390x844.png`
 Desktop screenshot: `/home/ubuntu/screenshots/context-menu-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/context-menu-mobile-390x844.png`
 
-## contract-abi-visual-checkpoint.md
+## contract-a-b-i-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/contract-abi-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/contract-abi-mobile-390x844.png`
