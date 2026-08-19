@@ -323,6 +323,12 @@ Route text capture: `/home/ubuntu/page_texts/localhost_5175_dating-profile.md`
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_16-33-40_5014.webp`
 Blocked-calculation screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_16-33-49_3669.webp`
 
+## decentralized-identity-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-59-42_7717.webp`
+Credentials screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-59-55_2726.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_decentralized-identity.md`
+Blocked-credential screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-00-21_8708.webp`
+
 ## department-management-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_07-21-53_5026.webp`
 Blocked-manage screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_07-22-02_8482.webp`
