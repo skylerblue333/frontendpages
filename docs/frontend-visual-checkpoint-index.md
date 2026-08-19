@@ -304,6 +304,11 @@ Local-draft screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-51-25_
 Blocked-send screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-51-34_8073.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_dating-messages.md`
 
+## dating-premium-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-56-29_1708.webp`
+Blocked-checkout screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-56-38_2895.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_dating-premium.md`
+
 ## dating-profile-setup-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_08-13-20_6736.webp`
 Blocked-completion screenshot: `/home/ubuntu/screenshots/localhost_2026-08-18_08-13-39_5751.webp`
