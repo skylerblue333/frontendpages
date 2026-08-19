@@ -338,6 +338,11 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-03-42_3652
 Blocked-new-task screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-04-01_6271.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_dependency-graph.md`
 
+## deployment-pipeline-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-06-43_4376.webp`
+Blocked-run screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-06-53_1984.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_deployment-pipeline.md`
+
 ## discussion-forums-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-30-52_8152.webp`
 Detail-view screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-31-10_3476.webp`
