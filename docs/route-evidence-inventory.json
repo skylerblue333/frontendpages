@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "7734b6ad6ac6aa44e22abf89c17b683425b029b6",
+  "generated_at_commit": "a4eedfb7d45bda8250c5c66fd3aa33cd4cad4efa",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 139,
-  "routes_with_visual_checkpoint": 139,
+  "routes_with_review": 140,
+  "routes_with_visual_checkpoint": 140,
   "routes_with_placeholder_signal": 786,
   "routes": [
     {
@@ -211,8 +211,8 @@
       "component": "AITrainingLoops",
       "source": "client/src/pages/AITrainingLoops.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
