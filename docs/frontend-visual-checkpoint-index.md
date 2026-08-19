@@ -946,3 +946,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/content-vault-mobile-390x844.png`
 ## context-menu-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/context-menu-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/context-menu-mobile-390x844.png`
+
+## contract-abi-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/contract-abi-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/contract-abi-mobile-390x844.png`

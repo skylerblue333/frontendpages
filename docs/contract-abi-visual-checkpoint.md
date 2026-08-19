@@ -1,8 +1,11 @@
 # ContractABI visual checkpoint
 
-The route `/contract-a-b-i` was verified in the direct Vite client at the responsive desktop viewport. The new layout renders a contract-service-unavailable notice, typed local interface concepts, network and state filter groups, selected-interface address/network/artifact/functions/events/verification unavailable fields, and safety guidance for network validation, artifact provenance, deterministic parsing, wallet authorization, simulation, signature verification, replay protection, and chain mutation controls.
+# ContractABI visual checkpoint
 
-The `Inspect unavailable` action was activated. The status changed to: `Inspect contract is unavailable locally. No chain read, ABI parse, wallet, transaction, signature, deployment, or contract mutation request was started.` No chain read, ABI parse, wallet, transaction, signature, deployment, or contract mutation operation occurred.
+Route: `/contract-a-b-i`
 
-Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_16-01-54_7793.webp`
-Blocked-inspect screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_16-02-03_8198.webp`
+Desktop screenshot: `/home/ubuntu/screenshots/contract-abi-desktop-1440x1000.png`
+
+Mobile screenshot: `/home/ubuntu/screenshots/contract-abi-mobile-390x844.png`
+
+The desktop render presents a clear contract-execution boundary, truthful ABI state, disabled ABI/validation/simulation/transaction controls, release requirements, and local-only capability map. The 390×844 render stacks the same sections without horizontal clipping and keeps network identity, ABI schema, simulation, signer authorization, replay protection, transaction failure, receipt, audit, and unavailable-action disclosures readable. No network, address, ABI, signer, signature, transaction, receipt, or audit outcome is fabricated.
