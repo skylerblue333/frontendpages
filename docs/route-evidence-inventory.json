@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "a098c2041ea1e478978d0f81cf15384e05e37e8d",
+  "generated_at_commit": "dba9b8f82092e6be49ea2a2b2363a448dbd5bf3b",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 181,
-  "routes_with_visual_checkpoint": 181,
+  "routes_with_review": 182,
+  "routes_with_visual_checkpoint": 182,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -1192,8 +1192,8 @@
       "component": "BugReporting",
       "source": "client/src/pages/BugReporting.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
