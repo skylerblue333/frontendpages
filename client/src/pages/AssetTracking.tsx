@@ -1,20 +1,13 @@
-import React from "react";
+import { useState } from "react";
+import { CheckCircle2, FileSearch, LockKeyhole, Package, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
-const AssetTracking = () => {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-6 text-4xl font-bold text-white">AssetTracking</h1>
-        <Card className="border-purple-600 bg-slate-800 p-6">
-          <p className="text-gray-300">
-            AssetTracking feature coming soon...
-          </p>
-        </Card>
-      </div>
-    </div>
-  );
-};
+const assetTypes = ["Digital asset intent", "Physical asset intent", "Document intent", "License or entitlement intent", "Treasury or custody intent"];
+const gates = ["Authenticated owner, tenant, source, and provenance", "Identity, custody, valuation, location, and lifecycle rules", "Transfers, access, permissions, reconciliation, and audit", "Privacy, retention, insurance, tax, and support policy", "Rollback, dispute, loss, incident, and recovery procedure"];
 
-export default AssetTracking;
+export default function AssetTracking() {
+  const [assetType, setAssetType] = useState(assetTypes[0]);
+  const [saved, setSaved] = useState(false);
+  return <main className="min-h-screen bg-gradient-to-br from-slate-950 via-cyan-950/40 to-slate-900 p-6 text-white sm:p-10"><div className="mx-auto max-w-5xl"><div className="flex items-center gap-4"><div className="flex size-12 items-center justify-center rounded-2xl bg-cyan-300/10 text-cyan-200"><Package className="size-6" /></div><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200/70">Asset governance</p><h1 className="text-3xl font-black sm:text-4xl">Asset tracking workspace</h1></div><span className="ml-auto rounded-full border border-amber-300/20 bg-amber-300/[0.06] px-3 py-1 text-xs text-amber-100">No asset source</span></div><div className="mt-8 rounded-3xl border border-white/10 bg-gradient-to-br from-cyan-400/[0.14] via-indigo-400/[0.08] to-transparent p-6 sm:p-10"><div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200"><ShieldAlert className="size-4" />Truthful asset boundary</div><h2 className="mt-4 max-w-3xl text-4xl font-black tracking-tight">Track responsibility only when the record can prove it.</h2><p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">This local workspace helps define asset categories, ownership, custody, valuation, and lifecycle controls. It does not resolve an asset, establish ownership, display a balance, perform a transfer, or claim financial value.</p><div className="mt-7 flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-200 text-slate-950 hover:bg-cyan-100">{saved ? "Review saved locally" : "Save asset review locally"}</Button><Button onClick={() => setSaved(false)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">Reset</Button></div></div><section className="mt-8 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Card className="border-white/10 bg-white/[0.04] p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Asset intent</p><h2 className="mt-2 text-2xl font-black">Configure a local review</h2><label className="mt-6 block text-sm font-semibold text-slate-300">Asset category<select value={assetType} onChange={event => setAssetType(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm font-normal text-white outline-none">{assetTypes.map(item => <option key={item}>{item}</option>)}</select></label><div className="mt-6 grid gap-3 sm:grid-cols-3">{[{ label: "Identity", value: "Unavailable" }, { label: "Custody", value: "Unconfigured" }, { label: "Value", value: "Not asserted" }].map(item => <div key={item.label} className="rounded-xl border border-white/10 p-4"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-6 rounded-2xl border border-dashed border-white/15 bg-black/20 p-8 text-center"><FileSearch className="mx-auto size-9 text-slate-600" /><p className="mt-3 font-semibold">No asset evidence loaded</p><p className="mt-2 text-sm leading-6 text-slate-500">Connect an approved source, ownership record, custody policy, valuation authority, location or chain state, transfer controls, and audit before displaying an asset result.</p></div><div className="mt-6 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Add asset unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Transfer unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Export unavailable</Button></div></Card><aside className="rounded-2xl border border-white/10 bg-white/[0.04] p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Asset controls</p><h2 className="mt-2 text-2xl font-black">Before recording an asset</h2><div className="mt-6 space-y-3">{gates.map(item => <div key={item} className="flex items-start gap-3 rounded-xl border border-white/10 p-4 text-sm leading-6 text-slate-300"><LockKeyhole className="mt-1 size-4 shrink-0 text-amber-200" />{item}</div>)}</div></aside></section><div className="mt-8 flex items-center gap-3 text-sm leading-6 text-slate-500"><CheckCircle2 className="size-4 shrink-0 text-emerald-200" /><strong className="text-amber-100">No ownership, custody, valuation, balance, transfer, or financial claim is made.</strong> Local asset-review state only.</div></div></main>;
+}
