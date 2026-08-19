@@ -1,0 +1,7 @@
+# ChurnPrediction review
+
+The former route was a mock authenticated CRUD shell with a misleading sign-in gate, fake loading state, and no predictive model contract. It has been replaced with a strictly typed, local-only churn-prediction readiness workspace.
+
+The new screen explicitly states that no dataset, feature, label, model, score, explanation, recommendation, or customer action is loaded or generated. All cohort, prediction, explanation, and intervention actions are disabled. The route documents customer data lineage, feature definitions, churn target, observation window, label quality, account scope, model version, calibration, baseline, drift monitoring, uncertainty, thresholds, out-of-distribution behavior, sensitive-feature handling, consent, minimization, redaction, fairness evaluation, retention, privacy impact review, human review, overrides, action authorization, intervention safeguards, audit, and redacted telemetry. Its capability search filters static local notes only and never reads customer data, runs a model, calculates a score, recommends an action, or persists an intervention.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows balanced prediction-state/release cards and a capability map. Mobile evidence stacks the same content cleanly at 390×844 without clipping; model-risk, fairness, privacy, human-review, and unavailable-action disclosures remain readable.
