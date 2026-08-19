@@ -866,3 +866,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/change-log-mobile-390x844.png`
 ## channel-customization-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/channel-customization-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/channel-customization-mobile-390x844.png`
+
+## chart-analysis-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/chart-analysis-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/chart-analysis-mobile-390x844.png`
