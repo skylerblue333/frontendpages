@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "8247c4e7393e0ff3217a78a105ff7a6d775c4c25",
+  "generated_at_commit": "968be4e24aedc81a5e32612d3f150784253d6df4",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 184,
-  "routes_with_visual_checkpoint": 184,
+  "routes_with_review": 185,
+  "routes_with_visual_checkpoint": 185,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -1237,8 +1237,8 @@
       "component": "BulkUpload",
       "source": "client/src/pages/BulkUpload.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
