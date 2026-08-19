@@ -1,158 +1,205 @@
-import { useState } from "react";
-import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import { useMemo, useState } from "react";
 import {
-  Bold, Italic, Link2, Image, Code, List, Quote, Eye, Save,
-  Send, ChevronLeft, Globe, Lock, Star, Hash, X, Plus,
-  AlignLeft, Heading1, Heading2, Minus
+  BookOpenText,
+  CircleSlash2,
+  Eye,
+  FileText,
+  LockKeyhole,
+  PenLine,
+  ShieldAlert,
 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { PageHeader } from "@/components/PageHeader";
+import { Textarea } from "@/components/ui/textarea";
 
+type Mode = "Draft" | "Preview";
+type Visibility = "Public preview" | "Subscriber preview" | "Private draft";
 export default function CreateArticle() {
+  const [mode, setMode] = useState<Mode>("Draft");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
-  const [tagInput, setTagInput] = useState("");
-  const [visibility, setVisibility] = useState<"public" | "subscribers" | "private">("public");
-  const [preview, setPreview] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [status, setStatus] = useState("Local editor only. No draft or publication provider is connected.");
-
-  const addTag = () => {
-    const t = tagInput.trim().toLowerCase().replace(/\s+/g, "-");
-    if (t && !tags.includes(t) && tags.length < 5) {
-      setTags(prev => [...prev, t]);
-      setTagInput("");
-    }
-  };
-
-  const handleSave = () => {
-    setSaving(true);
-    setSaved(false);
-    setStatus("Draft saving is unavailable until authenticated persistence is connected. No external write was started.");
-    window.setTimeout(() => setSaving(false), 250);
-  };
-
-  const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
-  const readTime = Math.max(1, Math.ceil(wordCount / 200));
-
+  const [visibility, setVisibility] = useState<Visibility>("Private draft");
+  const [status, setStatus] = useState(
+    "Article persistence unavailable. Showing local editor structure only."
+  );
+  const words = useMemo(
+    () => (content.trim() ? content.trim().split(/\s+/).length : 0),
+    [content]
+  );
+  const blocked = (a: string) =>
+    setStatus(
+      `${a} is unavailable locally. No author, draft, article, visibility, subscriber, notification, payment, payout, or account mutation was started.`
+    );
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Top Bar */}
-      <div className="sticky top-0 z-40 border-b border-border/50 bg-background/95 backdrop-blur px-4 py-2.5 flex items-center gap-3">
-        <Link href="/creator-onboarding">
-          <Button variant="ghost" size="sm" className="gap-1 text-muted-foreground">
-            <ChevronLeft className="h-4 w-4" /> Back
-          </Button>
-        </Link>
-        <div className="flex-1 flex items-center gap-2">
-          <Badge variant="outline" className="text-xs font-mono">Article</Badge>
-          {saved && <span className="text-xs text-purple-400">Saved locally ✓</span>}
+    <div className="min-h-screen bg-background">
+      <PageHeader
+        icon={BookOpenText}
+        title="Create article"
+        subtitle="Draft and preview article structure locally without fabricated authorship, publishing, subscriber access, monetization, or persistence outcomes."
+        badge="Local preview"
+        badgeVariant="outline"
+      />
+      <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+        <div className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4 text-sm text-amber-100">
+          <strong>Article persistence unavailable.</strong> Drafts remain in
+          component memory. No identity, storage, moderation, publication,
+          entitlement, payment, tax, or payout service is connected.
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="gap-1" onClick={() => setPreview(p => !p)}>
-            <Eye className="h-4 w-4" />{preview ? "Edit" : "Preview"}
-          </Button>
-          <Button variant="outline" size="sm" className="gap-1" onClick={handleSave} disabled={saving}>
-            <Save className="h-4 w-4" />{saving ? "Saving..." : "Save Draft"}
-          </Button>
-          <Button size="sm" className="bg-primary text-primary-foreground gap-1" disabled={!title || !content} onClick={() => setStatus("Publication is unavailable until authenticated content, moderation, visibility, and provider workflows are connected.")}>
-            <Send className="h-4 w-4" />Publish unavailable
-          </Button>
-        </div>
-      </div>
-
-      <div className="border-b border-amber-300/15 bg-amber-300/[0.05] px-4 py-3 text-center text-xs text-amber-100/80" aria-live="polite">{status}</div>
-      <div className="flex flex-1">
-        {/* Editor */}
-        <div className="flex-1 max-w-3xl mx-auto px-4 py-8 w-full">
-          {!preview ? (
-            <>
-              {/* Title */}
-              <input
-                value={title}
+        <Card className="border-slate-800 bg-slate-900/75 p-6">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <Badge variant="outline">Local editor</Badge>
+              <h2 className="mt-3 text-2xl font-semibold">
+                {mode === "Draft" ? "Draft locally" : "Preview locally"}
+              </h2>
+              <p className="mt-2 text-sm text-slate-400">
+                {words} words. This is not saved or published.
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                aria-pressed={mode === "Draft"}
+                onClick={() => setMode("Draft")}
+                size="sm"
+                variant={mode === "Draft" ? "default" : "outline"}
+              >
+                <PenLine className="mr-2 h-4 w-4" />
+                Draft
+              </Button>
+              <Button
+                aria-pressed={mode === "Preview"}
+                onClick={() => setMode("Preview")}
+                size="sm"
+                variant={mode === "Preview" ? "default" : "outline"}
+              >
+                <Eye className="mr-2 h-4 w-4" />
+                Preview
+              </Button>
+            </div>
+          </div>
+          {mode === "Draft" ? (
+            <div className="mt-6 space-y-4">
+              <Input
+                aria-label="Article title"
                 onChange={e => setTitle(e.target.value)}
-                placeholder="Article title..."
-                className="w-full text-3xl md:text-4xl font-bold bg-transparent border-none outline-none placeholder:text-muted-foreground/40 mb-4 resize-none"
+                placeholder="Article title draft"
+                value={title}
               />
-
-              {/* Toolbar */}
-              <div className="flex flex-wrap items-center gap-1 p-2 rounded-xl border border-border/50 bg-card/30 mb-4">
-                {[
-                  { icon: Heading1, label: "H1" }, { icon: Heading2, label: "H2" },
-                  { icon: Bold, label: "Bold" }, { icon: Italic, label: "Italic" },
-                  { icon: Link2, label: "Link" }, { icon: Image, label: "Image" },
-                  { icon: Code, label: "Code" }, { icon: List, label: "List" },
-                  { icon: Quote, label: "Quote" }, { icon: Minus, label: "Divider" },
-                ].map(({ icon: Icon, label }) => (
-                  <button key={label} title={label} className="p-1.5 rounded-lg hover:bg-card/80 text-muted-foreground hover:text-foreground transition-colors">
-                    <Icon className="h-4 w-4" />
-                  </button>
-                ))}
-              </div>
-
-              {/* Content */}
-              <textarea
-                value={content}
+              <Textarea
+                aria-label="Article content"
                 onChange={e => setContent(e.target.value)}
-                placeholder="Start writing your article... Use the toolbar above to format your content."
-                className="w-full min-h-[400px] bg-transparent border-none outline-none text-base leading-relaxed placeholder:text-muted-foreground/40 resize-none"
+                placeholder="Write locally; no content is transmitted"
+                rows={14}
+                value={content}
               />
-
-              <div className="text-xs text-muted-foreground mt-2">{wordCount} words · {readTime} min read</div>
-            </>
+              <div className="flex flex-wrap gap-2">
+                <Button onClick={() => blocked("Save draft")} variant="outline">
+                  Save unavailable
+                </Button>
+                <Button
+                  onClick={() => blocked("Publish article")}
+                  variant="outline"
+                >
+                  Publish unavailable
+                </Button>
+                <Button
+                  onClick={() => {
+                    setTitle("");
+                    setContent("");
+                  }}
+                  variant="ghost"
+                >
+                  Clear local draft
+                </Button>
+              </div>
+            </div>
           ) : (
-            <div className="prose prose-invert max-w-none">
-              <h1 className="text-3xl font-bold mb-4">{title || "Untitled Article"}</h1>
-              <div className="text-muted-foreground whitespace-pre-wrap leading-relaxed">{content || "Nothing written yet."}</div>
+            <div className="mt-6 rounded-xl border border-slate-800 p-6">
+              <p className="text-xs uppercase tracking-widest text-slate-500">
+                Local preview
+              </p>
+              <h1 className="mt-3 text-3xl font-semibold">
+                {title || "Untitled article"}
+              </h1>
+              <p className="mt-4 whitespace-pre-wrap text-sm leading-7 text-slate-300">
+                {content || "Nothing written yet."}
+              </p>
             </div>
           )}
-        </div>
-
-        {/* Sidebar */}
-        <div className="hidden lg:flex w-72 border-l border-border/50 flex-col p-5 gap-5">
-          {/* Visibility */}
-          <div>
-            <p className="text-sm font-semibold mb-2">Visibility</p>
-            <div className="space-y-2">
-              {([
-                { value: "public", label: "Public", desc: "Anyone can read", icon: Globe, color: "text-purple-400" },
-                { value: "subscribers", label: "Subscribers Only", desc: "Paying fans only", icon: Star, color: "text-yellow-400" },
-                { value: "private", label: "Private", desc: "Only you", icon: Lock, color: "text-muted-foreground" },
-              ] as const).map(v => (
-                <button key={v.value} onClick={() => setVisibility(v.value)} className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all text-left ${visibility === v.value ? "border-primary/50 bg-primary/10" : "border-border/50 hover:border-border"}`}>
-                  <v.icon className={`h-4 w-4 ${v.color} shrink-0`} />
-                  <div><p className="text-xs font-medium">{v.label}</p><p className="text-xs text-muted-foreground">{v.desc}</p></div>
-                </button>
+        </Card>
+        <Card className="border-slate-800 bg-slate-900/75 p-6">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-widest text-slate-500">
+                Visibility concept
+              </p>
+              <h2 className="mt-1 text-xl font-semibold">
+                No live access policy
+              </h2>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {(
+                [
+                  "Public preview",
+                  "Subscriber preview",
+                  "Private draft",
+                ] as Visibility[]
+              ).map(item => (
+                <Button
+                  aria-pressed={visibility === item}
+                  key={item}
+                  onClick={() => setVisibility(item)}
+                  size="sm"
+                  variant={visibility === item ? "default" : "outline"}
+                >
+                  {item}
+                </Button>
               ))}
             </div>
           </div>
-
-          {/* Tags */}
-          <div>
-            <p className="text-sm font-semibold mb-2">Tags <span className="text-muted-foreground font-normal">({tags.length}/5)</span></p>
-            <div className="flex gap-2 mb-2">
-              <Input value={tagInput} onChange={e => setTagInput(e.target.value)} onKeyDown={e => e.key === "Enter" && addTag()} placeholder="Add tag..." className="h-8 text-xs" />
-              <Button size="sm" variant="outline" onClick={addTag} className="h-8 px-2"><Plus className="h-3.5 w-3.5" /></Button>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {tags.map(t => (
-                <span key={t} className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-xs text-primary">
-                  <Hash className="h-2.5 w-2.5" />{t}
-                  <button onClick={() => setTags(prev => prev.filter(x => x !== t))}><X className="h-2.5 w-2.5" /></button>
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Monetization boundary */}
-          <div className="rounded-xl border border-amber-300/20 bg-amber-300/[0.05] p-4">
-            <p className="text-sm font-semibold text-amber-200 mb-1">Monetization boundary</p>
-            <p className="text-xs leading-5 text-muted-foreground">Tips, subscriber access, revenue share, token rewards, and payout estimates are not shown until a verified ledger, identity, entitlement, payment, tax, and settlement provider is connected.</p>
-          </div>
+          <p className="mt-3 text-sm leading-6 text-slate-400">
+            Selected: {visibility}. This is a local display preference, not a
+            published visibility or entitlement policy.
+          </p>
+        </Card>
+        <div className="grid gap-4 md:grid-cols-3">
+          {[
+            [FileText, "No persistence"],
+            [ShieldAlert, "No publication"],
+            [CircleSlash2, "No monetization"],
+          ].map(([Icon, label]) => (
+            <Card
+              className="border-slate-800 bg-slate-900/75 p-5"
+              key={String(label)}
+            >
+              <Icon className="h-5 w-5 text-cyan-200" />
+              <h2 className="mt-3 font-semibold">{String(label)}</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                No author, article, subscriber, revenue, token, notification,
+                payment, or account operation is available locally.
+              </p>
+            </Card>
+          ))}
         </div>
+        <Card className="border-slate-800 bg-slate-900/75 p-5">
+          <div className="flex gap-3">
+            <LockKeyhole className="h-5 w-5 text-cyan-200" />
+            <p className="text-sm leading-6 text-slate-400">
+              Production publishing requires authenticated authorship, content
+              moderation, revision history, access controls, subscriber
+              entitlements, payment, tax, payout, and deletion workflows.
+            </p>
+          </div>
+        </Card>
+        <p
+          aria-live="polite"
+          className="rounded-lg border border-slate-800 p-4 text-sm text-slate-400"
+        >
+          {status}
+        </p>
       </div>
     </div>
   );
