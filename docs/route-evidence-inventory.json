@@ -1,7 +1,7 @@
 {
-  "generated_at_commit": "80219979fef26d873c386e9138bcf8b3fe7094ef",
+  "generated_at_commit": "0f30080f9189e602c42783affef2087c45e15f55",
   "registered_route_count": 1059,
-  "source_page_count": 1063,
+  "source_page_count": 1064,
   "routed_component_count": 1057,
   "duplicate_route_components": {
     "Home": 2,
@@ -22,15 +22,6 @@
   ],
   "routes_missing_source": [
     {
-      "route": "/documentation",
-      "component": "Documentation",
-      "source": null,
-      "source_exists": false,
-      "review_documented": true,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": false
-    },
-    {
       "route": "/sky-school-quiz",
       "component": "() => <SkySchoolQuiz lessonId=\"blockchain-101-lesson-0\" />",
       "source": null,
@@ -41,8 +32,8 @@
     }
   ],
   "routes_with_review": 130,
-  "routes_with_visual_checkpoint": 129,
-  "routes_with_placeholder_signal": 785,
+  "routes_with_visual_checkpoint": 130,
+  "routes_with_placeholder_signal": 786,
   "routes": [
     {
       "route": "/",
@@ -2927,11 +2918,11 @@
     {
       "route": "/documentation",
       "component": "Documentation",
-      "source": null,
-      "source_exists": false,
+      "source": "client/src/pages/Documentation.tsx",
+      "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": true
     },
     {
       "route": "/dogecoin-pool-selection",
