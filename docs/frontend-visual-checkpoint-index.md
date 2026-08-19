@@ -177,6 +177,11 @@ Blocked-preview screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_15-55
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_15-57-25_9100.webp`
 Blocked-assess screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_15-57-32_4968.webp`
 
+## content-scheduler-visual-checkpoint.md
+Queue screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-25-18_7116.webp`
+Draft screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-25-24_8480.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_content-scheduler.md`
+
 ## content-scheduling-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_15-59-32_3614.webp`
 Blocked-create screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_15-59-40_7681.webp`
