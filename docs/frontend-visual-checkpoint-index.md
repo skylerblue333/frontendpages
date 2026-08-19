@@ -922,3 +922,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/color-picker-dialog-mobile-390x844.
 ## comments-section-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/comments-section-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/comments-section-mobile-390x844.png`
+
+## compliance-checking-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/compliance-checking-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/compliance-checking-mobile-390x844.png`
