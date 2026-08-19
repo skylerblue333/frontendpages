@@ -1,294 +1,313 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Search, Zap, TrendingUp, Users, Sparkles, ArrowRight } from 'lucide-react';
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import {
+  Compass,
+  Filter,
+  Hash,
+  RefreshCw,
+  Search,
+  ShieldAlert,
+  Sparkles,
+  TrendingUp,
+  Users,
+  XCircle,
+} from "lucide-react";
 
-interface Creator {
-  id: string;
-  name: string;
-  handle: string;
-  avatar: string;
-  category: string;
-  followers: number;
-  engagement: number;
-  verified: boolean;
-}
-
-interface Trend {
-  id: string;
+type Category = "all" | "people" | "topics" | "communities";
+type DiscoveryArea = {
   title: string;
-  category: string;
-  momentum: number;
-  posts: number;
-  growth: number;
-}
+  description: string;
+  category: Exclude<Category, "all">;
+  icon: typeof Users;
+};
+const AREAS: readonly DiscoveryArea[] = [
+  {
+    title: "People and creators",
+    description:
+      "Verified profiles, consent, identity, activity, audience, and follow relationships require a trusted directory and social graph.",
+    category: "people",
+    icon: Users,
+  },
+  {
+    title: "Topics and trends",
+    description:
+      "Trend labels, post volume, momentum, growth, ranking, and freshness require a provenance-backed feed and ranking policy.",
+    category: "topics",
+    icon: TrendingUp,
+  },
+  {
+    title: "Communities",
+    description:
+      "Community membership, moderation, recommendations, invitations, and access require connected services and safety ownership.",
+    category: "communities",
+    icon: Hash,
+  },
+  {
+    title: "Personalized recommendations",
+    description:
+      "Personalization needs consent, explainability, data minimization, evaluation, and a user-controlled opt-out.",
+    category: "people",
+    icon: Sparkles,
+  },
+];
 
 export default function Discover() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-
-  const creators: Creator[] = [
-    {
-      id: '1',
-      name: 'Luna Crypto',
-      handle: '@lunacrypto',
-      avatar: '👩‍💼',
-      category: 'Finance',
-      followers: 124500,
-      engagement: 8.7,
-      verified: true,
-    },
-    {
-      id: '2',
-      name: 'Tech Visionary',
-      handle: '@techvision',
-      avatar: '👨‍💻',
-      category: 'Technology',
-      followers: 89300,
-      engagement: 7.2,
-      verified: true,
-    },
-    {
-      id: '3',
-      name: 'AI Explorer',
-      handle: '@aiexplorer',
-      avatar: '🤖',
-      category: 'AI',
-      followers: 156200,
-      engagement: 9.1,
-      verified: true,
-    },
-    {
-      id: '4',
-      name: 'Gaming Pro',
-      handle: '@gamingpro',
-      avatar: '🎮',
-      category: 'Gaming',
-      followers: 203400,
-      engagement: 8.5,
-      verified: true,
-    },
-    {
-      id: '5',
-      name: 'Creator Elite',
-      handle: '@creatorelite',
-      avatar: '🎬',
-      category: 'Content',
-      followers: 178900,
-      engagement: 7.8,
-      verified: true,
-    },
-    {
-      id: '6',
-      name: 'DeFi Master',
-      handle: '@defimaster',
-      avatar: '💰',
-      category: 'Finance',
-      followers: 95600,
-      engagement: 8.3,
-      verified: false,
-    },
-  ];
-
-  const trends: Trend[] = [
-    {
-      id: '1',
-      title: 'Web3 Revolution',
-      category: 'Technology',
-      momentum: 94,
-      posts: 12400,
-      growth: 23,
-    },
-    {
-      id: '2',
-      title: 'AI Gaming Boom',
-      category: 'Gaming',
-      momentum: 87,
-      posts: 9800,
-      growth: 18,
-    },
-    {
-      id: '3',
-      title: 'Crypto Adoption',
-      category: 'Finance',
-      momentum: 76,
-      posts: 8200,
-      growth: 15,
-    },
-    {
-      id: '4',
-      title: 'Creator Economy',
-      category: 'Content',
-      momentum: 82,
-      posts: 7600,
-      growth: 19,
-    },
-    {
-      id: '5',
-      title: 'NFT Renaissance',
-      category: 'Digital Art',
-      momentum: 71,
-      posts: 6400,
-      growth: 12,
-    },
-    {
-      id: '6',
-      title: 'Social Finance',
-      category: 'Finance',
-      momentum: 85,
-      posts: 9100,
-      growth: 21,
-    },
-  ];
-
-  const categories = ['All', 'Finance', 'Technology', 'Gaming', 'AI', 'Content', 'Art'];
-
-  const filteredCreators = creators.filter((creator) => {
-    const matchesSearch =
-      creator.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      creator.handle.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || creator.category.toLowerCase() === selectedCategory.toLowerCase();
-    return matchesSearch && matchesCategory;
-  });
-
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState<Category>("all");
+  const [status, setStatus] = useState(
+    "Discovery service unavailable locally. No profile, trend, community, ranking, follow, notification, or recommendation mutation was started."
+  );
+  const areas = useMemo(
+    () =>
+      AREAS.filter(item => {
+        const matchesQuery =
+          !query ||
+          `${item.title} ${item.description}`
+            .toLowerCase()
+            .includes(query.toLowerCase());
+        return (
+          matchesQuery && (category === "all" || item.category === category)
+        );
+      }),
+    [query, category]
+  );
+  const announceUnavailable = (action: string) =>
+    setStatus(
+      `${action} is unavailable locally. No profile, trend, community, ranking, follow, notification, or recommendation mutation was started.`
+    );
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-purple-900 to-black border-b border-purple-500/30 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold">Discover</h1>
-          <p className="text-gray-400 mt-1">Find trending creators, content, and communities</p>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Search Bar */}
-        <div className="mb-8">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-            <Input
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search creators, trends, communities..."
-              className="pl-12 h-12 bg-gray-900/50 border-purple-500/30 text-white placeholder-gray-500"
+    <main
+      className="min-h-screen bg-background"
+      aria-labelledby="discover-title"
+    >
+      <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+        <header className="flex flex-wrap items-start justify-between gap-4">
+          <div className="space-y-3">
+            <Badge
+              variant="outline"
+              className="border-purple-400/30 text-purple-200"
+            >
+              DISCOVERY READINESS PREVIEW
+            </Badge>
+            <h1
+              id="discover-title"
+              className="flex items-center gap-2 text-3xl font-bold tracking-tight"
+            >
+              <Compass className="h-7 w-7 text-purple-300" aria-hidden="true" />
+              Discover
+            </h1>
+            <p className="max-w-3xl text-muted-foreground">
+              Review discovery requirements without inventing creators,
+              profiles, engagement, trends, communities, rankings, or
+              personalized recommendations.
+            </p>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => announceUnavailable("Discovery refresh")}
+          >
+            <RefreshCw className="mr-2 h-4 w-4" aria-hidden="true" />
+            Refresh unavailable
+          </Button>
+        </header>
+        <section className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5">
+          <div className="flex items-start gap-3">
+            <ShieldAlert
+              className="mt-0.5 h-5 w-5 shrink-0 text-amber-200"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="font-semibold text-amber-100">
+                Discovery service unavailable
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-amber-100/75">
+                No profile directory, social graph, content feed, trend
+                analyzer, community catalog, ranking provider, notification
+                service, or personalization model is connected. This page
+                contains planning requirements only.
+              </p>
+            </div>
+          </div>
+        </section>
+        <section className="grid gap-4 md:grid-cols-4">
+          <Card className="border-border/40 bg-card/50 p-5">
+            <Users className="mb-3 h-5 w-5 text-sky-300" aria-hidden="true" />
+            <p className="text-lg font-semibold">People unavailable</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No names, handles, avatars, verification, presence, followers, or
+              engagement are loaded.
+            </p>
+          </Card>
+          <Card className="border-border/40 bg-card/50 p-5">
+            <TrendingUp
+              className="mb-3 h-5 w-5 text-violet-300"
+              aria-hidden="true"
+            />
+            <p className="text-lg font-semibold">Trends unavailable</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No topic, post count, momentum, growth, freshness, or ranking is
+              authoritative.
+            </p>
+          </Card>
+          <Card className="border-border/40 bg-card/50 p-5">
+            <Hash className="mb-3 h-5 w-5 text-amber-300" aria-hidden="true" />
+            <p className="text-lg font-semibold">Communities unavailable</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No group, member, access, invitation, or moderation state exists.
+            </p>
+          </Card>
+          <Card className="border-border/40 bg-card/50 p-5">
+            <Sparkles
+              className="mb-3 h-5 w-5 text-emerald-300"
+              aria-hidden="true"
+            />
+            <p className="text-lg font-semibold">Recommendations unavailable</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No personalized score, explanation, or recommendation outcome is
+              produced.
+            </p>
+          </Card>
+        </section>
+        <section
+          className="flex flex-wrap gap-2"
+          role="group"
+          aria-label="Discovery filters"
+        >
+          <label htmlFor="discover-search" className="sr-only">
+            Search discovery requirements
+          </label>
+          <div className="relative min-w-[240px] flex-1">
+            <Search
+              className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <input
+              id="discover-search"
+              value={query}
+              onChange={event => setQuery(event.target.value)}
+              placeholder="Search discovery requirements"
+              className="w-full rounded-xl border border-border/40 bg-card/40 py-3 pl-10 pr-3 text-sm outline-none ring-primary/40 focus:ring-2"
             />
           </div>
-        </div>
-
-        {/* Category Filter */}
-        <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
-          {categories.map((cat) => (
+          {(["all", "people", "topics", "communities"] as const).map(value => (
             <Button
-              key={cat}
-              onClick={() => setSelectedCategory(cat.toLowerCase())}
-              variant={selectedCategory === cat.toLowerCase() ? 'default' : 'outline'}
-              className={
-                selectedCategory === cat.toLowerCase()
-                  ? 'bg-purple-600 hover:bg-purple-700'
-                  : 'border-purple-500 text-purple-400 hover:bg-purple-900/20'
-              }
+              key={value}
+              type="button"
+              variant={category === value ? "default" : "outline"}
+              onClick={() => setCategory(value)}
             >
-              {cat}
+              <Filter className="mr-2 h-4 w-4" aria-hidden="true" />
+              {value === "all"
+                ? "All"
+                : value[0].toUpperCase() + value.slice(1)}
             </Button>
           ))}
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Creators Section */}
-          <div className="lg:col-span-2">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                <Users className="w-6 h-6 text-purple-400" />
-                Top Creators
+        </section>
+        <section aria-labelledby="discovery-areas-title">
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 id="discovery-areas-title" className="text-xl font-semibold">
+                Discovery areas
               </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Local filtering only. Nothing queries or changes social records.
+              </p>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {filteredCreators.map((creator) => (
-                <Card key={creator.id} className="bg-black border-purple-500/30 p-4 hover:border-purple-500/60 transition-all cursor-pointer">
-                  <div className="flex items-start gap-4">
-                    <div className="text-4xl">{creator.avatar}</div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-bold text-lg">{creator.name}</h3>
-                        {creator.verified && <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/50 text-xs">✓ Verified</Badge>}
-                      </div>
-                      <p className="text-gray-400 text-sm">{creator.handle}</p>
-                      <p className="text-gray-500 text-xs mt-1">{creator.category}</p>
-
-                      <div className="flex gap-4 mt-3 text-sm">
-                        <div>
-                          <p className="text-gray-400 text-xs">Followers</p>
-                          <p className="font-bold text-purple-400">{(creator.followers / 1000).toFixed(0)}K</p>
-                        </div>
-                        <div>
-                          <p className="text-gray-400 text-xs">Engagement</p>
-                          <p className="font-bold text-green-400">{creator.engagement}%</p>
-                        </div>
-                      </div>
-
-                      <Button className="w-full mt-3 bg-purple-600 hover:bg-purple-700 text-sm">Follow</Button>
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
+            <Button
+              type="button"
+              onClick={() => announceUnavailable("Community browsing")}
+            >
+              <Compass className="mr-2 h-4 w-4" aria-hidden="true" />
+              Browse communities unavailable
+            </Button>
           </div>
-
-          {/* Trends Section */}
-          <div>
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                <TrendingUp className="w-6 h-6 text-green-400" />
-                Trending Now
-              </h2>
-            </div>
-
-            <div className="space-y-3">
-              {trends.map((trend) => (
-                <Card key={trend.id} className="bg-black border-purple-500/30 p-4 hover:border-purple-500/60 transition-all cursor-pointer">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <h3 className="font-bold mb-1">{trend.title}</h3>
-                      <p className="text-gray-400 text-xs mb-2">{trend.category}</p>
-                      <div className="flex gap-3 text-xs">
-                        <span className="text-gray-500">{trend.posts.toLocaleString()} posts</span>
-                        <span className="text-green-400 flex items-center gap-1">
-                          <Sparkles className="w-3 h-3" />
-                          +{trend.growth}%
-                        </span>
-                      </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {areas.map(item => {
+              const Icon = item.icon;
+              return (
+                <Card
+                  key={item.title}
+                  className="border-border/40 bg-card/40 p-5"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="rounded-xl bg-secondary/60 p-3">
+                      <Icon
+                        className="h-5 w-5 text-primary"
+                        aria-hidden="true"
+                      />
                     </div>
-                    <div className="text-right">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">
-                        <span className="text-lg font-bold">{trend.momentum}</span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="font-semibold">{item.title}</h3>
+                        <Badge
+                          variant="outline"
+                          className="border-muted-foreground/30 text-muted-foreground"
+                        >
+                          Unavailable
+                        </Badge>
                       </div>
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                        {item.description}
+                      </p>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="mt-4"
+                        onClick={() =>
+                          announceUnavailable(`${item.title} discovery`)
+                        }
+                      >
+                        {item.title} unavailable
+                      </Button>
                     </div>
                   </div>
                 </Card>
-              ))}
-            </div>
-
-            {/* Recommended Section */}
-            <div className="mt-8">
-              <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                <Zap className="w-5 h-5 text-yellow-400" />
-                Recommended
-              </h3>
-              <Card className="bg-gradient-to-br from-purple-900/50 to-pink-900/50 border-purple-500/30 p-6">
-                <h4 className="font-bold mb-2">Explore Communities</h4>
-                <p className="text-gray-400 text-sm mb-4">Join exclusive groups and connect with like-minded creators and investors.</p>
-                <Button className="w-full bg-purple-600 hover:bg-purple-700 flex items-center justify-center gap-2">
-                  Browse Communities
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
+              );
+            })}
+            {areas.length === 0 && (
+              <Card className="border-border/40 bg-card/30 p-8 text-center md:col-span-2">
+                <XCircle
+                  className="mx-auto mb-3 h-7 w-7 text-muted-foreground"
+                  aria-hidden="true"
+                />
+                <p className="font-semibold">No discovery requirements found</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Search is local and does not query profiles, posts, trends, or
+                  communities.
+                </p>
               </Card>
+            )}
+          </div>
+        </section>
+        <section className="rounded-2xl border border-border/40 bg-card/30 p-5">
+          <div className="flex items-start gap-3">
+            <ShieldAlert
+              className="mt-0.5 h-5 w-5 shrink-0 text-primary"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="font-semibold">No discovery claim</h2>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                A production discovery surface needs provenance, moderation,
+                privacy, ranking transparency, user controls, rate limits, abuse
+                handling, accessibility, and auditable follow or recommendation
+                events.
+              </p>
             </div>
           </div>
-        </div>
+        </section>
+        <p
+          className="rounded-xl border border-border/30 bg-card/30 px-4 py-3 text-sm text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
+          {status}
+        </p>
       </div>
-    </div>
+    </main>
   );
 }
