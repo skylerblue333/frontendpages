@@ -1,171 +1,261 @@
-import { useState } from "react";
-import { Lock, Unlock, Star, Download, Eye, Crown, Zap, Shield, Filter, Search, Grid, List } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useMemo, useState } from "react";
+import {
+  Archive,
+  FileKey2,
+  FolderLock,
+  HardDrive,
+  LockKeyhole,
+  Search,
+  ShieldCheck,
+  SlidersHorizontal,
+  Trash2,
+} from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
-import { Link } from "wouter";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
-const VAULT_ITEMS = [
-  { id: 1, title: "Exclusive Photo Set #001", type: "photo", tier: "Basic",   size: "24 photos", unlocked: true,  date: "Jun 12", views: 1240 },
-  { id: 2, title: "Behind the Scenes Video",  type: "video", tier: "Premium", size: "18 min",    unlocked: true,  date: "Jun 10", views: 890  },
-  { id: 3, title: "VIP Private Collection",   type: "photo", tier: "VIP",     size: "48 photos", unlocked: false, date: "Jun 8",  views: 3200 },
-  { id: 4, title: "Exclusive Audio Message",  type: "audio", tier: "Basic",   size: "4 min",     unlocked: true,  date: "Jun 6",  views: 560  },
-  { id: 5, title: "Full Length Video #3",     type: "video", tier: "Premium", size: "42 min",    unlocked: false, date: "Jun 4",  views: 2100 },
-  { id: 6, title: "Signed Digital Print",     type: "photo", tier: "VIP",     size: "1 file",    unlocked: false, date: "Jun 2",  views: 4500 },
-  { id: 7, title: "Personalized Shoutout",    type: "video", tier: "Basic",   size: "2 min",     unlocked: true,  date: "May 30", views: 780  },
-  { id: 8, title: "Exclusive Story Archive",  type: "photo", tier: "Premium", size: "36 photos", unlocked: false, date: "May 28", views: 1650 },
-];
-
-const TIER_COLORS: Record<string, string> = {
-  Basic:   "bg-blue-900/50 text-blue-300 border-blue-500/20",
-  Premium: "bg-purple-900/50 text-purple-300 border-purple-500/20",
-  VIP:     "bg-yellow-900/50 text-yellow-300 border-yellow-500/20",
+type VaultCapability = {
+  title: string;
+  description: string;
+  icon: typeof Archive;
 };
 
-const TYPE_ICONS: Record<string, string> = { photo: "🖼️", video: "🎬", audio: "🎵" };
+const vaultCapabilities: VaultCapability[] = [
+  {
+    title: "Asset inventory and metadata",
+    description:
+      "No asset, owner, media type, size, checksum, version, preview, creation date, or availability state is loaded.",
+    icon: Archive,
+  },
+  {
+    title: "Storage and key custody",
+    description:
+      "No storage provider, encryption key, access token, retention class, backup, region, or recovery mechanism is connected.",
+    icon: HardDrive,
+  },
+  {
+    title: "Permission and delivery",
+    description:
+      "No account scope, entitlement, share link, download authorization, watermark, delivery record, or access log is verified.",
+    icon: FileKey2,
+  },
+  {
+    title: "Lifecycle and deletion",
+    description:
+      "No upload, replace, publish, archive, restore, deletion request, legal hold, expiry, or audit event can be executed or persisted.",
+    icon: Trash2,
+  },
+];
 
 export default function ContentVault() {
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<"all" | "unlocked" | "locked">("all");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-
-  const filtered = VAULT_ITEMS.filter(item => {
-    const matchSearch = item.title.toLowerCase().includes(search.toLowerCase());
-    const matchFilter = filter === "all" || (filter === "unlocked" ? item.unlocked : !item.unlocked);
-    return matchSearch && matchFilter;
-  });
-
-  const unlockedCount = VAULT_ITEMS.filter(i => i.unlocked).length;
-  const lockedCount = VAULT_ITEMS.filter(i => !i.unlocked).length;
+  const [searchQuery, setSearchQuery] = useState("");
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const visibleCapabilities = useMemo(
+    () =>
+      vaultCapabilities.filter(({ title, description }) =>
+        `${title} ${description}`.toLowerCase().includes(normalizedQuery)
+      ),
+    [normalizedQuery]
+  );
 
   return (
-    <div className="min-h-screen bg-[#050308] text-white">
-      {/* Header */}
-      <div className="sticky top-0 z-40 bg-[#050308]/95 backdrop-blur border-b border-slate-800 px-4 py-3">
-        <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-purple-400" />
-            <span className="font-black text-white">Content Vault</span>
-            <Badge className="bg-purple-600/20 text-purple-300 border-purple-500/30 text-[10px]">
-              {unlockedCount}/{VAULT_ITEMS.length} Unlocked
-            </Badge>
-          </div>
-          <Link href="/nsfw-feed">
-            <Button size="sm" variant="outline" className="border-slate-700 text-slate-400 hover:text-white text-xs">
-              Browse Feed
-            </Button>
-          </Link>
-        </div>
-      </div>
-
-      <div className="max-w-5xl mx-auto px-4 py-6">
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          {[
-            { label: "Unlocked", value: unlockedCount, icon: Unlock, color: "text-green-400" },
-            { label: "Locked",   value: lockedCount,   icon: Lock,   color: "text-red-400"   },
-            { label: "Total",    value: VAULT_ITEMS.length, icon: Star, color: "text-purple-400" },
-          ].map(({ label, value, icon: Icon, color }) => (
-            <div key={label} className="bg-slate-900/50 border border-slate-800 rounded-xl p-4 text-center">
-              <Icon className={`w-5 h-5 ${color} mx-auto mb-1`} />
-              <p className="text-2xl font-black text-white">{value}</p>
-              <p className="text-xs text-slate-500">{label}</p>
+    <main
+      className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 lg:px-8"
+      aria-labelledby="content-vault-title"
+    >
+      <div className="mx-auto max-w-6xl space-y-6">
+        <header className="rounded-2xl border border-border/70 bg-card/80 p-6 shadow-sm sm:p-8">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+            <div className="space-y-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="outline" className="gap-2">
+                  <LockKeyhole className="size-3.5" aria-hidden="true" />
+                  Content custody boundary
+                </Badge>
+                <Badge variant="secondary">Not active</Badge>
+              </div>
+              <div>
+                <h1
+                  id="content-vault-title"
+                  className="text-3xl font-semibold tracking-tight sm:text-4xl"
+                >
+                  Content vault readiness
+                </h1>
+                <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground sm:text-base">
+                  This route documents secure content storage without pretending
+                  that assets, entitlements, views, downloads, or subscription
+                  access are live.
+                </p>
+              </div>
             </div>
-          ))}
-        </div>
-
-        {/* Toolbar */}
-        <div className="flex gap-3 mb-6 flex-wrap">
-          <div className="relative flex-1 min-w-48">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-            <Input
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="Search vault..."
-              className="pl-9 bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
-            />
-          </div>
-          <div className="flex gap-1 bg-slate-900 border border-slate-800 rounded-lg p-1">
-            {(["all", "unlocked", "locked"] as const).map(f => (
-              <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className={`px-3 py-1 rounded-md text-xs font-semibold capitalize transition-all ${filter === f ? "bg-purple-600 text-white" : "text-slate-500 hover:text-white"}`}
-              >
-                {f}
-              </button>
-            ))}
-          </div>
-          <div className="flex border border-slate-800 rounded-lg overflow-hidden">
-            <button onClick={() => setViewMode("grid")} className={`p-2 ${viewMode === "grid" ? "bg-slate-700 text-white" : "text-slate-500"}`}><Grid className="w-4 h-4" /></button>
-            <button onClick={() => setViewMode("list")} className={`p-2 ${viewMode === "list" ? "bg-slate-700 text-white" : "text-slate-500"}`}><List className="w-4 h-4" /></button>
-          </div>
-        </div>
-
-        {/* Items */}
-        <div className={viewMode === "grid" ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" : "space-y-3"}>
-          {filtered.map(item => (
-            <div
-              key={item.id}
-              className={`bg-slate-900/60 border rounded-xl overflow-hidden transition-all group cursor-pointer ${item.unlocked ? "border-slate-700 hover:border-purple-500/40" : "border-slate-800 hover:border-red-500/30"} ${viewMode === "list" ? "flex gap-4 p-3 items-center" : ""}`}
+            <Button
+              type="button"
+              variant="outline"
+              disabled
+              aria-disabled="true"
             >
-              {/* Thumbnail */}
-              <div className={`relative bg-gradient-to-br from-slate-800 to-slate-900 ${viewMode === "list" ? "w-16 h-16 rounded-lg shrink-0" : "aspect-square"} flex items-center justify-center`}>
-                <span className="text-2xl">{TYPE_ICONS[item.type]}</span>
-                {!item.unlocked && (
-                  <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center rounded-lg">
-                    <Lock className="w-5 h-5 text-red-400" />
-                  </div>
+              Load vault unavailable
+            </Button>
+          </div>
+        </header>
+
+        <section
+          className="grid gap-6 lg:grid-cols-[1.35fr_1fr]"
+          aria-label="Content vault status"
+        >
+          <Card>
+            <CardHeader>
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <ShieldCheck
+                      className="size-5 text-primary"
+                      aria-hidden="true"
+                    />
+                    Truthful vault state
+                  </CardTitle>
+                  <CardDescription className="mt-2">
+                    No asset, owner, entitlement, storage location, encryption
+                    key, view count, download, or saved lifecycle state is
+                    loaded or persisted.
+                  </CardDescription>
+                </div>
+                <SlidersHorizontal
+                  className="size-5 text-amber-500"
+                  aria-hidden="true"
+                />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="rounded-xl border border-dashed border-border bg-muted/30 p-5">
+                <h2 className="font-medium">
+                  No verified content-vault service is available
+                </h2>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  A real contract must define asset inventory, storage and
+                  encryption, authorization, entitlements, delivery, retention,
+                  backup, recovery, deletion, and audit evidence before this
+                  route can expose or change content.
+                </p>
+              </div>
+              <div
+                className="flex flex-wrap gap-2"
+                aria-label="Unavailable vault actions"
+              >
+                {[
+                  "Load assets",
+                  "Upload asset",
+                  "View asset",
+                  "Delete asset",
+                ].map(label => (
+                  <Button
+                    key={label}
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled
+                    aria-disabled="true"
+                  >
+                    {label}
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Release requirements</CardTitle>
+              <CardDescription>
+                These safeguards must be verified before vault controls are
+                enabled.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4 text-sm text-muted-foreground">
+              <p>
+                Asset owner, type, size, checksum, version, preview,
+                availability, account scope, and entitlement.
+              </p>
+              <p>
+                Storage provider, encryption, key custody, access tokens,
+                retention, backup, region, and recovery.
+              </p>
+              <p>
+                Permission checks, share links, download authorization,
+                watermarking, delivery, and access logs.
+              </p>
+              <p>
+                Upload, replacement, publishing, archive, restore, deletion,
+                expiry, legal hold, and audit.
+              </p>
+            </CardContent>
+          </Card>
+        </section>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Vault capability map</CardTitle>
+            <CardDescription>
+              Search is local-only and does not query storage, expose files,
+              calculate views, grant access, upload content, or persist a
+              lifecycle change.
+            </CardDescription>
+            <div className="relative max-w-md pt-2">
+              <Search
+                className="pointer-events-none absolute left-3 top-4 size-4 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <Input
+                aria-label="Search vault capability notes"
+                placeholder="Search capability notes"
+                value={searchQuery}
+                onChange={event => setSearchQuery(event.target.value)}
+                className="pl-9"
+              />
+            </div>
+          </CardHeader>
+          <CardContent>
+            {visibleCapabilities.length > 0 ? (
+              <div className="grid gap-3 sm:grid-cols-2">
+                {visibleCapabilities.map(
+                  ({ title, description, icon: Icon }) => (
+                    <div
+                      key={title}
+                      className="rounded-xl border border-border/70 p-4"
+                    >
+                      <div className="flex items-center gap-2 font-medium">
+                        <Icon
+                          className="size-4 text-primary"
+                          aria-hidden="true"
+                        />
+                        {title}
+                      </div>
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                        {description}
+                      </p>
+                    </div>
+                  )
                 )}
               </div>
-
-              {/* Info */}
-              <div className={viewMode === "list" ? "flex-1 min-w-0" : "p-3"}>
-                <p className={`text-sm font-semibold truncate mb-1 ${item.unlocked ? "text-white" : "text-slate-500"}`}>{item.title}</p>
-                <div className="flex items-center gap-2 mb-2">
-                  <Badge className={`text-[9px] px-1.5 py-0.5 border ${TIER_COLORS[item.tier]}`}>{item.tier}</Badge>
-                  <span className="text-[10px] text-slate-600">{item.size}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] text-slate-600 flex items-center gap-1">
-                    <Eye className="w-3 h-3" />{item.views.toLocaleString()}
-                  </span>
-                  {item.unlocked ? (
-                    <Button size="sm" className="h-6 px-2 text-[10px] bg-green-700 hover:bg-green-600 text-white">
-                      <Download className="w-3 h-3 mr-1" />View
-                    </Button>
-                  ) : (
-                    <Button size="sm" className="h-6 px-2 text-[10px] bg-red-700 hover:bg-red-600 text-white">
-                      <Zap className="w-3 h-3 mr-1" />Unlock
-                    </Button>
-                  )}
-                </div>
+            ) : (
+              <div
+                className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground"
+                role="status"
+              >
+                No capability notes match “{searchQuery}”.
               </div>
-            </div>
-          ))}
-        </div>
-
-        {filtered.length === 0 && (
-          <div className="text-center py-16 text-slate-500">
-            <Shield className="w-10 h-10 mx-auto mb-3 opacity-30" />
-            <p>No items match your filter</p>
-          </div>
-        )}
-
-        {/* Upgrade CTA */}
-        {lockedCount > 0 && (
-          <div className="mt-10 bg-gradient-to-br from-purple-900/20 to-fuchsia-900/20 border border-purple-500/20 rounded-2xl p-6 text-center">
-            <Crown className="w-8 h-8 text-yellow-400 mx-auto mb-3" />
-            <h2 className="text-xl font-black text-white mb-1">Unlock {lockedCount} More Items</h2>
-            <p className="text-slate-400 text-sm mb-4">Upgrade your subscription to access the full vault.</p>
-            <Link href="/subscriptions">
-              <Button className="bg-purple-600 hover:bg-purple-500 text-white font-bold">
-                Upgrade Subscription
-              </Button>
-            </Link>
-          </div>
-        )}
+            )}
+          </CardContent>
+        </Card>
       </div>
-    </div>
+    </main>
   );
 }
