@@ -906,3 +906,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/classroom-management-mobile-390x844
 ## client-libraries-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/client-libraries-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/client-libraries-mobile-390x844.png`
+
+## closing-checklist-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/closing-checklist-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/closing-checklist-mobile-390x844.png`

@@ -1,0 +1,7 @@
+# ClosingChecklist review
+
+The former route was a mock authenticated CRUD shell with a misleading sign-in gate, fake loading state, and no verified release-governance contract. It has been replaced with a strictly typed, local-only release-closing-checklist readiness workspace.
+
+The new screen explicitly states that no checklist, task, evidence, approval, deployment, production status, or release decision is loaded or persisted. All checklist-loading, completion, approval, and release-closing actions are disabled. The route documents release scope, acceptance criteria, tests, accessibility review, dependency audit, ownership, sign-off evidence, secrets, authorization, privacy, threat modeling, vulnerabilities, backup/restore, incident contacts, retention, deployment target, migrations, monitoring, alerts, logs, dashboards, runbooks, SLOs, on-call ownership, rollback, feature flags, change approval, communication, evidence archive, incident path, and final decision. Its capability search filters static local notes only and never loads tasks, marks completion, requests approval, deploys software, or persists a release decision.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows balanced release-state/requirements cards and a capability map. Mobile evidence stacks the same content cleanly at 390×844 without clipping; security, observability, rollback, ownership, and unavailable-action disclosures remain readable.
