@@ -842,3 +842,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/car-rental-mobile-390x844.png`
 ## card-grid-view-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/card-grid-view-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/card-grid-view-mobile-390x844.png`
+
+## cash-flow-analysis-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/cash-flow-analysis-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/cash-flow-analysis-mobile-390x844.png`
