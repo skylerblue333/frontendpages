@@ -1,127 +1,23 @@
 import { useState } from "react";
+import { BarChart3, CheckCircle2, ChevronLeft, ChevronRight, ClipboardCheck, FileWarning, LockKeyhole, ShieldAlert } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Users, DollarSign, Globe, Shield, Zap, BarChart3, Target, Rocket, ChevronRight, ChevronLeft, Building, Coins } from "lucide-react";
 
-const SLIDES = [
-  {
-    id: 1, title: "The Problem", icon: Target,
-    content: "Fragmented digital ecosystems force users across 12+ apps for social, crypto, gaming, and commerce. $2.1T market opportunity remains untapped by a unified platform.",
-    stats: [{ label: "Apps avg user juggles", value: "12+" }, { label: "Market opportunity", value: "$2.1T" }, { label: "User churn from fragmentation", value: "67%" }],
-    color: "from-rose-600 to-red-600",
-  },
-  {
-    id: 2, title: "The Solution", icon: Rocket,
-    content: "SKYCOIN4444 is the first fully integrated AI-powered Web3 social ecosystem. One platform combining social, DeFi, gaming, streaming, marketplace, and governance.",
-    stats: [{ label: "Integrated modules", value: "44+" }, { label: "AI bots coding", value: "12" }, { label: "Languages supported", value: "8" }],
-    color: "from-blue-600 to-cyan-600",
-  },
-  {
-    id: 3, title: "Market Size", icon: Globe,
-    content: "Targeting the intersection of Web3 ($1.08T), social media ($231B), and gaming ($282B) markets. Early mover advantage in AI-native crypto social platforms.",
-    stats: [{ label: "TAM", value: "$1.59T" }, { label: "SAM", value: "$47B" }, { label: "SOM (Year 3)", value: "$2.3B" }],
-    color: "from-emerald-600 to-teal-600",
-  },
-  {
-    id: 4, title: "Business Model", icon: DollarSign,
-    content: "7 revenue streams: subscriptions ($9-$99/mo), transaction fees (0.5-2%), creator monetization (30% cut), enterprise SaaS ($200-$2000/mo), NFT marketplace, token appreciation, and data-as-a-service.",
-    stats: [{ label: "Revenue streams", value: "7" }, { label: "Target ARR (18mo)", value: "$1.2M" }, { label: "Gross margin", value: "78%" }],
-    color: "from-amber-600 to-orange-600",
-  },
-  {
-    id: 5, title: "Traction", icon: TrendingUp,
-    content: "Platform launched with 44+ live modules, 24,557 lines of production code, autonomous AI sprint engine generating 100K lines/sprint, and growing developer community.",
-    stats: [{ label: "Live modules", value: "44+" }, { label: "Code lines", value: "24K+" }, { label: "Sprint velocity", value: "100K/sprint" }],
-    color: "from-purple-600 to-violet-600",
-  },
-  {
-    id: 6, title: "The Ask", icon: Building,
-    content: "Raising $2M seed round at $15M pre-money valuation. 18-month runway to $1.2M ARR milestone. Funds allocated: 40% engineering, 30% growth, 20% infrastructure, 10% legal/compliance.",
-    stats: [{ label: "Raise amount", value: "$2M" }, { label: "Pre-money valuation", value: "$15M" }, { label: "Runway", value: "18 months" }],
-    color: "from-indigo-600 to-blue-600",
-  },
+const slides = [
+  { title: "Problem framing", label: "Define the user problem", detail: "Document the specific user pain, affected audience, evidence source, alternatives, and limitations. Market-size or churn figures require independently sourced research." },
+  { title: "Product scope", label: "Show what exists today", detail: "Separate implemented routes, local previews, provider-dependent capabilities, and planned work. A module count does not prove a functioning product or customer outcome." },
+  { title: "Market evidence", label: "Source the opportunity", detail: "Record the research method, geography, date, definitions, and source links behind any market or addressable-opportunity claim. No market number is asserted here." },
+  { title: "Business model", label: "Prove delivery economics", detail: "Define the actual product, entitlement, payment, tax, support, refund, settlement, and compliance path before presenting pricing, margin, revenue, or token economics." },
+  { title: "Traction evidence", label: "Use reproducible artifacts", detail: "Customer, user, retention, engagement, revenue, code velocity, uptime, and performance claims require traceable artifacts and period definitions. None are prefilled." },
+  { title: "Capital and governance", label: "Document the ask only when approved", detail: "A fundraising amount, valuation, runway, allocation, or investor outcome requires founder approval, financial model, legal review, and supporting evidence. No ask is displayed." },
 ];
 
 export default function InvestorPitch() {
   const [slide, setSlide] = useState(0);
-  const current = SLIDES[slide];
-  const Icon = current.icon;
+  const [reviewed, setReviewed] = useState(false);
+  const current = slides[slide];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-slate-100">
-      <div className="border-b border-slate-800/60 bg-[#0d0d14]/90 backdrop-blur sticky top-0 z-20">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between flex-wrap gap-3">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-600 to-blue-600 flex items-center justify-center">
-              <BarChart3 className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <h1 className="font-bold text-white text-lg leading-none">Investor Pitch Deck</h1>
-              <p className="text-xs text-slate-500 mt-0.5">SKYCOIN4444 · $15M Pre-Money · Seed Round</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Badge className="bg-indigo-500/15 text-indigo-400 border-indigo-500/25 text-xs">Slide {slide+1} / {SLIDES.length}</Badge>
-            <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs">Download PDF</Button>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-5xl mx-auto px-4 py-12">
-        {/* Slide */}
-        <div className={`bg-gradient-to-br from-slate-900 to-slate-950 rounded-3xl border border-slate-800/60 p-10 min-h-[400px] relative overflow-hidden`}>
-          <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${current.color}`} />
-          <div className="flex items-start gap-6 mb-8">
-            <div className={`h-14 w-14 rounded-2xl bg-gradient-to-br ${current.color} flex items-center justify-center shrink-0`}>
-              <Icon className="h-7 w-7 text-white" />
-            </div>
-            <div>
-              <div className="text-xs text-slate-500 font-mono mb-1">SLIDE {String(current.id).padStart(2,"0")} / {String(SLIDES.length).padStart(2,"0")}</div>
-              <h2 className="text-3xl font-black text-white">{current.title}</h2>
-            </div>
-          </div>
-          <p className="text-lg text-slate-300 leading-relaxed mb-10 max-w-3xl">{current.content}</p>
-          <div className="grid grid-cols-3 gap-6">
-            {current.stats.map(s => (
-              <div key={s.label} className="bg-slate-950/60 rounded-2xl p-5 border border-slate-800/40">
-                <div className={`text-3xl font-black bg-gradient-to-r ${current.color} bg-clip-text text-transparent mb-1`}>{s.value}</div>
-                <div className="text-xs text-slate-500">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <div className="flex items-center justify-between mt-6">
-          <Button onClick={() => setSlide(p => Math.max(0, p-1))} disabled={slide===0} variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-800">
-            <ChevronLeft className="h-4 w-4 mr-1" />Previous
-          </Button>
-          <div className="flex gap-2">
-            {SLIDES.map((_, i) => (
-              <button key={i} onClick={() => setSlide(i)} className={`h-2 rounded-full transition-all ${i===slide?"w-8 bg-indigo-500":"w-2 bg-slate-700 hover:bg-slate-600"}`} />
-            ))}
-          </div>
-          <Button onClick={() => setSlide(p => Math.min(SLIDES.length-1, p+1))} disabled={slide===SLIDES.length-1} className="bg-indigo-600 hover:bg-indigo-700 text-white">
-            Next<ChevronRight className="h-4 w-4 ml-1" />
-          </Button>
-        </div>
-
-        {/* All slides overview */}
-        <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-3">
-          {SLIDES.map((s, i) => {
-            const SIcon = s.icon;
-            return (
-              <button key={s.id} onClick={() => setSlide(i)} className={`text-left rounded-xl border p-4 transition-all ${i===slide?"border-indigo-500/50 bg-indigo-500/5":"border-slate-800/60 bg-slate-900/40 hover:border-slate-700"}`}>
-                <div className="flex items-center gap-2 mb-1">
-                  <SIcon className="h-4 w-4 text-slate-400" />
-                  <span className="text-xs text-slate-500 font-mono">0{s.id}</span>
-                </div>
-                <div className="text-sm font-semibold text-white">{s.title}</div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    </div>
+    <main className="min-h-screen bg-[#070a16] text-white"><header className="sticky top-0 z-20 border-b border-white/10 bg-[#070a16]/90 px-4 py-4 backdrop-blur-xl"><div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3"><div className="flex size-10 items-center justify-center rounded-2xl bg-indigo-300/10 text-indigo-200"><BarChart3 className="size-5" /></div><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-200/70">Narrative evidence</p><h1 className="text-lg font-black">Investor narrative workspace</h1></div><Badge variant="outline" className="ml-auto border-amber-300/20 bg-amber-300/[0.06] text-amber-100">Unverified claims excluded</Badge></div></header><section className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><div className="rounded-3xl border border-white/10 bg-gradient-to-br from-indigo-400/[0.15] via-violet-400/[0.08] to-transparent p-6 sm:p-10"><div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-200"><ShieldAlert className="size-4" />Truthful investor workspace</div><h2 className="mt-4 max-w-3xl text-4xl font-black tracking-tight sm:text-5xl">Tell the story without turning assumptions into evidence.</h2><p className="mt-5 max-w-3xl text-base leading-7 text-slate-300">Navigate a presentation structure for problem, product scope, market research, business model, traction, and capital governance. No valuation, revenue, user, market, performance, funding, or investor outcome is asserted or exported.</p><div className="mt-7 flex flex-wrap gap-2"><Button onClick={() => setReviewed(true)} className="bg-indigo-200 text-slate-950 hover:bg-indigo-100"><ClipboardCheck className="mr-2 size-4" />{reviewed ? "Review recorded locally" : "Mark review locally"}</Button><Button onClick={() => setReviewed(false)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">Reset review</Button></div></div><div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]"><section className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 sm:p-8"><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-200">Slide {String(slide + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}</p><h3 className="mt-3 text-3xl font-black">{current.title}</h3><p className="mt-2 text-sm font-semibold text-indigo-200">{current.label}</p></div><FileWarning className="size-6 text-amber-200" /></div><p className="mt-8 text-lg leading-8 text-slate-300">{current.detail}</p><div className="mt-10 rounded-2xl border border-dashed border-white/15 bg-black/20 p-8 text-center"><BarChart3 className="mx-auto size-10 text-slate-600" /><p className="mt-4 font-semibold">No supporting evidence loaded</p><p className="mt-2 text-sm leading-6 text-slate-500">Add a traceable artifact, source link, period, owner, and acceptance result before showing a number or claim.</p></div><div className="mt-8 flex items-center justify-between gap-3"><Button onClick={() => setSlide(value => Math.max(0, value - 1))} disabled={slide === 0} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><ChevronLeft className="mr-2 size-4" />Previous</Button><div className="flex gap-1.5">{slides.map((item, index) => <button key={item.title} type="button" aria-label={`Go to slide ${index + 1}: ${item.title}`} onClick={() => setSlide(index)} className={`h-2 rounded-full transition-all ${index === slide ? "w-8 bg-indigo-300" : "w-2 bg-white/15"}`} />)}</div><Button onClick={() => setSlide(value => Math.min(slides.length - 1, value + 1))} disabled={slide === slides.length - 1} className="bg-indigo-500 text-white hover:bg-indigo-400">Next<ChevronRight className="ml-2 size-4" /></Button></div></section><aside className="rounded-2xl border border-white/10 bg-white/[0.04] p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Evidence register</p><h3 className="mt-2 text-2xl font-black">Before publishing</h3><div className="mt-6 space-y-3">{["Claim owner and approval", "Source or artifact link", "Measurement period", "Definition and denominator", "Legal/compliance review", "Rollback or correction path"].map(item => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-4 text-sm text-slate-300"><LockKeyhole className="size-4 text-amber-200" />{item}<span className="ml-auto text-xs text-amber-200">Required</span></div>)}</div></aside></div><div className="grid gap-4 sm:grid-cols-3">{["Valuation", "Traction", "Fundraising"].map(label => <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5"><p className="text-xs uppercase tracking-widest text-slate-500">{label}</p><p className="mt-2 text-2xl font-black text-amber-200">Not asserted</p><p className="mt-1 text-sm text-slate-500">Evidence required</p></div>)}</div><div className="rounded-2xl border border-dashed border-white/15 bg-amber-300/[0.04] p-6 text-sm leading-6 text-slate-400"><strong className="text-amber-100">No investor, valuation, market, revenue, traction, fundraising, or performance claim is made.</strong> This is a local narrative workspace and not a financial offering, investment solicitation, or substitute for diligence.</div><div className="flex items-center gap-3 text-sm text-slate-500"><CheckCircle2 className="size-4 text-emerald-200" />Local review state only; no investor document was generated or sent.</div></section></main>
   );
 }
