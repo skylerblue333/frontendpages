@@ -674,3 +674,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/address-lookup-mobile-390x844.png`
 ## admin-orders-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/admin-orders-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/admin-orders-mobile-390x844.png`
+
+## admin-wallet-manager-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/admin-wallet-manager-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/admin-wallet-manager-mobile-390x844.png`
