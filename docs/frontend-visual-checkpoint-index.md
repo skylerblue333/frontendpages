@@ -818,3 +818,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/calculator-mobile-390x844.png`
 ## calendar-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/calendar-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/calendar-mobile-390x844.png`
+
+## calendar-view-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/calendar-view-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/calendar-view-mobile-390x844.png`
