@@ -416,6 +416,11 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-22-31_9887
 Blocked-delivery screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-22-44_4359.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_d-m-inbox.md`
 
+## document-signing-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_05-00-14_7915.webp`
+Blocked-signature-request screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_05-00-22_7717.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_document-signing.md`
+
 ## engineer-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-42-48_8371.webp`
 Local-input screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-42-59_5299.webp`
