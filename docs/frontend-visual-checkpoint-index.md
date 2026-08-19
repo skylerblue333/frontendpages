@@ -714,3 +714,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/alert-dialog-mobile-390x844.png`
 ## asset-allocation-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/asset-allocation-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/asset-allocation-mobile-390x844.png`
+
+## asset-management-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/asset-management-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/asset-management-mobile-390x844.png`
