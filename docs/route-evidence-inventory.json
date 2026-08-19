@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "9ee92e82801f153e44400e51cdde5eee6541cf5b",
+  "generated_at_commit": "7ddd2f674258d12612644c4bce2f3966ce8bdd16",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 195,
-  "routes_with_visual_checkpoint": 195,
+  "routes_with_review": 196,
+  "routes_with_visual_checkpoint": 196,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -1345,8 +1345,8 @@
       "component": "CardGridView",
       "source": "client/src/pages/CardGridView.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
