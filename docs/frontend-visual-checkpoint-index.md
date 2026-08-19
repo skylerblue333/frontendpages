@@ -870,3 +870,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/channel-customization-mobile-390x84
 ## chart-analysis-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/chart-analysis-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/chart-analysis-mobile-390x844.png`
+
+## chart-dashboard-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/chart-dashboard-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/chart-dashboard-mobile-390x844.png`

@@ -1,0 +1,7 @@
+# ChartDashboard review
+
+The former route used a generic shared placeholder that did not explain dashboard-specific widget, metric, refresh, layout, authorization, or accessibility risks. It has been replaced with a strictly typed, local-only chart-dashboard readiness workspace.
+
+The new screen explicitly states that no widget, metric, source, layout, refresh, saved view, or dashboard value is loaded or persisted. All dashboard selection, widget addition, refresh, and layout-saving actions are disabled. The route documents typed widget and metric schemas, source lineage, units, ownership, freshness, empty/error states, responsive grid and density, resize and ordering rules, saved views, URL state, persistence semantics, refresh cadence, cache correctness, partial failures, loading and retry behavior, consistency, account-scoped access, redaction, keyboard navigation, screen-reader summaries, and audit controls. Its capability search filters static local notes only and never loads widgets, calculates metrics, refreshes providers, or persists layouts.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows balanced dashboard-state/release cards and a capability map. Mobile evidence stacks the same content cleanly at 390×844 without clipping; widget, refresh, authorization, accessibility, and unavailable-action disclosures remain readable.
