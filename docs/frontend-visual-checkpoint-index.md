@@ -666,3 +666,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/add-credit-card-mobile-390x844.png`
 ## address-book-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/address-book-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/address-book-mobile-390x844.png`
+
+## address-lookup-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/address-lookup-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/address-lookup-mobile-390x844.png`
