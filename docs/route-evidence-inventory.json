@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "ecdc0904f900ef57bb3e8a09f62ac753af667075",
+  "generated_at_commit": "e6493889fd769b4f0857b01b9c16775f66fb0dba",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 135,
-  "routes_with_visual_checkpoint": 135,
+  "routes_with_review": 136,
+  "routes_with_visual_checkpoint": 136,
   "routes_with_placeholder_signal": 786,
   "routes": [
     {
@@ -121,8 +121,8 @@
       "component": "AICore",
       "source": "client/src/pages/AICore.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {

@@ -602,3 +602,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/ai-agent-market-mobile-390x844.png`
 ## a-i-assistant-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/ai-assistant-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/ai-assistant-mobile-390x844.png`
+
+## a-i-core-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/ai-core-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/ai-core-mobile-390x844.png`
