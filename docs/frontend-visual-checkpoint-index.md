@@ -634,3 +634,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/api-logs-mobile-390x844.png`
 ## a-p-i-management-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/api-management-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/api-management-mobile-390x844.png`
+
+## a-p-y-tracking-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/apy-tracking-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/apy-tracking-mobile-390x844.png`
