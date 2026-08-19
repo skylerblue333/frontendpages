@@ -1,220 +1,274 @@
-import React, { useState, useEffect } from 'react';
-import { Heart, X, MessageCircle, Star } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { useAuth } from '@/_core/hooks/useAuth';
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import {
+  Compass,
+  Heart,
+  Info,
+  LockKeyhole,
+  MapPinOff,
+  ShieldAlert,
+  Sparkles,
+  UserRound,
+  XCircle,
+} from "lucide-react";
 
-interface Profile {
-  id: string;
-  displayName: string;
-  age: number;
-  location: string;
-  bio: string;
-  profileImageUrl: string;
-  interests: string[];
-  compatibility: number;
-}
+type Requirement = { title: string; description: string; icon: typeof Info };
+const REQUIREMENTS: readonly Requirement[] = [
+  {
+    title: "Consented profile data",
+    description:
+      "Only data a person explicitly provides for discovery may be used, with retention and deletion controls.",
+    icon: UserRound,
+  },
+  {
+    title: "Age and safety assurance",
+    description:
+      "Age, identity, abuse reporting, moderation, blocking, and appeals must be verified before discovery is enabled.",
+    icon: ShieldAlert,
+  },
+  {
+    title: "Explainable recommendations",
+    description:
+      "Any recommendation needs transparent non-sensitive signals and must not infer protected or intimate traits.",
+    icon: Sparkles,
+  },
+  {
+    title: "Location minimization",
+    description:
+      "Exact location and distance should not be exposed without a clear purpose, consent, and safe precision limits.",
+    icon: MapPinOff,
+  },
+];
 
 export default function DatingDiscovery() {
-  const { user } = useAuth();
-  const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [liked, setLiked] = useState<Set<string>>(new Set());
-  const [superLiked, setSuperLiked] = useState<Set<string>>(new Set());
-
-  useEffect(() => {
-    loadProfiles();
-  }, []);
-
-  const loadProfiles = async () => {
-    setLoading(true);
-    try {
-      // Fetch recommended profiles
-      const response = await fetch('/api/dating/discover');
-      const data = await response.json();
-      setProfiles(data.profiles || []);
-    } catch (error) {
-      console.error('Failed to load profiles:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const currentProfile = profiles[currentIndex];
-
-  const handleLike = async () => {
-    if (!currentProfile) return;
-
-    setLiked((prev) => new Set(prev).add(currentProfile.id));
-
-    try {
-      await fetch('/api/dating/like', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ toUserId: currentProfile.id, likeType: 'like' }),
-      });
-    } catch (error) {
-      console.error('Failed to like profile:', error);
-    }
-
-    nextProfile();
-  };
-
-  const handleSuperLike = async () => {
-    if (!currentProfile) return;
-
-    setSuperLiked((prev) => new Set(prev).add(currentProfile.id));
-
-    try {
-      await fetch('/api/dating/like', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ toUserId: currentProfile.id, likeType: 'superlike' }),
-      });
-    } catch (error) {
-      console.error('Failed to super like profile:', error);
-    }
-
-    nextProfile();
-  };
-
-  const handlePass = async () => {
-    if (!currentProfile) return;
-
-    try {
-      await fetch('/api/dating/like', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ toUserId: currentProfile.id, likeType: 'pass' }),
-      });
-    } catch (error) {
-      console.error('Failed to pass profile:', error);
-    }
-
-    nextProfile();
-  };
-
-  const nextProfile = () => {
-    setCurrentIndex((prev) => (prev + 1) % profiles.length);
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-600 flex items-center justify-center">
-        <div className="text-white text-2xl">Loading matches...</div>
-      </div>
+  const [selected, setSelected] = useState<string | null>(null);
+  const [status, setStatus] = useState(
+    "Dating discovery service unavailable locally. No profile, recommendation, location, match, notification, or account mutation was started."
+  );
+  const announceUnavailable = (action: string) =>
+    setStatus(
+      `${action} is unavailable locally. No profile, recommendation, location, match, notification, or account mutation was started.`
     );
-  }
-
-  if (!currentProfile) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-600 flex items-center justify-center">
-        <div className="text-white text-center">
-          <h2 className="text-3xl font-bold mb-4">No more profiles</h2>
-          <Button onClick={loadProfiles} className="bg-white text-pink-600">
-            Refresh Matches
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-600 p-4">
-      <div className="max-w-md mx-auto">
-        {/* Header */}
-        <div className="text-white text-center mb-8">
-          <h1 className="text-3xl font-bold">Discover</h1>
-          <p className="text-pink-100">Find your perfect match</p>
-        </div>
-
-        {/* Profile Card */}
-        <Card className="relative overflow-hidden mb-6 shadow-2xl">
-          {/* Profile Image */}
-          <div className="relative h-96 bg-gray-200 overflow-hidden">
-            <img
-              src={currentProfile.profileImageUrl}
-              alt={currentProfile.displayName}
-              className="w-full h-full object-cover"
+    <main
+      className="min-h-screen bg-background"
+      aria-labelledby="dating-discovery-title"
+    >
+      <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+        <header className="space-y-3">
+          <Badge variant="outline" className="border-pink-400/30 text-pink-200">
+            DISCOVERY READINESS PREVIEW
+          </Badge>
+          <h1
+            id="dating-discovery-title"
+            className="flex items-center gap-2 text-3xl font-bold tracking-tight"
+          >
+            <Compass className="h-7 w-7 text-pink-300" aria-hidden="true" />
+            Dating discovery
+          </h1>
+          <p className="max-w-3xl text-muted-foreground">
+            Review the requirements for a safe discovery experience without
+            inventing people, profile details, compatibility scores, locations,
+            or social outcomes.
+          </p>
+        </header>
+        <section className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5">
+          <div className="flex items-start gap-3">
+            <Info
+              className="mt-0.5 h-5 w-5 shrink-0 text-amber-200"
+              aria-hidden="true"
             />
-
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-
-            {/* Compatibility Badge */}
-            <div className="absolute top-4 right-4 bg-pink-500 text-white px-4 py-2 rounded-full font-bold">
-              {currentProfile.compatibility}% Match
-            </div>
-
-            {/* Profile Info */}
-            <div className="absolute bottom-0 left-0 right-0 text-white p-6">
-              <h2 className="text-3xl font-bold mb-2">
-                {currentProfile.displayName}, {currentProfile.age}
+            <div>
+              <h2 className="font-semibold text-amber-100">
+                Discovery service unavailable
               </h2>
-              <p className="text-pink-100 mb-4">{currentProfile.location}</p>
-              <p className="text-sm text-gray-200 line-clamp-3">{currentProfile.bio}</p>
+              <p className="mt-1 text-sm leading-6 text-amber-100/75">
+                No consented profile source, age assurance, recommendation
+                model, image provider, location signal, moderation service, or
+                interaction endpoint is connected. No person or recommendation
+                is represented.
+              </p>
             </div>
           </div>
-
-          {/* Interests */}
-          <div className="p-4 bg-white">
-            <div className="flex flex-wrap gap-2">
-              {currentProfile.interests.map((interest) => (
-                <span
-                  key={interest}
-                  className="bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm"
+        </section>
+        <section className="grid gap-4 md:grid-cols-3">
+          <Card className="border-border/40 bg-card/50 p-5">
+            <UserRound
+              className="mb-3 h-5 w-5 text-sky-300"
+              aria-hidden="true"
+            />
+            <p className="text-lg font-semibold">Profiles unavailable</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No names, ages, photos, biographies, interests, or identity data
+              are loaded.
+            </p>
+          </Card>
+          <Card className="border-border/40 bg-card/50 p-5">
+            <Sparkles
+              className="mb-3 h-5 w-5 text-violet-300"
+              aria-hidden="true"
+            />
+            <p className="text-lg font-semibold">Recommendations unavailable</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No compatibility, ranking, preference inference, or match score is
+              calculated.
+            </p>
+          </Card>
+          <Card className="border-border/40 bg-card/50 p-5">
+            <Heart className="mb-3 h-5 w-5 text-pink-300" aria-hidden="true" />
+            <p className="text-lg font-semibold">Actions unavailable</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Like, pass, super-like, refresh, match, and notification outcomes
+              are not connected.
+            </p>
+          </Card>
+        </section>
+        <section aria-labelledby="requirements-title">
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 id="requirements-title" className="text-xl font-semibold">
+                Responsible discovery requirements
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Select a requirement to review its local boundary.
+              </p>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => announceUnavailable("Profile refresh")}
+            >
+              Refresh unavailable
+            </Button>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {REQUIREMENTS.map(requirement => {
+              const Icon = requirement.icon;
+              const active = selected === requirement.title;
+              return (
+                <button
+                  key={requirement.title}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => setSelected(active ? null : requirement.title)}
+                  className={`rounded-2xl border p-5 text-left transition-colors ${active ? "border-primary/50 bg-primary/10" : "border-border/40 bg-card/40 hover:bg-card/60"}`}
                 >
-                  {interest}
-                </span>
-              ))}
+                  <div className="mb-4 flex items-start justify-between gap-3">
+                    <div className="rounded-xl bg-secondary/60 p-3">
+                      <Icon
+                        className="h-5 w-5 text-primary"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className="border-muted-foreground/30 text-muted-foreground"
+                    >
+                      Unavailable
+                    </Badge>
+                  </div>
+                  <h3 className="font-semibold">{requirement.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    {requirement.description}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+        {selected && (
+          <section
+            className="rounded-2xl border border-primary/30 bg-primary/5 p-5"
+            aria-live="polite"
+          >
+            <div className="flex items-start gap-3">
+              <LockKeyhole
+                className="mt-0.5 h-5 w-5 shrink-0 text-primary"
+                aria-hidden="true"
+              />
+              <div>
+                <h2 className="font-semibold">Requirement selected locally</h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {selected} is a planning requirement only. No profile,
+                  recommendation, location signal, match, or user record
+                  changed.
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
+        <section className="grid gap-4 md:grid-cols-3">
+          <Card className="border-border/40 bg-card/40 p-5">
+            <h2 className="font-semibold">Pass unavailable</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No profile is available to dismiss and no preference is saved.
+            </p>
+            <Button
+              type="button"
+              variant="outline"
+              className="mt-4 w-full"
+              onClick={() => announceUnavailable("Pass action")}
+            >
+              Pass unavailable
+            </Button>
+          </Card>
+          <Card className="border-border/40 bg-card/40 p-5">
+            <h2 className="font-semibold">Like unavailable</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No interest, match, notification, or conversation is created.
+            </p>
+            <Button
+              type="button"
+              variant="outline"
+              className="mt-4 w-full"
+              onClick={() => announceUnavailable("Like action")}
+            >
+              Like unavailable
+            </Button>
+          </Card>
+          <Card className="border-border/40 bg-card/40 p-5">
+            <h2 className="font-semibold">Super-like unavailable</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No elevated signal, billing event, or recommendation effect
+              exists.
+            </p>
+            <Button
+              type="button"
+              variant="outline"
+              className="mt-4 w-full"
+              onClick={() => announceUnavailable("Super-like action")}
+            >
+              Super-like unavailable
+            </Button>
+          </Card>
+        </section>
+        <section className="rounded-2xl border border-border/40 bg-card/30 p-5">
+          <div className="flex items-start gap-3">
+            <XCircle
+              className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="font-semibold">No discovery claim</h2>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                This page does not rank, display, recommend, contact, notify, or
+                record a person. A production implementation needs consent, age
+                assurance, privacy, moderation, explainability, safe failure,
+                and deletion controls.
+              </p>
             </div>
           </div>
-        </Card>
-
-        {/* Action Buttons */}
-        <div className="flex justify-center gap-6 mb-8">
-          {/* Pass Button */}
-          <Button
-            onClick={handlePass}
-            className="w-16 h-16 rounded-full bg-white hover:bg-gray-100 shadow-lg flex items-center justify-center"
-          >
-            <X className="w-8 h-8 text-gray-600" />
-          </Button>
-
-          {/* Super Like Button */}
-          <Button
-            onClick={handleSuperLike}
-            className="w-16 h-16 rounded-full bg-blue-500 hover:bg-blue-600 shadow-lg flex items-center justify-center"
-          >
-            <Star className="w-8 h-8 text-white" />
-          </Button>
-
-          {/* Like Button */}
-          <Button
-            onClick={handleLike}
-            className="w-16 h-16 rounded-full bg-pink-500 hover:bg-pink-600 shadow-lg flex items-center justify-center"
-          >
-            <Heart className="w-8 h-8 text-white" />
-          </Button>
-        </div>
-
-        {/* Quick Stats */}
-        <div className="grid grid-cols-3 gap-4 text-white text-center">
-          <div className="bg-white bg-opacity-20 rounded-lg p-4">
-            <div className="text-2xl font-bold">{liked.size}</div>
-            <div className="text-sm">Likes</div>
-          </div>
-          <div className="bg-white bg-opacity-20 rounded-lg p-4">
-            <div className="text-2xl font-bold">{superLiked.size}</div>
-            <div className="text-sm">Super Likes</div>
-          </div>
-          <div className="bg-white bg-opacity-20 rounded-lg p-4">
-            <div className="text-2xl font-bold">{currentIndex + 1}</div>
-            <div className="text-sm">Viewed</div>
-          </div>
-        </div>
+        </section>
+        <p
+          className="rounded-xl border border-border/30 bg-card/30 px-4 py-3 text-sm text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
+          {status}
+        </p>
       </div>
-    </div>
+    </main>
   );
 }
