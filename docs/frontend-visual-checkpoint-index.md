@@ -722,3 +722,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/asset-management-mobile-390x844.png
 ## audio-player-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/audio-player-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/audio-player-mobile-390x844.png`
+
+## audit-logs-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/audit-logs-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/audit-logs-mobile-390x844.png`
