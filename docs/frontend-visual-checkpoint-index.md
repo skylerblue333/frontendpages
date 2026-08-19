@@ -718,3 +718,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/asset-allocation-mobile-390x844.png
 ## asset-management-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/asset-management-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/asset-management-mobile-390x844.png`
+
+## audio-player-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/audio-player-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/audio-player-mobile-390x844.png`
