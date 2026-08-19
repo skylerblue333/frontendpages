@@ -694,3 +694,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/agent-coordination-mobile-390x844.p
 ## agent-debate-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/agent-debate-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/agent-debate-mobile-390x844.png`
+
+## agent-detail-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/agent-detail-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/agent-detail-mobile-390x844.png`
