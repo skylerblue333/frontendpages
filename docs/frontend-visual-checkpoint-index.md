@@ -406,6 +406,11 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_04-56-32_9814
 Blocked-case screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_04-56-44_4423.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_dispute-resolution.md`
 
+## distribution-channels-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_04-58-19_9390.webp`
+Blocked-connection screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_04-58-25_3437.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_distribution-channels.md`
+
 ## dm-inbox-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-22-31_9887.webp`
 Blocked-delivery screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-22-44_4359.webp`
