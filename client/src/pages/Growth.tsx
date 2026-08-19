@@ -1,57 +1,20 @@
+import { useState } from "react";
+import { ArrowRight, BarChart3, CheckCircle2, Gift, LockKeyhole, Rocket, Share2, ShieldAlert, Star, Target, TrendingUp, Users } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
-import { StatCard } from "@/components/StatCard";
-import { TrendingUp, Users, DollarSign, Target, Rocket, Share2, Gift, Star, ArrowRight, BarChart3, Zap } from "lucide-react";
 
-const GROWTH_CHANNELS = [
-  { icon: Share2, label: "Referral Program", desc: "Earn 10% of referred user's first month revenue", reward: "10% commission", href: "/referrals", color: "text-primary" },
-  { icon: Gift, label: "Airdrop Campaigns", desc: "Complete tasks to earn free SKY444 tokens", reward: "Up to 1,000 SKY444", href: "/airdrops", color: "text-accent" },
-  { icon: Star, label: "Creator Incentives", desc: "Top creators earn bonus rewards monthly", reward: "Up to $5,000/mo", href: "/creator-studio", color: "text-warning" },
-  { icon: Rocket, label: "Launch Partner", desc: "Early adopter benefits and lifetime discounts", reward: "50% lifetime discount", href: "/enterprise", color: "text-success" },
+const channels = [
+  { icon: Share2, label: "Referral program", description: "Requires authenticated referral attribution, consent, eligibility, ledger events, payout policy, fraud controls, and reconciliation." },
+  { icon: Gift, label: "Campaign concepts", description: "Requires a governed campaign, verified task completion, reward policy, identity, anti-abuse controls, and an auditable ledger." },
+  { icon: Star, label: "Creator incentives", description: "Requires creator eligibility, content provenance, performance definitions, payout custody, tax, and support." },
+  { icon: Rocket, label: "Launch partnerships", description: "Requires an approved commercial agreement, entitlement rules, discount terms, expiry, billing, and customer support." },
 ];
 
 export default function Growth() {
-  return (
-    <div className="container py-8 max-w-5xl animate-page-in">
-      <PageHeader backHref="/analytics" icon={TrendingUp} title="Growth Hub" subtitle="Referrals, incentives, and growth programs to accelerate your journey" badge="Active" />
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <StatCard icon={Users} label="Total Users" value="24,891" change={12.4} changeLabel="this month" color="primary" />
-        <StatCard icon={DollarSign} label="Rewards Paid" value="$48,230" change={8.7} changeLabel="this month" color="success" />
-        <StatCard icon={Target} label="Conversion Rate" value="4.2%" change={1.3} changeLabel="vs last month" color="accent" />
-        <StatCard icon={BarChart3} label="Viral Coefficient" value="1.34" change={5.2} changeLabel="this week" color="warning" />
-      </div>
-      <div className="grid md:grid-cols-2 gap-4 mb-8">
-        {GROWTH_CHANNELS.map(ch => (
-          <div key={ch.label} className="card p-5 hover:border-primary/40 transition-all duration-200">
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
-                <ch.icon className={`w-5 h-5 ${ch.color}`} />
-              </div>
-              <div className="flex-1">
-                <div className="font-semibold mb-1">{ch.label}</div>
-                <p className="text-sm text-muted-foreground mb-2">{ch.desc}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono text-primary bg-primary/10 px-2 py-1 rounded">{ch.reward}</span>
-                  <Link href={ch.href}><Button size="sm" variant="outline" className="text-xs gap-1">Join <ArrowRight className="w-3 h-3" /></Button></Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="card p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30">
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <div>
-            <h3 className="text-lg font-bold mb-1">Your Referral Link</h3>
-            <p className="text-sm text-muted-foreground">Share and earn 10% of every referral's revenue</p>
-          </div>
-          <div className="flex gap-2">
-            <div className="px-4 py-2 bg-secondary rounded-lg font-mono text-sm">skycoin4444.com/ref/you</div>
-            <Button className="btn-primary gap-2"><Share2 className="w-4 h-4" />Copy Link</Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  const [selected, setSelected] = useState(0);
+  const [saved, setSaved] = useState(false);
+  const channel = channels[selected];
+  const Icon = channel.icon;
+  return <div className="container max-w-6xl animate-page-in py-8"><PageHeader backHref="/analytics" icon={TrendingUp} title="Growth workspace" subtitle="Design acquisition programs only after attribution and reward evidence exists" badge="Evidence required" /><div className="mb-8 rounded-3xl border border-white/10 bg-gradient-to-br from-cyan-400/[0.12] via-violet-400/[0.08] to-transparent p-6 sm:p-8"><div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200"><ShieldAlert className="size-4" />Truthful growth boundary</div><h2 className="mt-4 max-w-3xl text-3xl font-black tracking-tight">Build a growth loop without promising a reward.</h2><p className="mt-3 max-w-3xl text-sm leading-6 text-slate-300">This workspace preserves referral, campaign, creator, and partnership planning while removing fabricated users, rewards, conversion, viral coefficients, token grants, commissions, discounts, payouts, and live referral outcomes.</p><div className="mt-6 flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-200 text-slate-950 hover:bg-cyan-100">{saved ? "Plan saved locally" : "Save plan locally"}</Button><Button onClick={() => setSaved(false)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">Reset</Button></div></div><div className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">{[{ label: "Users", icon: Users }, { label: "Rewards", icon: Gift }, { label: "Conversion", icon: Target }, { label: "Attribution", icon: BarChart3 }].map(item => <div key={item.label} className="card p-4"><item.icon className="size-4 text-cyan-200" /><div className="mt-3 text-2xl font-bold text-amber-200">Unavailable</div><div className="text-xs text-muted-foreground">{item.label} · no source</div></div>)}</div><section className="grid gap-6 md:grid-cols-2">{channels.map((item, index) => { const ChannelIcon = item.icon; return <button key={item.label} type="button" onClick={() => setSelected(index)} className={`card p-5 text-left transition-all ${selected === index ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "hover:border-primary/40"}`}><div className="flex items-start gap-4"><div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-200"><ChannelIcon className="size-5" /></div><div className="flex-1"><div className="font-semibold">{item.label}</div><p className="mt-2 text-sm leading-6 text-muted-foreground">{item.description}</p><span className="mt-3 inline-flex rounded-full border border-amber-300/20 bg-amber-300/[0.05] px-2 py-1 text-xs text-amber-100">Requires evidence</span></div></div></button>; })}</section><section className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><div className="card p-6"><div className="flex items-start gap-3"><Icon className="mt-1 size-5 text-cyan-200" /><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected program</p><h3 className="mt-2 text-2xl font-black">{channel.label}</h3></div></div><p className="mt-4 text-sm leading-6 text-slate-300">{channel.description}</p><div className="mt-6 rounded-2xl border border-dashed border-border/60 bg-black/10 p-8 text-center"><Target className="mx-auto size-9 text-muted-foreground/50" /><p className="mt-3 font-semibold">No growth evidence loaded</p><p className="mt-2 text-sm leading-6 text-muted-foreground">Campaign, referral, attribution, reward, and customer outcomes remain unavailable until governed providers and persistence are connected.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Join unavailable</Button><Button disabled variant="outline">Copy link unavailable</Button><Button disabled variant="outline">Launch unavailable</Button></div></div><aside className="card p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Growth gates</p><h3 className="mt-2 text-2xl font-black">Before inviting users</h3><div className="mt-5 space-y-3">{["Authenticated identity and consent", "Attribution, cohort, and fraud rules", "Reward, payout, tax, and ledger policy", "Campaign terms, expiry, and support", "Privacy, retention, deletion, and audit", "Rollback, correction, and accountable owner"].map(item => <div key={item} className="flex items-start gap-3 rounded-xl border border-border/50 p-3 text-sm text-muted-foreground"><LockKeyhole className="mt-1 size-4 shrink-0 text-amber-200" />{item}<span className="ml-auto text-xs text-amber-200">Required</span></div>)}</div></aside></section><div className="mt-8 rounded-2xl border border-dashed border-amber-300/20 bg-amber-300/[0.05] p-5 text-sm leading-6 text-muted-foreground"><strong className="text-amber-100">No growth, reward, referral, customer, or financial claim is made.</strong> This is a local planning workspace; no referral link was generated, copied, submitted, or rewarded.</div><div className="mt-5 flex items-center gap-3 text-sm text-muted-foreground"><CheckCircle2 className="size-4 text-emerald-200" />Local planning state only; no external campaign or payout operation was started.</div></div>;
 }
