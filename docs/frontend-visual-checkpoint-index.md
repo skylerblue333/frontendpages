@@ -878,3 +878,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/chart-dashboard-mobile-390x844.png`
 ## chat-bot-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/chat-bot-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/chat-bot-mobile-390x844.png`
+
+## chat-history-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/chat-history-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/chat-history-mobile-390x844.png`
