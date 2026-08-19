@@ -1,0 +1,7 @@
+# ContactUsForm review
+
+The former route was a generic unavailable placeholder. It has been replaced with a strictly typed, accessible, local-only support-intake readiness workspace.
+
+The new screen states that no requester, message, attachment, recipient, case, acknowledgement, delivery result, or saved support record is loaded or persisted. Form-loading, message submission, file attachment, and case-view controls are disabled. The route documents the release requirements for requester identity, contact verification, consent, communication preference, message validation, category and priority, attachment limits, malware scanning, redaction, sensitive-data handling, queue and assignment, service-level target, notification, acknowledgement, retries, escalation, delivery status, case identifiers, access control, retention, deletion, transcripts, status history, privacy, and audit. Its search field filters static capability notes only and never collects contact details, uploads files, sends messages, creates a case, notifies staff, or persists a transcript.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows balanced intake-state/release cards and a four-item capability map. Mobile evidence stacks the same content cleanly at 390×844 without clipping; identity, consent, message safety, routing, delivery, privacy, audit, and unavailable-action disclosures remain readable.
