@@ -798,3 +798,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/bulk-ordering-mobile-390x844.png`
 ## bulk-upload-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/bulk-upload-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/bulk-upload-mobile-390x844.png`
+
+## ccpa-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/ccpa-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/ccpa-mobile-390x844.png`
