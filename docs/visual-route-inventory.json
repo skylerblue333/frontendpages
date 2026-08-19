@@ -376,9 +376,9 @@
       "component": "AchievementBadges",
       "page_file": "AchievementBadges.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
-      "auth_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -486,10 +486,10 @@
       "component": "AddressLookup",
       "page_file": "AddressLookup.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/admin",
@@ -616,8 +616,8 @@
       "component": "AgeVerification",
       "page_file": "AgeVerification.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -826,8 +826,8 @@
       "component": "ApprovalWorkflows",
       "page_file": "ApprovalWorkflows.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -856,8 +856,8 @@
       "component": "ArchiveManagement",
       "page_file": "ArchiveManagement.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -886,9 +886,9 @@
       "component": "AssetTracking",
       "page_file": "AssetTracking.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
-      "auth_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -936,8 +936,8 @@
       "component": "AudioEditing",
       "page_file": "AudioEditing.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -1066,8 +1066,8 @@
       "component": "BatchGeneration",
       "page_file": "BatchGeneration.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -1116,8 +1116,8 @@
       "component": "BlockBrowser",
       "page_file": "BlockBrowser.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -1706,8 +1706,8 @@
       "component": "CodeCompletion",
       "page_file": "CodeCompletion.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -2076,9 +2076,9 @@
       "component": "ContentFlagging",
       "page_file": "ContentFlagging.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
-      "auth_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -2176,9 +2176,9 @@
       "component": "ContributionInterface",
       "page_file": "ContributionInterface.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
-      "auth_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -2186,9 +2186,9 @@
       "component": "ConversationArchive",
       "page_file": "ConversationArchive.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
-      "auth_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -2417,7 +2417,7 @@
       "page_file": "CreatorOnboarding.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
       "external_signals": true
     },
@@ -2616,7 +2616,7 @@
       "component": "DMInbox",
       "page_file": "DMInbox.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
+      "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": true,
       "external_signals": true
@@ -3086,9 +3086,9 @@
       "component": "DirectMessaging",
       "page_file": "DirectMessaging.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
-      "auth_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -3176,9 +3176,9 @@
       "component": "DocumentManagement",
       "page_file": "DocumentManagement.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
-      "auth_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -3266,20 +3266,20 @@
       "component": "EarningsTracker",
       "page_file": "EarningsTracker.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
-      "auth_signals": false,
-      "external_signals": false
+      "placeholder_markers": false,
+      "boundary_signals": true,
+      "auth_signals": true,
+      "external_signals": true
     },
     {
       "path": "/earnings-tracking",
       "component": "EarningsTracking",
       "page_file": "EarningsTracking.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
-      "auth_signals": false,
-      "external_signals": false
+      "placeholder_markers": false,
+      "boundary_signals": true,
+      "auth_signals": true,
+      "external_signals": true
     },
     {
       "path": "/economic-layer",
@@ -3406,8 +3406,8 @@
       "component": "EmbedSDK",
       "page_file": "EmbedSDK.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": true
     },
@@ -4347,7 +4347,7 @@
       "page_file": "GhostMode.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
       "external_signals": false
     },
@@ -5567,9 +5567,9 @@
       "page_file": "MemorySystem.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/mentions",
@@ -6027,9 +6027,9 @@
       "page_file": "NSFWPlatform.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/narrative-engine",
@@ -8757,7 +8757,7 @@
       "page_file": "StreamClip.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -9087,7 +9087,7 @@
       "page_file": "TeachingOpportunities.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
       "external_signals": false
     },
@@ -9337,9 +9337,9 @@
       "page_file": "TodoList.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/toggle-switch-form",
@@ -9537,7 +9537,7 @@
       "page_file": "TranslationEnabledCommunity.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -9777,7 +9777,7 @@
       "page_file": "UnhiddenMode.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
       "external_signals": true
     },
