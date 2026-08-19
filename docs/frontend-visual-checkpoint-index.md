@@ -374,6 +374,12 @@ Selected-requirement screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_matching-algorithm.md`
 Blocked-evaluation screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-43-40_9570.webp`
 
+## matchmaking-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-45-51_5625.webp`
+Selected-stage screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-46-02_9971.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_matchmaking.md`
+Blocked-preview screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-46-23_7044.webp`
+
 ## memory-system-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-17-02_3005.webp`
 Blocked-store screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_02-17-17_2208.webp`
