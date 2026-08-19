@@ -353,6 +353,11 @@ Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-12-53_9726
 Blocked-simulation screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-13-03_8163.webp`
 Route text capture: `/home/ubuntu/page_texts/localhost_5175_derivatives-trading.md`
 
+## dev-ops-visual-checkpoint.md
+Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-16-02_7165.webp`
+Configuration screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_03-16-23_1388.webp`
+Route text capture: `/home/ubuntu/page_texts/localhost_5175_dev-ops.md`
+
 ## discussion-forums-visual-checkpoint.md
 Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-30-52_8152.webp`
 Detail-view screenshot: `/home/ubuntu/screenshots/localhost_2026-08-19_01-31-10_3476.webp`
