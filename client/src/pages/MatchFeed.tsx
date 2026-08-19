@@ -1,212 +1,288 @@
-/**
- * MatchFeed — Dating System Matches List
- * Conversation previews, safety filters, engagement scoring
- */
-import { useState } from "react";
-import { Heart, MessageCircle, Search, Filter, Star, Shield, Clock, Flame } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "wouter";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import {
+  Clock3,
+  Filter,
+  Heart,
+  LockKeyhole,
+  MessageCircleOff,
+  Search,
+  ShieldAlert,
+  UserRound,
+  XCircle,
+} from "lucide-react";
 
-const MATCHES = [
+type FilterMode = "all" | "unread" | "available";
+type Concept = {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  unread: boolean;
+};
+const CONCEPTS: readonly Concept[] = [
   {
-    id: 1,
-    name: "Alex Rivera",
-    age: 26,
-    lastMessage: "That DeFi protocol you mentioned sounds interesting...",
-    lastMessageTime: "2m ago",
-    unread: 2,
-    compatibility: 94,
-    isOnline: true,
-    isVerified: true,
-    engagementScore: 87,
-    conversationStage: "active",
+    id: "new",
+    title: "New conversation concept",
+    description: "No person, profile, message, or match is loaded.",
+    status: "Not connected",
+    unread: false,
   },
   {
-    id: 2,
-    name: "Jordan Kim",
-    age: 29,
-    lastMessage: "I'd love to hear more about your AI research!",
-    lastMessageTime: "1h ago",
-    unread: 0,
-    compatibility: 88,
-    isOnline: false,
-    isVerified: true,
-    engagementScore: 72,
-    conversationStage: "warm",
+    id: "active",
+    title: "Active conversation concept",
+    description: "Message history and delivery state are unavailable.",
+    status: "Not connected",
+    unread: false,
   },
   {
-    id: 3,
-    name: "Sam Chen",
-    age: 24,
-    lastMessage: "You: Hey! Loved your profile 👋",
-    lastMessageTime: "3h ago",
-    unread: 0,
-    compatibility: 82,
-    isOnline: true,
-    isVerified: false,
-    engagementScore: 45,
-    conversationStage: "new",
-  },
-  {
-    id: 4,
-    name: "Riley Park",
-    age: 27,
-    lastMessage: "Match! Say hello 💜",
-    lastMessageTime: "1d ago",
-    unread: 0,
-    compatibility: 79,
-    isOnline: false,
-    isVerified: false,
-    engagementScore: 20,
-    conversationStage: "new",
+    id: "follow-up",
+    title: "Follow-up concept",
+    description: "No reminder, presence, or response prediction is available.",
+    status: "Not connected",
+    unread: false,
   },
 ];
 
-const STAGE_COLORS: Record<string, string> = {
-  active: "text-green-400",
-  warm: "text-yellow-400",
-  new: "text-blue-400",
-};
-
-const STAGE_LABELS: Record<string, string> = {
-  active: "Active",
-  warm: "Warming up",
-  new: "New match",
-};
-
 export default function MatchFeed() {
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<"all" | "unread" | "online">("all");
-
-  const filtered = MATCHES.filter(m => {
-    if (filter === "unread" && m.unread === 0) return false;
-    if (filter === "online" && !m.isOnline) return false;
-    if (search && !m.name.toLowerCase().includes(search.toLowerCase())) return false;
-    return true;
-  });
-
+  const [filter, setFilter] = useState<FilterMode>("all");
+  const [status, setStatus] = useState(
+    "Conversation service unavailable locally. No profile, message, presence, match, notification, or social mutation was started."
+  );
+  const filtered = useMemo(
+    () =>
+      CONCEPTS.filter(concept => {
+        const matchesSearch =
+          !search || concept.title.toLowerCase().includes(search.toLowerCase());
+        const matchesFilter =
+          filter === "all" ||
+          (filter === "unread" && concept.unread) ||
+          (filter === "available" && false);
+        return matchesSearch && matchesFilter;
+      }),
+    [filter, search]
+  );
+  const announceUnavailable = (action: string) =>
+    setStatus(
+      `${action} is unavailable locally. No profile, message, presence, match, notification, or social mutation was started.`
+    );
   return (
-    <div className="min-h-screen bg-background p-4 max-w-lg mx-auto space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-bold flex items-center gap-2">
-            <Heart className="w-5 h-5 text-pink-500" />
-            My Matches
-          </h1>
-          <p className="text-xs text-muted-foreground">{MATCHES.length} connections</p>
-        </div>
-        <Button variant="outline" size="sm" onClick={() => toast("Filters coming soon")}>
-          <Filter className="w-4 h-4" />
-        </Button>
-      </div>
-
-      {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-        <Input
-          placeholder="Search matches..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="pl-9"
-        />
-      </div>
-
-      {/* Filter tabs */}
-      <div className="flex gap-1 p-1 bg-secondary/50 rounded-xl">
-        {(["all", "unread", "online"] as const).map(f => (
-          <button
-            key={f}
-            onClick={() => setFilter(f)}
-            className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-all capitalize ${filter === f ? "bg-background shadow text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+    <main
+      className="min-h-screen bg-background"
+      aria-labelledby="match-feed-title"
+    >
+      <div className="mx-auto max-w-5xl space-y-6 px-4 py-8">
+        <header className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <Badge
+              variant="outline"
+              className="border-pink-400/30 text-pink-200"
+            >
+              CONVERSATION READINESS PREVIEW
+            </Badge>
+            <h1
+              id="match-feed-title"
+              className="mt-3 flex items-center gap-2 text-3xl font-bold tracking-tight"
+            >
+              <Heart className="h-7 w-7 text-pink-300" aria-hidden="true" />
+              Match feed
+            </h1>
+            <p className="mt-2 max-w-2xl text-muted-foreground">
+              Review local conversation concepts without inventing profiles,
+              match scores, presence, messages, unread counts, or response
+              analytics.
+            </p>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => announceUnavailable("Filter service")}
           >
-            {f}
-          </button>
-        ))}
-      </div>
-
-      {/* New matches row */}
-      <div>
-        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">New Matches</h2>
-        <div className="flex gap-3 overflow-x-auto pb-1">
-          {MATCHES.filter(m => m.conversationStage === "new").map(m => (
-            <Link key={m.id} href={`/dating/chat/${m.id}`}>
-              <div className="flex flex-col items-center gap-1 cursor-pointer">
-                <div className="relative">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center text-xl font-bold text-white">
-                    {m.name[0]}
-                  </div>
-                  {m.isOnline && <div className="absolute bottom-0.5 right-0.5 w-3 h-3 rounded-full bg-green-500 border-2 border-background" />}
-                </div>
-                <span className="text-xs text-muted-foreground">{m.name.split(" ")[0]}</span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* Conversations */}
-      <div>
-        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Conversations</h2>
-        <div className="space-y-2">
-          {filtered.map(match => (
-            <Link key={match.id} href={`/dating/chat/${match.id}`}>
-              <div className="card p-3 flex items-center gap-3 hover:bg-secondary/30 transition-colors cursor-pointer">
-                {/* Avatar */}
-                <div className="relative shrink-0">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center text-lg font-bold text-white">
-                    {match.name[0]}
-                  </div>
-                  {match.isOnline && <div className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-background" />}
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1.5 mb-0.5">
-                    <span className="font-semibold text-sm">{match.name}</span>
-                    {match.isVerified && <Shield className="w-3 h-3 text-blue-400" />}
-                    <span className={`text-xs ml-auto ${STAGE_COLORS[match.conversationStage]}`}>
-                      {STAGE_LABELS[match.conversationStage]}
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground truncate">{match.lastMessage}</p>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <Clock className="w-2.5 h-2.5 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">{match.lastMessageTime}</span>
-                    <span className="text-xs text-green-400 ml-auto">{match.compatibility}% match</span>
-                  </div>
-                </div>
-
-                {/* Unread badge */}
-                {match.unread > 0 && (
-                  <Badge className="bg-pink-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full p-0 shrink-0">
-                    {match.unread}
-                  </Badge>
-                )}
-              </div>
-            </Link>
-          ))}
-
-          {filtered.length === 0 && (
-            <div className="text-center py-8">
-              <Heart className="w-10 h-10 text-pink-500/30 mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">No matches found</p>
+            <Filter className="mr-2 h-4 w-4" aria-hidden="true" />
+            Filters unavailable
+          </Button>
+        </header>
+        <section className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5">
+          <div className="flex items-start gap-3">
+            <ShieldAlert
+              className="mt-0.5 h-5 w-5 shrink-0 text-amber-200"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="font-semibold text-amber-100">
+                Conversation service unavailable
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-amber-100/75">
+                No consented profiles, matching provider, messaging transport,
+                delivery receipts, presence signal, notification service,
+                moderation system, or response analytics is connected. Nothing
+                here represents a real person or conversation.
+              </p>
             </div>
-          )}
-        </div>
+          </div>
+        </section>
+        <section className="grid gap-4 md:grid-cols-3">
+          <Card className="border-border/40 bg-card/50 p-5">
+            <UserRound
+              className="mb-3 h-5 w-5 text-sky-300"
+              aria-hidden="true"
+            />
+            <p className="text-lg font-semibold">Profiles unavailable</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No names, ages, avatars, verification, or location are loaded.
+            </p>
+          </Card>
+          <Card className="border-border/40 bg-card/50 p-5">
+            <MessageCircleOff
+              className="mb-3 h-5 w-5 text-pink-300"
+              aria-hidden="true"
+            />
+            <p className="text-lg font-semibold">Messages unavailable</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No message content, delivery, read state, or chat route is
+              connected.
+            </p>
+          </Card>
+          <Card className="border-border/40 bg-card/50 p-5">
+            <Clock3
+              className="mb-3 h-5 w-5 text-amber-300"
+              aria-hidden="true"
+            />
+            <p className="text-lg font-semibold">Analytics unavailable</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No compatibility, response, engagement, presence, or unread metric
+              is asserted.
+            </p>
+          </Card>
+        </section>
+        <section className="space-y-4">
+          <div className="relative">
+            <Search
+              className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <label htmlFor="match-feed-search" className="sr-only">
+              Search local conversation concepts
+            </label>
+            <input
+              id="match-feed-search"
+              value={search}
+              onChange={event => setSearch(event.target.value)}
+              placeholder="Search local concepts"
+              className="w-full rounded-xl border border-border/40 bg-card/40 py-3 pl-10 pr-3 text-sm outline-none ring-primary/40 focus:ring-2"
+            />
+          </div>
+          <div
+            className="flex flex-wrap gap-2"
+            role="group"
+            aria-label="Local conversation filters"
+          >
+            {(["all", "unread", "available"] as const).map(mode => (
+              <Button
+                key={mode}
+                type="button"
+                size="sm"
+                variant={filter === mode ? "default" : "outline"}
+                onClick={() => setFilter(mode)}
+              >
+                {mode === "available"
+                  ? "Available"
+                  : mode === "unread"
+                    ? "Unread"
+                    : "All concepts"}
+              </Button>
+            ))}
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {filtered.map(concept => (
+              <Card
+                key={concept.id}
+                className="border-border/40 bg-card/40 p-5"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="rounded-xl bg-secondary/60 p-3">
+                    <MessageCircleOff
+                      className="h-5 w-5 text-primary"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h2 className="font-semibold">{concept.title}</h2>
+                      <Badge
+                        variant="outline"
+                        className="border-muted-foreground/30 text-muted-foreground"
+                      >
+                        {concept.status}
+                      </Badge>
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                      {concept.description}
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-4 flex gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => announceUnavailable("Conversation opening")}
+                  >
+                    Open unavailable
+                  </Button>
+                  <Button
+                    type="button"
+                    className="flex-1"
+                    onClick={() => announceUnavailable("Message service")}
+                  >
+                    Message unavailable
+                  </Button>
+                </div>
+              </Card>
+            ))}
+            {filtered.length === 0 && (
+              <Card className="border-border/40 bg-card/30 p-8 text-center md:col-span-2">
+                <XCircle
+                  className="mx-auto mb-3 h-7 w-7 text-muted-foreground"
+                  aria-hidden="true"
+                />
+                <p className="font-semibold">No local concepts found</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Search and filtering are browser-only and do not query
+                  profiles or messages.
+                </p>
+              </Card>
+            )}
+          </div>
+        </section>
+        <section className="rounded-2xl border border-border/40 bg-card/30 p-5">
+          <div className="flex items-start gap-3">
+            <LockKeyhole
+              className="mt-0.5 h-5 w-5 shrink-0 text-primary"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="font-semibold">Safe conversation boundary</h2>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                A production feed needs consent, identity and age controls,
+                secure transport, moderation, blocking, reporting, notification
+                governance, deletion, and auditable delivery states. No
+                response-rate, compatibility, or safety claim is made here.
+              </p>
+            </div>
+          </div>
+        </section>
+        <p
+          className="rounded-xl border border-border/30 bg-card/30 px-4 py-3 text-sm text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
+          {status}
+        </p>
       </div>
-
-      {/* Engagement tip */}
-      <div className="card p-3 bg-gradient-to-r from-orange-500/10 to-pink-500/10 border-orange-500/20 flex items-center gap-3">
-        <Flame className="w-6 h-6 text-orange-400 shrink-0" />
-        <div className="flex-1 text-xs">
-          <span className="font-semibold">Pro tip:</span>
-          <span className="text-muted-foreground"> Matches with 80%+ compatibility are 3x more likely to respond within 1 hour.</span>
-        </div>
-      </div>
-    </div>
+    </main>
   );
 }
