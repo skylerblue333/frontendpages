@@ -830,3 +830,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/campaign-analytics-mobile-390x844.p
 ## campaign-builder-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/campaign-builder-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/campaign-builder-mobile-390x844.png`
+
+## campaign-creation-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/campaign-creation-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/campaign-creation-mobile-390x844.png`
