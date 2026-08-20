@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "46800e52d4f8c69b003121632b394c6fd6abed1b",
+  "generated_at_commit": "fc27ae3f06967703a9f6c4eeea2d50ed72761b2e",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 493,
-  "routes_with_visual_checkpoint": 471,
+  "routes_with_review": 494,
+  "routes_with_visual_checkpoint": 472,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -6736,8 +6736,8 @@
       "component": "RecommendationsFeed",
       "source": "client/src/pages/RecommendationsFeed.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
