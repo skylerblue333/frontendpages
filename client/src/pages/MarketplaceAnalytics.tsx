@@ -1,12 +1,254 @@
-import { FeatureUnavailable } from "@/components/FeatureUnavailable";
+import { useMemo, useState } from "react";
+import {
+  BarChart3,
+  FileWarning,
+  LockKeyhole,
+  Search,
+  ServerOff,
+  ShieldCheck,
+  ShoppingBag,
+  Store,
+  XCircle,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
+type Requirement = { title: string; area: string; description: string };
+const requirements: readonly Requirement[] = [
+  {
+    title: "Marketplace event and seller provenance",
+    area: "Evidence",
+    description:
+      "No marketplace, seller, buyer, listing, order, product, event source, owner, timestamp, currency, or catalog lineage is connected.",
+  },
+  {
+    title: "Revenue, fees, and settlement definitions",
+    area: "Finance",
+    description:
+      "No gross or net revenue source, fee schedule, refund, tax, payout, currency, settlement status, or reconciliation policy is configured.",
+  },
+  {
+    title: "Date-range query and aggregation",
+    area: "Analysis",
+    description:
+      "No authorized time range, timezone, filter, cohort, deduplication rule, denominator, aggregation query, freshness signal, or comparison baseline exists.",
+  },
+  {
+    title: "Seller authorization and privacy",
+    area: "Governance",
+    description:
+      "No seller scope, buyer-data boundary, consent, role, minimization, retention, redaction, export authorization, or access audit is verified.",
+  },
+  {
+    title: "Reporting and operational integrity",
+    area: "Operations",
+    description:
+      "No dashboard, order-state reconciliation, failed-event handling, anomaly alert, correction path, audit event, or recovery evidence is available.",
+  },
+];
 export default function MarketplaceAnalytics() {
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState(
+    "MarketplaceAnalytics is unavailable locally. No marketplace, seller, buyer, listing, order, revenue, fee, payout, chart, or mutation was loaded or saved."
+  );
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return requirements.filter(
+      ({ title, area, description }) =>
+        !q || `${title} ${area} ${description}`.toLowerCase().includes(q)
+    );
+  }, [query]);
+  const unavailable = (action: string) =>
+    setStatus(
+      `${action} is unavailable locally. No marketplace event, seller, order, revenue, fee, payout, report, export, or marketplace-data mutation was changed.`
+    );
   return (
-    <FeatureUnavailable
-      title="Marketplace analytics is not active"
-      description="This route currently exposes an authenticated shell without a real analytics contract. It remains unavailable until marketplace events, revenue provenance, seller authorization, date-range queries, aggregation correctness, loading/error states, and access-controlled exports are implemented and tested."
-      capability="Marketplace analytics and reporting"
-      nextStep="Return to the launch hub"
-    />
+    <main
+      className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 lg:px-8"
+      aria-labelledby="marketplace-analytics-title"
+    >
+      <div className="mx-auto max-w-6xl space-y-6">
+        <header className="rounded-2xl border border-border/70 bg-card/80 p-6 shadow-sm sm:p-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="outline" className="gap-2">
+                  <Store className="size-3.5" aria-hidden="true" />{" "}
+                  Marketplace-measurement readiness
+                </Badge>
+                <Badge variant="secondary">No marketplace analytics</Badge>
+              </div>
+              <h1
+                id="marketplace-analytics-title"
+                className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl"
+              >
+                MarketplaceAnalytics readiness
+              </h1>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground sm:text-base">
+                Review marketplace events, seller authorization, revenue and fee
+                definitions, date-range queries, aggregation, privacy, exports,
+                and reporting integrity without presenting fabricated orders,
+                buyer activity, seller metrics, revenue, or payouts.
+              </p>
+            </div>
+            <ShieldCheck className="size-8 text-primary" aria-hidden="true" />
+          </div>
+        </header>
+        <section className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5">
+          <div className="flex items-start gap-3">
+            <ServerOff
+              className="mt-0.5 size-5 shrink-0 text-amber-200"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="font-semibold text-amber-100">
+                Marketplace analytics is unavailable
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-amber-100/75">
+                No marketplace event store, seller authorization layer, revenue
+                ledger, settlement source, query service, privacy control,
+                reporting pipeline, or persistence layer is connected. This is a
+                readiness workspace, not an analytics report.
+              </p>
+            </div>
+          </div>
+        </section>
+        <section className="grid gap-4 sm:grid-cols-3">
+          <Card>
+            <CardContent className="p-5">
+              <ShoppingBag
+                className="mb-3 size-5 text-primary"
+                aria-hidden="true"
+              />
+              <h2 className="font-semibold">No marketplace events</h2>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                No marketplace, seller, buyer, listing, order, product, event,
+                timestamp, catalog, or currency state is loaded.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-5">
+              <BarChart3
+                className="mb-3 size-5 text-primary"
+                aria-hidden="true"
+              />
+              <h2 className="font-semibold">No verified metrics</h2>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                No revenue, fees, refunds, payouts, orders, cohorts, conversion,
+                freshness, comparison, or settlement result is verified.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-5">
+              <XCircle
+                className="mb-3 size-5 text-primary"
+                aria-hidden="true"
+              />
+              <h2 className="font-semibold">No analytics actions</h2>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                No ingest, aggregate, reconcile, publish, export, correct,
+                settle, or marketplace-data mutation exists.
+              </p>
+            </CardContent>
+          </Card>
+        </section>
+        <Card>
+          <CardHeader>
+            <CardTitle>Marketplace-measurement governance map</CardTitle>
+            <p className="text-sm leading-6 text-muted-foreground">
+              Search filters immutable local requirement notes only. It never
+              loads orders or revenue, queries seller data, calculates metrics,
+              publishes a report, exports buyer information, or saves
+              marketplace data.
+            </p>
+            <div className="relative max-w-xl pt-2">
+              <Search
+                className="pointer-events-none absolute left-3 top-4 size-4 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <Input
+                aria-label="Search MarketplaceAnalytics readiness notes"
+                value={query}
+                onChange={event => setQuery(event.target.value)}
+                placeholder="Filter marketplace-measurement requirements"
+                className="pl-9"
+              />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-2">
+              {visible.map(item => (
+                <div
+                  key={item.title}
+                  className="rounded-xl border border-border/70 p-5"
+                >
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="font-semibold">{item.title}</h3>
+                    <Badge variant="outline">{item.area}</Badge>
+                  </div>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    {item.description}
+                  </p>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    className="mt-4"
+                    onClick={() => unavailable(`Review ${item.title}`)}
+                  >
+                    <FileWarning className="mr-2 size-4" aria-hidden="true" />
+                    Review unavailable
+                  </Button>
+                </div>
+              ))}
+              {visible.length === 0 && (
+                <div
+                  className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground md:col-span-2"
+                  role="status"
+                >
+                  No marketplace-measurement notes match “{query}”.
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+        <section className="rounded-2xl border border-border/70 bg-card/50 p-5">
+          <div className="flex items-start gap-3">
+            <LockKeyhole
+              className="mt-0.5 size-5 shrink-0 text-emerald-500"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="font-semibold">
+                Evidence required before activation
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                A production marketplace analytics system needs event and seller
+                provenance, reconciled revenue and fees, settlement integrity,
+                authorized date-range queries, privacy controls, safe exports,
+                accurate aggregation, order-state handling, auditability, and
+                tested recovery. No order, seller metric, revenue, payout, or
+                buyer activity is claimed here.
+              </p>
+            </div>
+          </div>
+        </section>
+        <p
+          className="rounded-xl border border-border/30 bg-card/30 px-4 py-3 text-sm text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
+          <ShieldCheck
+            className="mr-2 inline size-4 text-emerald-400"
+            aria-hidden="true"
+          />
+          {status}
+        </p>
+      </div>
+    </main>
   );
 }

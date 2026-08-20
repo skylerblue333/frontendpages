@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "4029e995492cea80b86c7fcafda0d921e0ce13a6",
+  "generated_at_commit": "91e0af9d16d5fb7b038e4e7335bd89baf6358fa7",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 391,
-  "routes_with_visual_checkpoint": 369,
-  "routes_with_placeholder_signal": 695,
+  "routes_with_review": 392,
+  "routes_with_visual_checkpoint": 370,
+  "routes_with_placeholder_signal": 694,
   "routes": [
     {
       "route": "/",
@@ -4909,8 +4909,8 @@
       "component": "MarketplaceAnalytics",
       "source": "client/src/pages/MarketplaceAnalytics.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -5307,7 +5307,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/movie-catalog",
