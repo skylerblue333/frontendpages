@@ -1063,3 +1063,6 @@ Mobile screenshot: `/home/ubuntu/screenshots/direct-messaging-mobile-390x844.png
 ## disaster-recovery-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/disaster-recovery-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/disaster-recovery-mobile-390x844.png`
+## domain-management-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/domain-management-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/domain-management-mobile-390x844.png`
