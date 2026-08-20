@@ -3338,7 +3338,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": true,
+      "auth_signals": false,
       "external_signals": false
     },
     {
@@ -4057,9 +4057,9 @@
       "page_file": "ForecastingEngine.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/forum-categories",
