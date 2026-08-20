@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "d20de79330b886773e4b3e9db71b31c6b45b66af",
+  "generated_at_commit": "d6d6203518d6ead7b5178f26ebb9aab2d34fcbaa",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 563,
-  "routes_with_visual_checkpoint": 541,
+  "routes_with_review": 564,
+  "routes_with_visual_checkpoint": 542,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7528,8 +7528,8 @@
       "component": "Sharing",
       "source": "client/src/pages/Sharing.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
