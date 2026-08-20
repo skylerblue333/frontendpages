@@ -26,7 +26,7 @@ export default function Guilds() {
       `${action} is unavailable locally. No guild, membership, invite, war, leaderboard, reward, notification, or account mutation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-191" className="min-h-screen bg-background">
       <PageHeader
         icon={Users}
         title="Guilds"
