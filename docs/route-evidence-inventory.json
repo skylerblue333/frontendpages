@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "cacc589bf7606434ddd8ad2dff301a555d1e660d",
+  "generated_at_commit": "60e500570e814bf40da1fefcfc279a3330329a8b",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 596,
-  "routes_with_visual_checkpoint": 574,
-  "routes_with_placeholder_signal": 579,
+  "routes_with_review": 597,
+  "routes_with_visual_checkpoint": 575,
+  "routes_with_placeholder_signal": 578,
   "routes": [
     {
       "route": "/",
@@ -8059,9 +8059,9 @@
       "component": "SupportTicket",
       "source": "client/src/pages/SupportTicket.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/swap-interface",
