@@ -6507,7 +6507,7 @@
       "page_file": "Phase1Dashboard.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -7567,8 +7567,8 @@
       "page_file": "ReputationSystem.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": false,
+      "boundary_signals": true,
+      "auth_signals": true,
       "external_signals": false
     },
     {
