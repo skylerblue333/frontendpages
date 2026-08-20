@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "8131190700df664ecaf37b52ee66ef72563a5e17",
+  "generated_at_commit": "2e48dc734d954a4fab7c120e631667ba83d83f30",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 403,
-  "routes_with_visual_checkpoint": 381,
-  "routes_with_placeholder_signal": 686,
+  "routes_with_review": 404,
+  "routes_with_visual_checkpoint": 382,
+  "routes_with_placeholder_signal": 671,
   "routes": [
     {
       "route": "/",
@@ -870,7 +870,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/audio-editing",
@@ -888,7 +888,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/audio-player",
@@ -1680,7 +1680,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/community",
@@ -1842,7 +1842,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/connector-intelligence",
@@ -5170,8 +5170,8 @@
       "component": "MobileGaming",
       "source": "client/src/pages/MobileGaming.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -5199,7 +5199,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/mobile-notifications",
@@ -5442,7 +5442,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/n-s-f-w-feed",
@@ -6279,7 +6279,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/production-architecture",
@@ -7917,7 +7917,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/stream-clip",
@@ -8178,7 +8178,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/tax-documentation",
@@ -8970,7 +8970,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/user-discovery",
@@ -9015,7 +9015,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/user-profile",
@@ -9195,7 +9195,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/vesting-schedule",
@@ -9411,7 +9411,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/wealth-simulator",
@@ -9447,7 +9447,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/webhooks",
@@ -9510,7 +9510,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/world-brain",
