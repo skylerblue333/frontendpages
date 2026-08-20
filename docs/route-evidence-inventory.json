@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "f983d971ed9ed60ff0fdc8fe95f122a3bb56eeab",
+  "generated_at_commit": "6ca977ff7f0383efdc3abdb6145cdbce5ed00026",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 273,
-  "routes_with_visual_checkpoint": 251,
+  "routes_with_review": 274,
+  "routes_with_visual_checkpoint": 252,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3334,8 +3334,8 @@
       "component": "ExerciseLibrary",
       "source": "client/src/pages/ExerciseLibrary.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
