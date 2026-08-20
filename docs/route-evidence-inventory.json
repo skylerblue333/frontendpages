@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "a2af7ab06ce4ab91836b8c5bd83f58c7fc66bd9f",
+  "generated_at_commit": "873808f84c41be72326a27ae85ade34d760dc96d",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 400,
-  "routes_with_visual_checkpoint": 378,
+  "routes_with_review": 401,
+  "routes_with_visual_checkpoint": 379,
   "routes_with_placeholder_signal": 688,
   "routes": [
     {
@@ -5116,8 +5116,8 @@
       "component": "MiningCalculator",
       "source": "client/src/pages/MiningCalculator.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
