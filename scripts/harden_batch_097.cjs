@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/TradeHistory.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst TradeHistory = () => (\n  <FeatureUnavailable\n    title="Trade history unavailable"\n    description="A production trade history requires authenticated account and exchange connections, verified order and fill events, immutable ledger records, market and currency context, reconciliation, authorization, privacy, and clear failed or pending states. No order, fill, price, balance, position, profit, execution, or transaction record is fabricated here."\n    capability="Exchange order history, fills, positions, and trading records"\n    nextStep="Connect governed exchange or chain integrations, immutable ledger storage, reconciliation, authorization, and audit controls before enabling trade history"\n  />\n);\n\nexport default TradeHistory;\n`);
+console.log(JSON.stringify({ changed: ['TradeHistory.tsx'] }, null, 2));
