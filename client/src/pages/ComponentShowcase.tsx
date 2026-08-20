@@ -231,6 +231,17 @@ export default function ComponentsShowcase() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <main className="container max-w-6xl mx-auto">
+        <Alert className="mb-6 border-amber-500/40 bg-amber-500/10">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Local design-system preview</AlertTitle>
+          <AlertDescription>
+            This route demonstrates reusable UI components and local interaction
+            states only. Controls do not submit production data, call external
+            services, persist user records, or represent a completed AI
+            capability. Use the linked production route for any real workflow.
+          </AlertDescription>
+        </Alert>
+
         <div className="space-y-2 justify-between flex">
           <h2 className="text-3xl font-bold tracking-tight mb-6">
             Shadcn/ui Component Library
