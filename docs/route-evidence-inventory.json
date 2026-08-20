@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "fa1e57be841ab81daf415568b631f0adfa010df6",
+  "generated_at_commit": "9e08ef43b5dafc83e88823f8e8d4e0b7a25361e2",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 586,
-  "routes_with_visual_checkpoint": 564,
+  "routes_with_review": 587,
+  "routes_with_visual_checkpoint": 565,
   "routes_with_placeholder_signal": 579,
   "routes": [
     {
@@ -7879,8 +7879,8 @@
       "component": "StepperWizard",
       "source": "client/src/pages/StepperWizard.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
