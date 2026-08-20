@@ -1,0 +1,3 @@
+# TokenomicsCalculator visual findings
+
+The 390×844 mobile render keeps the tokenomics header, unavailable-service disclosure, reset control, scenario explanation, scenario-label field, and first withheld supply input readable without horizontal overflow. The 1440×1000 desktop render shows the complete local scenario workspace with supply, allocation, emissions, vesting, inflation, and staking source requirements, calculation status, valuation/return/recommendation withholding, and professional-review boundaries. No unverified number is accepted as fact, and no supply, allocation, emissions, vesting, inflation, staking, valuation, return, profitability, or financial recommendation is fabricated. Scenario naming, local review, clear, reset, and status are browser-local.
