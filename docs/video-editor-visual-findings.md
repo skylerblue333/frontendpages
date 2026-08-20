@@ -1,0 +1,3 @@
+# VideoEditor visual findings
+
+The 390×844 mobile render keeps the Video Editor header, unavailable-service disclosure, refresh-unavailable control, editing explanation, and asset/upload capability card readable without horizontal overflow. The 1440×1000 desktop render shows the complete media-editing readiness workspace with asset, project, timeline, tracks, preview, render, export, collaboration, publishing, and retention states explicitly withheld, plus clear upload and project boundaries. Upload, create project, and render remain disabled. No asset, project, timeline, edit, preview, render, export, collaboration, publication, or stored-video outcome is fabricated.
