@@ -1,0 +1,7 @@
+# DMInbox review
+
+DMInbox already contained a purposeful local-sample messaging preview rather than fabricated authenticated conversations. The review confirms that its sample threads and messages are explicitly labeled for layout review only, with provider, presence, encryption, delivery, AI, calls, uploads, and ledger boundaries disclosed. Local search and thread selection change only component-memory preview state. The message composer is a local draft; send and Enter announce unavailable delivery, and no draft is retained after the component lifecycle.
+
+The route explicitly discloses that no message, presence, encryption, Hope AI reply, token tip, call, upload, delivery status, notification, financial action, or account mutation is connected. Voice, video, options, image upload, emoji, and send controls do not perform external actions. The selected sample message also states that no message has been delivered to another person.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows the conversation-list/chat layout with local sample labels, preview-only timestamps, encryption and delivery disclosure, disabled communication affordances, and draft-only composer. Mobile evidence shows the responsive thread list and clearly labeled preview boundary at 390×844. No identity, message delivery, presence, notification, AI, media, financial, or account outcome is fabricated.

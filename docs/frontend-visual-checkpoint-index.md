@@ -1002,3 +1002,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/dao-treasury-mobile-390x844.png`
 ## dca-calculator-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/dca-calculator-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/dca-calculator-mobile-390x844.png`
+
+## d-m-inbox-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/dm-inbox-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/dm-inbox-mobile-390x844.png`
