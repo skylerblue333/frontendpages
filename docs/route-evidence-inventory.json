@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "98ff7ca2d97262b49811707d67a9e665c65eaaad",
+  "generated_at_commit": "7091882ba44f7caa051f9f9479f95a8157d142af",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 418,
-  "routes_with_visual_checkpoint": 396,
+  "routes_with_review": 419,
+  "routes_with_visual_checkpoint": 397,
   "routes_with_placeholder_signal": 662,
   "routes": [
     {
@@ -5332,8 +5332,8 @@
       "component": "MultiModelSelector",
       "source": "client/src/pages/MultiModelSelector.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
