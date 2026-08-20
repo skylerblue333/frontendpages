@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "5ff206d65d3260e4e26f1999e16a4e6317b1b299",
+  "generated_at_commit": "004c8e53fcad81b72dd89f17c6d4069eaaaf27f5",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 386,
-  "routes_with_visual_checkpoint": 364,
+  "routes_with_review": 387,
+  "routes_with_visual_checkpoint": 365,
   "routes_with_placeholder_signal": 697,
   "routes": [
     {
@@ -4846,8 +4846,8 @@
       "component": "MaintenanceMode",
       "source": "client/src/pages/MaintenanceMode.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
