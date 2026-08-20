@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "f27ad5832f528069eb360854f957a1832f414f17",
+  "generated_at_commit": "5ba745f35da8c67c07389f5b0ec34efe91704d0a",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 455,
-  "routes_with_visual_checkpoint": 433,
-  "routes_with_placeholder_signal": 608,
+  "routes_with_review": 456,
+  "routes_with_visual_checkpoint": 434,
+  "routes_with_placeholder_signal": 607,
   "routes": [
     {
       "route": "/",
@@ -5836,8 +5836,8 @@
       "component": "PayoutManagement",
       "source": "client/src/pages/PayoutManagement.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -6459,7 +6459,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/property-detail",
