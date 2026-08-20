@@ -1,0 +1,2 @@
+{"index": 1, "path": "/about", "component": "About", "mode": "mobile", "screenshot": "/home/ubuntu/frontendpages/docs/visual-review/batch-002-recapture/mobile/001-about.png", "exit_code": 0, "seconds": 1.35, "error": ""}
+{"index": 2, "path": "/i-t-services-landing", "component": "ITServicesLanding", "mode": "mobile", "screenshot": "/home/ubuntu/frontendpages/docs/visual-review/batch-002-recapture/mobile/002-i-t-services-landing.png", "exit_code": 0, "seconds": 1.24, "error": ""}
