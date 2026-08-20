@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/CommissionManagement.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst CommissionManagement = () => (\n  <FeatureUnavailable\n    title="Commission management unavailable"\n    description="Commission management requires documented parties and agreements, rate and currency rules, attribution, tax treatment, authorization, ledger reconciliation, payout processing, disputes, refunds, and audit evidence. No commission, rate, participant, payout, or settlement outcome is created here."\n    capability="Commissions, revenue share, attribution, and payouts"\n    nextStep="Connect governed contract, ledger, tax, payment, and reconciliation services before enabling commission workflows"\n  />\n);\n\nexport default CommissionManagement;\n`);
+console.log(JSON.stringify({ changed: ['CommissionManagement.tsx'] }, null, 2));
