@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "ac5b9d3dd37a1081c763a43cf8a85fda58841b23",
+  "generated_at_commit": "54c375d6dfa803c1b71401041a7504f3bea93ebb",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 507,
-  "routes_with_visual_checkpoint": 485,
+  "routes_with_review": 508,
+  "routes_with_visual_checkpoint": 486,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -6988,8 +6988,8 @@
       "component": "RewardsTracking",
       "source": "client/src/pages/RewardsTracking.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
