@@ -81,7 +81,7 @@ export default function DocumentSharing() {
       className="min-h-screen bg-background"
       aria-labelledby="document-sharing-title"
     >
-      <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+      <div data-ui-polish="batch-179" className="mx-auto max-w-6xl space-y-6 px-4 py-8">
         <header className="space-y-3">
           <Badge variant="outline" className="border-cyan-400/30 text-cyan-200">
             SHARING READINESS PREVIEW

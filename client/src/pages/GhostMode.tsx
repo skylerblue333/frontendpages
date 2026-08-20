@@ -121,7 +121,7 @@ export default function GhostMode() {
       aria-labelledby="ghost-mode-title"
     >
       <header className="mb-8 space-y-4">
-        <div className="inline-flex items-center gap-2 rounded-full border border-indigo-400/30 bg-indigo-400/10 px-3 py-1 text-xs font-mono text-indigo-200">
+        <div data-ui-polish="batch-179" className="inline-flex items-center gap-2 rounded-full border border-indigo-400/30 bg-indigo-400/10 px-3 py-1 text-xs font-mono text-indigo-200">
           <EyeOff className="h-3.5 w-3.5" aria-hidden="true" /> LOCAL PRIVACY
           READINESS
         </div>

@@ -91,7 +91,7 @@ export default function ReviewModeration() {
     setShowGates(false);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-179" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={ShieldCheck}
         eyebrow="Review moderation · Governance preview"

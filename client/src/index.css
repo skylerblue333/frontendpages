@@ -175,3 +175,59 @@
     }
   }
 }
+
+/* SKYCOIN4444 visual polish batch 179 */
+[data-ui-polish="batch-179"] {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  background:
+    radial-gradient(circle at 8% 4%, color-mix(in oklab, var(--primary) 13%, transparent), transparent 36%),
+    radial-gradient(circle at 94% 8%, color-mix(in oklab, var(--color-cyan-500) 10%, transparent), transparent 32%),
+    var(--background);
+}
+
+[data-ui-polish="batch-179"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background: linear-gradient(135deg, color-mix(in oklab, var(--foreground) 3%, transparent), transparent 42%);
+}
+
+[data-ui-polish="batch-179"] h1 {
+  letter-spacing: -0.035em;
+}
+
+[data-ui-polish="batch-179"] h2,
+[data-ui-polish="batch-179"] h3 {
+  letter-spacing: -0.02em;
+}
+
+[data-ui-polish="batch-179"] [class*="rounded-lg"],
+[data-ui-polish="batch-179"] [class*="rounded-xl"],
+[data-ui-polish="batch-179"] [class*="rounded-2xl"] {
+  box-shadow: 0 14px 38px color-mix(in oklab, var(--foreground) 8%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+[data-ui-polish="batch-179"] button,
+[data-ui-polish="batch-179"] a {
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+[data-ui-polish="batch-179"] button:hover:not(:disabled),
+[data-ui-polish="batch-179"] a:hover {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 640px) {
+  [data-ui-polish="batch-179"] {
+    min-height: 100dvh;
+  }
+
+  [data-ui-polish="batch-179"] [class*="grid-cols-"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

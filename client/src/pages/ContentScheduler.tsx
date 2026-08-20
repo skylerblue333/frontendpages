@@ -86,7 +86,7 @@ export default function ContentScheduler() {
       aria-labelledby="content-scheduler-title"
     >
       <header className="sticky top-0 z-10 border-b border-border/30 bg-background/95 px-4 py-4 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center gap-3">
+        <div data-ui-polish="batch-179" className="mx-auto flex max-w-5xl items-center gap-3">
           <CalendarClock className="h-5 w-5 text-primary" aria-hidden="true" />
           <div className="min-w-0 flex-1">
             <h1 id="content-scheduler-title" className="text-lg font-bold">

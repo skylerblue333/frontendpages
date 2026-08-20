@@ -84,7 +84,7 @@ export default function RewardsMonitoring() {
     setShowGates(false);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-179" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={Activity}
         eyebrow="Rewards monitoring · Preview"

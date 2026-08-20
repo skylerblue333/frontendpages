@@ -89,7 +89,7 @@ export function AccountSettings() {
       className="min-h-screen bg-background"
       aria-labelledby="account-settings-title"
     >
-      <div className="mx-auto max-w-5xl space-y-6 px-4 py-8">
+      <div data-ui-polish="batch-179" className="mx-auto max-w-5xl space-y-6 px-4 py-8">
         <header className="space-y-3">
           <Badge
             variant="outline"
