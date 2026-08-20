@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/TravelTips.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst TravelTips = () => (\n  <FeatureUnavailable\n    title="Travel tips unavailable"\n    description="Reliable travel guidance requires sourced and current destination information, editorial review, regional context, accessibility and safety caveats, date/version tracking, and a clear distinction between general information and professional advice. No destination tip, recommendation, availability, price, or safety outcome is published here."\n    capability="Travel tips, guides, and destination recommendations"\n    nextStep="Connect governed editorial sources, freshness checks, destination data, moderation, and disclosure controls before enabling travel guidance"\n  />\n);\n\nexport default TravelTips;\n`);
+console.log(JSON.stringify({ changed: ['TravelTips.tsx'] }, null, 2));
