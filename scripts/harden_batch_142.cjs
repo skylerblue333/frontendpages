@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/ProductCatalog.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst ProductCatalog = () => (\n  <FeatureUnavailable\n    title="Product catalog unavailable"\n    description="A trustworthy product catalog requires an authoritative catalog source, product ownership, schema and media validation, pricing and currency rules, inventory or availability synchronization, search indexing, access controls, localization, publishing state, and cache correctness. No product, price, inventory, availability, listing, search result, or catalog synchronization is shown or asserted."\n    capability="Verified product catalog and availability browsing"\n    nextStep="Connect approved catalog, pricing, inventory, search, media, localization, and publishing services with freshness and rollback controls before enabling the catalog"\n  />\n);\n\nexport default ProductCatalog;\n`);
+console.log(JSON.stringify({ changed: ['ProductCatalog.tsx'] }, null, 2));
