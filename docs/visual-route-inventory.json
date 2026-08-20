@@ -2599,7 +2599,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/d-e-x-depth-chart",
@@ -4697,7 +4697,7 @@
       "page_file": "ITServicesLanding.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },

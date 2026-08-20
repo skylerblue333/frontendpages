@@ -274,15 +274,14 @@ export default function About() {
       {/* CTA */}
       <section className="max-w-4xl mx-auto px-4 py-20 text-center">
         <div className="bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-white/10 rounded-3xl p-12">
-          <h2 className="text-4xl font-black mb-4">Ready to Start Earning?</h2>
+          <h2 className="text-4xl font-black mb-4">Explore the Platform Preview</h2>
           <p className="text-gray-400 text-lg mb-8">
-            Explore the SKYCOIN4444 platform preview; user and reward metrics
-            are unavailable in this local build.
+            Explore the SKYCOIN4444 platform preview; account, reward, mining, blockchain, and financial outcomes remain unavailable until their verified services are connected.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link href="/dashboard">
               <Button className="bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold px-8 py-4 rounded-xl text-lg">
-                Create Account <ArrowRight className="w-5 h-5 ml-2" />
+                Open Dashboard <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>
             <Link href="/mining">
@@ -291,7 +290,7 @@ export default function About() {
                 className="border-orange-500/40 text-orange-400 hover:bg-orange-500/10 px-8 py-4 rounded-xl text-lg"
               >
                 <Cpu className="w-5 h-5 mr-2" />
-                Start Mining
+                Review Safety Boundaries
               </Button>
             </Link>
           </div>
