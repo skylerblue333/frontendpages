@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "8f201c7f3c7e4be0d82520a648015b7806449c1c",
+  "generated_at_commit": "2898040507bfda6c87b16b3cddfa34b3f3a171b2",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 491,
-  "routes_with_visual_checkpoint": 469,
+  "routes_with_review": 492,
+  "routes_with_visual_checkpoint": 470,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -6718,8 +6718,8 @@
       "component": "RecentActivity",
       "source": "client/src/pages/RecentActivity.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
