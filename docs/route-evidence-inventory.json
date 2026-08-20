@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "d46e0a5ea9d32eee64263db5583a02ce77e517fa",
+  "generated_at_commit": "dac4e7c727b6253f920cc97f61f0eb7fbe06cd67",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 286,
-  "routes_with_visual_checkpoint": 264,
+  "routes_with_review": 287,
+  "routes_with_visual_checkpoint": 265,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3514,8 +3514,8 @@
       "component": "FileBrowser",
       "source": "client/src/pages/FileBrowser.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
