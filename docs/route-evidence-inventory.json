@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "1e4e9c57113ed76b27a6bf6b29dc98cc464a3a1a",
+  "generated_at_commit": "37914c0f754b08c82b8a873c1e4fe1e7aab0e53c",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 472,
-  "routes_with_visual_checkpoint": 450,
-  "routes_with_placeholder_signal": 595,
+  "routes_with_review": 473,
+  "routes_with_visual_checkpoint": 451,
+  "routes_with_placeholder_signal": 594,
   "routes": [
     {
       "route": "/",
@@ -6205,8 +6205,8 @@
       "component": "PrivacyVault",
       "source": "client/src/pages/PrivacyVault.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -7701,7 +7701,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/social-analytics",
