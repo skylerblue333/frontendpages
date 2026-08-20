@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "8643843958ff2f2601c524f06aefccf3cb1e678b",
+  "generated_at_commit": "a18d5f66b0c313d5fae28f0c181a61c6afe99d7f",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 248,
-  "routes_with_visual_checkpoint": 248,
+  "routes_with_review": 249,
+  "routes_with_visual_checkpoint": 249,
   "routes_with_placeholder_signal": 708,
   "routes": [
     {
@@ -2740,8 +2740,8 @@
       "component": "DeveloperMarketplace",
       "source": "client/src/pages/DeveloperMarketplace.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
