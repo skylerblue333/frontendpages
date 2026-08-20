@@ -2832,7 +2832,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/discover",
