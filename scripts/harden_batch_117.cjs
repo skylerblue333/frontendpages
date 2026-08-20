@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/CodeRepository.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst CodeRepository = () => (\n  <FeatureUnavailable\n    title="Code repository unavailable"\n    description="Repository browsing requires an approved source-control integration, explicit repository and branch authorization, secure token handling, access auditing, rate limits, webhooks or synchronization, and clear read/write boundaries. No repository, branch, commit, issue, pull request, deployment, or synchronization state is shown or asserted."\n    capability="Governed source-code repository browsing and collaboration"\n    nextStep="Connect the approved source-control provider with least-privilege access, token isolation, audit logging, synchronization, and explicit read/write controls before enabling this feature"\n  />\n);\n\nexport default CodeRepository;\n`);
+console.log(JSON.stringify({ changed: ['CodeRepository.tsx'] }, null, 2));
