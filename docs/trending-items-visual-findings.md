@@ -1,0 +1,3 @@
+# TrendingItems visual findings
+
+The 390×844 mobile render keeps the Trending Items header, unavailable-service disclosure, refresh-unavailable control, item explanation, Recent/This week/This month filters, and first featured-item concept readable without horizontal overflow. The 1440×1000 desktop render shows the complete item-discovery workspace with Store, Collectibles, and Education concepts, selected rank/catalog/price/stock/views/ownership/recommendation/purchase metadata, and explicit catalog, marketplace, inventory, provenance, privacy, and timestamp boundaries. No item listing, popularity, price, stock, views, ownership, recommendation, availability, or purchase outcome is fabricated. Recency selection, concept selection, status, and refresh remain local-only.
