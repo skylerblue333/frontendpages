@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/TicketAssignment.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst TicketAssignment = () => (\n  <FeatureUnavailable\n    title="Ticket assignment unavailable"\n    description="Production ticket routing requires authenticated agent and requester identities, role and skill policy, workload and availability signals, fair assignment rules, SLA controls, notifications, reassignment history, and auditability. No ticket, agent, assignment, availability, priority, SLA, or notification outcome is created here."\n    capability="Support-ticket assignment, routing, and workload operations"\n    nextStep="Connect governed support storage, identity, role and skill policy, workload signals, routing, notification, and audit services before enabling assignment"\n  />\n);\n\nexport default TicketAssignment;\n`);
+console.log(JSON.stringify({ changed: ['TicketAssignment.tsx'] }, null, 2));
