@@ -1,0 +1,2 @@
+{"index": 1, "path": "/pool-performance", "component": "PoolPerformance", "mode": "desktop", "screenshot": "/home/ubuntu/frontendpages/docs/visual-review/batch-002-recapture/desktop/001-pool-performance.png", "exit_code": 0, "seconds": 2.55, "error": ""}
+{"index": 2, "path": "/validator-performance", "component": "ValidatorPerformance", "mode": "desktop", "screenshot": "/home/ubuntu/frontendpages/docs/visual-review/batch-002-recapture/desktop/002-validator-performance.png", "exit_code": 0, "seconds": 1.64, "error": ""}

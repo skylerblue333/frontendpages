@@ -1177,9 +1177,9 @@
       "page_file": "BlogEditor.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/blog-publisher",
@@ -1187,9 +1187,9 @@
       "page_file": "BlogPublisher.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/book-page",
@@ -1227,9 +1227,9 @@
       "page_file": "BrandGuidelines.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/breadcrumb-navigation",
@@ -1257,8 +1257,8 @@
       "page_file": "BridgeTransactions.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
+      "boundary_signals": true,
+      "auth_signals": false,
       "external_signals": true
     },
     {
@@ -1277,8 +1277,8 @@
       "page_file": "BudgetPlanner.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
+      "boundary_signals": true,
+      "auth_signals": false,
       "external_signals": true
     },
     {
@@ -1287,9 +1287,9 @@
       "page_file": "BugReporting.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/build-order",
@@ -1317,9 +1317,9 @@
       "page_file": "BulkOperations.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/bulk-ordering",
@@ -1337,9 +1337,9 @@
       "page_file": "BulkUpload.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/c-c-p-a",
@@ -1347,9 +1347,9 @@
       "page_file": "CCPA.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/c-d-n-management",
@@ -1387,9 +1387,9 @@
       "page_file": "Calculator.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/calendar",
@@ -1397,9 +1397,9 @@
       "page_file": "Calendar.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/calendar-view",
@@ -1418,7 +1418,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": true,
+      "auth_signals": false,
       "external_signals": false
     },
     {
@@ -1428,7 +1428,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": true,
+      "auth_signals": false,
       "external_signals": false
     },
     {
@@ -1447,9 +1447,9 @@
       "page_file": "CarRental.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/card-grid-view",
@@ -1467,8 +1467,8 @@
       "page_file": "CashFlowAnalysis.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
+      "boundary_signals": true,
+      "auth_signals": false,
       "external_signals": true
     },
     {
@@ -1477,9 +1477,9 @@
       "page_file": "CategoryManagement.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/certificate-manager",
@@ -1488,7 +1488,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": true,
+      "auth_signals": false,
       "external_signals": false
     },
     {
@@ -1507,9 +1507,9 @@
       "page_file": "ChangeLog.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/channel-customization",
@@ -1568,7 +1568,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": true,
+      "auth_signals": false,
       "external_signals": false
     },
     {
@@ -1578,7 +1578,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": true,
+      "auth_signals": false,
       "external_signals": false
     },
     {
@@ -1637,9 +1637,9 @@
       "page_file": "ChurnPrediction.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/citizen-passport",
@@ -1677,9 +1677,9 @@
       "page_file": "ClassroomManagement.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/client-libraries",
@@ -1687,9 +1687,9 @@
       "page_file": "ClientLibraries.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/closing-checklist",
@@ -1697,9 +1697,9 @@
       "page_file": "ClosingChecklist.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/code-completion",
@@ -1747,9 +1747,9 @@
       "page_file": "CodeQualityDashboard.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/code-repository",
@@ -1989,7 +1989,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/connection-error",
@@ -2137,7 +2137,7 @@
       "page_file": "ContentVault.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -2157,9 +2157,9 @@
       "page_file": "ContractABI.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/contract-management",
@@ -2247,9 +2247,9 @@
       "page_file": "CostAllocation.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/cost-basis-calculation",
@@ -2307,7 +2307,7 @@
       "page_file": "CreateAudio.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -2317,7 +2317,7 @@
       "page_file": "CreateDrop.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": true
     },
@@ -3167,9 +3167,9 @@
       "page_file": "DocumentEditor.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/document-management",
@@ -3187,9 +3187,9 @@
       "page_file": "DocumentSharing.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/document-signing",
@@ -6596,8 +6596,8 @@
       "component": "PoolPerformance",
       "page_file": "PoolPerformance.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -10056,8 +10056,8 @@
       "component": "ValidatorPerformance",
       "page_file": "ValidatorPerformance.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
