@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "60e500570e814bf40da1fefcfc279a3330329a8b",
+  "generated_at_commit": "09f692171f3ecd8129fab924e7707e25af504b2e",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 597,
-  "routes_with_visual_checkpoint": 575,
-  "routes_with_placeholder_signal": 578,
+  "routes_with_review": 598,
+  "routes_with_visual_checkpoint": 576,
+  "routes_with_placeholder_signal": 577,
   "routes": [
     {
       "route": "/",
@@ -8104,9 +8104,9 @@
       "component": "SystemLogs",
       "source": "client/src/pages/SystemLogs.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/system-monitoring",
