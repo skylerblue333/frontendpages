@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "44e8f7db3bdf9040f5022519cfe905e827374ea7",
+  "generated_at_commit": "8643843958ff2f2601c524f06aefccf3cb1e678b",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 247,
-  "routes_with_visual_checkpoint": 247,
-  "routes_with_placeholder_signal": 709,
+  "routes_with_review": 248,
+  "routes_with_visual_checkpoint": 248,
+  "routes_with_placeholder_signal": 708,
   "routes": [
     {
       "route": "/",
@@ -2695,8 +2695,8 @@
       "component": "DestinationGuide",
       "source": "client/src/pages/DestinationGuide.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -4731,7 +4731,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/live-stream-setup",
