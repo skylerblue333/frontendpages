@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "149225a6b88c1a96efb2638c72676802e34b7a7f",
+  "generated_at_commit": "33fea9de441d02c14d47c947a2b34bde4b109378",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 406,
-  "routes_with_visual_checkpoint": 384,
-  "routes_with_placeholder_signal": 670,
+  "routes_with_review": 407,
+  "routes_with_visual_checkpoint": 385,
+  "routes_with_placeholder_signal": 669,
   "routes": [
     {
       "route": "/",
@@ -5206,8 +5206,8 @@
       "component": "MobileNotifications",
       "source": "client/src/pages/MobileNotifications.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -9285,7 +9285,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/viewer-metrics",
