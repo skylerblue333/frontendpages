@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "61c445381ae347f402d9b0af74c02d7b0413e827",
+  "generated_at_commit": "bbb96fbe734b8199eba9d429f3f8d0732b9c1245",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 375,
-  "routes_with_visual_checkpoint": 353,
-  "routes_with_placeholder_signal": 700,
+  "routes_with_review": 376,
+  "routes_with_visual_checkpoint": 354,
+  "routes_with_placeholder_signal": 701,
   "routes": [
     {
       "route": "/",
@@ -1743,7 +1743,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": false
+      "placeholder_signal": true
     },
     {
       "route": "/compliance-center",
@@ -4684,8 +4684,8 @@
       "component": "LiquidityPools",
       "source": "client/src/pages/LiquidityPools.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
