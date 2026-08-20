@@ -1007,9 +1007,9 @@
       "page_file": "AutomationEngine.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/automation-rules",
@@ -1087,7 +1087,7 @@
       "page_file": "BehavioralIntelligence.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
