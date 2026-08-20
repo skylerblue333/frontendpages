@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "c8be790b9c575b5315d6abc19d8ad069364aa283",
+  "generated_at_commit": "afe0f9d6261efa03bf531b121899f3668d688305",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 629,
-  "routes_with_visual_checkpoint": 607,
-  "routes_with_placeholder_signal": 555,
+  "routes_with_review": 630,
+  "routes_with_visual_checkpoint": 608,
+  "routes_with_placeholder_signal": 554,
   "routes": [
     {
       "route": "/",
@@ -8959,9 +8959,9 @@
       "component": "UserBio",
       "source": "client/src/pages/UserBio.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/user-directory",

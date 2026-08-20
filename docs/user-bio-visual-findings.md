@@ -1,0 +1,3 @@
+# UserBio visual findings
+
+The 390×844 mobile render keeps the User Bio header, unavailable-service disclosure, refresh-unavailable control, profile explanation, and first identity/display-name cards readable without horizontal overflow. The 1440×1000 desktop render shows the complete profile-readiness workspace with identity, display name, biography, avatar, links, visibility, verification, and moderation states explicitly withheld, alongside identity/ownership, links/media, and privacy/visibility gates. Edit bio, save, and publish remain disabled. No identity, biography, avatar, social link, verification badge, audience, moderation, or saved-profile outcome is fabricated.
