@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/PropertyComparison.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst PropertyComparison = () => (\n  <FeatureUnavailable\n    title="Property comparison unavailable"\n    description="A trustworthy property comparison requires authoritative listing and property records, current market and tax data, source provenance, location and currency handling, financing assumptions, privacy controls, disclosure requirements, and validated calculations. No property, price, valuation, rent, yield, tax, affordability, market trend, recommendation, or investment conclusion is shown or asserted."\n    capability="Verified property comparison and decision-support data"\n    nextStep="Connect approved property, market, tax, financing, provenance, and regional-compliance services with current-data and calculation controls before enabling comparisons"\n  />\n);\n\nexport default PropertyComparison;\n`);
+console.log(JSON.stringify({ changed: ['PropertyComparison.tsx'] }, null, 2));
