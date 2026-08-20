@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "f416a6c780ecc4c574bc2094729de5fedb96fe82",
+  "generated_at_commit": "df133ed9141c777710e78db4c48b65001fab5cc4",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 382,
-  "routes_with_visual_checkpoint": 360,
-  "routes_with_placeholder_signal": 700,
+  "routes_with_review": 383,
+  "routes_with_visual_checkpoint": 361,
+  "routes_with_placeholder_signal": 699,
   "routes": [
     {
       "route": "/",
@@ -4783,8 +4783,8 @@
       "component": "LogViewer",
       "source": "client/src/pages/LogViewer.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -6513,7 +6513,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/push-notifications",
