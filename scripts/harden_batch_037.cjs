@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/ChinaEdition.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst ChinaEdition = () => (\n  <FeatureUnavailable\n    title="Regional ecosystem edition unavailable"\n    description="This bilingual regional concept page does not verify AI services, education programs, social communities, livestreaming, creator monetization, ecosystem partners, regional availability, certifications, users, revenue, or operational support. Those claims require deployed services, localization review, legal/privacy controls, partner evidence, and accountable ownership."\n    capability="Regional ecosystem, localization, partnerships, and market availability"\n    nextStep="Publish a regional edition only after services, language, compliance, and partner evidence are verified"\n  />\n);\n\nexport default ChinaEdition;\n`);
+console.log(JSON.stringify({ changed: ['ChinaEdition.tsx'] }, null, 2));
