@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "eefc71ae03a0359329cd9ab8820c4992d3cba088",
+  "generated_at_commit": "fd0600945171f0544b13b6a497adb67b04385757",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 430,
-  "routes_with_visual_checkpoint": 408,
-  "routes_with_placeholder_signal": 654,
+  "routes_with_review": 431,
+  "routes_with_visual_checkpoint": 409,
+  "routes_with_placeholder_signal": 653,
   "routes": [
     {
       "route": "/",
@@ -5476,8 +5476,8 @@
       "component": "NetWorthTracker",
       "source": "client/src/pages/NetWorthTracker.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -8349,7 +8349,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/ticket-detail",
