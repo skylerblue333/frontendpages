@@ -1,8 +1,393 @@
 import { useMemo, useState } from "react";
-import { Activity, Bell, Check, ChevronRight, Compass, Grid2X2, Keyboard, LockKeyhole, Menu, RefreshCw, Search, ShieldAlert, Sparkles, UserRound, WalletCards, X } from "lucide-react";
+import {
+  Activity,
+  Bell,
+  Check,
+  ChevronRight,
+  Compass,
+  Grid2X2,
+  Keyboard,
+  LockKeyhole,
+  Menu,
+  RefreshCw,
+  Search,
+  ShieldAlert,
+  Sparkles,
+  UserRound,
+  WalletCards,
+  X,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const routes = [{ id: 1, label: "Launch hub", group: "Core", icon: Grid2X2, status: "Route not verified" }, { id: 2, label: "Profile and settings", group: "Account", icon: UserRound, status: "Access unknown" }, { id: 3, label: "Crypto hub", group: "Finance", icon: WalletCards, status: "Backend unavailable" }, { id: 4, label: "HopeAI", group: "AI", icon: Sparkles, status: "Provider unavailable" }, { id: 5, label: "SkySchool", group: "Education", icon: Compass, status: "Route not verified" }, { id: 6, label: "System health", group: "Operations", icon: Activity, status: "Telemetry unavailable" }];
-export default function SidebarNavigation() { const [query, setQuery] = useState(""); const [selected, setSelected] = useState(1); const [collapsed, setCollapsed] = useState(false); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false); const filtered = useMemo(() => routes.filter((item) => `${item.label} ${item.group} ${item.status}`.toLowerCase().includes(query.toLowerCase())), [query]); const route = routes.find((item) => item.id === selected) ?? routes[0]; const reset = () => { setQuery(""); setSelected(1); setCollapsed(false); setSaved(false); setShowGates(false); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Menu} eyebrow="Sidebar navigation · UX preview" title="Make navigation useful without pretending routes or permissions are live." description="Explore a local responsive navigation workspace with grouped ecosystem routes, search, active-state intent, access labels, collapse/expand behavior, keyboard guidance, save/reset, and evidence gates. No route transition, permission, notification, account, integration, or feature availability is connected." badge="Evidence-bounded navigation workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Saved locally" : "Save navigation view"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review navigation gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset navigation</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Routes", value: `${routes.length} local`, hint: "No router proof", icon: Grid2X2, tone: "cyan" }, { label: "Groups", value: `${new Set(routes.map((item) => item.group)).size}`, hint: "Local taxonomy", icon: Compass, tone: "violet" }, { label: "Access", value: "Unknown", hint: "No auth source", icon: LockKeyhole, tone: "amber" }, { label: "Alerts", value: "Unavailable", hint: "No notification source", icon: Bell, tone: "slate" }]} /><ScreenPreviewBanner title="Navigation evidence boundary"><strong>This is a local navigation UX preview, not evidence that routes resolve, modules are enabled, permissions are correct, notifications exist, or feature surfaces are available.</strong> Search, selection, collapse state, grouped route cards, keyboard hints, saved state, and disabled navigation actions are browser concepts. No route transition, authorization, user identity, alert count, notification, data load, or feature availability is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.38fr_0.62fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className={`p-4 ${collapsed ? "sm:w-24" : ""}`}><div className="flex items-center justify-between gap-3"><p className={`text-xs font-semibold uppercase tracking-[0.2em] text-violet-200 ${collapsed ? "sr-only" : ""}`}>Navigation preview</p><Button onClick={() => setCollapsed((value) => !value)} aria-label={collapsed ? "Expand navigation" : "Collapse navigation"} size="icon" variant="outline" className="border-white/10 text-slate-300"><Menu className="size-4" /></Button></div>{!collapsed && <div className="mt-4"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search routes" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-5 space-y-2">{filtered.map((item) => { const Icon = item.icon; return <button key={item.id} onClick={() => setSelected(item.id)} className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><Icon className="size-4 text-cyan-300" /><span className="flex-1"><span className="block text-sm font-semibold">{item.label}</span><span className="block text-xs text-slate-500">{item.group}</span></span><ChevronRight className="size-4 text-slate-600" /></button>; })}</div></div>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected route concept</p><h2 className="mt-2 text-3xl font-black">{route.label}</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{route.status}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-400">{route.group} module selected locally. The active state does not prove the route resolves, a user can access it, or data loads.</p><div className="mt-6 grid gap-3 sm:grid-cols-3">{[{ label: "Route", value: "Unverified" }, { label: "Permission", value: "Unknown" }, { label: "Data", value: "Unavailable" }, { label: "Loading", value: "Not connected" }, { label: "Error", value: "Not connected" }, { label: "Alerts", value: "No feed" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-6 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Open route unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Load notifications unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Check permission unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500"><Bell className="mr-2 size-4" />Subscribe unavailable</Button></div><div className="mt-6 rounded-xl border border-white/10 p-5"><div className="flex items-center gap-3"><Keyboard className="size-5 text-cyan-300" /><div><p className="font-semibold">Keyboard and responsive preview</p><p className="mt-2 text-sm leading-6 text-slate-500">Use Tab to focus route controls. The collapse action demonstrates a mobile-friendly sidebar state; it does not prove route or accessibility compliance in the full application.</p></div></div></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No navigation claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A selected route concept does not prove navigation, permissions, data loading, notifications, authentication, or feature availability.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Navigation-governance gates</p><h2 className="mt-2 text-2xl font-black">What a real sidebar must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Authenticated route map, tenant, roles, permissions, feature flags, redirects, deep links, loading states, errors, and not-found handling", "Accessible keyboard focus, labels, responsive collapse, screen-reader semantics, reduced motion, contrast, localization, and state announcements", "Account, finance, wallet, AI, education, community, operations, security, and notification routes require separate authorization and evidence", "Navigation telemetry, search, recent items, unread counts, alerts, personalization, and cross-device persistence require a data contract", "Open, subscribe, mark read, switch workspace, accessibility, retry, and accountable approval require governed navigation operations", "A navigation preview must not be presented as a live route, permission, alert feed, account state, or feature availability without evidence"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Navigation surface preserved", description: "Route groups, search, active state, collapse, keyboard guidance, access labels, alerts, save/reset, and gates remain interactive.", icon: Menu, status: "Local UX" }, { title: "No route theater", description: "Navigation, permissions, data, notifications, account identity, and feature availability are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Authorization before access", description: "Real navigation requires authenticated route maps, permissions, feature flags, accessible states, errors, and telemetry.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>; }
+import {
+  ScreenFeatureGrid,
+  ScreenHero,
+  ScreenPreviewBanner,
+  ScreenStatGrid,
+} from "@/components/ScreenExperience";
+const routes = [
+  {
+    id: 1,
+    label: "Launch hub",
+    group: "Core",
+    icon: Grid2X2,
+    status: "Route not verified",
+  },
+  {
+    id: 2,
+    label: "Profile and settings",
+    group: "Account",
+    icon: UserRound,
+    status: "Access unknown",
+  },
+  {
+    id: 3,
+    label: "Crypto hub",
+    group: "Finance",
+    icon: WalletCards,
+    status: "Backend unavailable",
+  },
+  {
+    id: 4,
+    label: "HopeAI",
+    group: "AI",
+    icon: Sparkles,
+    status: "Provider unavailable",
+  },
+  {
+    id: 5,
+    label: "SkySchool",
+    group: "Education",
+    icon: Compass,
+    status: "Route not verified",
+  },
+  {
+    id: 6,
+    label: "System health",
+    group: "Operations",
+    icon: Activity,
+    status: "Telemetry unavailable",
+  },
+];
+export default function SidebarNavigation() {
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState(1);
+  const [collapsed, setCollapsed] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [showGates, setShowGates] = useState(false);
+  const filtered = useMemo(
+    () =>
+      routes.filter(item =>
+        `${item.label} ${item.group} ${item.status}`
+          .toLowerCase()
+          .includes(query.toLowerCase())
+      ),
+    [query]
+  );
+  const route = routes.find(item => item.id === selected) ?? routes[0];
+  const reset = () => {
+    setQuery("");
+    setSelected(1);
+    setCollapsed(false);
+    setSaved(false);
+    setShowGates(false);
+  };
+  return (
+    <div className="min-h-screen bg-[#070a16] text-white">
+      <ScreenHero
+        icon={Menu}
+        eyebrow="Sidebar navigation · UX preview"
+        title="Make navigation useful without pretending routes or permissions are live."
+        description="Explore a local responsive navigation workspace with grouped ecosystem routes, search, active-state intent, access labels, collapse/expand behavior, keyboard guidance, save/reset, and evidence gates. No route transition, permission, notification, account, integration, or feature availability is connected."
+        badge="Evidence-bounded navigation workspace"
+      >
+        <div className="flex flex-wrap gap-2">
+          <Button
+            onClick={() => setSaved(true)}
+            className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"
+          >
+            <Check className="mr-2 size-4" />
+            {saved ? "Saved locally" : "Save navigation view"}
+          </Button>
+          <Button
+            onClick={() => setShowGates(value => !value)}
+            variant="outline"
+            className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+          >
+            {showGates ? (
+              <X className="mr-2 size-4" />
+            ) : (
+              <ShieldAlert className="mr-2 size-4" />
+            )}
+            {showGates ? "Close gates" : "Review navigation gates"}
+          </Button>
+          <Button
+            onClick={reset}
+            variant="outline"
+            className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+          >
+            <RefreshCw className="mr-2 size-4" />
+            Reset navigation
+          </Button>
+        </div>
+      </ScreenHero>
+      <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+        <ScreenStatGrid
+          items={[
+            {
+              label: "Routes",
+              value: `${routes.length} local`,
+              hint: "No router proof",
+              icon: Grid2X2,
+              tone: "cyan",
+            },
+            {
+              label: "Groups",
+              value: `${new Set(routes.map(item => item.group)).size}`,
+              hint: "Local taxonomy",
+              icon: Compass,
+              tone: "violet",
+            },
+            {
+              label: "Access",
+              value: "Unknown",
+              hint: "No auth source",
+              icon: LockKeyhole,
+              tone: "amber",
+            },
+            {
+              label: "Alerts",
+              value: "Unavailable",
+              hint: "No notification source",
+              icon: Bell,
+              tone: "slate",
+            },
+          ]}
+        />
+        <ScreenPreviewBanner title="Navigation evidence boundary">
+          <strong>
+            This is a local navigation UX preview, not evidence that routes
+            resolve, modules are enabled, permissions are correct, notifications
+            exist, or feature surfaces are available.
+          </strong>{" "}
+          Search, selection, collapse state, grouped route cards, keyboard
+          hints, saved state, and disabled navigation actions are browser
+          concepts. No route transition, authorization, user identity, alert
+          count, notification, data load, or feature availability is asserted.
+        </ScreenPreviewBanner>
+        <section className="grid gap-6 lg:grid-cols-[0.38fr_0.62fr]">
+          <Card className="border-white/10 bg-white/[0.04]">
+            <CardContent className={`p-4 ${collapsed ? "sm:w-24" : ""}`}>
+              <div className="flex items-center justify-between gap-3">
+                <p
+                  className={`text-xs font-semibold uppercase tracking-[0.2em] text-violet-200 ${collapsed ? "sr-only" : ""}`}
+                >
+                  Navigation preview
+                </p>
+                <Button
+                  onClick={() => setCollapsed(value => !value)}
+                  aria-label={
+                    collapsed ? "Expand navigation" : "Collapse navigation"
+                  }
+                  size="icon"
+                  variant="outline"
+                  className="border-white/10 text-slate-300"
+                >
+                  <Menu className="size-4" />
+                </Button>
+              </div>
+              {!collapsed && (
+                <div className="mt-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-3 size-4 text-slate-500" />
+                    <input
+                      value={query}
+                      onChange={event => setQuery(event.target.value)}
+                      placeholder="Search routes"
+                      className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none"
+                    />
+                  </div>
+                  <div className="mt-5 space-y-2">
+                    {filtered.map(item => {
+                      const Icon = item.icon;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => setSelected(item.id)}
+                          className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}
+                        >
+                          <Icon className="size-4 text-cyan-300" />
+                          <span className="flex-1">
+                            <span className="block text-sm font-semibold">
+                              {item.label}
+                            </span>
+                            <span className="block text-xs text-slate-500">
+                              {item.group}
+                            </span>
+                          </span>
+                          <ChevronRight className="size-4 text-slate-600" />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+          <Card className="border-white/10 bg-white/[0.04]">
+            <CardContent className="p-6">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">
+                    Selected route concept
+                  </p>
+                  <h2 className="mt-2 text-3xl font-black">{route.label}</h2>
+                </div>
+                <Badge
+                  variant="outline"
+                  className="border-amber-300/20 text-amber-200"
+                >
+                  {route.status}
+                </Badge>
+              </div>
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                {route.group} module selected locally. The active state does not
+                prove the route resolves, a user can access it, or data loads.
+              </p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                {[
+                  { label: "Route", value: "Unverified" },
+                  { label: "Permission", value: "Unknown" },
+                  { label: "Data", value: "Unavailable" },
+                  { label: "Loading", value: "Not connected" },
+                  { label: "Error", value: "Not connected" },
+                  { label: "Alerts", value: "No feed" },
+                ].map(item => (
+                  <div
+                    key={item.label}
+                    className="rounded-xl border border-white/10 p-3"
+                  >
+                    <p className="text-xs text-slate-500">{item.label}</p>
+                    <p className="mt-2 text-sm font-semibold text-amber-200">
+                      {item.value}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 flex flex-wrap gap-2">
+                <Button disabled className="bg-slate-700 text-slate-400">
+                  Open route unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Load notifications unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Check permission unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  <Bell className="mr-2 size-4" />
+                  Subscribe unavailable
+                </Button>
+              </div>
+              <div className="mt-6 rounded-xl border border-white/10 p-5">
+                <div className="flex items-center gap-3">
+                  <Keyboard className="size-5 text-cyan-300" />
+                  <div>
+                    <p className="font-semibold">
+                      Keyboard and responsive preview
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-slate-500">
+                      Use Tab to focus route controls. The collapse action
+                      demonstrates a mobile-friendly sidebar state; it does not
+                      prove route or accessibility compliance in the full
+                      application.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              {showGates && (
+                <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4">
+                  <p className="font-semibold text-amber-100">
+                    No navigation claim
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-slate-400">
+                    A selected route concept does not prove navigation,
+                    permissions, data loading, notifications, authentication, or
+                    feature availability.
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </section>
+        <Card className="border-white/10 bg-white/[0.04]">
+          <CardContent className="p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">
+              Navigation-governance gates
+            </p>
+            <h2 className="mt-2 text-2xl font-black">
+              What a real sidebar must prove
+            </h2>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {[
+                "Authenticated route map, tenant, roles, permissions, feature flags, redirects, deep links, loading states, errors, and not-found handling",
+                "Accessible keyboard focus, labels, responsive collapse, screen-reader semantics, reduced motion, contrast, localization, and state announcements",
+                "Account, finance, wallet, AI, education, community, operations, security, and notification routes require separate authorization and evidence",
+                "Navigation telemetry, search, recent items, unread counts, alerts, personalization, and cross-device persistence require a data contract",
+                "Open, subscribe, mark read, switch workspace, accessibility, retry, and accountable approval require governed navigation operations",
+                "A navigation preview must not be presented as a live route, permission, alert feed, account state, or feature availability without evidence",
+              ].map(item => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3 rounded-xl border border-white/10 p-3"
+                >
+                  <LockKeyhole className="size-4 text-slate-500" />
+                  <span className="flex-1 text-sm text-slate-300">{item}</span>
+                  <span className="text-xs text-amber-200">Required</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+        <ScreenFeatureGrid
+          features={[
+            {
+              title: "Navigation surface preserved",
+              description:
+                "Route groups, search, active state, collapse, keyboard guidance, access labels, alerts, save/reset, and gates remain interactive.",
+              icon: Menu,
+              status: "Local UX",
+            },
+            {
+              title: "No route theater",
+              description:
+                "Navigation, permissions, data, notifications, account identity, and feature availability are not fabricated.",
+              icon: ShieldAlert,
+              status: "Guardrail",
+            },
+            {
+              title: "Authorization before access",
+              description:
+                "Real navigation requires authenticated route maps, permissions, feature flags, accessible states, errors, and telemetry.",
+              icon: LockKeyhole,
+              status: "Blocked",
+            },
+          ]}
+        />
+      </main>
+    </div>
+  );
+}
