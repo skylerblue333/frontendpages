@@ -1,0 +1,3 @@
+# UserTimeline visual findings
+
+The 390×844 mobile render keeps the User Timeline header, unavailable-service disclosure, refresh-unavailable control, timeline explanation, All/Activity/Milestones lanes, and first activity-event concept readable without horizontal overflow. The 1440×1000 desktop render shows the complete timeline-readiness workspace with selected event ID, timestamp, actor/owner, source, ordering, status, completion, reminder, privacy, and persistence states explicitly withheld, plus clear evidence and relationship boundaries. Add reminder and mark complete remain disabled. No timeline event, actor, timestamp, relationship, reminder, completion, privacy, persistence, or account-activity outcome is fabricated.
