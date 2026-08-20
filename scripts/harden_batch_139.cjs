@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/PriorityMatrix.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst PriorityMatrix = () => (\n  <FeatureUnavailable\n    title="Priority matrix unavailable"\n    description="A trustworthy priority matrix requires durable task records, user or organization scope, explicit prioritization criteria, ownership, permissions, change history, reminders, completion state, and synchronization across clients. No task, score, priority, schedule, recommendation, completion, or productivity result is shown or asserted."\n    capability="Auditable task prioritization and planning workspace"\n    nextStep="Connect approved task and planning services with authorization, durable state, scoring rules, reminders, audit, and recovery behavior before enabling the matrix"\n  />\n);\n\nexport default PriorityMatrix;\n`);
+console.log(JSON.stringify({ changed: ['PriorityMatrix.tsx'] }, null, 2));
