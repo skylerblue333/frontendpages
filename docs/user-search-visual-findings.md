@@ -1,0 +1,3 @@
+# UserSearch visual findings
+
+The 390×844 mobile render keeps the User Search header, unavailable-service disclosure, refresh-unavailable control, local query explanation, labeled example-search input, local review/clear actions, and status message readable without horizontal overflow. The 1440×1000 desktop render shows the complete search-readiness workspace with local query intent and directory, identity, relevance, pagination, privacy, moderation, rate-limit, and result states explicitly withheld. No user result, identity, relevance rank, profile data, privacy state, moderation decision, or search outcome is fabricated. Query review, clear, status, and refresh remain local-only or unavailable no-ops.
