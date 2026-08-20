@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "7511fa29cc8ff6eb061a16e1e1484f403e6caea1",
+  "generated_at_commit": "cd527101425889cfcaf0d2a97b26134315fc0c4b",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 383,
-  "routes_with_visual_checkpoint": 361,
-  "routes_with_placeholder_signal": 699,
+  "routes_with_review": 384,
+  "routes_with_visual_checkpoint": 362,
+  "routes_with_placeholder_signal": 698,
   "routes": [
     {
       "route": "/",
@@ -4810,8 +4810,8 @@
       "component": "MLInsights",
       "source": "client/src/pages/MLInsights.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -6072,7 +6072,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/predictive-models",
