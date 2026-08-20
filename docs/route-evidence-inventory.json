@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "9b2c480163718aaf6d8b4b94a3b089aba947616e",
+  "generated_at_commit": "a3fbadd72ab4764fe5c91b64a85fa0f7baf53902",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 607,
-  "routes_with_visual_checkpoint": 585,
-  "routes_with_placeholder_signal": 570,
+  "routes_with_review": 608,
+  "routes_with_visual_checkpoint": 586,
+  "routes_with_placeholder_signal": 569,
   "routes": [
     {
       "route": "/",
@@ -8383,9 +8383,9 @@
       "component": "TimeInputForm",
       "source": "client/src/pages/TimeInputForm.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/time-picker-dialog",

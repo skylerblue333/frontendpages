@@ -1,0 +1,3 @@
+# TimeInputForm visual findings
+
+The 390×844 mobile render keeps the time-input header, unavailable service disclosure, reset control, local time preview, date input, and time input readable while the timezone control continues below the viewport. The 1440×1000 desktop render shows the complete date/time/timezone workspace with native controls, local review and clear actions, live status messaging, selected time metadata, and explicit conversion/persistence/notification boundaries. No device timezone, locale, DST conversion, calendar event, appointment, deadline, reminder, schedule, notification, or delivery outcome is fabricated. Date, time, timezone, review, and reset behavior remain local-only.
