@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/SleepTracking.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst SleepTracking = () => (\n  <FeatureUnavailable\n    title="Sleep tracking unavailable"\n    description="Sleep tracking requires an approved device or data-provider integration, explicit consent, secure health-data handling, reliable synchronization, data deletion controls, and validated interpretation boundaries. No sleep duration, stages, score, trend, recommendation, or health conclusion is shown."\n    capability="Connected sleep data collection and analysis"\n    nextStep="Connect a governed health-data provider with consent, privacy, retention, deletion, synchronization, and validation controls before enabling this feature"\n  />\n);\n\nexport default SleepTracking;\n`);
+console.log(JSON.stringify({ changed: ['SleepTracking.tsx'] }, null, 2));
