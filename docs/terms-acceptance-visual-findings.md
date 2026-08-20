@@ -1,0 +1,3 @@
+# TermsAcceptance visual findings
+
+The 390×844 mobile render keeps the terms-acceptance header, unavailable service disclosure, reset control, agreement-concepts preview, and first concept card readable without horizontal overflow. The 1440×1000 desktop render provides a two-column agreement-review workspace with platform terms, privacy notice, and financial-risk disclosure concepts, selected document metadata, and explicit version/effective-date/jurisdiction/notice/identity/consent/withdrawal/audit boundaries. Both captures state that no agreement is accepted by the preview and do not claim approved legal text, delivered notice, consent, withdrawal, binding effect, or legal compliance. Accept, withdraw, publish, and reset actions remain local-only or unavailable.

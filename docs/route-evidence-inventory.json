@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "b66f08d511843ec07151d2c22993deec1ae1f560",
+  "generated_at_commit": "b50163b36faae983c33f5048eebea1030d033ab9",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 603,
-  "routes_with_visual_checkpoint": 581,
-  "routes_with_placeholder_signal": 573,
+  "routes_with_review": 604,
+  "routes_with_visual_checkpoint": 582,
+  "routes_with_placeholder_signal": 572,
   "routes": [
     {
       "route": "/",
@@ -8275,9 +8275,9 @@
       "component": "TermsAcceptance",
       "source": "client/src/pages/TermsAcceptance.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/terms-of-service",
