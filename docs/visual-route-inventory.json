@@ -5727,9 +5727,9 @@
       "page_file": "MobileMenu.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/mobile-messages",
@@ -9957,9 +9957,9 @@
       "page_file": "UserOnboarding.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/user-permissions",
