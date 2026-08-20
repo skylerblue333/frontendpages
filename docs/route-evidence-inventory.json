@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "fdc2ca1fef0cfbbd4e71321eb3dd9e912753fa39",
+  "generated_at_commit": "6ed75293bb2dce9461aac044b7d8d283fa8bea4c",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 549,
-  "routes_with_visual_checkpoint": 527,
+  "routes_with_review": 550,
+  "routes_with_visual_checkpoint": 528,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7366,8 +7366,8 @@
       "component": "SecuritySettings",
       "source": "client/src/pages/SecuritySettings.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
