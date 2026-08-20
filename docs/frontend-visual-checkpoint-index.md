@@ -994,3 +994,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/crypto-news-mobile-390x844.png`
 ## crypto-research-hub-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/crypto-research-hub-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/crypto-research-hub-mobile-390x844.png`
+
+## dao-treasury-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/dao-treasury-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/dao-treasury-mobile-390x844.png`

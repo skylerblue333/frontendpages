@@ -1,8 +1,11 @@
 # DAOTreasury visual checkpoint
 
-The route `/d-a-o-treasury` was verified in the direct Vite client at the responsive desktop viewport. The new layout renders a treasury-service-unavailable notice, typed local treasury concepts, asset and state filter groups, selected-treasury holdings/balance/signers/proposal/approvals/transaction/settlement unavailable fields, and safety guidance for multisignature custody, role separation, proposal provenance, spend limits, network and address validation, transaction simulation, signing controls, timelocks, replay protection, confirmation tracking, reconciliation, and audit trails.
+Route: `/d-a-o-treasury`
 
-The `Transfer unavailable` action was activated. The status remained explicit that transfer is unavailable locally and no asset balance, signer, proposal, approval, recipient, transfer, notification, or financial transaction request was started. No treasury or blockchain operation occurred.
+Desktop screenshot: `/home/ubuntu/screenshots/dao-treasury-desktop-1440x1000.png`
 
-Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_16-31-22_4314.webp`
-Blocked-transfer screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_16-31-32_6507.webp`
+Mobile screenshot: `/home/ubuntu/screenshots/dao-treasury-mobile-390x844.png`
+
+The desktop render presents a clear treasury-governance boundary, truthful unavailable state, disabled treasury/proposal/vote/transfer controls, release requirements, and local-only capability map. The 390×844 render stacks the same sections without horizontal clipping and keeps custody, signer authority, asset ledger, proposals, quorum, voting, transfer controls, risk, reporting, reconciliation, audit, and unavailable-action disclosures readable. No DAO identity, wallet, balance, proposal, vote, transfer, settlement, ledger, or financial outcome is fabricated.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. No treasury or blockchain operation occurred.
