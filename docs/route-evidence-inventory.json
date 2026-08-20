@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "dff0f454ce40c97fc36b5e81875d98593b5080b4",
+  "generated_at_commit": "f4496c00070af43bc1df1f700946d13e8eecaa5b",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 514,
-  "routes_with_visual_checkpoint": 492,
+  "routes_with_review": 515,
+  "routes_with_visual_checkpoint": 493,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7051,8 +7051,8 @@
       "component": "SDKDownload",
       "source": "client/src/pages/SDKDownload.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
