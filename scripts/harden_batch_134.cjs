@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/DataRetention.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst DataRetention = () => (\n  <FeatureUnavailable\n    title="Data retention controls unavailable"\n    description="Data retention requires an authoritative data inventory, documented purpose and retention rules, legal and regional requirements, storage ownership, automated enforcement, deletion and legal-hold handling, audit evidence, recovery behavior, and independently validated policy publication. No retention period, deletion status, storage state, compliance result, or policy enforcement is shown or asserted."\n    capability="Auditable retention, deletion, and legal-hold governance"\n    nextStep="Connect approved data-governance, storage, deletion, legal-hold, audit, and policy services with owner acceptance before enabling retention operations"\n  />\n);\n\nexport default DataRetention;\n`);
+console.log(JSON.stringify({ changed: ['DataRetention.tsx'] }, null, 2));
