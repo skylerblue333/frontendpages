@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/SupportMetrics.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst SupportMetrics = () => (\n  <FeatureUnavailable\n    title="Support metrics unavailable"\n    description="Production support metrics require authoritative ticket and event data, defined KPI formulas, identity and tenant scope, time-window semantics, timezone handling, sampling and aggregation rules, privacy controls, and monitoring integrity. No ticket volume, SLA, response time, resolution, backlog, satisfaction, agent, uptime, or performance metric is generated here."\n    capability="Support KPIs, service levels, response, resolution, and workload analytics"\n    nextStep="Connect governed support telemetry, ticket storage, metric definitions, privacy, aggregation, and audit services before enabling support metrics"\n  />\n);\n\nexport default SupportMetrics;\n`);
+console.log(JSON.stringify({ changed: ['SupportMetrics.tsx'] }, null, 2));
