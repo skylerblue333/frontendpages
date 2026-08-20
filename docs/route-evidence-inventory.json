@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "37bed6b3fbfe8b31833857ec2b5af65e37c3e167",
+  "generated_at_commit": "fa1e57be841ab81daf415568b631f0adfa010df6",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 585,
-  "routes_with_visual_checkpoint": 563,
-  "routes_with_placeholder_signal": 580,
+  "routes_with_review": 586,
+  "routes_with_visual_checkpoint": 564,
+  "routes_with_placeholder_signal": 579,
   "routes": [
     {
       "route": "/",
@@ -7861,9 +7861,9 @@
       "component": "StatisticsPanel",
       "source": "client/src/pages/StatisticsPanel.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/status",
