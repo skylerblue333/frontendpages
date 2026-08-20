@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "3b260041cf6bc628231d145f3f99961ec04196aa",
+  "generated_at_commit": "e445b2be065e5d3bbde6c9d7fb5c1128c152ea5c",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 299,
-  "routes_with_visual_checkpoint": 277,
+  "routes_with_review": 300,
+  "routes_with_visual_checkpoint": 278,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3640,8 +3640,8 @@
       "component": "FollowRequests",
       "source": "client/src/pages/FollowRequests.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
