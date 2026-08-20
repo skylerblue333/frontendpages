@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "873808f84c41be72326a27ae85ade34d760dc96d",
+  "generated_at_commit": "0dfe837c468f0fabea118fe3ff46a80b6f75c117",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 401,
-  "routes_with_visual_checkpoint": 379,
-  "routes_with_placeholder_signal": 688,
+  "routes_with_review": 402,
+  "routes_with_visual_checkpoint": 380,
+  "routes_with_placeholder_signal": 687,
   "routes": [
     {
       "route": "/",
@@ -5125,8 +5125,8 @@
       "component": "MiningDashboard",
       "source": "client/src/pages/MiningDashboard.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -8340,7 +8340,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/ticket-assignment",
