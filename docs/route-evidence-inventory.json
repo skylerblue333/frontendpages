@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "42c5876ad61ef3212bb96f0f738525489456f15a",
+  "generated_at_commit": "a389a59cd84b5221f1912a20acf8ed3a8657bebb",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 486,
-  "routes_with_visual_checkpoint": 464,
+  "routes_with_review": 487,
+  "routes_with_visual_checkpoint": 465,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -6574,8 +6574,8 @@
       "component": "QuizBuilder",
       "source": "client/src/pages/QuizBuilder.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
