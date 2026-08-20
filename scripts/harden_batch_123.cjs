@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/ConversionFunnel.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst ConversionFunnel = () => (\n  <FeatureUnavailable\n    title="Conversion funnel unavailable"\n    description="Conversion funnels require governed event instrumentation, documented stage definitions, attribution and identity rules, consent and privacy controls, deduplication, time-window handling, reproducible calculations, and validated exports. No visitor, user, stage, conversion, revenue, attribution, optimization, or forecast result is presented."\n    capability="Auditable conversion-funnel measurement"\n    nextStep="Connect approved analytics events and a governed reporting pipeline with privacy, attribution, calculation, access, export, and retention controls before enabling this feature"\n  />\n);\n\nexport default ConversionFunnel;\n`);
+console.log(JSON.stringify({ changed: ['ConversionFunnel.tsx'] }, null, 2));
