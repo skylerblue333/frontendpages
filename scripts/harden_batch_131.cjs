@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/DataExport.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst DataExport = () => (\n  <FeatureUnavailable\n    title="Data export unavailable"\n    description="Data export requires authenticated and permission-aware data access, an explicit export scope, schema and format definitions, privacy and redaction rules, reliable job processing, retention and deletion controls, integrity checks, and secure download delivery. No records were queried, generated, exported, counted, or downloaded."\n    capability="Secure, auditable user-authorized data export"\n    nextStep="Connect approved export services with authorization, scope review, redaction, job tracking, integrity validation, retention, and secure delivery controls before enabling exports"\n  />\n);\n\nexport default DataExport;\n`);
+console.log(JSON.stringify({ changed: ['DataExport.tsx'] }, null, 2));
