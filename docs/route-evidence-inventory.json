@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "07b9f1e9f1a57336a280191a307ba8ec7151d9b7",
+  "generated_at_commit": "5fd47b766076fa4599dd4e9a180f01be7b3ee804",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 359,
-  "routes_with_visual_checkpoint": 337,
+  "routes_with_review": 360,
+  "routes_with_visual_checkpoint": 338,
   "routes_with_placeholder_signal": 700,
   "routes": [
     {
@@ -4477,8 +4477,8 @@
       "component": "KnowledgeBase",
       "source": "client/src/pages/KnowledgeBase.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
