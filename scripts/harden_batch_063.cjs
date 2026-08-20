@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/TranscriptionManager.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst TranscriptionManager = () => (\n  <FeatureUnavailable\n    title="Transcription manager unavailable"\n    description="Transcription requires an approved model or provider, secure media upload, language and speaker handling, consent, retention and deletion rules, processing state, accuracy evaluation, export controls, and error recovery. No audio, transcript, language, speaker, delivery, or storage outcome is generated here."\n    capability="Audio transcription, speaker processing, language handling, and transcript delivery"\n    nextStep="Connect a governed transcription service with consent, privacy, model provenance, retention, and audited processing before enabling uploads"\n  />\n);\n\nexport default TranscriptionManager;\n`);
+console.log(JSON.stringify({ changed: ['TranscriptionManager.tsx'] }, null, 2));
