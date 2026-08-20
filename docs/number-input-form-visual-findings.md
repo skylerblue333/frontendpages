@@ -1,0 +1,3 @@
+# NumberInputForm visual findings
+
+The 390×844 mobile render shows a responsive single-column hierarchy with the numeric-input readiness label, no-input-contract badge, NumberInputForm readiness heading, concise scope statement, unavailable-input warning, and first no-numeric-value summary card visible without horizontal overflow. The 1440×1000 desktop render shows the full-width readiness header, unavailable warning, three summary cards, numeric-input governance requirements heading and filter, and the first two governance cards in a balanced two-column layout. Both captures use explicit no-data and no-action language and show no fabricated numeric values, units, validation results, calculations, or records.
