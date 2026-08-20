@@ -978,3 +978,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/creator-studio-mobile-390x844.png`
 ## cross-chain-interop-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/cross-chain-interop-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/cross-chain-interop-mobile-390x844.png`
+
+## cross-chain-swap-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/cross-chain-swap-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/cross-chain-swap-mobile-390x844.png`
