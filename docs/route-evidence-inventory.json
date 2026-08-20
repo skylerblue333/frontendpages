@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "06192f2c50b54a3a9f93358d0490cb5d35c09749",
+  "generated_at_commit": "029105fc7b3392d8759894634540ad3a0f92f5b1",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 572,
-  "routes_with_visual_checkpoint": 550,
+  "routes_with_review": 573,
+  "routes_with_visual_checkpoint": 551,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7627,8 +7627,8 @@
       "component": "SkySchoolAI",
       "source": "client/src/pages/SkySchoolAI.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
