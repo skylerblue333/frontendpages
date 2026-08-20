@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "e663bd216340dfa8d44b8b02926fb5113c87701e",
+  "generated_at_commit": "e40a6cbcbe9d036f8469ab9c27711a2539387dd6",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 317,
-  "routes_with_visual_checkpoint": 295,
+  "routes_with_review": 318,
+  "routes_with_visual_checkpoint": 296,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3847,8 +3847,8 @@
       "component": "GameTokenTap",
       "source": "client/src/pages/GameTokenTap.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
