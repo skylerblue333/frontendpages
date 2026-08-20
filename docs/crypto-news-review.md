@@ -1,0 +1,7 @@
+# CryptoNews review
+
+The former route was a generic unavailable placeholder. It has been replaced with a strictly typed, accessible, local-only crypto-news readiness workspace.
+
+The new screen states that no publisher, article, headline, timestamp, source, market claim, topic, alert, notification, or saved reading state is loaded or persisted. Headline loading, article opening, story search, and alert creation controls are disabled. The route documents publisher and URL provenance, authors, timestamps, feed identity, licensing, freshness, retrieval, headlines, articles, quotes, token claims, market events, price context, forecasts, fact checks, corrections, editorial review, categories, asset tags, search, recommendations, ranking, related stories, saved items, reading history, alerts, notifications, moderation, takedown, personalization, consent, profiles, privacy, and audit. Its search field filters static capability notes only and never queries feeds, retrieves articles, validates market claims, tracks reading, creates alerts, notifies users, or persists editorial data.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows balanced news-state/release cards and a four-item capability map. Mobile evidence stacks the same content cleanly at 390×844 without clipping; source provenance, freshness, article integrity, discovery, moderation, privacy, audit, and unavailable-action disclosures remain readable.
