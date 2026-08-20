@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/TravelBudget.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst TravelBudget = () => (\n  <FeatureUnavailable\n    title="Travel budgeting unavailable"\n    description="A production travel budget requires user-provided expenses, verified prices and exchange rates, currency and tax assumptions, secure persistence, calculation rules, correction history, and clear limits against financial advice. No amount, balance, forecast, savings claim, booking cost, or financial recommendation is generated here."\n    capability="Travel expense planning, budgeting, and cost estimates"\n    nextStep="Connect governed expense storage, market and exchange-rate sources, calculation rules, privacy controls, and reviewed disclosures before enabling budgeting"\n  />\n);\n\nexport default TravelBudget;\n`);
+console.log(JSON.stringify({ changed: ['TravelBudget.tsx'] }, null, 2));
