@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "c58f55d32f8d2af683447286057afe4fa3fe04df",
+  "generated_at_commit": "ccee18957454c20f1cf9e45bb1b973667e8e3fec",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 331,
-  "routes_with_visual_checkpoint": 309,
+  "routes_with_review": 332,
+  "routes_with_visual_checkpoint": 310,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -4045,8 +4045,8 @@
       "component": "GroupManagement",
       "source": "client/src/pages/GroupManagement.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
