@@ -1,0 +1,3 @@
+# UnifiedWallet visual findings
+
+The 390×844 mobile render keeps the Unified Wallet header, unavailable-service disclosure, refresh-unavailable control, ownership explanation, and first ownership/address cards readable without horizontal overflow. The 1440×1000 desktop render shows the complete wallet-readiness workspace with ownership, address, network, custody, balance, assets, transactions, and reconciliation explicitly withheld, alongside ownership/network, keys/signing, and transfers/reconciliation gates. Connect, send, and receive remain disabled. No address, balance, asset ownership, private key, signature, transaction, custody relationship, or transfer outcome is fabricated.

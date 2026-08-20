@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "f5e0798b198b41119c68d0f7cc2e4bd2887e3cf3",
+  "generated_at_commit": "087b8214d32aaede35b825a50906e81b180be063",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 626,
-  "routes_with_visual_checkpoint": 604,
-  "routes_with_placeholder_signal": 558,
+  "routes_with_review": 627,
+  "routes_with_visual_checkpoint": 605,
+  "routes_with_placeholder_signal": 557,
   "routes": [
     {
       "route": "/",
@@ -8896,9 +8896,9 @@
       "component": "UnifiedWallet",
       "source": "client/src/pages/UnifiedWallet.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/universal-search",
