@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/TimeTracking.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst TimeTracking = () => (\n  <FeatureUnavailable\n    title="Time tracking unavailable"\n    description="A production time-tracking system requires trusted clock and timer behavior, authenticated users, project and task authorization, edit history, timezone handling, privacy controls, approval workflows, and any billing or payroll rules to be independently verified. No timer, work hour, assignment, utilization, invoice, payroll, or synchronization result is created here."\n    capability="Work logs, timers, utilization, and billable-time records"\n    nextStep="Connect governed identity, project authorization, time persistence, audit history, approval, privacy, and billing systems before enabling time tracking"\n  />\n);\n\nexport default TimeTracking;\n`);
+console.log(JSON.stringify({ changed: ['TimeTracking.tsx'] }, null, 2));
