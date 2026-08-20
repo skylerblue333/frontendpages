@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "4ac52c8ba6fa1c07813c44668b87f8e2a328ff76",
+  "generated_at_commit": "b8c24ab831e6a60796a8c8baa23c2a7a5b955d72",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 338,
-  "routes_with_visual_checkpoint": 316,
+  "routes_with_review": 339,
+  "routes_with_visual_checkpoint": 317,
   "routes_with_placeholder_signal": 701,
   "routes": [
     {
@@ -4153,8 +4153,8 @@
       "component": "HelpCenter",
       "source": "client/src/pages/HelpCenter.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
