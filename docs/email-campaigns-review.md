@@ -1,0 +1,7 @@
+# EmailCampaigns review
+
+The former route was an unavailable campaign shell. It has been replaced with a typed email campaign readiness workspace that makes no claim that a sender identity, provider, audience, consent list, suppression state, template, message queue, delivery result, or reporting data is connected.
+
+The screen includes a local subject-intent field and an unavailable send action. The field updates local status only; it does not select recipients, verify consent, create a queue, send content, persist a campaign, or claim delivery. Its searchable requirement map covers sender identity and provider, consent and suppression, template and content review, and reporting and rollback. Search filters static readiness notes and never inspects contacts, consent, suppression, provider delivery, or campaign analytics.
+
+The page states that activation requires verified sender identity, explicit consent, suppression and unsubscribe handling, template approval, provider isolation, rate limits, bounce and complaint handling, privacy controls, delivery observability, rollback, audit logs, and duplicate-send tests. `prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows the send boundary, local subject planning, requirement map, and unavailable controls. Mobile evidence preserves the hierarchy and disclosures at 390×844 without clipping. No recipient, consent record, email send, delivery result, metric, notification, or rollback outcome is fabricated.

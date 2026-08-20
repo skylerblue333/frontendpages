@@ -1075,3 +1075,6 @@ Mobile screenshot: `/home/ubuntu/screenshots/ens-resolver-mobile-390x844.png`
 ## edit-profile-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/edit-profile-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/edit-profile-mobile-390x844.png`
+## email-campaigns-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/email-campaigns-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/email-campaigns-mobile-390x844.png`
