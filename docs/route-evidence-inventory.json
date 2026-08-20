@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "609b71597d453e8717af18ef4e4db9695326d6b8",
+  "generated_at_commit": "714899f9d4f8a42ceb14c8c219e6d3b9dcc4e8a7",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 481,
-  "routes_with_visual_checkpoint": 459,
+  "routes_with_review": 482,
+  "routes_with_visual_checkpoint": 460,
   "routes_with_placeholder_signal": 591,
   "routes": [
     {
@@ -6466,8 +6466,8 @@
       "component": "PropertyDetail",
       "source": "client/src/pages/PropertyDetail.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
