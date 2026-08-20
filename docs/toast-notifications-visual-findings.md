@@ -1,0 +1,3 @@
+# ToastNotifications visual findings
+
+The 390×844 mobile render keeps the toast-notifications header, unavailable service disclosure, reset control, local preview explanation, add/dismiss actions, and first toast card readable without horizontal overflow. The 1440×1000 desktop render shows the complete notification workspace with info and warning severity examples, ordering, per-toast dismissal, dismiss-all behavior, live status messaging, and explicit provider, queue, persistence, read-state, timing, and audience boundaries. No alert, message, email, push, inbox record, delivery, read state, or operational event is fabricated. Add, dismiss, reset, and status changes remain browser-local.
