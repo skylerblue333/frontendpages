@@ -21,7 +21,7 @@ export default function EventPlanner() {
 
   const addTable = () => {
     const id = `t${Date.now()}`;
-    setTables(p => [...p, { id, x: 50 + Math.random()*300, y: 50 + Math.random()*200, label: `Table ${p.length+1}`, seats: 6, color: COLORS[p.length % COLORS.length] }]);
+    setTables(p => [...p, { id, x: 50 + (p.length % 4) * 90, y: 50 + Math.floor(p.length / 4) * 80, label: `Table ${p.length+1}`, seats: 6, color: COLORS[p.length % COLORS.length] }]);
   };
 
   const onMouseDown = (e: React.MouseEvent, id: string) => {
@@ -66,7 +66,7 @@ export default function EventPlanner() {
             </Badge>
             <Button size="sm" onClick={addTable} className="bg-violet-600 hover:bg-violet-700 text-white text-xs"><Plus className="h-3.5 w-3.5 mr-1" />Add Table</Button>
             <Button size="sm" onClick={saveLayout} className={`text-xs ${saved?"bg-emerald-600":"bg-slate-700 hover:bg-slate-600"} text-white`}>
-              <Save className="h-3.5 w-3.5 mr-1" />{saved ? "Saved!" : "Save Layout"}
+              <Save className="h-3.5 w-3.5 mr-1" />{saved ? "Saved locally" : "Save locally"}
             </Button>
           </div>
         </div>
@@ -120,7 +120,7 @@ export default function EventPlanner() {
                 <div className="text-xs text-slate-500">{t.seats} seats</div>
               </div>
             ))}
-            <div className="absolute bottom-3 right-3 text-xs text-slate-700">Drag tables to arrange · {online ? "Auto-syncing" : "Saved locally"}</div>
+            <div className="absolute bottom-3 right-3 text-xs text-slate-700">Drag tables to arrange · {online ? "Auto-syncing" : "Local browser storage only"}</div>
           </div>
         </div>
       </div>
