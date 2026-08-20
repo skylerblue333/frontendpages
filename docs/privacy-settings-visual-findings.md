@@ -1,0 +1,3 @@
+# PrivacySettings visual findings
+
+The 390×844 mobile render shows a responsive single-column hierarchy with the privacy readiness label, no-privacy-state badge, PrivacySettings readiness heading, concise scope statement, unavailable-privacy warning, and first no-identity-or-consent summary card visible without horizontal overflow. The 1440×1000 desktop render shows the full-width readiness header, unavailable warning, three summary cards, privacy governance requirements heading and filter, and the first two governance cards in a balanced two-column layout. Both captures use explicit no-state and no-action language and show no fabricated identity, consent, personal-data, rights-request, sharing, security, policy, or privacy-setting records.
