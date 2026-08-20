@@ -5747,9 +5747,9 @@
       "page_file": "MobileNotifications.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/mobile-profile",
@@ -5757,9 +5757,9 @@
       "page_file": "MobileProfile.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/mobile-search",
@@ -9897,9 +9897,9 @@
       "page_file": "UserBehavior.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/user-bio",

@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/UserBehavior.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst UserBehavior = () => (\n  <FeatureUnavailable\n    title="User behavior analytics unavailable"\n    description="Behavior analytics require explicit consent, lawful-purpose controls, privacy-safe event collection, identity and tenant isolation, retention limits, aggregation, access controls, and auditable data processing. No user journey, event, segment, profile, prediction, or behavioral insight is collected or generated here."\n    capability="Privacy-aware user behavior and journey analytics"\n    nextStep="Connect governed consent, telemetry, privacy, aggregation, authorization, and audit services before enabling behavior analytics"\n  />\n);\n\nexport default UserBehavior;\n`);
+console.log(JSON.stringify({ changed: ['UserBehavior.tsx'] }, null, 2));
