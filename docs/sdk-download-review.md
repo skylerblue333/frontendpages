@@ -1,0 +1,17 @@
+# SDKDownload review
+
+The `/s-d-k-download` route already contained a substantial local SDK-catalog and release-governance preview, so the implementation was preserved rather than rewritten. It now has formatting, strict typecheck/build validation, and desktop/mobile evidence documentation. The route is not treated as a production package registry, downloadable release, security certification, or support commitment.
+
+| Area | Result |
+|---|---|
+| Local package functionality | Web, crypto, AI, and education package concepts, search, category filters, selected-package state, platform and version intent, save state, reset, disabled download/verify/release-notes/report controls, and release-gate toggling remain interactive in local component state. |
+| Evidence boundary | The hero and evidence banner explicitly state that this is a local SDK-catalog preview, not a downloadable release. No binary, version, checksum, signature, support level, security review, compatibility, API contract, or production release is asserted. |
+| Provenance and integrity | Concepts correctly require package builds, registry provenance, ownership, timestamps, release records, checksums, signatures, registry policy, dependency inventory, vulnerability review, SBOM, reproducible builds, compatibility tests, API contracts, and release notes. |
+| Crypto, AI, and education safety | Wallet SDK is blocked and requires network, address validation, signing boundaries, transaction status, custody, and security review. HopeAI requires model contract, safety, privacy, rate limits, observability, and evaluation. SkySchool requires content schema, learner privacy, accessibility, curriculum authority, and support. No domain outcome is connected. |
+| Security and operations | Gates include authentication, authorization, rate limits, error semantics, privacy, telemetry, secret handling, support, deprecation, incident response, rollback, and legal/support approval. No identity, secret, artifact, release, or personal-data mutation is connected. |
+| Persistence and actions | Save and reset operate only on local package state. Download, verify, release notes, and report issue remain visibly disabled. No binary, checksum, signature, release, support, or package record is created. |
+| Accessibility and UX | Existing semantic controls, visible labels, focusable buttons, native selects, responsive cards, disabled-state treatment, and evidence disclosures were retained. Desktop and mobile visual hierarchy was reviewed. |
+
+Validation completed successfully with Prettier, `pnpm exec tsc --noEmit`, and the production build. The build continues to emit the existing non-blocking large-chunk advisory. Desktop evidence was captured at 1440×1000 and mobile evidence at 390×844. Visual review confirms preserved local package behavior, explicit no-artifact and unverified states, disabled consequential actions, and absence of fabricated outcomes.
+
+Production activation would require authenticated package source, artifact provenance, version, platform, API contract, ownership, timestamps, release records, checksums, signatures, SBOM, vulnerability review, reproducible builds, compatibility tests, security review, support ownership, deprecation policy, rollback, and incident response. Crypto, financial, AI, educational, marketplace, security, and user-impact claims require separate domain review. No SDK artifact, release, binary, integrity, support, security, or production outcome is claimed here.
