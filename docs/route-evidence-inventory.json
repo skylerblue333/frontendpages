@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "3114996bb3180d9635619a1819890e9a807f6dcc",
+  "generated_at_commit": "15bcc2ab21115487f6a0ff609bc41ee8653b0e44",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 457,
-  "routes_with_visual_checkpoint": 435,
-  "routes_with_placeholder_signal": 606,
+  "routes_with_review": 458,
+  "routes_with_visual_checkpoint": 436,
+  "routes_with_placeholder_signal": 605,
   "routes": [
     {
       "route": "/",
@@ -5863,8 +5863,8 @@
       "component": "PermissionManagement",
       "source": "client/src/pages/PermissionManagement.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -6486,7 +6486,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/protocol-layer",
