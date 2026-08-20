@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/PerformanceMetrics.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst PerformanceMetrics = () => (\n  <FeatureUnavailable\n    title="Performance metrics unavailable"\n    description="Operational performance metrics require instrumented services, synchronized telemetry, defined measurement windows, sampling and aggregation rules, access controls, retention, alert thresholds, and independently verified monitoring. No latency, uptime, throughput, error rate, capacity, request count, service health, or performance result is shown or asserted."\n    capability="Verified application observability and performance monitoring"\n    nextStep="Connect approved telemetry, tracing, metrics, alerting, retention, and dashboard services with ownership and incident-response controls before enabling metrics"\n  />\n);\n\nexport default PerformanceMetrics;\n`);
+console.log(JSON.stringify({ changed: ['PerformanceMetrics.tsx'] }, null, 2));
