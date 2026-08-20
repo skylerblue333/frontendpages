@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "5d1640695253bcad52fffd2459a11f7231962440",
+  "generated_at_commit": "f108e4379f3f98f27e343be851e514dcbd864d2d",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 580,
-  "routes_with_visual_checkpoint": 558,
-  "routes_with_placeholder_signal": 584,
+  "routes_with_review": 581,
+  "routes_with_visual_checkpoint": 559,
+  "routes_with_placeholder_signal": 583,
   "routes": [
     {
       "route": "/",
@@ -7780,9 +7780,9 @@
       "component": "SortOptions",
       "source": "client/src/pages/SortOptions.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/speech-to-text",
