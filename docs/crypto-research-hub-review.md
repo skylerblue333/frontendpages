@@ -1,0 +1,7 @@
+# CryptoResearchHub review
+
+The former route was a shared unavailable notice that did not provide a useful research contract. It has been replaced with a strictly typed, accessible, local-only crypto-research readiness workspace.
+
+The new screen states that no source, article, asset, price, metric, model, rating, thesis, recommendation, report, or saved research state is loaded or persisted. Research loading, asset comparison, thesis saving, and report export controls are disabled. The route documents sources, authors, dates, methodology, licensing, providers, update schedules, research versions, assets, prices, volumes, liquidity, chain metrics, model inputs, calculations, forecasts, scenarios, ratings, risk, citations, evidence, assumptions, uncertainty, conflicts, editorial review, corrections, reproducibility, taxonomy, watchlists, theses, comparisons, alerts, recommendations, reports, exports, and audit. Its search field filters static capability notes only and never queries sources, loads market data, runs models, generates ratings, recommends investments, saves a thesis, or exports a report.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows balanced research-state/release cards and a four-item capability map. Mobile evidence stacks the same content cleanly at 390×844 without clipping; source provenance, methodology, market analysis, citations, conflicts, organization, export, audit, and unavailable-action disclosures remain readable.

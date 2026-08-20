@@ -990,3 +990,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/crypto-exchange-mobile-390x844.png`
 ## crypto-news-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/crypto-news-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/crypto-news-mobile-390x844.png`
+
+## crypto-research-hub-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/crypto-research-hub-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/crypto-research-hub-mobile-390x844.png`
