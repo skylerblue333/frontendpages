@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "91e0af9d16d5fb7b038e4e7335bd89baf6358fa7",
+  "generated_at_commit": "8c7776998de5419945b0c367eee09619d009f921",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 392,
-  "routes_with_visual_checkpoint": 370,
+  "routes_with_review": 393,
+  "routes_with_visual_checkpoint": 371,
   "routes_with_placeholder_signal": 694,
   "routes": [
     {
@@ -4927,8 +4927,8 @@
       "component": "MatchChat",
       "source": "client/src/pages/MatchChat.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
