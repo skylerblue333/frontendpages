@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "dcfa194df63e2db49452200f6153d7788f75e1fd",
+  "generated_at_commit": "220b934b2bcd32f935258e677c922b7bcc5389be",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 378,
-  "routes_with_visual_checkpoint": 356,
-  "routes_with_placeholder_signal": 701,
+  "routes_with_review": 379,
+  "routes_with_visual_checkpoint": 357,
+  "routes_with_placeholder_signal": 700,
   "routes": [
     {
       "route": "/",
@@ -4711,8 +4711,8 @@
       "component": "LiveChat",
       "source": "client/src/pages/LiveChat.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -5019,7 +5019,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/memory-constellation",
