@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/FeedbackHub.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst FeedbackHub = () => (\n  <FeatureUnavailable\n    title="Feedback hub unavailable"\n    description="The prior hub used mock feedback records and fabricated totals, trends, sentiment, actionable-item counts, response rates, moderation, and auto-update behavior. No authenticated feedback store, consent policy, identity handling, analysis pipeline, triage workflow, or resolution evidence is connected."\n    capability="Feedback collection, sentiment analysis, triage, and product-response workflows"\n    nextStep="Connect a governed feedback service with consent, privacy, moderation, analysis provenance, and audited triage before publishing metrics"\n  />\n);\n\nexport default FeedbackHub;\n`);
+console.log(JSON.stringify({ changed: ['FeedbackHub.tsx'] }, null, 2));
