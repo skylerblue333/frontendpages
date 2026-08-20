@@ -1046,3 +1046,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/delete-content-mobile-390x844.png`
 ## derivative-trading-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/derivative-trading-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/derivative-trading-mobile-390x844.png`
+
+## destination-guide-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/destination-guide-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/destination-guide-mobile-390x844.png`
