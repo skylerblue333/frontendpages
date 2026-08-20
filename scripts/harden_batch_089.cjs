@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/TripPlanner.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst TripPlanner = () => (\n  <FeatureUnavailable\n    title="Trip planner unavailable"\n    description="A production trip planner requires verified destinations, schedules, inventory, pricing, availability, user preferences, booking-provider integrations, cancellation rules, payment controls, and durable itinerary state. No destination, itinerary, price, booking, reservation, or completion result is generated here."\n    capability="Travel discovery, itinerary planning, and booking coordination"\n    nextStep="Connect governed travel inventory, provider integrations, pricing, identity, payment, and reservation services before enabling trip planning"\n  />\n);\n\nexport default TripPlanner;\n`);
+console.log(JSON.stringify({ changed: ['TripPlanner.tsx'] }, null, 2));
