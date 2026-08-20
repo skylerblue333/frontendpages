@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "61c19a492faa5d55293512432f2ac854bf9bbf26",
+  "generated_at_commit": "65a6fc890c16c0ae787e2ae83df885b59833a1e4",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 466,
-  "routes_with_visual_checkpoint": 444,
-  "routes_with_placeholder_signal": 603,
+  "routes_with_review": 467,
+  "routes_with_visual_checkpoint": 445,
+  "routes_with_placeholder_signal": 602,
   "routes": [
     {
       "route": "/",
@@ -6034,8 +6034,8 @@
       "component": "PortfolioTracking",
       "source": "client/src/pages/PortfolioTracking.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -6612,7 +6612,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/rate-limit-dashboard",
