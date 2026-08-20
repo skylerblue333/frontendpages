@@ -1,0 +1,3 @@
+# UserMentions visual findings
+
+The 390×844 mobile render keeps the User Mentions header, unavailable-service disclosure, refresh-unavailable control, mention explanation, All/Unread/Read filters, and first community-mention concept readable without horizontal overflow. The 1440×1000 desktop render shows the complete mention-readiness workspace with selected mention ID, actor, content, target, timestamp, delivery, read state, privacy, and moderation states explicitly withheld, plus clear notification and privacy boundaries. Mark read and open content remain disabled. No mention, actor, content, recipient, notification, read receipt, privacy, moderation, or account-activity outcome is fabricated.
