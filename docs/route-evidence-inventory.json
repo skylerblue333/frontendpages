@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "97cd4c71145adf76033401324e0cdbc46cbf2891",
+  "generated_at_commit": "f6a0094d282c1ee4ce055ce205277982460aa4ad",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 516,
-  "routes_with_visual_checkpoint": 494,
+  "routes_with_review": 517,
+  "routes_with_visual_checkpoint": 495,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7069,8 +7069,8 @@
       "component": "SEOOptimizer",
       "source": "client/src/pages/SEOOptimizer.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
