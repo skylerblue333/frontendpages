@@ -1,0 +1,3 @@
+# OnboardingTutorial visual findings
+
+The 390×844 mobile render shows a responsive single-column hierarchy with the guided-onboarding readiness label, no-tutorial-data badge, OnboardingTutorial readiness heading, concise scope statement, unavailable-content warning, and first no-tutorial summary card visible without horizontal overflow. The 1440×1000 desktop render shows the full-width readiness header, unavailable warning, three summary cards, onboarding-governance requirements heading and filter, and the first two governance cards in a balanced two-column layout. Both captures use explicit no-data and no-action language and show no fabricated tutorial content, profiles, preferences, progress checkpoints, or onboarding records.

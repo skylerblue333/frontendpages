@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "6cf8e131cf9b395b21010b615394ae0359901a95",
+  "generated_at_commit": "4b0c6ce35bae28797fb7006d4a4274de54336c88",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 442,
-  "routes_with_visual_checkpoint": 420,
-  "routes_with_placeholder_signal": 622,
+  "routes_with_review": 443,
+  "routes_with_visual_checkpoint": 421,
+  "routes_with_placeholder_signal": 621,
   "routes": [
     {
       "route": "/",
@@ -2454,7 +2454,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/data-retention",
@@ -5647,8 +5647,8 @@
       "component": "OnboardingTutorial",
       "source": "client/src/pages/OnboardingTutorial.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
