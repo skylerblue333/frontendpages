@@ -60,7 +60,7 @@ const quickLinks = [
 
 export default function Home() {
   return (
-    <main className="min-h-screen overflow-hidden bg-[#07070c] text-white">
+    <main data-ui-polish="batch-180" className="min-h-screen overflow-hidden bg-[#07070c] text-white">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_0%,rgba(217,70,239,0.18),transparent_32%),radial-gradient(circle_at_85%_15%,rgba(34,211,238,0.14),transparent_30%)]" />
       <section className="relative mx-auto max-w-7xl px-6 pb-16 pt-10 lg:px-10 lg:pt-16">
         <div className="flex items-center justify-between gap-4">

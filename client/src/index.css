@@ -177,7 +177,7 @@
 }
 
 /* SKYCOIN4444 visual polish batch 179 */
-[data-ui-polish="batch-179"] {
+[data-ui-polish] {
   position: relative;
   isolation: isolate;
   overflow: clip;
@@ -187,7 +187,7 @@
     var(--background);
 }
 
-[data-ui-polish="batch-179"]::before {
+[data-ui-polish]::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -196,38 +196,38 @@
   background: linear-gradient(135deg, color-mix(in oklab, var(--foreground) 3%, transparent), transparent 42%);
 }
 
-[data-ui-polish="batch-179"] h1 {
+[data-ui-polish] h1 {
   letter-spacing: -0.035em;
 }
 
-[data-ui-polish="batch-179"] h2,
-[data-ui-polish="batch-179"] h3 {
+[data-ui-polish] h2,
+[data-ui-polish] h3 {
   letter-spacing: -0.02em;
 }
 
-[data-ui-polish="batch-179"] [class*="rounded-lg"],
-[data-ui-polish="batch-179"] [class*="rounded-xl"],
-[data-ui-polish="batch-179"] [class*="rounded-2xl"] {
+[data-ui-polish] [class*="rounded-lg"],
+[data-ui-polish] [class*="rounded-xl"],
+[data-ui-polish] [class*="rounded-2xl"] {
   box-shadow: 0 14px 38px color-mix(in oklab, var(--foreground) 8%, transparent);
   backdrop-filter: blur(14px);
 }
 
-[data-ui-polish="batch-179"] button,
-[data-ui-polish="batch-179"] a {
+[data-ui-polish] button,
+[data-ui-polish] a {
   transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
 }
 
-[data-ui-polish="batch-179"] button:hover:not(:disabled),
-[data-ui-polish="batch-179"] a:hover {
+[data-ui-polish] button:hover:not(:disabled),
+[data-ui-polish] a:hover {
   transform: translateY(-1px);
 }
 
 @media (max-width: 640px) {
-  [data-ui-polish="batch-179"] {
+  [data-ui-polish] {
     min-height: 100dvh;
   }
 
-  [data-ui-polish="batch-179"] [class*="grid-cols-"] {
+  [data-ui-polish] [class*="grid-cols-"] {
     grid-template-columns: minmax(0, 1fr);
   }
 }

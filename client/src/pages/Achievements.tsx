@@ -108,7 +108,7 @@ export default function Achievements() {
     ["Audit", selected.audit],
   ];
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-180" className="min-h-screen bg-background">
       <PageHeader
         icon={Trophy}
         title="Achievements"

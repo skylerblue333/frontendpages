@@ -114,7 +114,7 @@ export default function APIIntegration() {
     ["Errors", selected.error],
   ];
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-180" className="min-h-screen bg-background">
       <PageHeader
         icon={Link2}
         title="API integrations"

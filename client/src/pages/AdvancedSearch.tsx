@@ -68,7 +68,7 @@ export default function AdvancedSearch() {
       `${action} is unavailable locally. No query, index, profile, result, ranking, personalization, external record, or analytics request was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-180" className="min-h-screen bg-background">
       <PageHeader
         icon={Search}
         title="Advanced search"

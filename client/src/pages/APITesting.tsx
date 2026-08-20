@@ -104,7 +104,7 @@ export default function APITesting() {
     ["Persistence", selected.persistence],
   ];
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-180" className="min-h-screen bg-background">
       <PageHeader
         icon={FlaskConical}
         title="API testing"

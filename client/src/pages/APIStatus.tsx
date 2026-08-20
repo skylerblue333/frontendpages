@@ -104,7 +104,7 @@ export default function APIStatus() {
     ["SLA", selected.sla],
   ];
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-180" className="min-h-screen bg-background">
       <PageHeader
         icon={BellRing}
         title="API status"

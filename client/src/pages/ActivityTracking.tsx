@@ -103,7 +103,7 @@ export default function ActivityTracking() {
     ["Deletion", selected.deletion],
   ];
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-180" className="min-h-screen bg-background">
       <PageHeader
         icon={Activity}
         title="Activity tracking"

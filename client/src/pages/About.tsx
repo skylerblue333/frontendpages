@@ -134,7 +134,7 @@ const TIMELINE = [
 
 export default function About() {
   return (
-    <div className="min-h-screen bg-[#0a0e1a] text-white">
+    <div data-ui-polish="batch-180" className="min-h-screen bg-[#0a0e1a] text-white">
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-purple-500/5 to-transparent" />
