@@ -1102,3 +1102,6 @@ Mobile screenshot: `/home/ubuntu/screenshots/empty-search-state-mobile-390x844.p
 ## engagement-metrics-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/engagement-metrics-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/engagement-metrics-mobile-390x844.png`
+## engagement-stats-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/engagement-stats-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/engagement-stats-mobile-390x844.png`
