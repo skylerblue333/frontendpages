@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "22bf6a754bac6650fb10670dce32e760ce278dbf",
+  "generated_at_commit": "c61b70a81a0858cf49e061be5998779ebb34f5ad",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 495,
-  "routes_with_visual_checkpoint": 473,
+  "routes_with_review": 496,
+  "routes_with_visual_checkpoint": 474,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -6808,8 +6808,8 @@
       "component": "ReportDialog",
       "source": "client/src/pages/ReportDialog.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
