@@ -1,0 +1,3 @@
+# TimelineView visual findings
+
+The 390×844 mobile render keeps the timeline header, unavailable service disclosure, reset control, preview explanation, lane filters, and first ordered event card readable without horizontal overflow. The 1440×1000 desktop render shows the full timeline readiness workspace with Core, Education, and Financial lanes, selected concept metadata, date/timestamp/owner/history/reminder/completion boundaries, and local event/reminder/completion actions. No event, date, historical activity, owner, progress, completion, reminder, notification, calendar, or delivery outcome is fabricated. Lane selection, concept selection, reset, and blocked action status remain browser-local.
