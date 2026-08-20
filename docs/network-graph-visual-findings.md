@@ -1,0 +1,3 @@
+# NetworkGraph visual findings
+
+The 390×844 mobile render shows a responsive single-column hierarchy with the relationship-readiness label, no-graph-data badge, NetworkGraph readiness heading, concise scope statement, network-data-unavailable warning, and first no-nodes summary card visible without horizontal overflow. The 1440×1000 desktop render shows the full-width readiness header, unavailable warning, three summary cards, graph-governance requirements heading and filter, and the first two governance cards in a balanced two-column layout. Both captures use explicit no-data and no-action language and show no fabricated people, accounts, profiles, entities, nodes, edges, connections, or graph records.
