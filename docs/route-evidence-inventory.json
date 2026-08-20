@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "2a27895881b35aa6df5545c1d644b133288576cd",
+  "generated_at_commit": "9281a178ef83edd67f8fe51f91660cecd714902d",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 352,
-  "routes_with_visual_checkpoint": 330,
+  "routes_with_review": 353,
+  "routes_with_visual_checkpoint": 331,
   "routes_with_placeholder_signal": 700,
   "routes": [
     {
@@ -4360,8 +4360,8 @@
       "component": "InputDialog",
       "source": "client/src/pages/InputDialog.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
