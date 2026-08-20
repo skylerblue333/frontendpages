@@ -1,0 +1,17 @@
+# SMSTemplates review
+
+The `/s-m-s-templates` route already contained a substantial local SMS message-quality preview, so the implementation was preserved rather than rewritten. It now has formatting, strict typecheck/build validation, and desktop/mobile evidence documentation. The route is not treated as a live content registry, message sender, provider, consent ledger, delivery report, or compliance certification.
+
+| Area | Result |
+|---|---|
+| Local template functionality | Transactional, lifecycle, education, and community template concepts, search, category filters, selected-template state, variable and locale intent, save state, reset, template-gate toggling, and disabled publish/preview-send/validate/export controls remain interactive in local component state. |
+| Evidence boundary | The hero and evidence banner explicitly state that this is a local message-template preview, not evidence that a message, recipient, consent, sender, or delivery exists. No phone number, message content, provider, delivery, cost, compliance, or user outcome is asserted. |
+| Content and variable safety | Real activation requires authenticated event and recipient context, purpose, consent, phone provenance, tenant, locale, timestamps, source, variable schema, type validation, redaction, escaping, character limits, encoding, accessibility, and source-authority review. No message, event, recipient, or variable value is connected. |
+| Sender and communications safety | Production templates require sender identity, approval, transactional/marketing policy, quiet hours, opt-out, rate limits, provider, delivery/failure/retry status, callbacks, support, monitoring, retention, deletion, export, and recovery. No sender, provider, delivery, or consent state is connected. |
+| Education, localization, and accessibility | Learning reminders require learner consent, safeguarding, curriculum authority, accessible language, and privacy. Locale intent includes multilingual, right-to-left review, and accessible-language intent, but no translation or accessibility result is claimed. |
+| Persistence and actions | Save and reset operate only on local template state. Publish, preview send, validate, and export remain visibly disabled. No message, recipient, variable, consent, provider, delivery, cost, compliance, or audit record is created. |
+| Accessibility and UX | Existing semantic controls, visible labels, focusable buttons, native selects, responsive cards, disabled-state treatment, and evidence disclosures were retained. Desktop and mobile visual hierarchy was reviewed. |
+
+Validation completed successfully with Prettier, `pnpm exec tsc --noEmit`, and the production build. The build continues to emit the existing non-blocking large-chunk advisory. Desktop evidence was captured at 1440×1000 and mobile evidence at 390×844. Visual review confirms preserved local template behavior, explicit unavailable/unconfigured/blocked states, disabled consequential actions, and absence of fabricated outcomes.
+
+Production activation would require governed content, event and recipient provenance, safe variable processing, sender verification, consent and opt-out enforcement, localization and accessibility review, provider evidence, privacy and retention controls, rate limits, approval, audit, incident response, and accountable domain review for security, education, community, marketing, financial, health, legal, regulated, or user-impact communications. No message, send, delivery, cost, compliance, or business outcome is claimed here.
