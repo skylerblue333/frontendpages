@@ -1,0 +1,3 @@
+# VideoPlayer visual findings
+
+The 390×844 mobile render keeps the Video Player header, unavailable-service disclosure, refresh-unavailable control, playback explanation, and asset/access capability card readable without horizontal overflow. The 1440×1000 desktop render shows the complete playback-readiness workspace with asset, access, stream, player, progress, captions, transcript, analytics, download, and retention states explicitly withheld, plus clear privacy and viewing boundaries. Play, download, and caption settings remain disabled. No asset, entitlement, stream, playback, caption, transcript, analytics, download, viewing, or media outcome is fabricated.

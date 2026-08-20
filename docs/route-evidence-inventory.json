@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "02b3d76a6d6df05076bde12f18703a881e6f7d31",
+  "generated_at_commit": "2eba5b0cebb3f05ae9786d76655f03de97068967",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 642,
-  "routes_with_visual_checkpoint": 620,
-  "routes_with_placeholder_signal": 544,
+  "routes_with_review": 643,
+  "routes_with_visual_checkpoint": 621,
+  "routes_with_placeholder_signal": 543,
   "routes": [
     {
       "route": "/",
@@ -9247,9 +9247,9 @@
       "component": "VideoPlayer",
       "source": "client/src/pages/VideoPlayer.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/video-tools",
