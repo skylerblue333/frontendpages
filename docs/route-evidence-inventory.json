@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "96a9742e2ad593f24e423dbe6413274b47caedb1",
+  "generated_at_commit": "889303e5f15d50a7025ce269e9a40bbd370d9455",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 622,
-  "routes_with_visual_checkpoint": 600,
-  "routes_with_placeholder_signal": 560,
+  "routes_with_review": 623,
+  "routes_with_visual_checkpoint": 601,
+  "routes_with_placeholder_signal": 559,
   "routes": [
     {
       "route": "/",
@@ -8752,9 +8752,9 @@
       "component": "TrendingTopics",
       "source": "client/src/pages/TrendingTopics.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/triggers-actions",
