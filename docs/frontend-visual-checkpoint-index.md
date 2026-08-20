@@ -958,3 +958,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/cost-allocation-mobile-390x844.png`
 ## cover-photo-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/cover-photo-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/cover-photo-mobile-390x844.png`
+
+## create-audio-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/create-audio-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/create-audio-mobile-390x844.png`

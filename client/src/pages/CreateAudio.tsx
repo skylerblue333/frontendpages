@@ -1,139 +1,261 @@
-import { useState, useRef } from "react";
-import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useMemo, useState } from "react";
+import {
+  FileAudio,
+  FileCheck2,
+  Headphones,
+  LockKeyhole,
+  Mic2,
+  Search,
+  ShieldCheck,
+  SlidersHorizontal,
+  UploadCloud,
+} from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
-import { Mic, MicOff, Upload, Play, Pause, Trash2, ChevronLeft, Globe, Star, Lock, Save, Send, Music, Headphones, Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+
+type AudioCapability = {
+  title: string;
+  description: string;
+  icon: typeof FileAudio;
+};
+
+const audioCapabilities: AudioCapability[] = [
+  {
+    title: "Source and audio validation",
+    description:
+      "No microphone stream, audio file, format, duration, sample rate, channels, codec, size, checksum, or validation result is connected.",
+    icon: FileAudio,
+  },
+  {
+    title: "Recording and processing",
+    description:
+      "No permission grant, recording state, waveform, playback buffer, editing, normalization, transcription, generated derivative, or processing job exists.",
+    icon: Mic2,
+  },
+  {
+    title: "Rights and publishing",
+    description:
+      "No title, description, ownership proof, license, content review, visibility policy, audience entitlement, publish workflow, or moderation result is verified.",
+    icon: FileCheck2,
+  },
+  {
+    title: "Storage and monetization",
+    description:
+      "No storage object, encryption, delivery URL, retention, deletion, play count, earnings rate, revenue share, payout, or audit record is available.",
+    icon: UploadCloud,
+  },
+];
 
 export default function CreateAudio() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [recording, setRecording] = useState(false);
-  const [hasRecording, setHasRecording] = useState(false);
-  const [playing, setPlaying] = useState(false);
-  const [duration, setDuration] = useState(0);
-  const [visibility, setVisibility] = useState<"public" | "subscribers" | "private">("public");
-  const [audioType, setAudioType] = useState<"podcast" | "music" | "voice" | "interview">("podcast");
-  const [saving, setSaving] = useState(false);
-
-  const startRecording = () => { setRecording(true); };
-  const stopRecording = () => { setRecording(false); setHasRecording(true); setDuration(142); };
-
-  const handleSave = async () => {
-    setSaving(true);
-    await new Promise(r => setTimeout(r, 800));
-    setSaving(false);
-  };
-
-  const formatDuration = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, "0")}`;
+  const [searchQuery, setSearchQuery] = useState("");
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const visibleCapabilities = useMemo(
+    () =>
+      audioCapabilities.filter(({ title, description }) =>
+        `${title} ${description}`.toLowerCase().includes(normalizedQuery)
+      ),
+    [normalizedQuery]
+  );
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <div className="sticky top-0 z-40 border-b border-border/50 bg-background/95 backdrop-blur px-4 py-2.5 flex items-center gap-3">
-        <Link href="/creator-onboarding">
-          <Button variant="ghost" size="sm" className="gap-1 text-muted-foreground"><ChevronLeft className="h-4 w-4" />Back</Button>
-        </Link>
-        <Badge variant="outline" className="text-xs font-mono text-purple-400 border-purple-500/30">Audio</Badge>
-        <div className="flex-1" />
-        <Button variant="outline" size="sm" className="gap-1" onClick={handleSave} disabled={saving || !hasRecording}>
-          <Save className="h-4 w-4" />{saving ? "Saving..." : "Save Draft"}
-        </Button>
-        <Button size="sm" className="bg-purple-500 hover:bg-purple-600 text-white gap-1" disabled={!title || !hasRecording}>
-          <Send className="h-4 w-4" />Publish
-        </Button>
-      </div>
-
-      <div className="container max-w-3xl py-10">
-        {/* Type Selector */}
-        <div className="flex gap-2 mb-6 flex-wrap">
-          {([
-            { value: "podcast", label: "Podcast", icon: Headphones },
-            { value: "music", label: "Music", icon: Music },
-            { value: "voice", label: "Voice Note", icon: Mic },
-            { value: "interview", label: "Interview", icon: Headphones },
-          ] as const).map(t => (
-            <button key={t.value} onClick={() => setAudioType(t.value)} className={`flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition-all ${audioType === t.value ? "border-purple-500/50 bg-purple-500/10 text-purple-400" : "border-border/50 text-muted-foreground hover:border-border"}`}>
-              <t.icon className="h-4 w-4" />{t.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Title & Description */}
-        <div className="space-y-4 mb-8">
-          <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="Episode title..." className="text-lg h-12 bg-card/30 border-border/50" />
-          <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Describe your audio content..." className="w-full h-24 rounded-xl border border-border/50 bg-card/30 p-4 text-sm resize-none focus:outline-none focus:border-purple-500/50" />
-        </div>
-
-        {/* Recording Studio */}
-        <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-br from-purple-500/5 to-violet-500/5 p-8 mb-6 text-center">
-          <p className="text-sm text-muted-foreground mb-6">Record directly in your browser or upload an audio file</p>
-
-          {/* Waveform Visualizer */}
-          <div className="flex items-center justify-center gap-0.5 h-16 mb-6">
-            {Array.from({ length: 40 }).map((_, i) => (
-              <div key={i} className={`w-1 rounded-full transition-all ${recording ? "bg-purple-400 animate-pulse" : hasRecording ? "bg-purple-500/60" : "bg-border/50"}`}
-                style={{ height: recording ? `${20 + Math.random() * 40}px` : hasRecording ? `${8 + Math.sin(i * 0.4) * 20 + 20}px` : "8px" }} />
-            ))}
-          </div>
-
-          {hasRecording && (
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <button onClick={() => setPlaying(p => !p)} className="w-12 h-12 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center hover:bg-purple-500/30 transition-colors">
-                {playing ? <Pause className="h-5 w-5 text-purple-400" /> : <Play className="h-5 w-5 text-purple-400 ml-0.5" />}
-              </button>
-              <div className="flex-1 max-w-xs h-1.5 bg-border/50 rounded-full overflow-hidden">
-                <div className="h-full bg-purple-500 w-1/3 rounded-full" />
+    <main
+      className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 lg:px-8"
+      aria-labelledby="create-audio-title"
+    >
+      <div className="mx-auto max-w-6xl space-y-6">
+        <header className="rounded-2xl border border-border/70 bg-card/80 p-6 shadow-sm sm:p-8">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+            <div className="space-y-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="outline" className="gap-2">
+                  <LockKeyhole className="size-3.5" aria-hidden="true" />
+                  Audio-creation boundary
+                </Badge>
+                <Badge variant="secondary">Not active</Badge>
               </div>
-              <span className="text-sm font-mono text-muted-foreground">{formatDuration(duration)}</span>
-              <button onClick={() => { setHasRecording(false); setDuration(0); }} className="text-muted-foreground hover:text-red-400 transition-colors"><Trash2 className="h-4 w-4" /></button>
+              <div>
+                <h1
+                  id="create-audio-title"
+                  className="text-3xl font-semibold tracking-tight sm:text-4xl"
+                >
+                  Create audio readiness
+                </h1>
+                <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground sm:text-base">
+                  This route documents a safe, accessible audio workflow without
+                  pretending that recording, upload, playback, publishing, or
+                  earnings are live.
+                </p>
+              </div>
             </div>
-          )}
-
-          <div className="flex items-center justify-center gap-4">
-            {!recording ? (
-              <Button onClick={startRecording} className="bg-red-500 hover:bg-red-600 text-white gap-2 h-12 px-6">
-                <Mic className="h-5 w-5" />Start Recording
-              </Button>
-            ) : (
-              <Button onClick={stopRecording} className="bg-red-500 hover:bg-red-600 text-white gap-2 h-12 px-6 animate-pulse">
-                <MicOff className="h-5 w-5" />Stop Recording
-              </Button>
-            )}
-            <span className="text-muted-foreground text-sm">or</span>
-            <Button variant="outline" className="gap-2 h-12">
-              <Upload className="h-5 w-5" />Upload File
+            <Button
+              type="button"
+              variant="outline"
+              disabled
+              aria-disabled="true"
+            >
+              Load audio studio unavailable
             </Button>
           </div>
-          <p className="text-xs text-muted-foreground mt-3">Supports MP3, WAV, OGG, M4A · Max 100MB</p>
-        </div>
+        </header>
 
-        {/* Settings */}
-        <div className="grid md:grid-cols-2 gap-4">
-          <div className="rounded-xl border border-border/50 bg-card/30 p-4">
-            <p className="text-sm font-semibold mb-3">Visibility</p>
-            <div className="space-y-2">
-              {([
-                { value: "public", label: "Public", icon: Globe, color: "text-purple-400" },
-                { value: "subscribers", label: "Subscribers Only", icon: Star, color: "text-yellow-400" },
-                { value: "private", label: "Private", icon: Lock, color: "text-muted-foreground" },
-              ] as const).map(v => (
-                <button key={v.value} onClick={() => setVisibility(v.value)} className={`w-full flex items-center gap-2 p-2.5 rounded-lg border text-sm transition-all ${visibility === v.value ? "border-purple-500/50 bg-purple-500/10" : "border-border/30 hover:border-border/60"}`}>
-                  <v.icon className={`h-4 w-4 ${v.color}`} />{v.label}
-                </button>
-              ))}
+        <section
+          className="grid gap-6 lg:grid-cols-[1.35fr_1fr]"
+          aria-label="Create audio status"
+        >
+          <Card>
+            <CardHeader>
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <ShieldCheck
+                      className="size-5 text-primary"
+                      aria-hidden="true"
+                    />
+                    Truthful audio state
+                  </CardTitle>
+                  <CardDescription className="mt-2">
+                    No microphone, recording, file, duration, waveform, title,
+                    license, audience, storage object, publish state, or
+                    earnings data is loaded or persisted.
+                  </CardDescription>
+                </div>
+                <SlidersHorizontal
+                  className="size-5 text-amber-500"
+                  aria-hidden="true"
+                />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="rounded-xl border border-dashed border-border bg-muted/30 p-5">
+                <h2 className="font-medium">
+                  No verified audio-creation service is available
+                </h2>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  A real contract must handle microphone permission, file
+                  validation, rights and moderation, audio processing, secure
+                  storage, audience access, publishing, playback, and financial
+                  reporting before this route can create or distribute audio.
+                </p>
+              </div>
+              <div
+                className="flex flex-wrap gap-2"
+                aria-label="Unavailable audio actions"
+              >
+                {[
+                  "Start recording",
+                  "Upload audio",
+                  "Preview playback",
+                  "Publish audio",
+                ].map(label => (
+                  <Button
+                    key={label}
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled
+                    aria-disabled="true"
+                  >
+                    {label}
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Release requirements</CardTitle>
+              <CardDescription>
+                These safeguards must be verified before audio controls are
+                enabled.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4 text-sm text-muted-foreground">
+              <p>
+                Microphone permission, file format, duration, sample rate,
+                channels, codec, size, checksum, and validation.
+              </p>
+              <p>
+                Recording, waveform, playback, editing, normalization,
+                transcription, derivatives, and processing state.
+              </p>
+              <p>
+                Title, description, ownership, license, content review,
+                visibility, entitlement, publishing, and moderation.
+              </p>
+              <p>
+                Storage, encryption, delivery, retention, deletion, play counts,
+                rates, revenue share, payouts, and audit.
+              </p>
+            </CardContent>
+          </Card>
+        </section>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Audio capability map</CardTitle>
+            <CardDescription>
+              Search is local-only and does not request microphone access,
+              inspect files, record audio, generate playback, publish content,
+              or calculate earnings.
+            </CardDescription>
+            <div className="relative max-w-md pt-2">
+              <Search
+                className="pointer-events-none absolute left-3 top-4 size-4 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <Input
+                aria-label="Search audio capability notes"
+                placeholder="Search capability notes"
+                value={searchQuery}
+                onChange={event => setSearchQuery(event.target.value)}
+                className="pl-9"
+              />
             </div>
-          </div>
-          <div className="rounded-xl border border-yellow-500/30 bg-yellow-500/5 p-4">
-            <p className="text-sm font-semibold text-yellow-400 mb-3">💰 Earnings</p>
-            <div className="space-y-2 text-sm text-muted-foreground">
-              <div className="flex justify-between"><span>Per 1K plays</span><span className="text-yellow-400">~22 SKY444</span></div>
-              <div className="flex justify-between"><span>Tip revenue</span><span className="text-purple-400">100%</span></div>
-              <div className="flex justify-between"><span>Subscriber plays</span><span className="text-purple-400">+50%</span></div>
-              <div className="flex justify-between"><span>Platform fee</span><span>5%</span></div>
-            </div>
-          </div>
-        </div>
+          </CardHeader>
+          <CardContent>
+            {visibleCapabilities.length > 0 ? (
+              <div className="grid gap-3 sm:grid-cols-2">
+                {visibleCapabilities.map(
+                  ({ title, description, icon: Icon }) => (
+                    <div
+                      key={title}
+                      className="rounded-xl border border-border/70 p-4"
+                    >
+                      <div className="flex items-center gap-2 font-medium">
+                        <Icon
+                          className="size-4 text-primary"
+                          aria-hidden="true"
+                        />
+                        {title}
+                      </div>
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                        {description}
+                      </p>
+                    </div>
+                  )
+                )}
+              </div>
+            ) : (
+              <div
+                className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground"
+                role="status"
+              >
+                No capability notes match “{searchQuery}”.
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
-    </div>
+    </main>
   );
 }
