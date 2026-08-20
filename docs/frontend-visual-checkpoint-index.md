@@ -982,3 +982,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/cross-chain-interop-mobile-390x844.
 ## cross-chain-swap-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/cross-chain-swap-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/cross-chain-swap-mobile-390x844.png`
+
+## crypto-exchange-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/crypto-exchange-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/crypto-exchange-mobile-390x844.png`

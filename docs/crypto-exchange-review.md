@@ -1,0 +1,7 @@
+# CryptoExchange review
+
+The former route was a generic unavailable placeholder. It has been replaced with a strictly typed, accessible, local-only exchange-readiness workspace.
+
+The new screen states that no provider, market, price, order book, account, balance, ledger entry, order, fill, deposit, withdrawal, or saved settlement is loaded or persisted. Market loading, balance viewing, order placement, and deposit or withdrawal controls are disabled. The route documents provider and market identity, instruments, symbols, precision, price feeds, order books, liquidity, market status, identity, accounts, balances, margin, collateral, limits, fees, risk checks, custody, ledgers, orders, sides, amounts, prices, time-in-force, submission, matching, fills, cancellation, deposits, withdrawals, settlement, surveillance, rate limits, sanctions, jurisdiction, reconciliation, statements, tax, incidents, and audit. Its search field filters static capability notes only and never queries markets, loads prices, accesses accounts, reads balances, submits orders, moves funds, or persists a ledger event.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows balanced exchange-state/release cards and a four-item capability map. Mobile evidence stacks the same content cleanly at 390×844 without clipping; market identity, account and risk, order lifecycle, custody, compliance, reporting, audit, and unavailable-action disclosures remain readable.
