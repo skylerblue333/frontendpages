@@ -69,7 +69,7 @@ export default function ListView() {
       className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 lg:px-8"
       aria-labelledby="list-view-title"
     >
-      <div className="mx-auto max-w-6xl space-y-6">
+      <div data-ui-polish="batch-193" className="mx-auto max-w-6xl space-y-6">
         <header className="rounded-2xl border border-border/70 bg-card/80 p-6 shadow-sm sm:p-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
