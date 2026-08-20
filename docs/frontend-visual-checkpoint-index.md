@@ -1078,3 +1078,6 @@ Mobile screenshot: `/home/ubuntu/screenshots/edit-profile-mobile-390x844.png`
 ## email-campaigns-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/email-campaigns-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/email-campaigns-mobile-390x844.png`
+## email-configuration-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/email-configuration-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/email-configuration-mobile-390x844.png`
