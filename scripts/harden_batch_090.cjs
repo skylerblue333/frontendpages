@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/TriggersActions.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst TriggersActions = () => (\n  <FeatureUnavailable\n    title="Triggers and actions unavailable"\n    description="Production event automation requires authenticated event sources, validated payloads, durable rules, idempotent actions, secret handling, rate limits, retries, approvals, audit records, and observable delivery state. No trigger, rule, action, integration call, or success result is created here."\n    capability="Event triggers, action rules, and integration automation"\n    nextStep="Connect governed event ingestion, rule storage, action execution, secret management, observability, and rollback controls before enabling automation"\n  />\n);\n\nexport default TriggersActions;\n`);
+console.log(JSON.stringify({ changed: ['TriggersActions.tsx'] }, null, 2));
