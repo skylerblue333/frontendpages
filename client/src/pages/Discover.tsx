@@ -82,7 +82,7 @@ export default function Discover() {
       className="min-h-screen bg-background"
       aria-labelledby="discover-title"
     >
-      <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+      <div data-ui-polish="batch-187" className="mx-auto max-w-6xl space-y-6 px-4 py-8">
         <header className="flex flex-wrap items-start justify-between gap-4">
           <div className="space-y-3">
             <Badge

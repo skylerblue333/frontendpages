@@ -80,7 +80,7 @@ export default function DiscussionForums() {
       `${action} is unavailable locally. No post, reply, like, bookmark, notification, moderation, identity, or account mutation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-187" className="min-h-screen bg-background">
       <PageHeader
         icon={MessageCircle}
         title="Discussion forums"

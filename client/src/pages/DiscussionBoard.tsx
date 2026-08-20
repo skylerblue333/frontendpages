@@ -81,7 +81,7 @@ export default function DiscussionBoard() {
       className="min-h-screen bg-background"
       aria-labelledby="discussion-board-title"
     >
-      <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+      <div data-ui-polish="batch-187" className="mx-auto max-w-6xl space-y-6 px-4 py-8">
         <header className="space-y-3">
           <Badge variant="outline" className="border-blue-400/30 text-blue-200">
             Q&A READINESS PREVIEW
