@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "d891131abcbba10cc827b65508fbef93fc566799",
+  "generated_at_commit": "fd261ef294a885b22065e00e9e7f9410926e8076",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 527,
-  "routes_with_visual_checkpoint": 505,
+  "routes_with_review": 528,
+  "routes_with_visual_checkpoint": 506,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7168,8 +7168,8 @@
       "component": "SatisfactionSurvey",
       "source": "client/src/pages/SatisfactionSurvey.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
