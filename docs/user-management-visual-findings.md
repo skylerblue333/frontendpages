@@ -1,0 +1,3 @@
+# UserManagement visual findings
+
+The 390×844 mobile render keeps the User Management header, unavailable-service disclosure, refresh-unavailable control, admin explanation, All/Active/Review filters, and first account concept readable without horizontal overflow. The 1440×1000 desktop render shows the complete admin-readiness workspace with selected user ID, identity, role, permissions, account status, invitation, moderation, audit, and last-activity states explicitly withheld, plus clear authorization, moderation, and audit boundaries. Edit and suspend remain disabled. No user identity, role, permission, account status, invitation, moderation decision, suspension, audit record, or administrator outcome is fabricated.
