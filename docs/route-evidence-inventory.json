@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "2af77210e491b38b7243c324cadf4d7b44be1f20",
+  "generated_at_commit": "f416a6c780ecc4c574bc2094729de5fedb96fe82",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 381,
-  "routes_with_visual_checkpoint": 359,
+  "routes_with_review": 382,
+  "routes_with_visual_checkpoint": 360,
   "routes_with_placeholder_signal": 700,
   "routes": [
     {
@@ -4774,8 +4774,8 @@
       "component": "LoadingDialog",
       "source": "client/src/pages/LoadingDialog.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
