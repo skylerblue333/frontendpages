@@ -1,0 +1,3 @@
+# UnifiedPaymentLedger visual findings
+
+The 390×844 mobile render keeps the Unified Payment Ledger header, unavailable-service disclosure, refresh-unavailable control, financial-record explanation, and first currency/balance cards readable without horizontal overflow. The 1440×1000 desktop render shows the complete ledger-readiness workspace with currency, balance, payment source, settlement, fees, refunds, reconciliation, and payouts explicitly withheld, alongside account/custody, provider/settlement, and reconciliation/audit gates. Withdraw and export remain disabled. No balance, charge, subscription, token earning, payout, refund, settlement, withdrawal, or financial outcome is fabricated.
