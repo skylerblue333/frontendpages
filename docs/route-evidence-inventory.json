@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "6d48386a8b808e0a54d47a4349ad77bbb609d37a",
+  "generated_at_commit": "c1e41257be12d4f8e08515cb2ab71776aef51a78",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 230,
-  "routes_with_visual_checkpoint": 230,
+  "routes_with_review": 231,
+  "routes_with_visual_checkpoint": 231,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -2254,8 +2254,8 @@
       "component": "CrossChainSwap",
       "source": "client/src/pages/CrossChainSwap.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
