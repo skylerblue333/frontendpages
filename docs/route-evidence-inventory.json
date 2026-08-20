@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "643aad95e9ade2af85923e5f5bd5809cc37b15e9",
+  "generated_at_commit": "7937e1409e3fdbe9282cc83e214a34754f270b9e",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 521,
-  "routes_with_visual_checkpoint": 499,
+  "routes_with_review": 522,
+  "routes_with_visual_checkpoint": 500,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7114,8 +7114,8 @@
       "component": "SMTPSettings",
       "source": "client/src/pages/SMTPSettings.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
