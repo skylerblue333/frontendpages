@@ -1006,3 +1006,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/dca-calculator-mobile-390x844.png`
 ## d-m-inbox-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/dm-inbox-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/dm-inbox-mobile-390x844.png`
+
+## data-grid-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/data-grid-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/data-grid-mobile-390x844.png`
