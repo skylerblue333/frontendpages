@@ -1,0 +1,17 @@
+# RewardsMonitoring review
+
+The `/rewards-monitoring` route already contained a substantial local reward-monitoring and governance preview, so the implementation was preserved rather than rewritten. It now has formatting, strict typecheck/build validation, and desktop/mobile evidence documentation. The route is not treated as production operational monitoring for rewards, finance, wallets, or security.
+
+| Area | Result |
+|---|---|
+| Local monitor functionality | Eligibility, issuance, reconciliation, and abuse monitor concepts, search, category filters, selected-monitor state, alert intent, save state, reset, disabled refresh/reconcile/acknowledge/export controls, and monitoring-gate toggling remain interactive in local component state. |
+| Evidence boundary | The hero and evidence banner explicitly state that this is a local rewards-monitoring preview, not operational evidence that rewards, balances, tokens, transactions, or alerts exist. No issuance count, balance, mismatch, user, wallet, payment, SLA, alert, or incident is asserted. |
+| Ledger and crypto claims | Issuance is unavailable, reconciliation is blocked, the source is unconnected, and telemetry is absent. No ledger, balance, wallet, address, transaction, custody, payment processor, settlement, reversal, or financial status is connected. |
+| Alert and incident discipline | Concepts correctly require thresholds, windows, baselines, missing-data and noise policy, ownership, escalation, acknowledgement, abuse signals, false-positive handling, privacy, incident response, audit, and rollback. |
+| Privacy and security | Gates include sensitive financial-data controls, rate limits, privacy, audit, rollback, support, operational ownership, accessibility, and separate evidence for token, financial, user, business, educational, marketplace, AI, or security claims. |
+| Persistence and actions | Save and reset operate only on local monitor-definition state. Refresh, reconcile, acknowledge, and export remain visibly disabled. No reward, ledger, balance, token, wallet, payment, alert, incident, or personal-data record is created. |
+| Accessibility and UX | Existing semantic controls, visible labels, focusable buttons, native select, responsive cards, disabled-state treatment, and evidence disclosures were retained. Desktop and mobile visual hierarchy was reviewed. |
+
+Validation completed successfully with Prettier, `pnpm exec tsc --noEmit`, and the production build. The build continues to emit the existing non-blocking large-chunk advisory. Desktop evidence was captured at 1440×1000 and mobile evidence at 390×844. Visual review confirms preserved local monitor behavior, explicit unconnected financial and crypto state, disabled consequential actions, and absence of fabricated outcomes.
+
+Production activation would require authenticated reward events, users, policy, tenant, timestamp, and source authority; ledger, wallet, balance, issuance, transfer, settlement, idempotency, retry, reversal, and reconciliation integrity; alert thresholds and ownership; fraud and abuse controls; privacy and sensitive financial-data protections; incident response; SLO and on-call ownership; audit; and separate review for any token, financial, user, business, educational, marketplace, AI, or security claim. No reward, balance, token, wallet, payment, issuance, alert, incident, operational, or financial outcome is claimed here.
