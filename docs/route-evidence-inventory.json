@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "6e581fe22fc5704afbcc7da3b9f1b60301a78db6",
+  "generated_at_commit": "a58a6147041a31629094dfe749c4a86948998808",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 284,
-  "routes_with_visual_checkpoint": 262,
+  "routes_with_review": 285,
+  "routes_with_visual_checkpoint": 263,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3487,8 +3487,8 @@
       "component": "FeedbackDialog",
       "source": "client/src/pages/FeedbackDialog.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
