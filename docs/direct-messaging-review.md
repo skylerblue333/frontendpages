@@ -1,0 +1,7 @@
+# DirectMessaging review
+
+The route already contained a useful local-only planning concept but was difficult to audit because its JSX was compressed, its `useState` import was missing, stage controls lacked explicit current-step semantics, and the draft status was not announced to assistive technology. The route has been refactored without introducing any provider, API, persistence, identity, or delivery behavior.
+
+The workspace now uses typed stage records, a typed readonly control list, explicit local state handlers, keyboard-focus styling, `aria-current` stage semantics, a labeled draft textarea, and an `aria-live` status message. Save and reset only affect in-page draft/stage state. Recipient, message, delivery, send, attachment, call, encryption, presence, notification, read receipt, and provider states remain clearly unavailable. The stage descriptions establish the required identity, consent, blocking, participant scope, privacy, encryption, key ownership, retention, moderation, deletion, export, delivery, notification, audit, recovery, and incident-response contracts before a real integration could be enabled.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows the full boundary panel, stage navigator, selected-stage detail, and unavailable recipient/message/delivery states. Mobile evidence preserves the hierarchy and disclosures at 390×844 without clipping. No message was sent, no recipient was identified, no encryption or delivery result was fabricated, and no message record was persisted.
