@@ -1,0 +1,3 @@
+# TradingHistory visual findings
+
+The 390×844 mobile render keeps the trading-history header, unavailable-service disclosure, refresh/export unavailable controls, history explanation, and status filters readable without horizontal overflow. The 1440×1000 desktop render shows the complete read-only record workspace with Pending, Confirmed, and Failed local concepts, selected record detail, transaction hash, network/venue, counterparties, asset/amount, fee, timestamp, confirmation, and reconciliation boundaries. No trade, order, fill, balance change, fee, tax lot, timestamp, confirmation, or financial result is fabricated. Refresh and export remain explicit unavailable no-ops.

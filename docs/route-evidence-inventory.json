@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "c34f259d2b33b329c632211cc10d4e6d92703d5c",
+  "generated_at_commit": "0bb4d7ee43dba7830906e1021852079da262551a",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 617,
-  "routes_with_visual_checkpoint": 595,
+  "routes_with_review": 618,
+  "routes_with_visual_checkpoint": 596,
   "routes_with_placeholder_signal": 563,
   "routes": [
     {
@@ -8572,8 +8572,8 @@
       "component": "TradingHistory",
       "source": "client/src/pages/TradingHistory.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
