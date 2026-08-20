@@ -1,0 +1,16 @@
+# SavingsGoals review
+
+The `/savings-goals` route already contained a substantial local savings-goal planning preview, so the implementation was preserved rather than rewritten. It now has formatting, strict typecheck/build validation, and desktop/mobile evidence documentation. The route is not treated as a savings account, balance tracker, investment product, financial recommendation, bank integration, wallet, custody service, or money-movement workflow.
+
+| Area | Result |
+|---|---|
+| Local goal functionality | Education, emergency-reserve, property-deposit, and community-project goal concepts, search, category filters, selected-goal state, target and contribution-cadence intent, save state, reset, goal-gate toggling, and disabled contribution/transfer/calculate/export controls remain interactive in local component state. |
+| Evidence boundary | The hero and evidence banner explicitly state that this is a local goal-planning preview, not a savings account, balance tracker, investment product, or financial recommendation. No account, balance, contribution, income, expense, interest, return, tax, affordability, financial outcome, or transaction is asserted. |
+| Financial and custody safety | Real activation requires authenticated account, user, currency, target, time horizon, contribution source, privacy, change history, balances, income, expenses, contributions, transfers, interest, fees, taxes, liquidity, affordability, and reconciliation evidence. No bank, wallet, payment, custody, or financial integration is connected. |
+| Goal and domain safety | Milestones, cadence, notifications, missed contributions, stale data, access, retention, deletion, export, support, and professional review are required. Financial, investment, retirement, property, mortgage, tax, crypto, legal, and user-impact claims require domain review. No plan, advice, affordability, return, tax, or investment outcome is claimed. |
+| Persistence and actions | Save and reset operate only on local goal state. Add contribution, transfer, calculate, and export remain visibly disabled. No account, balance, contribution, payment, transfer, plan, financial, or audit record is created. |
+| Accessibility and UX | Existing semantic controls, visible labels, focusable buttons, native selects, responsive cards, disabled-state treatment, and evidence disclosures were retained. Desktop and mobile visual hierarchy was reviewed. |
+
+Validation completed successfully with Prettier, `pnpm exec tsc --noEmit`, and the production build. The build continues to emit the existing non-blocking large-chunk advisory. Desktop evidence was captured at 1440×1000 and mobile evidence at 390×844. Visual review confirms preserved local goal behavior, explicit unavailable/unconfigured/blocked states, disabled consequential actions, and absence of fabricated outcomes.
+
+Production activation would require governed accounts, balances, currency and contribution sources, reconciliation, privacy, affordability, professional financial review, secure authentication, least privilege, audit, monitoring, incident response, and accountable domain review for financial, investment, retirement, mortgage, property, tax, crypto, legal, or user-impact decisions. No account, balance, plan, return, tax, affordability, or money-movement outcome is claimed here.

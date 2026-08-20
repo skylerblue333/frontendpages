@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "06d9801824ed2a139743868474bf185bb5c6cc22",
+  "generated_at_commit": "351b8881653e33a5e800baae53ec56f820782111",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 530,
-  "routes_with_visual_checkpoint": 508,
+  "routes_with_review": 531,
+  "routes_with_visual_checkpoint": 509,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7195,8 +7195,8 @@
       "component": "SavingsGoals",
       "source": "client/src/pages/SavingsGoals.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
