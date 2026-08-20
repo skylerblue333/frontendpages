@@ -1030,3 +1030,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/dashboard-mobile-390x844.png`
 ## dating-subscription-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/dating-subscription-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/dating-subscription-mobile-390x844.png`
+
+## de-fi-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/defi-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/defi-mobile-390x844.png`
