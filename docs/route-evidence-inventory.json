@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "f0fb7cf6915b467c3fbad98f25fe54ace8a5add2",
+  "generated_at_commit": "a3bf49d637afefb57d5f3d95cf7eb471942e1fc2",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 354,
-  "routes_with_visual_checkpoint": 332,
+  "routes_with_review": 355,
+  "routes_with_visual_checkpoint": 333,
   "routes_with_placeholder_signal": 700,
   "routes": [
     {
@@ -4387,8 +4387,8 @@
       "component": "Integrations",
       "source": "client/src/pages/Integrations.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
