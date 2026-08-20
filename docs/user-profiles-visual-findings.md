@@ -1,0 +1,3 @@
+# UserProfiles visual findings
+
+The 390×844 mobile render keeps the User Profiles header, unavailable-service disclosure, refresh-unavailable control, directory explanation, All/Community/Education filters, and first community-profile concept readable without horizontal overflow. The 1440×1000 desktop render shows the complete profile-directory readiness workspace with selected profile ID, identity, display name, avatar, biography, verification, activity, visibility, follow relationship, and moderation states explicitly withheld, plus clear source and privacy boundaries. Follow and open-profile actions remain disabled. No profile identity, avatar, biography, verification, activity, visibility, follow relationship, moderation, or public-profile outcome is fabricated.
