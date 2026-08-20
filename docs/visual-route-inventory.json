@@ -5907,9 +5907,9 @@
       "page_file": "MultiplayerLobby.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/multivariate-testing",
@@ -5917,9 +5917,9 @@
       "page_file": "MultivariateTesting.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/music-generation",
@@ -9567,9 +9567,9 @@
       "page_file": "TravelBlog.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/travel-budget",

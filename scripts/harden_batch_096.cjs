@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/TravelBlog.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst TravelBlog = () => (\n  <FeatureUnavailable\n    title="Travel blog unavailable"\n    description="A production travel publication requires authenticated authorship, editorial workflow, source and rights review, moderation, disclosure, content storage, revision history, search, privacy controls, and reliable publication state. No story, author, destination fact, readership, or publishing result is created here."\n    capability="Travel stories, editorial publishing, and destination content"\n    nextStep="Connect governed content storage, identity, editorial review, moderation, rights, search, and publication services before enabling travel blogging"\n  />\n);\n\nexport default TravelBlog;\n`);
+console.log(JSON.stringify({ changed: ['TravelBlog.tsx'] }, null, 2));
