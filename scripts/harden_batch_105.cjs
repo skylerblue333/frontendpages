@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/TaxPlanning.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst TaxPlanning = () => (\n  <FeatureUnavailable\n    title="Tax planning unavailable"\n    description="Tax planning is a high-risk capability requiring verified jurisdiction, tax-year, identity, income, transaction, cost-basis, and account data; current authoritative rules; scenario controls; privacy; review; and clear limits against legal or tax advice. No deduction, strategy, liability, savings, compliance, filing, or optimization recommendation is generated here."\n    capability="Tax-planning scenarios, optimization, and professional workflow support"\n    nextStep="Connect governed financial and identity data, jurisdiction rule sources, scenario calculations, audit, privacy, and reviewed professional disclosures before enabling tax planning"\n  />\n);\n\nexport default TaxPlanning;\n`);
+console.log(JSON.stringify({ changed: ['TaxPlanning.tsx'] }, null, 2));

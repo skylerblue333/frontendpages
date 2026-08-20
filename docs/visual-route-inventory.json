@@ -6108,7 +6108,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -6118,7 +6118,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -6137,9 +6137,9 @@
       "page_file": "NotificationPreferences.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/notification-settings",
@@ -9057,9 +9057,9 @@
       "page_file": "TaxPlanning.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/tax-reporting",
