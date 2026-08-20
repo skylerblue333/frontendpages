@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "f2eae4401b5b4c66639a09889392fb20d6d01183",
+  "generated_at_commit": "7960c9bb6393024ed9d348f9f9a437bd0a99c727",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 414,
-  "routes_with_visual_checkpoint": 392,
-  "routes_with_placeholder_signal": 665,
+  "routes_with_review": 415,
+  "routes_with_visual_checkpoint": 393,
+  "routes_with_placeholder_signal": 664,
   "routes": [
     {
       "route": "/",
@@ -5287,8 +5287,8 @@
       "component": "Monetization",
       "source": "client/src/pages/Monetization.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -8763,7 +8763,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/trip-planner",
