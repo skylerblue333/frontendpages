@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/CohortAnalysis.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst CohortAnalysis = () => (\n  <FeatureUnavailable\n    title="Cohort analysis unavailable"\n    description="Cohort analysis requires governed event instrumentation, documented cohort and attribution rules, consent and privacy controls, deduplication, timezone handling, reproducible calculations, access controls, and validated exports. No cohort membership, user count, retention, engagement, revenue, conversion, or forecast is presented."\n    capability="Auditable cohort segmentation and longitudinal analysis"\n    nextStep="Connect approved analytics events and a governed reporting pipeline with privacy, calculation, access, export, and retention controls before enabling this feature"\n  />\n);\n\nexport default CohortAnalysis;\n`);
+console.log(JSON.stringify({ changed: ['CohortAnalysis.tsx'] }, null, 2));
