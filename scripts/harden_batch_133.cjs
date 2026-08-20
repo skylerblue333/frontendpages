@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/DataProcessing.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst DataProcessing = () => (\n  <FeatureUnavailable\n    title="Data processing unavailable"\n    description="Data processing requires an approved input source, explicit scope and authorization, schema validation, deterministic transformation rules, job tracking, idempotency, resource limits, privacy and retention controls, integrity checks, and failure recovery. No data was ingested, transformed, counted, stored, exported, or marked complete."\n    capability="Governed and auditable data processing workflows"\n    nextStep="Connect approved processing services with input validation, authorization, privacy, resource, job, integrity, monitoring, and rollback controls before enabling processing"\n  />\n);\n\nexport default DataProcessing;\n`);
+console.log(JSON.stringify({ changed: ['DataProcessing.tsx'] }, null, 2));
