@@ -23,5 +23,9 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: TypeScript diagnostics
         run: pnpm exec tsc --noEmit --pretty false
+      - name: Automated tests
+        run: pnpm run test
+      - name: Route inventory validation
+        run: python3 scripts/visual_route_inventory.py
       - name: Production build
         run: pnpm run build
