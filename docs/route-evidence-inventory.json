@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "8a1a5183945f4ba30da4b02985e19b3279a9f639",
+  "generated_at_commit": "924f8d308d961071e554f70031e06e5b0cde259b",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 447,
-  "routes_with_visual_checkpoint": 425,
-  "routes_with_placeholder_signal": 617,
+  "routes_with_review": 448,
+  "routes_with_visual_checkpoint": 426,
+  "routes_with_placeholder_signal": 615,
   "routes": [
     {
       "route": "/",
@@ -5719,8 +5719,8 @@
       "component": "OrderTypes",
       "source": "client/src/pages/OrderTypes.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -5955,7 +5955,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/policy-management",
@@ -6171,7 +6171,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/privacy-mixer",
