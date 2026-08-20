@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "d688b9b1e5db06639be833a8283ce56cff5a5880",
+  "generated_at_commit": "fdc2ca1fef0cfbbd4e71321eb3dd9e912753fa39",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 548,
-  "routes_with_visual_checkpoint": 526,
+  "routes_with_review": 549,
+  "routes_with_visual_checkpoint": 527,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7357,8 +7357,8 @@
       "component": "SecurityDashboard",
       "source": "client/src/pages/SecurityDashboard.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
