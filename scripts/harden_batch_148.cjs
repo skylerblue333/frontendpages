@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/PropertyListing.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst PropertyListing = () => (\n  <FeatureUnavailable\n    title="Property listings unavailable"\n    description="A trustworthy property-listing experience requires authoritative listing records, verified ownership or seller identity, location and media validation, current price and availability data, disclosure and regional-compliance controls, privacy safeguards, inquiry routing, and transaction-state reconciliation. No property, price, valuation, rent, yield, availability, seller, inquiry, offer, or transaction result is shown or asserted."\n    capability="Verified property marketplace browsing and listing data"\n    nextStep="Connect approved property, identity, market-data, media, disclosure, inquiry, and transaction services with provenance and rollback controls before enabling listings"\n  />\n);\n\nexport default PropertyListing;\n`);
+console.log(JSON.stringify({ changed: ['PropertyListing.tsx'] }, null, 2));
