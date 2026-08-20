@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "08fee3c8f213e85c64a56a3eae39b2ba503415e5",
+  "generated_at_commit": "7c730f33ffa9fb9ce84df170ad68a260006ee76f",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 600,
-  "routes_with_visual_checkpoint": 578,
-  "routes_with_placeholder_signal": 576,
+  "routes_with_review": 601,
+  "routes_with_visual_checkpoint": 579,
+  "routes_with_placeholder_signal": 575,
   "routes": [
     {
       "route": "/",
@@ -8149,9 +8149,9 @@
       "component": "TabsNavigation",
       "source": "client/src/pages/TabsNavigation.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/task-automation",
