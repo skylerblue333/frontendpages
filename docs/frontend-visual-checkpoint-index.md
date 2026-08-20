@@ -1105,3 +1105,6 @@ Mobile screenshot: `/home/ubuntu/screenshots/engagement-metrics-mobile-390x844.p
 ## engagement-stats-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/engagement-stats-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/engagement-stats-mobile-390x844.png`
+## enterprise-billing-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/enterprise-billing-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/enterprise-billing-mobile-390x844.png`
