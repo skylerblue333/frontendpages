@@ -1114,3 +1114,6 @@ Mobile screenshot: `/home/ubuntu/screenshots/environment-management-mobile-390x8
 ## error-tracking-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/error-tracking-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/error-tracking-mobile-390x844.png`
+## event-analytics-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/event-analytics-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/event-analytics-mobile-390x844.png`
