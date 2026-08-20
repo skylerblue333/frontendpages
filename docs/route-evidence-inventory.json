@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "6c02efce25859a8ea1cf1796ec1793c140d0f157",
+  "generated_at_commit": "ac82968f511609b34533df3433bfa13f3a5dd435",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 307,
-  "routes_with_visual_checkpoint": 285,
+  "routes_with_review": 308,
+  "routes_with_visual_checkpoint": 286,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3757,8 +3757,8 @@
       "component": "GameBlackjack",
       "source": "client/src/pages/GameBlackjack.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
