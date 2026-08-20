@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "2d90b67c73c9771547153fe3325485d83ad5cf46",
+  "generated_at_commit": "429b04f427051e3a7dd296a08d6b57fc48e51939",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 304,
-  "routes_with_visual_checkpoint": 282,
+  "routes_with_review": 305,
+  "routes_with_visual_checkpoint": 283,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3721,8 +3721,8 @@
       "component": "FundraiserTools",
       "source": "client/src/pages/FundraiserTools.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
