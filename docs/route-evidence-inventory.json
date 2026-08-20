@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "a05e8afb14057ec54e4e5f7b579ceaa21694dde1",
+  "generated_at_commit": "adc2ff848fef733cbcf3a4ba71cc5248841109da",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 525,
-  "routes_with_visual_checkpoint": 503,
+  "routes_with_review": 526,
+  "routes_with_visual_checkpoint": 504,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7150,8 +7150,8 @@
       "component": "SalesAnalytics",
       "source": "client/src/pages/SalesAnalytics.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {

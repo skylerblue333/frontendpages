@@ -1,0 +1,17 @@
+# SalesAnalytics review
+
+The `/sales-analytics` route already contained a substantial local commercial-metrics preview, so the implementation was preserved rather than rewritten. It now has formatting, strict typecheck/build validation, and desktop/mobile evidence documentation. The route is not treated as a sales report, revenue statement, customer analysis, forecast, financial model, or business-outcome claim.
+
+| Area | Result |
+|---|---|
+| Local analytics functionality | Funnel, cohort, attribution, and forecast concepts, search, category filters, selected-metric state, period and attribution intent, illustrative-only trend bars, save state, reset, analytics-gate toggling, and disabled load/calculate/export/forecast controls remain interactive in local component state. |
+| Evidence boundary | The hero and evidence banner explicitly state that this is a local commercial-metrics preview, not a sales report, revenue statement, customer analysis, or forecast. No customer, order, payment, revenue, conversion, pipeline, retention, forecast, growth, ROI, or business outcome is asserted. |
+| Commerce and attribution safety | Real activation requires authenticated orders, customers, payments, products, tenants, currency, timezone, events, timestamps, source provenance, funnel definitions, cohort identity, deduplication, attribution windows, conversion definitions, refunds, cancellations, and reconciliation. No commerce or customer source is connected. |
+| Forecast and financial safety | Forecast concepts require verified history, assumptions, seasonality, uncertainty, confidence, model validation, scenario boundaries, explicit non-advice boundaries, and accountable review. No forecast, financial recommendation, ROI, growth, revenue, or investment outcome is claimed. |
+| Privacy and operations | Gates include consent, retention, deletion, export, redaction, access, support, sensitive-data handling, currency, reconciliation, and legal/compliance review. No customer identity, payment, financial, or personal-data mutation is connected. |
+| Persistence and actions | Save and reset operate only on local metric state. Load data, calculate, export, and forecast remain visibly disabled. No customer, order, payment, revenue, attribution, forecast, report, or financial record is created. |
+| Accessibility and UX | Existing semantic controls, visible labels, focusable buttons, native selects, responsive cards, disabled-state treatment, and evidence disclosures were retained. Desktop and mobile visual hierarchy was reviewed. |
+
+Validation completed successfully with Prettier, `pnpm exec tsc --noEmit`, and the production build. The build continues to emit the existing non-blocking large-chunk advisory. Desktop evidence was captured at 1440×1000 and mobile evidence at 390×844. Visual review confirms preserved local analytics behavior, explicit unavailable/not-claimed/blocked states, disabled consequential actions, and absence of fabricated outcomes.
+
+Production activation would require governed commerce data, source provenance, currency and refund reconciliation, privacy and consent controls, attribution review, validated forecasting models, uncertainty reporting, secure access, monitoring, audit, legal/tax review, and accountable domain review for revenue, payment, investment, financial, crypto, AI, education, marketplace, or user-impact claims. No sales, revenue, forecast, ROI, or business outcome is claimed here.
