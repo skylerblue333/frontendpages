@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/MissionControl.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst MissionControl = () => (\n  <FeatureUnavailable\n    title="Mission Control unavailable"\n    description="The prior command center implied a live HOPE AI orchestration layer, digital-twin memory, reputation, opportunities, missions, startup workflows, and an AI marketplace. No authenticated orchestration service, task ledger, model/tool routing, marketplace inventory, or operational audit evidence is connected; no mission or business action is executed here."\n    capability="AI orchestration, missions, startup workflows, and marketplace operations"\n    nextStep="Connect an approved control plane with authenticated task state, tool permissions, audit logs, and rollback before enabling operations"\n  />\n);\n\nexport default MissionControl;\n`);
+console.log(JSON.stringify({ changed: ['MissionControl.tsx'] }, null, 2));
