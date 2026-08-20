@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/PrivacyPolicy.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst PrivacyPolicy = () => (\n  <FeatureUnavailable\n    title="Privacy policy publication unavailable"\n    description="A trustworthy privacy policy requires an approved policy source, current data inventory, purposes and legal bases, regional requirements, processor disclosures, retention and rights procedures, versioning, effective dates, consent and withdrawal behavior, and validated publication controls. No policy text, consent state, compliance status, legal conclusion, or rights workflow is shown or asserted."\n    capability="Auditable privacy policy publication and rights disclosure"\n    nextStep="Connect approved privacy governance, policy-authoring, versioning, consent, rights-request, and publication services with owner acceptance before enabling this page"\n  />\n);\n\nexport default PrivacyPolicy;\n`);
+console.log(JSON.stringify({ changed: ['PrivacyPolicy.tsx'] }, null, 2));
