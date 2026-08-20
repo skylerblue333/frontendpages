@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "a03bf4162a45e19ac735d196c804db6a5a534cbe",
+  "generated_at_commit": "2b1f374b9e2673f6af449e1d61e30269f086ca7c",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 438,
-  "routes_with_visual_checkpoint": 416,
-  "routes_with_placeholder_signal": 650,
+  "routes_with_review": 439,
+  "routes_with_visual_checkpoint": 417,
+  "routes_with_placeholder_signal": 625,
   "routes": [
     {
       "route": "/",
@@ -933,7 +933,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/automation-engine",
@@ -951,7 +951,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/automation-workflows",
@@ -1581,7 +1581,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/code-highlighting",
@@ -1617,7 +1617,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/code-samples",
@@ -1626,7 +1626,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/cohort-analysis",
@@ -1635,7 +1635,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/color-picker-dialog",
@@ -1653,7 +1653,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/comments",
@@ -1716,7 +1716,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/community-hub",
@@ -1887,7 +1887,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/content-collaboration",
@@ -2022,7 +2022,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/conversion-optimization",
@@ -2031,7 +2031,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/cookie-policy",
@@ -2040,7 +2040,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/copyright-management",
@@ -2319,7 +2319,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/custom-reports",
@@ -2328,7 +2328,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/customer-analytics",
@@ -2337,7 +2337,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/customer-disputes",
@@ -2346,7 +2346,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/d-a-o-governance",
@@ -5584,8 +5584,8 @@
       "component": "NotificationsCenter",
       "source": "client/src/pages/NotificationsCenter.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -6891,7 +6891,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/retention-engine",
@@ -7611,7 +7611,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/sky-school",
@@ -7665,7 +7665,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/slippage-protection",
@@ -7872,7 +7872,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/stepper-wizard",
@@ -7890,7 +7890,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/stock-search",
@@ -7899,7 +7899,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/stories",
@@ -8052,7 +8052,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/support-ticket",
@@ -8160,7 +8160,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/task-detail",
@@ -8196,7 +8196,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/tax-reporting",
