@@ -78,7 +78,7 @@ export default function AssignmentTracker() {
       `${action} is unavailable locally. No assignment, student, instructor, course, progress, deadline, submission, grade, feedback, notification, certificate, or completion record was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-181" className="min-h-screen bg-background">
       <PageHeader
         icon={ClipboardCheck}
         title="Assignment tracker"

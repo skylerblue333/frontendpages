@@ -74,7 +74,7 @@ export default function ArbitrageBot() {
       `${action} is unavailable locally. No market quote, spread, balance, wallet, exchange, order, trade, fill, profit, fee, slippage, transaction, or execution operation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-181" className="min-h-screen bg-background">
       <PageHeader
         icon={Bot}
         title="Arbitrage strategy review"

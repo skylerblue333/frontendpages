@@ -74,7 +74,7 @@ export default function AlertManagement() {
       `${action} is unavailable locally. No alert, event, trigger, delivery, notification, incident, acknowledgement, response, or production mutation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-181" className="min-h-screen bg-background">
       <PageHeader
         icon={Bell}
         title="Alert management"

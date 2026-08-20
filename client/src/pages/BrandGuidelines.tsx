@@ -76,7 +76,7 @@ export default function BrandGuidelines() {
 
   return (
     <main className="min-h-screen bg-background px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
+      <div data-ui-polish="batch-181" className="mx-auto flex w-full max-w-6xl flex-col gap-6">
         <header className="flex flex-col gap-4 rounded-2xl border border-border/70 bg-card/80 p-6 shadow-sm sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">

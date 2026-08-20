@@ -74,7 +74,7 @@ export default function AlertConfiguration() {
       `${action} is unavailable locally. No alert, event, threshold, recipient, schedule, notification, webhook, incident, or production configuration was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-181" className="min-h-screen bg-background">
       <PageHeader
         icon={BellRing}
         title="Alert configuration"

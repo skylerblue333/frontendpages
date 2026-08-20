@@ -78,7 +78,7 @@ export default function AudienceSegmentation() {
       `${action} is unavailable locally. No identity, consent, segment membership, audience count, targeting list, campaign, export, notification, or marketing operation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-181" className="min-h-screen bg-background">
       <PageHeader
         icon={Layers3}
         title="Audience segmentation"

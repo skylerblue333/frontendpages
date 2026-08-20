@@ -79,7 +79,7 @@ export default function BookPage() {
       `${action} is unavailable locally. No email was collected, stored, transmitted, subscribed, purchased, or added to a waitlist.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-181" className="min-h-screen bg-background">
       <PageHeader
         icon={BookOpen}
         title="The Chosen One"

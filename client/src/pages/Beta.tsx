@@ -83,7 +83,7 @@ export default function Beta() {
       `${action} is unavailable locally. No eligibility check, account mutation, asset issuance, fee change, financial query, invitation, or application was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-181" className="min-h-screen bg-background">
       <PageHeader
         backHref="/dashboard"
         icon={Rocket}

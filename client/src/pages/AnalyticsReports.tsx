@@ -74,7 +74,7 @@ export default function AnalyticsReports() {
       `${action} is unavailable locally. No report, metric, identity, source, recipient, schedule, export, query, notification, or file operation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-181" className="min-h-screen bg-background">
       <PageHeader
         icon={BarChart3}
         title="Analytics reports"

@@ -75,7 +75,7 @@ export default function AnomalyDetection() {
       `${action} is unavailable locally. No signal, score, confidence, identity, incident, alert, remediation, query, report, or operational change was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-181" className="min-h-screen bg-background">
       <PageHeader
         icon={Activity}
         title="Anomaly detection"
