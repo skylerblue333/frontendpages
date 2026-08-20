@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "703fe33f88ae3cb264a22dc33ebbc347e5efad16",
+  "generated_at_commit": "1b553136a01a4f7df46192510be202fac92060d2",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 474,
-  "routes_with_visual_checkpoint": 452,
-  "routes_with_placeholder_signal": 593,
+  "routes_with_review": 475,
+  "routes_with_visual_checkpoint": 453,
+  "routes_with_placeholder_signal": 592,
   "routes": [
     {
       "route": "/",
@@ -6250,8 +6250,8 @@
       "component": "ProductDetail",
       "source": "client/src/pages/ProductDetail.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -8259,7 +8259,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/template-library",
