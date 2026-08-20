@@ -43,7 +43,7 @@ export default function SortOptions() {
     setShowGates(false);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-206" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={SlidersHorizontal}
         eyebrow="Sort options · Preference preview"
