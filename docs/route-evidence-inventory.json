@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "33c8d388d0816b5b5141bc125452ebf2d96dce2d",
+  "generated_at_commit": "83c49b203a1c50b3f15911428f2ac8aec1ff3274",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 639,
-  "routes_with_visual_checkpoint": 617,
-  "routes_with_placeholder_signal": 546,
+  "routes_with_review": 640,
+  "routes_with_visual_checkpoint": 618,
+  "routes_with_placeholder_signal": 545,
   "routes": [
     {
       "route": "/",
@@ -9175,9 +9175,9 @@
       "component": "VerificationSteps",
       "source": "client/src/pages/VerificationSteps.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/verification-system",

@@ -1,0 +1,3 @@
+# VerificationSteps visual findings
+
+The 390×844 mobile render keeps the Verification Steps header, unavailable-process disclosure, refresh-unavailable control, process explanation, and first numbered identity-scope step readable without horizontal overflow. The 1440×1000 desktop render shows the complete ordered process-readiness workspace with selected progress, identity, consent, documents, provider, reviewer, case, persistence, decision, and appeal states explicitly withheld, alongside clear evidence and reviewer boundaries. Continue and save-progress remain disabled. No verification progress, identity, document, consent, reviewer, case, decision, appeal, or verified-account outcome is fabricated.
