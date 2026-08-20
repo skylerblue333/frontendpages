@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/CustomerDisputes.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst CustomerDisputes = () => (\n  <FeatureUnavailable\n    title="Customer disputes unavailable"\n    description="Dispute management requires authenticated case intake, durable records, evidence handling, payment-provider or support integrations, role-based access, deadlines, notifications, escalation, audit history, and tested resolution or refund workflows. No dispute, customer complaint, payment, refund, chargeback, case status, outcome, amount, or resolution is shown or asserted."\n    capability="Auditable customer dispute and complaint handling"\n    nextStep="Connect approved support and payment-dispute services with identity, evidence, access, notification, escalation, audit, and rollback controls before enabling this feature"\n  />\n);\n\nexport default CustomerDisputes;\n`);
+console.log(JSON.stringify({ changed: ['CustomerDisputes.tsx'] }, null, 2));
