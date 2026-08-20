@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "8ac79bd32a3edc3f05b5ec5b451d896dc8ebb355",
+  "generated_at_commit": "315c349bb661213b6733660b648006c5f8988fd7",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 489,
-  "routes_with_visual_checkpoint": 467,
+  "routes_with_review": 490,
+  "routes_with_visual_checkpoint": 468,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -6700,8 +6700,8 @@
       "component": "ReceiptDownload",
       "source": "client/src/pages/ReceiptDownload.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
