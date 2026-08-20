@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "43d056e60ac889285c734b930cd15de4796987f1",
+  "generated_at_commit": "5e1c74cd0ea42a84887d2edfc311fc0a6ba7b357",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 371,
-  "routes_with_visual_checkpoint": 349,
+  "routes_with_review": 372,
+  "routes_with_visual_checkpoint": 350,
   "routes_with_placeholder_signal": 700,
   "routes": [
     {
@@ -4648,8 +4648,8 @@
       "component": "Lightbox",
       "source": "client/src/pages/Lightbox.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
