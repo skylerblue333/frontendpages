@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "5e913043c1edfb9ec792a427c0e50bfdc17171f2",
+  "generated_at_commit": "a7110b05982f5a463a8a303ccd6342a49c3ae5c5",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 235,
-  "routes_with_visual_checkpoint": 235,
+  "routes_with_review": 236,
+  "routes_with_visual_checkpoint": 236,
   "routes_with_placeholder_signal": 708,
   "routes": [
     {
@@ -2371,8 +2371,8 @@
       "component": "DCACalculator",
       "source": "client/src/pages/DCACalculator.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
