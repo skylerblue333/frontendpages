@@ -777,7 +777,7 @@
       "page_file": "AnalyticsDashboard.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -2017,7 +2017,7 @@
       "page_file": "ConnectorIntelligence.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -9787,7 +9787,7 @@
       "page_file": "UnifiedFeed.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
