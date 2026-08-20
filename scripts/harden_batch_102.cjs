@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/TextTools.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst TextTools = () => (\n  <FeatureUnavailable\n    title="Text tools unavailable"\n    description="Production text processing requires an explicit processing contract, input and output handling, privacy and retention controls, model or algorithm verification, encoding and language guarantees, error reporting, and safe export behavior. No text is transformed, summarized, translated, analyzed, stored, or exported here."\n    capability="Text transformation, analysis, translation, and export utilities"\n    nextStep="Connect governed text-processing services, privacy controls, input validation, language and model disclosures, and audited export before enabling text tools"\n  />\n);\n\nexport default TextTools;\n`);
+console.log(JSON.stringify({ changed: ['TextTools.tsx'] }, null, 2));
