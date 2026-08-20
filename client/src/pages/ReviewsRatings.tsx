@@ -1,11 +1,393 @@
 import { useMemo, useState } from "react";
-import { Check, Filter, Gauge, LockKeyhole, RefreshCw, ShieldAlert, SlidersHorizontal, Star, UsersRound, X } from "lucide-react";
+import {
+  Check,
+  Filter,
+  Gauge,
+  LockKeyhole,
+  RefreshCw,
+  ShieldAlert,
+  SlidersHorizontal,
+  Star,
+  UsersRound,
+  X,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const models = [{ id: 1, name: "Five-point rating", category: "Scale", detail: "A local scale definition requiring denominator, eligibility, missing-data, edit, deletion, and aggregation rules.", state: "Unconfigured" }, { id: 2, name: "Verified-weighted rating", category: "Trust", detail: "A weighting concept requiring verifiable experience provenance, anti-manipulation controls, disclosures, and appeal.", state: "Blocked" }, { id: 3, name: "Multi-axis score", category: "Quality", detail: "A multi-dimensional concept requiring axis definitions, weighting, normalization, confidence, and user-facing explanations.", state: "Needs review" }, { id: 4, name: "Bayesian estimate", category: "Analysis", detail: "An analysis concept requiring a declared prior, sample size, uncertainty, missing data, reproducibility, and review.", state: "Unmeasured" }];
+import {
+  ScreenFeatureGrid,
+  ScreenHero,
+  ScreenPreviewBanner,
+  ScreenStatGrid,
+} from "@/components/ScreenExperience";
+const models = [
+  {
+    id: 1,
+    name: "Five-point rating",
+    category: "Scale",
+    detail:
+      "A local scale definition requiring denominator, eligibility, missing-data, edit, deletion, and aggregation rules.",
+    state: "Unconfigured",
+  },
+  {
+    id: 2,
+    name: "Verified-weighted rating",
+    category: "Trust",
+    detail:
+      "A weighting concept requiring verifiable experience provenance, anti-manipulation controls, disclosures, and appeal.",
+    state: "Blocked",
+  },
+  {
+    id: 3,
+    name: "Multi-axis score",
+    category: "Quality",
+    detail:
+      "A multi-dimensional concept requiring axis definitions, weighting, normalization, confidence, and user-facing explanations.",
+    state: "Needs review",
+  },
+  {
+    id: 4,
+    name: "Bayesian estimate",
+    category: "Analysis",
+    detail:
+      "An analysis concept requiring a declared prior, sample size, uncertainty, missing data, reproducibility, and review.",
+    state: "Unmeasured",
+  },
+];
 export default function ReviewsRatings() {
-  const [query, setQuery] = useState(""); const [category, setCategory] = useState("All"); const [selected, setSelected] = useState(1); const [weighting, setWeighting] = useState("Weighting not configured"); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false); const categories = ["All", ...Array.from(new Set(models.map((item) => item.category)))]; const filtered = useMemo(() => models.filter((item) => (category === "All" || item.category === category) && `${item.name} ${item.category} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [category, query]); const model = models.find((item) => item.id === selected) ?? models[0]; const reset = () => { setQuery(""); setCategory("All"); setSelected(1); setWeighting("Weighting not configured"); setSaved(false); setShowGates(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Gauge} eyebrow="Reviews & ratings · Preview" title="Define the rating model before showing the score." description="Explore local rating-model concepts with search, filters, weighting and verification intent, moderation and appeal gates, save/reset, and blocked publishing/export actions. No live ratings, reviews, users, purchases, scores, trust labels, rankings, or recommendations are connected." badge="Trust analytics workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Saved locally" : "Save model locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review rating gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset model</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Models", value: `${models.length} local`, hint: "No rating source", icon: Gauge, tone: "cyan" }, { label: "Ratings", value: "Unavailable", hint: "No review source", icon: Star, tone: "violet" }, { label: "Weighting", value: "Unconfigured", hint: "No policy source", icon: SlidersHorizontal, tone: "amber" }, { label: "Trust", value: "Review needed", hint: "No verification source", icon: ShieldAlert, tone: "slate" }]} /><ScreenPreviewBanner title="Rating evidence boundary"><strong>This is a local rating-model preview, not a live score or trust signal.</strong> Model cards, filters, weighting intent, verification gates, saved state, and disabled publishing/export actions are browser concepts. No review count, average, score, user, purchase, verified label, ranking, recommendation, or business outcome is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Filter className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local rating models" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-4 flex flex-wrap gap-2">{categories.map((entry) => <Button key={entry} onClick={() => setCategory(entry)} size="sm" variant="outline" className={category === entry ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100" : "border-white/10 text-slate-400"}>{entry}</Button>)}</div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.state}</Badge></div><div className="mt-4"><Badge variant="outline" className="border-white/10 text-slate-500">{item.category}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected rating model</p><h2 className="mt-2 text-2xl font-black">{model.name}</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{model.state}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-400">{model.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Category", value: model.category }, { label: "Ratings", value: "Unavailable" }, { label: "Weighting", value: weighting }, { label: "Users", value: "Unconnected" }, { label: "Verification", value: "Required" }, { label: "Appeal", value: "Required" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><label className="mt-5 block text-sm text-slate-400">Weighting intent<select value={weighting} onChange={(event) => setWeighting(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Weighting not configured</option><option>Equal-weight intent</option><option>Verified-weight intent</option><option>Recency-weight intent</option><option>Axis-weight intent</option></select></label><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><Star className="mx-auto size-8 text-slate-600" /><p className="mt-3 font-semibold">No rating evidence loaded</p><p className="mt-2 text-sm text-slate-500">Connect governed reviews, identity, purchase or usage evidence, rating rules, aggregation, moderation, appeals, privacy, and audit before showing a score.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Publish score unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Recalculate unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Moderate unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Export unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No rating or trust claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A model definition does not establish a score, review authenticity, purchase verification, user quality, ranking, recommendation, or safe publication.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Rating gates</p><h2 className="mt-2 text-2xl font-black">What a real rating system must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Authenticated reviewer, subject, product, service, seller, purchase/usage event, timestamp, tenant, and provenance", "Scale, denominator, weighting, normalization, aggregation, missing data, edits, deletion, sampling, and confidence", "Verification labels, anti-manipulation, fraud controls, moderation, policy version, context, and appeals", "Privacy, consent, sensitive data, reporter safety, redaction, retention, deletion, export, and access controls", "Rankings, search, recommendation, trust labels, business, financial, and user-impact claims require evidence", "Transparency, explainability, accessibility, localization, audit, incident response, support, and reversible enforcement"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Rating surface preserved", description: "Rating models, filters, weighting, verification, moderation, appeals, publishing, export, save/reset, and gates remain interactive.", icon: Gauge, status: "Local models" }, { title: "No score theater", description: "Ratings, reviews, users, purchases, authenticity, trust labels, rankings, recommendations, and business outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Trust before score", description: "Real ratings require provenance, definitions, weighting, anti-manipulation, moderation, appeals, privacy, and audit.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("All");
+  const [selected, setSelected] = useState(1);
+  const [weighting, setWeighting] = useState("Weighting not configured");
+  const [saved, setSaved] = useState(false);
+  const [showGates, setShowGates] = useState(false);
+  const categories = [
+    "All",
+    ...Array.from(new Set(models.map(item => item.category))),
+  ];
+  const filtered = useMemo(
+    () =>
+      models.filter(
+        item =>
+          (category === "All" || item.category === category) &&
+          `${item.name} ${item.category} ${item.detail}`
+            .toLowerCase()
+            .includes(query.toLowerCase())
+      ),
+    [category, query]
+  );
+  const model = models.find(item => item.id === selected) ?? models[0];
+  const reset = () => {
+    setQuery("");
+    setCategory("All");
+    setSelected(1);
+    setWeighting("Weighting not configured");
+    setSaved(false);
+    setShowGates(false);
+  };
+  return (
+    <div className="min-h-screen bg-[#070a16] text-white">
+      <ScreenHero
+        icon={Gauge}
+        eyebrow="Reviews & ratings · Preview"
+        title="Define the rating model before showing the score."
+        description="Explore local rating-model concepts with search, filters, weighting and verification intent, moderation and appeal gates, save/reset, and blocked publishing/export actions. No live ratings, reviews, users, purchases, scores, trust labels, rankings, or recommendations are connected."
+        badge="Trust analytics workspace"
+      >
+        <div className="flex flex-wrap gap-2">
+          <Button
+            onClick={() => setSaved(true)}
+            className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"
+          >
+            <Check className="mr-2 size-4" />
+            {saved ? "Saved locally" : "Save model locally"}
+          </Button>
+          <Button
+            onClick={() => setShowGates(value => !value)}
+            variant="outline"
+            className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+          >
+            {showGates ? (
+              <X className="mr-2 size-4" />
+            ) : (
+              <ShieldAlert className="mr-2 size-4" />
+            )}
+            {showGates ? "Close gates" : "Review rating gates"}
+          </Button>
+          <Button
+            onClick={reset}
+            variant="outline"
+            className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+          >
+            <RefreshCw className="mr-2 size-4" />
+            Reset model
+          </Button>
+        </div>
+      </ScreenHero>
+      <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+        <ScreenStatGrid
+          items={[
+            {
+              label: "Models",
+              value: `${models.length} local`,
+              hint: "No rating source",
+              icon: Gauge,
+              tone: "cyan",
+            },
+            {
+              label: "Ratings",
+              value: "Unavailable",
+              hint: "No review source",
+              icon: Star,
+              tone: "violet",
+            },
+            {
+              label: "Weighting",
+              value: "Unconfigured",
+              hint: "No policy source",
+              icon: SlidersHorizontal,
+              tone: "amber",
+            },
+            {
+              label: "Trust",
+              value: "Review needed",
+              hint: "No verification source",
+              icon: ShieldAlert,
+              tone: "slate",
+            },
+          ]}
+        />
+        <ScreenPreviewBanner title="Rating evidence boundary">
+          <strong>
+            This is a local rating-model preview, not a live score or trust
+            signal.
+          </strong>{" "}
+          Model cards, filters, weighting intent, verification gates, saved
+          state, and disabled publishing/export actions are browser concepts. No
+          review count, average, score, user, purchase, verified label, ranking,
+          recommendation, or business outcome is asserted.
+        </ScreenPreviewBanner>
+        <section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]">
+          <Card className="border-white/10 bg-white/[0.04]">
+            <CardContent className="p-6">
+              <div className="relative">
+                <Filter className="absolute left-3 top-3 size-4 text-slate-500" />
+                <input
+                  value={query}
+                  onChange={event => setQuery(event.target.value)}
+                  placeholder="Search local rating models"
+                  className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none"
+                />
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {categories.map(entry => (
+                  <Button
+                    key={entry}
+                    onClick={() => setCategory(entry)}
+                    size="sm"
+                    variant="outline"
+                    className={
+                      category === entry
+                        ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100"
+                        : "border-white/10 text-slate-400"
+                    }
+                  >
+                    {entry}
+                  </Button>
+                ))}
+              </div>
+              <div className="mt-6 space-y-3">
+                {filtered.map(item => (
+                  <button
+                    key={item.id}
+                    onClick={() => setSelected(item.id)}
+                    className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="font-semibold">{item.name}</p>
+                        <p className="mt-1 text-sm text-slate-500">
+                          {item.detail}
+                        </p>
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className="border-amber-300/20 text-amber-200"
+                      >
+                        {item.state}
+                      </Badge>
+                    </div>
+                    <div className="mt-4">
+                      <Badge
+                        variant="outline"
+                        className="border-white/10 text-slate-500"
+                      >
+                        {item.category}
+                      </Badge>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="border-white/10 bg-white/[0.04]">
+            <CardContent className="p-6">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">
+                    Selected rating model
+                  </p>
+                  <h2 className="mt-2 text-2xl font-black">{model.name}</h2>
+                </div>
+                <Badge
+                  variant="outline"
+                  className="border-amber-300/20 text-amber-200"
+                >
+                  {model.state}
+                </Badge>
+              </div>
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                {model.detail}
+              </p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                {[
+                  { label: "Category", value: model.category },
+                  { label: "Ratings", value: "Unavailable" },
+                  { label: "Weighting", value: weighting },
+                  { label: "Users", value: "Unconnected" },
+                  { label: "Verification", value: "Required" },
+                  { label: "Appeal", value: "Required" },
+                ].map(item => (
+                  <div
+                    key={item.label}
+                    className="rounded-xl border border-white/10 p-3"
+                  >
+                    <p className="text-xs text-slate-500">{item.label}</p>
+                    <p className="mt-2 text-sm font-semibold text-amber-200">
+                      {item.value}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <label className="mt-5 block text-sm text-slate-400">
+                Weighting intent
+                <select
+                  value={weighting}
+                  onChange={event => setWeighting(event.target.value)}
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"
+                >
+                  <option>Weighting not configured</option>
+                  <option>Equal-weight intent</option>
+                  <option>Verified-weight intent</option>
+                  <option>Recency-weight intent</option>
+                  <option>Axis-weight intent</option>
+                </select>
+              </label>
+              <div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center">
+                <Star className="mx-auto size-8 text-slate-600" />
+                <p className="mt-3 font-semibold">No rating evidence loaded</p>
+                <p className="mt-2 text-sm text-slate-500">
+                  Connect governed reviews, identity, purchase or usage
+                  evidence, rating rules, aggregation, moderation, appeals,
+                  privacy, and audit before showing a score.
+                </p>
+              </div>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <Button disabled className="bg-slate-700 text-slate-400">
+                  Publish score unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Recalculate unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Moderate unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Export unavailable
+                </Button>
+              </div>
+              {showGates && (
+                <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4">
+                  <p className="font-semibold text-amber-100">
+                    No rating or trust claim
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-slate-400">
+                    A model definition does not establish a score, review
+                    authenticity, purchase verification, user quality, ranking,
+                    recommendation, or safe publication.
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </section>
+        <Card className="border-white/10 bg-white/[0.04]">
+          <CardContent className="p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">
+              Rating gates
+            </p>
+            <h2 className="mt-2 text-2xl font-black">
+              What a real rating system must prove
+            </h2>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {[
+                "Authenticated reviewer, subject, product, service, seller, purchase/usage event, timestamp, tenant, and provenance",
+                "Scale, denominator, weighting, normalization, aggregation, missing data, edits, deletion, sampling, and confidence",
+                "Verification labels, anti-manipulation, fraud controls, moderation, policy version, context, and appeals",
+                "Privacy, consent, sensitive data, reporter safety, redaction, retention, deletion, export, and access controls",
+                "Rankings, search, recommendation, trust labels, business, financial, and user-impact claims require evidence",
+                "Transparency, explainability, accessibility, localization, audit, incident response, support, and reversible enforcement",
+              ].map(item => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3 rounded-xl border border-white/10 p-3"
+                >
+                  <LockKeyhole className="size-4 text-slate-500" />
+                  <span className="flex-1 text-sm text-slate-300">{item}</span>
+                  <span className="text-xs text-amber-200">Required</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+        <ScreenFeatureGrid
+          features={[
+            {
+              title: "Rating surface preserved",
+              description:
+                "Rating models, filters, weighting, verification, moderation, appeals, publishing, export, save/reset, and gates remain interactive.",
+              icon: Gauge,
+              status: "Local models",
+            },
+            {
+              title: "No score theater",
+              description:
+                "Ratings, reviews, users, purchases, authenticity, trust labels, rankings, recommendations, and business outcomes are not fabricated.",
+              icon: ShieldAlert,
+              status: "Guardrail",
+            },
+            {
+              title: "Trust before score",
+              description:
+                "Real ratings require provenance, definitions, weighting, anti-manipulation, moderation, appeals, privacy, and audit.",
+              icon: LockKeyhole,
+              status: "Blocked",
+            },
+          ]}
+        />
+      </main>
+    </div>
+  );
 }
