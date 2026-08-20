@@ -1,0 +1,3 @@
+# Notifications visual findings
+
+The 390×844 mobile render shows a responsive single-column hierarchy with the notification-readiness label, no-notification-data badge, Notifications readiness heading, concise scope statement, unavailable-notifications warning, and first no-events summary card visible without horizontal overflow. The 1440×1000 desktop render shows the full-width readiness header, unavailable warning, three summary cards, notification-governance requirements heading and filter, and the first two governance cards in a balanced two-column layout. Both captures use explicit no-data and no-action language and show no fabricated events, recipients, read states, preferences, or notification records.

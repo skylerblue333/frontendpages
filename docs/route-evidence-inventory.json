@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "cf98558799c5a12d9f2e0361798d2d27ee4741f7",
+  "generated_at_commit": "a03bf4162a45e19ac735d196c804db6a5a534cbe",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 437,
-  "routes_with_visual_checkpoint": 415,
-  "routes_with_placeholder_signal": 651,
+  "routes_with_review": 438,
+  "routes_with_visual_checkpoint": 416,
+  "routes_with_placeholder_signal": 650,
   "routes": [
     {
       "route": "/",
@@ -5575,8 +5575,8 @@
       "component": "Notifications",
       "source": "client/src/pages/Notifications.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -8214,7 +8214,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/teaching-opportunities",
