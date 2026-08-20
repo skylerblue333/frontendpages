@@ -1,0 +1,7 @@
+# DataTable review
+
+The former route was a generic unavailable placeholder. It has been replaced with a strictly typed, accessible, local-only tabular-data readiness workspace.
+
+The new screen states that no table, schema, columns, rows, source, query, selection, export, or saved mutation state is loaded or persisted. Table loading, filtering, row export, and row editing controls are disabled. The route documents table and row provenance, schemas, columns, row identity, sources, freshness, authorization, validation, counts, queries, sort order, filters, cursors, totals, aggregates, timezones, consistency boundaries, selections, bulk actions, edits, deletes, updates, conflicts, permissions, transactions, recovery, export formats, column policy, redaction, downloads, retention, access logs, audit, privacy, and sensitive-data handling. Its search field filters static capability notes only and never queries tables, loads rows, applies filters, selects records, exports data, edits cells, or persists a mutation.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows balanced table-state/release cards and a four-item capability map. Mobile evidence stacks the same content cleanly at 390×844 without clipping; schema, query, selection, mutation, export, privacy, audit, and unavailable-action disclosures remain readable. No table, row, count, selection, export, or mutation outcome is fabricated.

@@ -1010,3 +1010,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/dm-inbox-mobile-390x844.png`
 ## data-grid-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/data-grid-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/data-grid-mobile-390x844.png`
+
+## data-table-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/data-table-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/data-table-mobile-390x844.png`
