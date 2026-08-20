@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/MortgageCalculator.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst MortgageCalculator = () => (\n  <FeatureUnavailable\n    title="Mortgage calculator unavailable"\n    description="A trustworthy mortgage calculator requires documented formulas, current rate inputs, loan-term and fee assumptions, jurisdictional rules, tax and insurance treatment, validation, privacy controls, and clear non-advisory disclosure. No payment, affordability, lender, approval, or personalized financial outcome is calculated here."\n    capability="Mortgage estimates, loan comparisons, and housing-finance calculations"\n    nextStep="Connect reviewed calculation logic and disclosed rate/fee sources before enabling estimates"\n  />\n);\n\nexport default MortgageCalculator;\n`);
+console.log(JSON.stringify({ changed: ['MortgageCalculator.tsx'] }, null, 2));
