@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "92152aefb24b870a36eaa178624b75be07699cc5",
+  "generated_at_commit": "2dfb195d141f3a1c4e435cb498b2a029d42ae732",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 240,
-  "routes_with_visual_checkpoint": 240,
-  "routes_with_placeholder_signal": 708,
+  "routes_with_review": 241,
+  "routes_with_visual_checkpoint": 241,
+  "routes_with_placeholder_signal": 709,
   "routes": [
     {
       "route": "/",
@@ -2400,7 +2400,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": false
+      "placeholder_signal": true
     },
     {
       "route": "/dashboard-overview",
@@ -2506,8 +2506,8 @@
       "component": "DatePickerDialog",
       "source": "client/src/pages/DatePickerDialog.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
