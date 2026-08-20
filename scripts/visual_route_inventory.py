@@ -23,7 +23,7 @@ for match in re.finditer(r"<Route\s+path=\"([^\"]+)\"\s+component=\{(\w+)\}", te
         "page_file": page_file,
         "source_exists": bool(source),
         "placeholder_markers": bool(re.search(r"coming soon|under construction|not implemented|work in progress", source, re.I)),
-        "boundary_signals": bool(re.search(r"FeatureUnavailable|evidence boundary|No .* claim|No .* evidence|Unavailable|Blocked|local design-system preview|local fixture|Local only|local shape check|No address was", source, re.I)),
+        "boundary_signals": bool(re.search(r"FeatureUnavailable|evidence boundary|No .* claim|No .* evidence|Unavailable|Blocked|local design-system preview|local fixture|Local only|local shape check|No address was|Local error-state preview|no production request was made|Local-only layout editor|Offline \(IndexedDB\)|Local browser storage only|No hashtag service|Hashtag index is unavailable|unavailable locally|No health-data service|Health-data service is unavailable|No AI provider|AI provider is unavailable|Provider-dependent|Evidence required|Truthful product status|Production infrastructure|Sign-in interface preview|No credentials are collected|Preview only: authentication was not attempted", source, re.I)),
         "auth_signals": bool(re.search(r"useAuth|ProtectedRoute|authenticated|login|session", source, re.I)),
         "external_signals": bool(re.search(r"fetch\(|trpc|axios|WebSocket|oauth|wallet|stripe|AWS|DATABASE_URL", source, re.I)),
     })
