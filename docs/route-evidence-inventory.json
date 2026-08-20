@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "a3fbadd72ab4764fe5c91b64a85fa0f7baf53902",
+  "generated_at_commit": "8dd45b56d059411036f56d9c05c925f9dcdb577d",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 608,
-  "routes_with_visual_checkpoint": 586,
-  "routes_with_placeholder_signal": 569,
+  "routes_with_review": 609,
+  "routes_with_visual_checkpoint": 587,
+  "routes_with_placeholder_signal": 568,
   "routes": [
     {
       "route": "/",
@@ -8392,9 +8392,9 @@
       "component": "TimePickerDialog",
       "source": "client/src/pages/TimePickerDialog.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/time-tracking",

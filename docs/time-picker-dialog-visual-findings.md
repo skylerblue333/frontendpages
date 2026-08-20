@@ -1,0 +1,3 @@
+# TimePickerDialog visual findings
+
+The 390×844 mobile render presents a contained modal with dimmed context, a visible close control, labelled time and timezone controls, a clear explanatory boundary, and cancel/confirm-local actions. The 1440×1000 desktop render preserves the centered dialog composition and dimmed page context while keeping the modal controls and semantics legible. The implementation uses `role="dialog"`, `aria-modal`, labelled/describedby references, an auto-focused time input, close/cancel affordances, Escape handling, local validation, and confirm-local status. No time selection is persisted, converted, scheduled, added to a calendar, used for a reminder, or delivered as a notification.
