@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "743be39969ecf90c016818669f7d06a86112b7f3",
+  "generated_at_commit": "915ecc5396350beff8b60fc0d0eb641cce0025ba",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 612,
-  "routes_with_visual_checkpoint": 590,
-  "routes_with_placeholder_signal": 565,
+  "routes_with_review": 613,
+  "routes_with_visual_checkpoint": 591,
+  "routes_with_placeholder_signal": 564,
   "routes": [
     {
       "route": "/",
@@ -8473,9 +8473,9 @@
       "component": "TokenGovernance",
       "source": "client/src/pages/TokenGovernance.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/token-information",

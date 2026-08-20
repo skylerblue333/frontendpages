@@ -1,0 +1,3 @@
+# TokenGovernance visual findings
+
+The 390×844 mobile render keeps the governance header, unavailable service disclosure, reset control, proposal-preview explanation, and first treasury-policy concept readable without horizontal overflow. The 1440×1000 desktop render shows the complete governance-readiness workspace with typed proposal concepts, selected proposal metadata, chain and contract identity boundaries, token supply and ownership/voting-power disclosures, quorum, treasury custody, timelock, and audit boundaries. No token balance, supply, vote count, voting power, quorum result, passed/failed outcome, treasury value, APY, fee, or execution result is fabricated. Proposal selection, reset, and blocked proposal/vote/execute actions remain local-only.
