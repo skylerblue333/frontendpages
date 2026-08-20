@@ -36,7 +36,7 @@ export const SignUpFlow = () => {
   };
   const stepLabel = steps[step];
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-204" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={Sparkles}
         eyebrow="Sign-up flow · Guided onboarding preview"

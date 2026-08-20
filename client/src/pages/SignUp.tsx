@@ -38,7 +38,7 @@ export function SignUp() {
     setShowGates(false);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-204" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={UserPlus}
         eyebrow="Sign up · Account-readiness preview"

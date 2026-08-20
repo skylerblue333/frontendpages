@@ -24,7 +24,7 @@ export default function TeachingOpportunities() {
       `${a} is unavailable locally. No teacher, booking, message, onboarding, payment, payout, notification, or account mutation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-204" className="min-h-screen bg-background">
       <PageHeader
         icon={BookOpen}
         title="Teaching opportunities"

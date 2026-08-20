@@ -47,7 +47,7 @@ export default function SocialMedia() {
 
       {isAuthenticated && user ? (
         <Card className="p-4 space-y-3">
-          <div className="text-sm font-medium">Share an update</div>
+          <div data-ui-polish="batch-204" className="text-sm font-medium">Share an update</div>
           <Textarea
             value={postContent}
             onChange={event => setPostContent(event.target.value)}

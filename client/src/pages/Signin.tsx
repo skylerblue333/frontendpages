@@ -45,7 +45,7 @@ export default function Signin() {
     setShowDemo(false);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-204" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={ShieldCheck}
         eyebrow="Sign in · Authentication readiness preview"

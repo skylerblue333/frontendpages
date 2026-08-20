@@ -97,7 +97,7 @@ export default function SocialEvents() {
     setShowGates(false);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-204" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={CalendarDays}
         eyebrow="Social events · Community planning preview"

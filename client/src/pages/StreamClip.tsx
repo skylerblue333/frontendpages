@@ -26,7 +26,7 @@ export default function StreamClip() {
       `${action} is unavailable locally. No source stream, clip, playback, share, download, notification, media, or account mutation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-204" className="min-h-screen bg-background">
       <PageHeader
         icon={Scissors}
         title="Stream clips"

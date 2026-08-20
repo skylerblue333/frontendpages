@@ -50,7 +50,7 @@ export default function TodoList() {
       `${a} is unavailable locally. No task, account, notification, collaboration, settings, synchronization, or persistence mutation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-204" className="min-h-screen bg-background">
       <PageHeader
         icon={ClipboardList}
         title="Todo list"
