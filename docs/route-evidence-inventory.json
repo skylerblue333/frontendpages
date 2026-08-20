@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "8531081f340bbd60e602627a83540d7f3176bfa7",
+  "generated_at_commit": "8ac79bd32a3edc3f05b5ec5b451d896dc8ebb355",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 488,
-  "routes_with_visual_checkpoint": 466,
+  "routes_with_review": 489,
+  "routes_with_visual_checkpoint": 467,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -6646,8 +6646,8 @@
       "component": "RatingSystem",
       "source": "client/src/pages/RatingSystem.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
