@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/ThreadManagement.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst ThreadManagement = () => (\n  <FeatureUnavailable\n    title="Thread management unavailable"\n    description="Thread management requires authenticated authorship, durable post and reply storage, moderation queues, abuse reporting, privacy controls, rate limits, edit and deletion policy, and auditable enforcement. No thread, author, reply, moderation, or saved-state outcome is created here."\n    capability="Community threads, replies, moderation, and discussion workflows"\n    nextStep="Connect governed community and moderation services with authorization, abuse controls, and audit evidence before enabling threads"\n  />\n);\n\nexport default ThreadManagement;\n`);
+console.log(JSON.stringify({ changed: ['ThreadManagement.tsx'] }, null, 2));
