@@ -124,7 +124,7 @@ export default function RetentionEngine() {
     setLoopEnabled([true, true, false, false, false]);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-200" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={Activity}
         eyebrow="Retention engine · Design preview"

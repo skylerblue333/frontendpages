@@ -23,7 +23,7 @@ export default function Referrals() {
       `${action} is unavailable locally. No contact, attribution, commission, payout, share, notification, or account mutation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-200" className="min-h-screen bg-background">
       <PageHeader
         icon={Users}
         title="Referrals"
