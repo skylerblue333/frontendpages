@@ -1,0 +1,3 @@
+# OrderTracking visual findings
+
+The 390×844 mobile render shows a responsive single-column hierarchy with the fulfillment-readiness label, no-tracking-data badge, OrderTracking readiness heading, concise scope statement, unavailable-tracking warning, and first no-shipment-data summary card visible without horizontal overflow. The 1440×1000 desktop render shows the full-width readiness header, unavailable warning, three summary cards, fulfillment-governance requirements heading and filter, and the first two governance cards in a balanced two-column layout. Both captures use explicit no-data and no-action language and show no fabricated orders, shipments, carriers, locations, delivery states, cancellations, returns, refunds, or fulfillment records.
