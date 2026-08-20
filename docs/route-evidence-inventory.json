@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "b395ce462033dc811c98b390e19910588d37e22f",
+  "generated_at_commit": "f6ed8b3058aaa00a5ac8bd39b708433d27600334",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 557,
-  "routes_with_visual_checkpoint": 535,
+  "routes_with_review": 558,
+  "routes_with_visual_checkpoint": 536,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7456,8 +7456,8 @@
       "component": "ServerStatus",
       "source": "client/src/pages/ServerStatus.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
