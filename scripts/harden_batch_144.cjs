@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/ProductListing.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst ProductListing = () => (\n  <FeatureUnavailable\n    title="Product listing unavailable"\n    description="A trustworthy product listing workflow requires authenticated seller ownership, durable product records, schema and media validation, pricing and currency rules, inventory or fulfillment integration, policy and prohibited-content review, draft and publication state, audit history, and rollback behavior. No listing, product, price, inventory, availability, order, publication, or successful save is shown or asserted."\n    capability="Auditable product creation and marketplace publishing"\n    nextStep="Connect approved seller, catalog, media, pricing, inventory, review, publishing, and audit services with least-privilege controls before enabling listings"\n  />\n);\n\nexport default ProductListing;\n`);
+console.log(JSON.stringify({ changed: ['ProductListing.tsx'] }, null, 2));
