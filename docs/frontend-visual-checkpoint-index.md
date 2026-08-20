@@ -998,3 +998,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/crypto-research-hub-mobile-390x844.
 ## dao-treasury-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/dao-treasury-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/dao-treasury-mobile-390x844.png`
+
+## dca-calculator-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/dca-calculator-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/dca-calculator-mobile-390x844.png`

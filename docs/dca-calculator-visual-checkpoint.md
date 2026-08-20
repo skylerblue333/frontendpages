@@ -1,8 +1,11 @@
 # DCACalculator visual checkpoint
 
-The route `/d-c-a-calculator` was verified in the direct Vite client at the responsive desktop viewport. The new layout renders a market-and-portfolio-services-unavailable notice, typed local DCA strategy concepts, asset and state filter groups, selected-strategy price/schedule/contribution/fee/balance/return/forecast unavailable fields, and safety guidance for authoritative market sources, timestamped prices, currency and fee semantics, suitability and risk disclosures, validation, rounding discipline, transaction authorization, custody controls, tax boundaries, auditability, and non-advice disclosures.
+Route: `/d-c-a-calculator`
 
-The `Calculate unavailable` action was activated. The status remained explicit that calculation is unavailable locally and no market price, balance, contribution, return, forecast, order, transaction, or investment recommendation request was started. No financial or portfolio operation occurred.
+Desktop screenshot: `/home/ubuntu/screenshots/dca-calculator-desktop-1440x1000.png`
 
-Initial screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_16-33-40_5014.webp`
-Blocked-calculation screenshot: `/home/ubuntu/screenshots/localhost_2026-08-17_16-33-49_3669.webp`
+Mobile screenshot: `/home/ubuntu/screenshots/dca-calculator-mobile-390x844.png`
+
+The desktop render presents a clear investment-calculation boundary, truthful unavailable state, disabled asset/schedule/estimate/plan controls, release requirements, and local-only capability map. The 390×844 render stacks the same sections without horizontal clipping and keeps asset inputs, price provenance, schedules, funding, wallet authorization, custody, accounting, performance, downside risk, audit, and unavailable-action disclosures readable. No asset price, contribution, schedule, balance, return, forecast, order, plan, or investment outcome is fabricated.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. No financial or portfolio operation occurred.
