@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "e48e63c754f8d8575f0080c6ba434b80be1ed4d3",
+  "generated_at_commit": "c1ded4dc95eaa21a9ee27cf773c352823de86ee4",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 411,
-  "routes_with_visual_checkpoint": 389,
-  "routes_with_placeholder_signal": 667,
+  "routes_with_review": 412,
+  "routes_with_visual_checkpoint": 390,
+  "routes_with_placeholder_signal": 666,
   "routes": [
     {
       "route": "/",
@@ -5260,8 +5260,8 @@
       "component": "MobileTrading",
       "source": "client/src/pages/MobileTrading.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -8952,7 +8952,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/user-bio",
