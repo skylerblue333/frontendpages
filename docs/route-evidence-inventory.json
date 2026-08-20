@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "4c5f1e3fc8c5cffec8c774aca5c42fb32db6f7a3",
+  "generated_at_commit": "2cfdd82997d77f5b75a2f78764ed26f3abd2cc6a",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 233,
-  "routes_with_visual_checkpoint": 233,
-  "routes_with_placeholder_signal": 709,
+  "routes_with_review": 234,
+  "routes_with_visual_checkpoint": 234,
+  "routes_with_placeholder_signal": 708,
   "routes": [
     {
       "route": "/",
@@ -2308,8 +2308,8 @@
       "component": "CryptoResearchHub",
       "source": "client/src/pages/CryptoResearchHub.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -5595,7 +5595,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/number-input-form",
