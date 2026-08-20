@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "7c730f33ffa9fb9ce84df170ad68a260006ee76f",
+  "generated_at_commit": "ef716cd959e2fbe8aeab91b382b28c1b3b7defda",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 601,
-  "routes_with_visual_checkpoint": 579,
-  "routes_with_placeholder_signal": 575,
+  "routes_with_review": 602,
+  "routes_with_visual_checkpoint": 580,
+  "routes_with_placeholder_signal": 574,
   "routes": [
     {
       "route": "/",
@@ -8167,9 +8167,9 @@
       "component": "TaskDetail",
       "source": "client/src/pages/TaskDetail.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/task-list",
