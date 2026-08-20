@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "e8c5010a8fcd7c0b0f73ea41250672f782b77814",
+  "generated_at_commit": "69d4381c22b9ff106decdba05a6030b63d6221a6",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 605,
-  "routes_with_visual_checkpoint": 583,
-  "routes_with_placeholder_signal": 572,
+  "routes_with_review": 606,
+  "routes_with_visual_checkpoint": 584,
+  "routes_with_placeholder_signal": 571,
   "routes": [
     {
       "route": "/",
@@ -8329,9 +8329,9 @@
       "component": "ThemeSettings",
       "source": "client/src/pages/ThemeSettings.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/thread-management",

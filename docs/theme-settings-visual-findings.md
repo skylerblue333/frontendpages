@@ -1,0 +1,3 @@
+# ThemeSettings visual findings
+
+The 390×844 mobile render keeps the theme-settings header, unavailable service disclosure, reset control, appearance preview, and stacked color-mode, density, and font-scale controls readable without horizontal overflow. The 1440×1000 desktop render shows the full appearance workspace with color mode, content density, font scale, preview summary, high-contrast intent, reduced-motion intent, selected-state metadata, and explicit persistence/device/global-theme boundaries. The selects and toggles represent local preference intent only; no account preference, browser storage, operating-system setting, device preference, contrast audit, font loader, animation policy, or global application theme change is asserted.
