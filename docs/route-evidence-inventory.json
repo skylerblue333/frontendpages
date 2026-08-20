@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "384ea248004f1675f81c0d4ea73c727168d35438",
+  "generated_at_commit": "7b9181e73ac16f3b55c599be0875cee37aded4bb",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 297,
-  "routes_with_visual_checkpoint": 275,
+  "routes_with_review": 298,
+  "routes_with_visual_checkpoint": 276,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3622,8 +3622,8 @@
       "component": "FlightSearch",
       "source": "client/src/pages/FlightSearch.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
