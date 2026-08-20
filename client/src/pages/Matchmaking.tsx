@@ -60,7 +60,7 @@ export default function Matchmaking() {
       className="min-h-screen bg-background"
       aria-labelledby="matchmaking-title"
     >
-      <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+      <div data-ui-polish="batch-195" className="mx-auto max-w-6xl space-y-6 px-4 py-8">
         <header className="space-y-3">
           <Badge variant="outline" className="border-pink-400/30 text-pink-200">
             MATCHMAKING READINESS PREVIEW

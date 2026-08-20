@@ -57,7 +57,7 @@ export default function MobileApp() {
       `${action} is unavailable locally. No download, store navigation, waitlist, account, notification, reward, or device operation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-195" className="min-h-screen bg-background">
       <PageHeader
         icon={Smartphone}
         title="Mobile app readiness"

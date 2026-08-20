@@ -22,7 +22,7 @@ export default function MemorySystem() {
       `${a} is unavailable locally. No memory, preference, profile, AI, retention, deletion, notification, or account mutation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-195" className="min-h-screen bg-background">
       <PageHeader
         icon={Brain}
         title="Memory system"
