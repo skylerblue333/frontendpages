@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "f1b07a26471f67385ad55a702b4bd981ecb5bc89",
+  "generated_at_commit": "9423680d734d22eb74fc73c46db6518a7bac6b7a",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 362,
-  "routes_with_visual_checkpoint": 340,
+  "routes_with_review": 363,
+  "routes_with_visual_checkpoint": 341,
   "routes_with_placeholder_signal": 700,
   "routes": [
     {
@@ -4513,8 +4513,8 @@
       "component": "LanguageExchangeAdmin",
       "source": "client/src/pages/LanguageExchangeAdmin.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
