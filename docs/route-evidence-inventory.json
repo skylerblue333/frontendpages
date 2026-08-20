@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "126ab4b79d19ee83c400f584daad174583cdaa11",
+  "generated_at_commit": "414aa122b23d7f6cfcd1f15e1db806d0d27278f2",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 416,
-  "routes_with_visual_checkpoint": 394,
+  "routes_with_review": 417,
+  "routes_with_visual_checkpoint": 395,
   "routes_with_placeholder_signal": 663,
   "routes": [
     {
@@ -5314,8 +5314,8 @@
       "component": "MovieCatalog",
       "source": "client/src/pages/MovieCatalog.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
