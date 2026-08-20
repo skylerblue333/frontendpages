@@ -1111,3 +1111,6 @@ Mobile screenshot: `/home/ubuntu/screenshots/enterprise-billing-mobile-390x844.p
 ## environment-management-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/environment-management-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/environment-management-mobile-390x844.png`
+## error-tracking-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/error-tracking-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/error-tracking-mobile-390x844.png`
