@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "54c375d6dfa803c1b71401041a7504f3bea93ebb",
+  "generated_at_commit": "97bb5942ed07e8f522dfc8c7d1e61f9fbceec6a0",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 508,
-  "routes_with_visual_checkpoint": 486,
+  "routes_with_review": 509,
+  "routes_with_visual_checkpoint": 487,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -6997,8 +6997,8 @@
       "component": "RiskAnalysis",
       "source": "client/src/pages/RiskAnalysis.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
