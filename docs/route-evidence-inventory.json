@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "76f96bea30978b14ea9cebb04b1c03cc260d6f72",
+  "generated_at_commit": "2e41a508cc3551cecdcd95ff42da412ad59e3946",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 532,
-  "routes_with_visual_checkpoint": 510,
+  "routes_with_review": 533,
+  "routes_with_visual_checkpoint": 511,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7213,8 +7213,8 @@
       "component": "ScheduledReports",
       "source": "client/src/pages/ScheduledReports.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {

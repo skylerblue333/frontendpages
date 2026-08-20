@@ -1,0 +1,3 @@
+# ScheduledReports visual findings
+
+The mobile render at 390×844 preserves the report-governance hero, save/review/reset actions, and stacked report cards without horizontal overflow. The desktop render at 1440×1000 shows the full report-concepts, schedule, audience, delivery, evidence-boundary, searchable-list, and selected-report hierarchy. Both views clearly disclose that report content, metrics, sources, recipients, delivery, compliance status, and business outcomes are unavailable, unconfigured, blocked, or unconnected. Consequential generate, send, preview, and export controls remain disabled.
