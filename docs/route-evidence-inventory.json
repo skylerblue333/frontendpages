@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "72aa508fbc3b9f25b61adb1f9af21b526e43cdcb",
+  "generated_at_commit": "def67ff400931684ed32e1b0046c0970e4a0da09",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 340,
-  "routes_with_visual_checkpoint": 318,
-  "routes_with_placeholder_signal": 701,
+  "routes_with_review": 341,
+  "routes_with_visual_checkpoint": 319,
+  "routes_with_placeholder_signal": 700,
   "routes": [
     {
       "route": "/",
@@ -4189,9 +4189,9 @@
       "component": "HopeAIMeta",
       "source": "client/src/pages/HopeAIMeta.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/hope-a-i-page",
