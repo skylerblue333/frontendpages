@@ -1099,3 +1099,6 @@ Mobile screenshot: `/home/ubuntu/screenshots/email-verification-mobile-390x844.p
 ## empty-search-state-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/empty-search-state-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/empty-search-state-mobile-390x844.png`
+## engagement-metrics-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/engagement-metrics-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/engagement-metrics-mobile-390x844.png`
