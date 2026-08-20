@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "5b0b5e37b0545e743ea17a3bf93f650704cc14fd",
+  "generated_at_commit": "ce750e6c9165e26799f87bb1ded6543a3f53e25e",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 396,
-  "routes_with_visual_checkpoint": 374,
-  "routes_with_placeholder_signal": 691,
+  "routes_with_review": 397,
+  "routes_with_visual_checkpoint": 375,
+  "routes_with_placeholder_signal": 690,
   "routes": [
     {
       "route": "/",
@@ -4999,8 +4999,8 @@
       "component": "MedicationReminder",
       "source": "client/src/pages/MedicationReminder.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -5631,7 +5631,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/onboarding",
