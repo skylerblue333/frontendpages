@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/AnalyticsProducts.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst AnalyticsProducts = () => (\n  <FeatureUnavailable\n    title="Analytics products unavailable"\n    description="The displayed intelligence products, SKY pricing, subscriber counts, monthly revenue, creator attribution, market sentiment, audience targeting, community forecasts, token analytics, and commercial outcomes are not verified. No data lake, subscriber ledger, payment source, or on-chain provider is connected."\n    capability="Commercial analytics products, subscriptions, revenue, and on-chain insights"\n    nextStep="Connect governed data, billing, privacy, and blockchain evidence before publishing products"\n  />\n);\n\nexport default AnalyticsProducts;\n`);
+console.log(JSON.stringify({ changed: ['AnalyticsProducts.tsx'] }, null, 2));
