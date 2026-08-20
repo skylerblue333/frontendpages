@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "0bf837e80ac4f4c224c6018fc020cd51a2852187",
+  "generated_at_commit": "b409f1950d5a9a107543c0316ae1558bbde1e6c9",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 334,
-  "routes_with_visual_checkpoint": 312,
-  "routes_with_placeholder_signal": 703,
+  "routes_with_review": 335,
+  "routes_with_visual_checkpoint": 313,
+  "routes_with_placeholder_signal": 702,
   "routes": [
     {
       "route": "/",
@@ -4117,9 +4117,9 @@
       "component": "Hashtags",
       "source": "client/src/pages/Hashtags.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/health-articles",
