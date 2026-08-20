@@ -1,25 +1,12 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import FeatureUnavailable from "@/components/FeatureUnavailable";
 
-export default function Error500() {
-  const [state, setState] = useState(false);
+const Error500 = () => (
+  <FeatureUnavailable
+    title="Service error"
+    description="The application could not complete the requested operation because an internal service failure was detected. Technical details, credentials, provider responses, and partial financial or user state are intentionally withheld; no transaction, save, message, AI response, or recovery is claimed as successful."
+    capability="Verified request completion and error recovery"
+    nextStep="Return to the launch hub, retry after service health is restored, and contact support with a redacted request timestamp if the issue persists"
+  />
+);
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-black p-4">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-8">Error500</h1>
-        <p className="text-slate-400 mb-8">500 server error page</p>
-
-        <Card className="bg-slate-900 border-slate-800 p-8">
-          <div className="space-y-6">
-            <p className="text-slate-300">Content for Error500 page</p>
-            <Button onClick={() => setState(!state)}>
-              {state ? "Deactivate" : "Activate"}
-            </Button>
-          </div>
-        </Card>
-      </div>
-    </div>
-  );
-}
+export default Error500;
