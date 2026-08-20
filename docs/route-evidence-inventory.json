@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "01be499f9402c235648904f3fff5e39be8d9273a",
+  "generated_at_commit": "149225a6b88c1a96efb2638c72676802e34b7a7f",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 405,
-  "routes_with_visual_checkpoint": 383,
-  "routes_with_placeholder_signal": 671,
+  "routes_with_review": 406,
+  "routes_with_visual_checkpoint": 384,
+  "routes_with_placeholder_signal": 670,
   "routes": [
     {
       "route": "/",
@@ -5188,8 +5188,8 @@
       "component": "MobileMenu",
       "source": "client/src/pages/MobileMenu.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -9303,7 +9303,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/voice-cloning",
