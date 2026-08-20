@@ -1,0 +1,3 @@
+# TokenInformation visual findings
+
+The 390×844 mobile render keeps the token-information header, unavailable-service disclosure, refresh-unavailable control, read-only metadata explanation, and first network/contract evidence cards readable without horizontal overflow. The 1440×1000 desktop render shows the complete metadata workspace with network, contract, symbol, decimals, total supply, holders, market price, and wallet ownership fields withheld as unavailable, alongside network, contract-provenance, ownership-context, and market-context evidence gates. No contract, supply, holder count, wallet balance, market price, liquidity, volume, valuation, custody, profitability, or investment outcome is fabricated. Refresh remains an explicit unavailable no-op.
