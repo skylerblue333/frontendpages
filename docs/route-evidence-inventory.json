@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "ed9b46864b33e39f9fe929cb3359be5c99051a24",
+  "generated_at_commit": "8c1be8f040f8427d1b2ef53450f9b0e2253fb728",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 421,
-  "routes_with_visual_checkpoint": 399,
-  "routes_with_placeholder_signal": 661,
+  "routes_with_review": 422,
+  "routes_with_visual_checkpoint": 400,
+  "routes_with_placeholder_signal": 660,
   "routes": [
     {
       "route": "/",
@@ -5359,8 +5359,8 @@
       "component": "MultivariateTesting",
       "source": "client/src/pages/MultivariateTesting.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -8673,7 +8673,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/travel-photos",
