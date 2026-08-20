@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "7a852599451845c6d30826da91ee945c5d4ef843",
+  "generated_at_commit": "ebd23460bcd1b5071c7ac06c4686441fbda970bf",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 435,
-  "routes_with_visual_checkpoint": 413,
+  "routes_with_review": 436,
+  "routes_with_visual_checkpoint": 414,
   "routes_with_placeholder_signal": 651,
   "routes": [
     {
@@ -5557,8 +5557,8 @@
       "component": "NotificationPreferences",
       "source": "client/src/pages/NotificationPreferences.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {

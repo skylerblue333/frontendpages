@@ -1,0 +1,3 @@
+# NotificationPreferences visual findings
+
+The 390×844 mobile render shows a responsive single-column hierarchy with the preference-readiness label, no-preference-data badge, NotificationPreferences readiness heading, concise scope statement, unavailable-preferences warning, and first no-preference-owner summary card visible without horizontal overflow. The 1440×1000 desktop render shows the full-width readiness header, unavailable warning, three summary cards, preference-governance requirements heading and filter, and the first two governance cards in a balanced two-column layout. Both captures use explicit no-data and no-action language and show no fabricated accounts, channels, consent decisions, subscriptions, or notification settings.
