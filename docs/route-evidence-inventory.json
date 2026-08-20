@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "83c49b203a1c50b3f15911428f2ac8aec1ff3274",
+  "generated_at_commit": "811f33bcd3105c3a6aef4e42f5d278ec1723e0f1",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 640,
-  "routes_with_visual_checkpoint": 618,
+  "routes_with_review": 641,
+  "routes_with_visual_checkpoint": 619,
   "routes_with_placeholder_signal": 545,
   "routes": [
     {
@@ -9229,8 +9229,8 @@
       "component": "VideoChat",
       "source": "client/src/pages/VideoChat.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {

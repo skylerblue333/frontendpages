@@ -1,0 +1,3 @@
+# VideoChat visual findings
+
+The 390×844 mobile render keeps the Video Chat header, unavailable-service disclosure, refresh-unavailable control, communication explanation, and participant-identity capability card readable without horizontal overflow. The 1440×1000 desktop render shows the complete communication-readiness workspace with participant identity, camera/microphone, WebRTC signaling, translation/transcript, screen sharing/recording, room, consent, media, signaling, translation, transcript, recording, and moderation states explicitly withheld. Start call, microphone, and camera remain disabled. No participant, room, media stream, call, translation, transcript, recording, moderation, or communication outcome is fabricated.
