@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/Leaderboard.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst Leaderboard = () => (\n  <FeatureUnavailable\n    title="Leaderboard unavailable"\n    description="The prior leaderboard relied on an unverified client query and implied ranked users, identities, XP, posts, followers, reputation, creator and earner outcomes, verified badges, and personal rank. No server procedure, scoring policy, privacy review, or durable ranking evidence is connected, so no ranking is displayed."\n    capability="User rankings, reputation, achievements, and competitive outcomes"\n    nextStep="Connect a documented server-side scoring service with privacy, authorization, anti-abuse controls, and audit evidence before publishing rankings"\n  />\n);\n\nexport default Leaderboard;\n`);
+console.log(JSON.stringify({ changed: ['Leaderboard.tsx'] }, null, 2));
