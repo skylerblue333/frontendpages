@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/PromotionEngine.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst PromotionEngine = () => (\n  <FeatureUnavailable\n    title="Promotion engine unavailable"\n    description="A trustworthy promotion engine requires authenticated campaign ownership, product and audience scope, eligibility and discount rules, budget and currency validation, consent and regional controls, scheduling, idempotency, abuse prevention, attribution, reporting, and rollback. No campaign, discount, coupon, reach, conversion, revenue, audience, schedule, or successful promotion is shown or asserted."\n    capability="Auditable promotion creation and campaign execution"\n    nextStep="Connect approved commerce, audience, pricing, consent, scheduling, attribution, reporting, and abuse-prevention services with rollback controls before enabling promotions"\n  />\n);\n\nexport default PromotionEngine;\n`);
+console.log(JSON.stringify({ changed: ['PromotionEngine.tsx'] }, null, 2));
