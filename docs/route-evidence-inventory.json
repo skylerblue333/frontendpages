@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "69d4381c22b9ff106decdba05a6030b63d6221a6",
+  "generated_at_commit": "9b2c480163718aaf6d8b4b94a3b089aba947616e",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 606,
-  "routes_with_visual_checkpoint": 584,
-  "routes_with_placeholder_signal": 571,
+  "routes_with_review": 607,
+  "routes_with_visual_checkpoint": 585,
+  "routes_with_placeholder_signal": 570,
   "routes": [
     {
       "route": "/",
@@ -8356,9 +8356,9 @@
       "component": "TicketDetail",
       "source": "client/src/pages/TicketDetail.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/ticket-queue",
