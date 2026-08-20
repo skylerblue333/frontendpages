@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "220b934b2bcd32f935258e677c922b7bcc5389be",
+  "generated_at_commit": "7ca47f554f7960f2cbe04dcce714d5e2528628e9",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 379,
-  "routes_with_visual_checkpoint": 357,
+  "routes_with_review": 380,
+  "routes_with_visual_checkpoint": 358,
   "routes_with_placeholder_signal": 700,
   "routes": [
     {
@@ -4747,8 +4747,8 @@
       "component": "LiveStreaming",
       "source": "client/src/pages/LiveStreaming.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
