@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/RFMAnalysis.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst RFMAnalysis = () => (\n  <FeatureUnavailable\n    title="RFM analysis unavailable"\n    description="A trustworthy recency-frequency-monetary analysis requires approved customer and transaction sources, privacy and consent controls, identity resolution, currency and time-window rules, data-quality checks, cohort definitions, aggregation logic, access controls, and reproducible calculations. No customer count, recency score, frequency score, monetary value, segment, churn, revenue, ranking, or recommendation is shown or asserted."\n    capability="Verified customer segmentation and RFM analytics"\n    nextStep="Connect approved consent-aware customer and transaction data, aggregation, governance, and reporting services with reproducible calculation definitions before enabling analysis"\n  />\n);\n\nexport default RFMAnalysis;\n`);
+console.log(JSON.stringify({ changed: ['RFMAnalysis.tsx'] }, null, 2));
