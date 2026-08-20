@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "800670d733467170cceb9b22b68b72fac53a794b",
+  "generated_at_commit": "642482ddfd7057e1ad9dbaed7344630a14662dc4",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 292,
-  "routes_with_visual_checkpoint": 270,
+  "routes_with_review": 293,
+  "routes_with_visual_checkpoint": 271,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3577,8 +3577,8 @@
       "component": "FileUploadProgress",
       "source": "client/src/pages/FileUploadProgress.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
