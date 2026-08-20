@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/OrganizationSettings.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst OrganizationSettings = () => (\n  <FeatureUnavailable\n    title="Organization settings unavailable"\n    description="Organization settings require an authoritative organization record, tenant isolation, role-based authorization, validated configuration schemas, member and domain controls, billing ownership, audit history, secret handling, change approval, and rollback behavior. No organization, role, member, setting, billing state, domain, or successful change is shown or asserted."\n    capability="Tenant-safe organization administration and configuration"\n    nextStep="Connect approved organization, identity, billing, domain, audit, and configuration services with least-privilege controls before enabling settings"\n  />\n);\n\nexport default OrganizationSettings;\n`);
+console.log(JSON.stringify({ changed: ['OrganizationSettings.tsx'] }, null, 2));
