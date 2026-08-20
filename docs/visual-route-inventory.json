@@ -6638,7 +6638,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": true,
+      "auth_signals": false,
       "external_signals": true
     },
     {
@@ -7327,7 +7327,7 @@
       "page_file": "RateLimitError.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },

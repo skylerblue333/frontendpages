@@ -1,25 +1,12 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import FeatureUnavailable from "@/components/FeatureUnavailable";
 
-export default function RateLimitError() {
-  const [state, setState] = useState(false);
+const RateLimitError = () => (
+  <FeatureUnavailable
+    title="Request temporarily unavailable"
+    description="A rate-limit response can only be shown as a verified operational event when an approved edge or API provider supplies the status, scope, retry guidance, request identity, and observability record. This route does not invent traffic volume, quota consumption, abuse findings, retry-after timing, or recovery success."
+    capability="Verified request throttling and retry guidance"
+    nextStep="Return to the launch hub and retry after the approved enforcement provider and health checks confirm availability"
+  />
+);
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-black p-4">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-8">RateLimitError</h1>
-        <p className="text-slate-400 mb-8">rate limit error page</p>
-
-        <Card className="bg-slate-900 border-slate-800 p-8">
-          <div className="space-y-6">
-            <p className="text-slate-300">Content for RateLimitError page</p>
-            <Button onClick={() => setState(!state)}>
-              {state ? "Deactivate" : "Activate"}
-            </Button>
-          </div>
-        </Card>
-      </div>
-    </div>
-  );
-}
+export default RateLimitError;
