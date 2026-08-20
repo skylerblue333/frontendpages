@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "3a919deb8c21fcc32a775d26462ebd0aa20ce949",
+  "generated_at_commit": "e5be1423511c729ca365e184438624cb97c8683d",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 310,
-  "routes_with_visual_checkpoint": 288,
+  "routes_with_review": 311,
+  "routes_with_visual_checkpoint": 289,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3784,8 +3784,8 @@
       "component": "GameCrash",
       "source": "client/src/pages/GameCrash.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
