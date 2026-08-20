@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/VersionManagement.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst VersionManagement = () => (\n  <FeatureUnavailable\n    title="Version management unavailable"\n    description="Version management requires a real API registry, immutable artifacts, compatibility policy, deployment records, authorization, approval history, migration and rollback plans, and observable release state. No API version, deployment, approval, rollback, or production outcome is created here."\n    capability="API versions, releases, deployment state, and rollback governance"\n    nextStep="Connect governed artifact and deployment services with approvals, compatibility checks, observability, and rollback evidence before enabling releases"\n  />\n);\n\nexport default VersionManagement;\n`);
+console.log(JSON.stringify({ changed: ['VersionManagement.tsx'] }, null, 2));
