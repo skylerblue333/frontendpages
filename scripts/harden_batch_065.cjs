@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/WebhookManager.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst WebhookManager = () => (\n  <FeatureUnavailable\n    title="Webhook manager unavailable"\n    description="Webhook management requires authenticated ownership, endpoint registration, secret handling, signature verification, event schemas, replay protection, retry and dead-letter policy, delivery observability, and audited persistence. No endpoint, event, delivery, retry, or success outcome is created here."\n    capability="Webhooks, event delivery, signatures, retries, and integrations"\n    nextStep="Connect governed integration services with secret rotation, verification, replay protection, delivery monitoring, and audit evidence before enabling webhooks"\n  />\n);\n\nexport default WebhookManager;\n`);
+console.log(JSON.stringify({ changed: ['WebhookManager.tsx'] }, null, 2));
