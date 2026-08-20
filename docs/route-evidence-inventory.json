@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "414aa122b23d7f6cfcd1f15e1db806d0d27278f2",
+  "generated_at_commit": "98ff7ca2d97262b49811707d67a9e665c65eaaad",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 417,
-  "routes_with_visual_checkpoint": 395,
-  "routes_with_placeholder_signal": 663,
+  "routes_with_review": 418,
+  "routes_with_visual_checkpoint": 396,
+  "routes_with_placeholder_signal": 662,
   "routes": [
     {
       "route": "/",
@@ -5323,8 +5323,8 @@
       "component": "MovieDetail",
       "source": "client/src/pages/MovieDetail.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -8691,7 +8691,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/travel-tips",
