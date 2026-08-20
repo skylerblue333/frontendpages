@@ -92,7 +92,7 @@ export default function VoiceCommandsRegistry() {
       `${action} is unavailable locally. No microphone, transcript, command dispatch, route navigation, account, wallet, financial, AI, notification, or history operation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-205" className="min-h-screen bg-background">
       <PageHeader
         icon={Command}
         title="Voice command registry"

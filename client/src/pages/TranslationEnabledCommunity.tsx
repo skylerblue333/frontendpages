@@ -22,7 +22,7 @@ export default function TranslationEnabledCommunity() {
       `${action} is unavailable locally. No community, translation, membership, notification, moderation, or account mutation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-205" className="min-h-screen bg-background">
       <PageHeader
         icon={Globe2}
         title="Translation-enabled community"

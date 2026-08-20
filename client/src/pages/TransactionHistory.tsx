@@ -80,7 +80,7 @@ export default function TransactionHistory() {
       `${action} is unavailable locally. No wallet, ledger, balance, signing, transaction, order, export, or account operation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-205" className="min-h-screen bg-background">
       <PageHeader
         icon={FileClock}
         title="Transaction history"

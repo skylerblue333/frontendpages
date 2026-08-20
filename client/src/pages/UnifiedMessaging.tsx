@@ -58,7 +58,7 @@ export default function UnifiedMessaging() {
       `${action} is unavailable locally. No message, notification, presence, call, video, attachment, account, or conversation mutation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-205" className="min-h-screen bg-background">
       <PageHeader
         icon={MessageCircle}
         title="Unified messaging"

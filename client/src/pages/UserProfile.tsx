@@ -33,7 +33,7 @@ export default function UserProfile() {
     );
   const selected = states.find(item => item.label === tab) ?? states[0];
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-205" className="min-h-screen bg-background">
       <PageHeader
         icon={UserRound}
         title="User profile"

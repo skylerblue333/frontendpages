@@ -19,7 +19,7 @@ export default function WalkthroughPage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#07050f] px-4 py-8 text-white sm:px-6 sm:py-14">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(34,211,238,0.12),transparent_35%),radial-gradient(circle_at_85%_20%,rgba(168,85,247,0.15),transparent_35%),linear-gradient(135deg,#07050f,#0d1428_55%,#160b26)]" />
+      <div data-ui-polish="batch-205" className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(34,211,238,0.12),transparent_35%),radial-gradient(circle_at_85%_20%,rgba(168,85,247,0.15),transparent_35%),linear-gradient(135deg,#07050f,#0d1428_55%,#160b26)]" />
       <div className="relative mx-auto max-w-4xl">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3"><div className="flex size-11 items-center justify-center rounded-2xl bg-cyan-300/10 text-cyan-200"><Compass className="size-5" aria-hidden="true" /></div><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200/75">SKYCOIN4444 orientation</p><h1 className="mt-1 text-2xl font-black sm:text-3xl">Find your next useful surface</h1></div></div>

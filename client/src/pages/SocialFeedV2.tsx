@@ -97,7 +97,7 @@ export default function SocialAnalytics() {
     setShowGates(false);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-205" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={FileText}
         eyebrow="Social feed V2 · Community stream preview"
