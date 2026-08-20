@@ -2027,9 +2027,9 @@
       "page_file": "ContactManagement.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/contact-us-form",
@@ -5358,7 +5358,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {

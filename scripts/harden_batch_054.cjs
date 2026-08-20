@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/ContactManagement.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst ContactManagement = () => (\n  <FeatureUnavailable\n    title="Contact management unavailable"\n    description="Contact management requires authenticated ownership, consent and purpose records, field validation, deduplication, access controls, retention and deletion rules, import/export safeguards, and audited persistence. No contact, customer, outreach, sync, or saved-state outcome is created here."\n    capability="Contact records, customer data, outreach, and synchronization"\n    nextStep="Connect a governed contact service with consent, privacy, authorization, retention, and audit controls before enabling records"\n  />\n);\n\nexport default ContactManagement;\n`);
+console.log(JSON.stringify({ changed: ['ContactManagement.tsx'] }, null, 2));
