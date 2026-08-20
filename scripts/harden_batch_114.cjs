@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/AutoResponder.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst AutoResponder = () => (\n  <FeatureUnavailable\n    title="Auto-responder unavailable"\n    description="Automated replies require an approved message provider, explicit account authorization, configurable rules, safe content handling, rate limits, delivery receipts, audit logs, opt-out controls, and failure recovery. No message has been sent, scheduled, delivered, or acknowledged."\n    capability="Governed automated message responses"\n    nextStep="Connect an approved messaging provider and rule engine with authorization, moderation, rate-limit, opt-out, delivery, audit, and rollback controls before enabling automation"\n  />\n);\n\nexport default AutoResponder;\n`);
+console.log(JSON.stringify({ changed: ['AutoResponder.tsx'] }, null, 2));
