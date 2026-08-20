@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "51ee33c16d40f0494412cf7dca5168f25d43b87f",
+  "generated_at_commit": "f4053b98f6b4e908cdb511485a9cf2266bb7ff56",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 497,
-  "routes_with_visual_checkpoint": 475,
+  "routes_with_review": 498,
+  "routes_with_visual_checkpoint": 476,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -6826,8 +6826,8 @@
       "component": "ReportsDashboard",
       "source": "client/src/pages/ReportsDashboard.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
