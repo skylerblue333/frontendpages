@@ -5838,8 +5838,8 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
-      "external_signals": false
+      "auth_signals": true,
+      "external_signals": true
     },
     {
       "path": "/mood-tracker",
@@ -5847,9 +5847,9 @@
       "page_file": "MoodTracker.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/mortgage-calculator",
@@ -9597,9 +9597,9 @@
       "page_file": "TravelPhotos.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/travel-reviews",

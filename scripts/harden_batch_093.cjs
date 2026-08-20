@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/TravelPhotos.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst TravelPhotos = () => (\n  <FeatureUnavailable\n    title="Travel photo sharing unavailable"\n    description="Production photo sharing requires secure uploads, verified ownership and permissions, EXIF and location privacy controls, malware scanning, moderation, storage lifecycle rules, deletion, sharing scopes, and durable media records. No photo, album, location, author, upload, or sharing result is created here."\n    capability="Travel photo upload, albums, metadata, and sharing"\n    nextStep="Connect governed object storage, media security, privacy controls, identity, moderation, and sharing services before enabling photo sharing"\n  />\n);\n\nexport default TravelPhotos;\n`);
+console.log(JSON.stringify({ changed: ['TravelPhotos.tsx'] }, null, 2));
