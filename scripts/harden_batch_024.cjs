@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/MasterArchitecture.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst MasterArchitecture = () => (\n  <FeatureUnavailable\n    title="Master architecture blueprint"\n    description="The platform architecture is intentionally presented as a planning boundary, not proof that distributed services, simulation workers, AI personas, event buses, caches, storage, trust scores, payments, transactions, WebSockets, or production data infrastructure are deployed or operational. Each layer requires independently verified contracts, deployment identity, observability, security controls, rollback, and ownership evidence."\n    capability="Production architecture, service topology, and runtime claims"\n    nextStep="Review the production evidence matrix"\n  />\n);\n\nexport default MasterArchitecture;\n`);
+console.log(JSON.stringify({ changed: ['MasterArchitecture.tsx'] }, null, 2));
