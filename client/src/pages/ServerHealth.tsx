@@ -95,7 +95,7 @@ export default function ServerHealth() {
     setRefreshState("Refresh unavailable");
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-203" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={Activity}
         eyebrow="Server health · Observability preview"

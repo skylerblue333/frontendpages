@@ -88,7 +88,7 @@ export default function SegmentationAnalysis() {
     setShowGates(false);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-203" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={UsersRound}
         eyebrow="Segmentation analysis · Audience preview"

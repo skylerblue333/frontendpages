@@ -89,7 +89,7 @@ export default function SecurityDashboard() {
     setShowGates(false);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-203" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={ShieldCheck}
         eyebrow="Security dashboard · Posture preview"

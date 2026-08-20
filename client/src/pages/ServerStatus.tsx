@@ -103,7 +103,7 @@ export default function ServerStatus() {
     setShowGates(false);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-203" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={Server}
         eyebrow="Server status · Operations overview"

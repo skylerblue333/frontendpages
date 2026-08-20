@@ -56,7 +56,7 @@ export default function Settings() {
     setFeedback("Preferences saved locally");
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-203" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={SlidersHorizontal}
         eyebrow="Settings · Account controls"
