@@ -1117,3 +1117,6 @@ Mobile screenshot: `/home/ubuntu/screenshots/error-tracking-mobile-390x844.png`
 ## event-analytics-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/event-analytics-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/event-analytics-mobile-390x844.png`
+## event-calendar-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/event-calendar-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/event-calendar-mobile-390x844.png`
