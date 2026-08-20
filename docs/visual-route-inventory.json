@@ -5207,9 +5207,9 @@
       "page_file": "LiveGifting.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/live-reactions",
