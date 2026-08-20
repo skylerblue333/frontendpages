@@ -1307,9 +1307,9 @@
       "page_file": "BuildRoadmap.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/bulk-operations",
@@ -2587,8 +2587,8 @@
       "page_file": "DAOTreasury.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
+      "boundary_signals": true,
+      "auth_signals": false,
       "external_signals": true
     },
     {
@@ -2867,9 +2867,9 @@
       "page_file": "DefensibilityMoat.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/delete-account",
@@ -4687,7 +4687,7 @@
       "page_file": "IITR.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -6947,9 +6947,9 @@
       "page_file": "ProductionArchitecture.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/profile",
