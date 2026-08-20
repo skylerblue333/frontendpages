@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "8a49d48cca19d1260374b8848b35b399a032e76a",
+  "generated_at_commit": "f1b07a26471f67385ad55a702b4bd981ecb5bc89",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 361,
-  "routes_with_visual_checkpoint": 339,
+  "routes_with_review": 362,
+  "routes_with_visual_checkpoint": 340,
   "routes_with_placeholder_signal": 700,
   "routes": [
     {
@@ -4495,8 +4495,8 @@
       "component": "LTVAnalysis",
       "source": "client/src/pages/LTVAnalysis.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
