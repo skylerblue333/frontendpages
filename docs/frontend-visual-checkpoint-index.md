@@ -1018,3 +1018,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/data-table-mobile-390x844.png`
 ## date-input-form-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/date-input-form-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/date-input-form-mobile-390x844.png`
+
+## date-picker-dialog-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/date-picker-dialog-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/date-picker-dialog-mobile-390x844.png`
