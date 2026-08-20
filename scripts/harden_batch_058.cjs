@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/WishlistManagement.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst WishlistManagement = () => (\n  <FeatureUnavailable\n    title="Wishlist management unavailable"\n    description="Wishlist management requires an authenticated user, verified product catalog, durable saved-item persistence, inventory and price freshness, privacy controls, deletion behavior, and optional notification or purchase integrations. No item, price, availability, or purchase outcome is saved or represented here."\n    capability="Wishlists, saved products, availability, and commerce notifications"\n    nextStep="Connect governed catalog and user-preference services before enabling saved items or alerts"\n  />\n);\n\nexport default WishlistManagement;\n`);
+console.log(JSON.stringify({ changed: ['WishlistManagement.tsx'] }, null, 2));
