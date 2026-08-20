@@ -1,0 +1,2 @@
+{"index": 1, "path": "/miner-dashboard", "component": "MinerDashboard", "mode": "desktop", "screenshot": "/home/ubuntu/frontendpages/docs/visual-review/batch-002-recapture/desktop/001-miner-dashboard.png", "exit_code": 0, "seconds": 1.82, "error": ""}
+{"index": 2, "path": "/system-status", "component": "SystemStatus", "mode": "desktop", "screenshot": "/home/ubuntu/frontendpages/docs/visual-review/batch-002-recapture/desktop/002-system-status.png", "exit_code": 0, "seconds": 1.64, "error": ""}
