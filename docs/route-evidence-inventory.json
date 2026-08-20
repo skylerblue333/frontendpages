@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "2d26a6978d83fa2d4e82a6bc2d52254d12257e9c",
+  "generated_at_commit": "fb96c064531607fa1deace8bbe40cd0fcbf70d2b",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 426,
-  "routes_with_visual_checkpoint": 404,
-  "routes_with_placeholder_signal": 657,
+  "routes_with_review": 427,
+  "routes_with_visual_checkpoint": 405,
+  "routes_with_placeholder_signal": 656,
   "routes": [
     {
       "route": "/",
@@ -5413,8 +5413,8 @@
       "component": "NFTGallery",
       "source": "client/src/pages/NFTGallery.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -8538,7 +8538,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/trade-history",
