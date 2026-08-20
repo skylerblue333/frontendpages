@@ -77,7 +77,7 @@ export default function BrowserExtension() {
       `${action} is unavailable locally. No extension was installed, no browser permission was requested, and no wallet, account, telemetry, email, reward, or enrollment operation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-182" className="min-h-screen bg-background">
       <PageHeader
         icon={PanelsTopLeft}
         title="Browser extension readiness"
