@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/TemplateLibrary.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst TemplateLibrary = () => (\n  <FeatureUnavailable\n    title="Template library unavailable"\n    description="A production template library requires governed content storage, ownership and licensing, versioning, preview and rendering safety, tenant isolation, approval workflow, delivery-provider compatibility, unsubscribe and consent controls, and auditable publication state. No template, author, version, approval, delivery, or marketplace result is created here."\n    capability="Email-template creation, versioning, reuse, and delivery preparation"\n    nextStep="Connect governed content and tenant storage, identity, licensing, rendering, approval, consent, and delivery services before enabling templates"\n  />\n);\n\nexport default TemplateLibrary;\n`);
+console.log(JSON.stringify({ changed: ['TemplateLibrary.tsx'] }, null, 2));
