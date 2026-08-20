@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "32019048eac34c46bc5e0310e60a17260e65ff55",
+  "generated_at_commit": "6760d29e355cf143ba29a8a74c874326d1a34784",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 460,
-  "routes_with_visual_checkpoint": 438,
+  "routes_with_review": 461,
+  "routes_with_visual_checkpoint": 439,
   "routes_with_placeholder_signal": 603,
   "routes": [
     {
@@ -5935,8 +5935,8 @@
       "component": "PlaylistManagement",
       "source": "client/src/pages/PlaylistManagement.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
