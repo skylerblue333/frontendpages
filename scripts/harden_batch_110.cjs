@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/Status.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst Status = () => (\n  <FeatureUnavailable\n    title="Service status unavailable"\n    description="A trustworthy status page requires live, independently monitored service checks, incident and maintenance records, component ownership, timestamps, regional scope, dependency health, alerting, and an auditable public communication process. No uptime, availability, incident, maintenance, latency, deployment, recovery, or production-readiness claim is made here."\n    capability="Live service health, incidents, maintenance, and availability reporting"\n    nextStep="Connect governed health checks, monitors, dependency probes, incident management, alerting, ownership, and public status publication before enabling service status"\n  />\n);\n\nexport default Status;\n`);
+console.log(JSON.stringify({ changed: ['Status.tsx'] }, null, 2));
