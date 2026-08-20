@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "290f30049799e4af7d022984cc493e96e43f0a17",
+  "generated_at_commit": "37bed6b3fbfe8b31833857ec2b5af65e37c3e167",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 584,
-  "routes_with_visual_checkpoint": 562,
-  "routes_with_placeholder_signal": 581,
+  "routes_with_review": 585,
+  "routes_with_visual_checkpoint": 563,
+  "routes_with_placeholder_signal": 580,
   "routes": [
     {
       "route": "/",
@@ -7843,9 +7843,9 @@
       "component": "StakingOptions",
       "source": "client/src/pages/StakingOptions.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/staking-portal",
