@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "cb39e237ea943460928be057bf271fad4f738269",
+  "generated_at_commit": "4b388b785a7d98d359abd14d8d07ef081ed38ef5",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 476,
-  "routes_with_visual_checkpoint": 454,
+  "routes_with_review": 477,
+  "routes_with_visual_checkpoint": 455,
   "routes_with_placeholder_signal": 591,
   "routes": [
     {
@@ -6331,8 +6331,8 @@
       "component": "ProfileDashboard",
       "source": "client/src/pages/ProfileDashboard.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
