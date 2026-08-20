@@ -1038,3 +1038,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/defi-mobile-390x844.png`
 ## delete-account-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/delete-account-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/delete-account-mobile-390x844.png`
+
+## delete-content-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/delete-content-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/delete-content-mobile-390x844.png`
