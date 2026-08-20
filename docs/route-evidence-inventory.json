@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "79fa42a5f4078d2a650f2de6787d5e54c14ef72d",
+  "generated_at_commit": "4645128401951b0e11614698662f56269d2053cf",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -33,7 +33,7 @@
   ],
   "routes_with_review": 441,
   "routes_with_visual_checkpoint": 419,
-  "routes_with_placeholder_signal": 624,
+  "routes_with_placeholder_signal": 623,
   "routes": [
     {
       "route": "/",
@@ -2418,7 +2418,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/data-grid",

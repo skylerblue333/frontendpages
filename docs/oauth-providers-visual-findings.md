@@ -1,0 +1,3 @@
+# OAuthProviders visual findings
+
+The 390×844 mobile render shows a responsive single-column hierarchy with the identity-provider readiness label, no-provider-data badge, OAuthProviders readiness heading, concise scope statement, unavailable-configuration warning, and first no-providers summary card visible without horizontal overflow. The 1440×1000 desktop render shows the full-width readiness header, unavailable warning, three summary cards, identity-provider governance requirements heading and filter, and the first two governance cards in a balanced two-column layout. Both captures use explicit no-data and no-action language and show no fabricated providers, credentials, tokens, consent decisions, or identity links.
