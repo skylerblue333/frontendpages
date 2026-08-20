@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "6479361ccf9ec72c9a340d1ed763b9019740937f",
+  "generated_at_commit": "800670d733467170cceb9b22b68b72fac53a794b",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 291,
-  "routes_with_visual_checkpoint": 269,
+  "routes_with_review": 292,
+  "routes_with_visual_checkpoint": 270,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3568,8 +3568,8 @@
       "component": "FileUploadForm",
       "source": "client/src/pages/FileUploadForm.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
