@@ -1,0 +1,3 @@
+# TradingBots visual findings
+
+The 390×844 mobile render keeps the trading-bots header, unavailable-service disclosure, refresh-unavailable control, automation explanation, and first strategy card readable without horizontal overflow. The 1440×1000 desktop render shows the complete automation-readiness workspace with strategy, exchange, wallet, risk-limit, order-feed, and performance cards, strategy/simulation/monitoring evidence gates, and disabled start/pause controls. No bot, strategy, exchange connection, wallet authorization, order, fill, balance, return, profit, loss, or trading outcome is fabricated. Refresh, start, and pause remain unavailable or no-op states.
