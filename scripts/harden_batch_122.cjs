@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/ContentCalendar.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst ContentCalendar = () => (\n  <FeatureUnavailable\n    title="Content calendar unavailable"\n    description="Content planning requires authenticated workspaces, durable scheduling, timezone and locale handling, approvals, version history, publishing integrations, failure recovery, access controls, and audit logs. No content item, publication, campaign, audience, engagement, delivery, or performance result is shown or asserted."\n    capability="Governed content planning and multi-channel publication scheduling"\n    nextStep="Connect approved content, approval, scheduling, publishing, notification, and analytics services with ownership and rollback controls before enabling this feature"\n  />\n);\n\nexport default ContentCalendar;\n`);
+console.log(JSON.stringify({ changed: ['ContentCalendar.tsx'] }, null, 2));
