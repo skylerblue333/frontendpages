@@ -1042,3 +1042,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/delete-account-mobile-390x844.png`
 ## delete-content-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/delete-content-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/delete-content-mobile-390x844.png`
+
+## derivative-trading-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/derivative-trading-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/derivative-trading-mobile-390x844.png`
