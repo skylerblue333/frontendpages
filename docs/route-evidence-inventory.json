@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "714899f9d4f8a42ceb14c8c219e6d3b9dcc4e8a7",
+  "generated_at_commit": "540860c986e230b6008b1cf33b9e05cbff79befd",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 482,
-  "routes_with_visual_checkpoint": 460,
-  "routes_with_placeholder_signal": 591,
+  "routes_with_review": 483,
+  "routes_with_visual_checkpoint": 461,
+  "routes_with_placeholder_signal": 584,
   "routes": [
     {
       "route": "/",
@@ -6502,8 +6502,8 @@
       "component": "PublishingQueue",
       "source": "client/src/pages/PublishingQueue.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -8592,7 +8592,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/transaction-history",
@@ -8718,7 +8718,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/trending",
@@ -9132,7 +9132,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/vendor-performance",
@@ -9141,7 +9141,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/vendor-verification",
@@ -9150,7 +9150,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/venue-management",
@@ -9429,7 +9429,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/webhook-management",
@@ -9546,7 +9546,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/zero-knowledge-proof",
