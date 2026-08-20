@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "a573ee536fc51fc4f3806dee8876aa34a7702b29",
+  "generated_at_commit": "5d114b0d597d0debadd97705e394e0da66755fbc",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 357,
-  "routes_with_visual_checkpoint": 335,
+  "routes_with_review": 358,
+  "routes_with_visual_checkpoint": 336,
   "routes_with_placeholder_signal": 700,
   "routes": [
     {
@@ -4450,8 +4450,8 @@
       "component": "InvoiceDetails",
       "source": "client/src/pages/InvoiceDetails.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
