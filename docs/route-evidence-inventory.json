@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "a978ae623985146fd19992e201dfb27a1797ed5d",
+  "generated_at_commit": "981ae684206fc377e0d04921b4b64a2019872f4b",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 320,
-  "routes_with_visual_checkpoint": 298,
+  "routes_with_review": 321,
+  "routes_with_visual_checkpoint": 299,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3883,8 +3883,8 @@
       "component": "GasFeeEstimator",
       "source": "client/src/pages/GasFeeEstimator.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
