@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "578da6857643700bd5409da65a49c1d6e5f59c59",
+  "generated_at_commit": "ed9b46864b33e39f9fe929cb3359be5c99051a24",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 420,
-  "routes_with_visual_checkpoint": 398,
+  "routes_with_review": 421,
+  "routes_with_visual_checkpoint": 399,
   "routes_with_placeholder_signal": 661,
   "routes": [
     {
@@ -5350,8 +5350,8 @@
       "component": "MultiplayerLobby",
       "source": "client/src/pages/MultiplayerLobby.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
