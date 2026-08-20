@@ -1090,3 +1090,6 @@ Mobile screenshot: `/home/ubuntu/screenshots/email-integration-mobile-390x844.pn
 ## email-notifications-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/email-notifications-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/email-notifications-mobile-390x844.png`
+## email-templates-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/email-templates-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/email-templates-mobile-390x844.png`
