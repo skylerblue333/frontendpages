@@ -1108,3 +1108,6 @@ Mobile screenshot: `/home/ubuntu/screenshots/engagement-stats-mobile-390x844.png
 ## enterprise-billing-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/enterprise-billing-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/enterprise-billing-mobile-390x844.png`
+## environment-management-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/environment-management-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/environment-management-mobile-390x844.png`
