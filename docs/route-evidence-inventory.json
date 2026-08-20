@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "a18d5f66b0c313d5fae28f0c181a61c6afe99d7f",
+  "generated_at_commit": "daae98fbe1d07056e5a36efb01c95c8e9e37572c",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 249,
-  "routes_with_visual_checkpoint": 249,
-  "routes_with_placeholder_signal": 708,
+  "routes_with_review": 272,
+  "routes_with_visual_checkpoint": 250,
+  "routes_with_placeholder_signal": 703,
   "routes": [
     {
       "route": "/",
@@ -2804,8 +2804,8 @@
       "source": "client/src/pages/DirectMessages.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/direct-messaging",
@@ -2813,8 +2813,8 @@
       "source": "client/src/pages/DirectMessaging.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/disaster-recovery",
@@ -2822,8 +2822,8 @@
       "source": "client/src/pages/DisasterRecovery.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/discord-integration",
@@ -2832,7 +2832,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "placeholder_signal": true
     },
     {
       "route": "/discover",
@@ -2939,8 +2939,8 @@
       "source": "client/src/pages/DomainManagement.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/donation-processing",
@@ -2957,7 +2957,7 @@
       "source": "client/src/pages/DropdownMenu.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
+      "visual_checkpoint_documented": false,
       "placeholder_signal": false
     },
     {
@@ -2965,9 +2965,9 @@
       "component": "ENSResolver",
       "source": "client/src/pages/ENSResolver.tsx",
       "source_exists": true,
-      "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "review_documented": false,
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/earnings-tracker",
@@ -3029,8 +3029,8 @@
       "source": "client/src/pages/EditProfile.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/email-campaigns",
@@ -3038,8 +3038,8 @@
       "source": "client/src/pages/EmailCampaigns.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/email-configuration",
@@ -3047,8 +3047,8 @@
       "source": "client/src/pages/EmailConfiguration.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/email-input-form",
@@ -3056,8 +3056,8 @@
       "source": "client/src/pages/EmailInputForm.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/email-integration",
@@ -3065,8 +3065,8 @@
       "source": "client/src/pages/EmailIntegration.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/email-notifications",
@@ -3074,8 +3074,8 @@
       "source": "client/src/pages/EmailNotifications.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/email-templates",
@@ -3083,8 +3083,8 @@
       "source": "client/src/pages/EmailTemplates.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/email-verification",
@@ -3092,8 +3092,8 @@
       "source": "client/src/pages/EmailVerification.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/embed-s-d-k",
@@ -3110,8 +3110,8 @@
       "source": "client/src/pages/EmptySearchState.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/engagement-metrics",
@@ -3119,8 +3119,8 @@
       "source": "client/src/pages/EngagementMetrics.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/engagement-stats",
@@ -3128,8 +3128,8 @@
       "source": "client/src/pages/EngagementStats.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/engineer",
@@ -3173,8 +3173,8 @@
       "source": "client/src/pages/EnterpriseBilling.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/entity-profile",
@@ -3191,8 +3191,8 @@
       "source": "client/src/pages/EnvironmentManagement.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/error403",
@@ -3245,8 +3245,8 @@
       "source": "client/src/pages/ErrorTracking.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/escrow-shop",
@@ -3272,8 +3272,8 @@
       "source": "client/src/pages/EventAnalytics.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/event-calendar",
@@ -3281,8 +3281,8 @@
       "source": "client/src/pages/EventCalendar.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/event-creation",
@@ -3290,8 +3290,8 @@
       "source": "client/src/pages/EventCreation.tsx",
       "source_exists": true,
       "review_documented": true,
-      "visual_checkpoint_documented": true,
-      "placeholder_signal": false
+      "visual_checkpoint_documented": false,
+      "placeholder_signal": true
     },
     {
       "route": "/event-planner",
@@ -3307,8 +3307,8 @@
       "component": "EventRegistration",
       "source": "client/src/pages/EventRegistration.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -3687,7 +3687,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/forum-categories",
@@ -4740,7 +4740,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/live-streaming",
@@ -6162,7 +6162,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/priority-matrix",
@@ -6675,7 +6675,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/real-time-streaming",
