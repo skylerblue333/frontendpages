@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "9e08ef43b5dafc83e88823f8e8d4e0b7a25361e2",
+  "generated_at_commit": "0a0a69ba9ca7fb5a22e71ced91b5023c1afd4baa",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 587,
-  "routes_with_visual_checkpoint": 565,
+  "routes_with_review": 588,
+  "routes_with_visual_checkpoint": 566,
   "routes_with_placeholder_signal": 579,
   "routes": [
     {
@@ -7942,8 +7942,8 @@
       "component": "StreamingDashboard",
       "source": "client/src/pages/StreamingDashboard.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
