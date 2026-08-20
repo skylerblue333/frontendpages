@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/ProductApproval.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst ProductApproval = () => (\n  <FeatureUnavailable\n    title="Product approval unavailable"\n    description="Product approval requires authoritative product records, ownership, role-based review, catalog and pricing validation, inventory or fulfillment controls, prohibited-content checks, audit history, publishing safeguards, and rollback behavior. No product, price, inventory value, approval decision, publication state, compliance result, or successful change is shown or asserted."\n    capability="Auditable product review and commerce publishing workflow"\n    nextStep="Connect approved catalog, identity, review, pricing, inventory, compliance, publishing, and audit services with owner acceptance before enabling approval"\n  />\n);\n\nexport default ProductApproval;\n`);
+console.log(JSON.stringify({ changed: ['ProductApproval.tsx'] }, null, 2));
