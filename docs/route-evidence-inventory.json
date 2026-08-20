@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "0f2e70619888a4ef57ffa44bfad06ddcca081138",
+  "generated_at_commit": "c0867de592df45a43efdbd941e225baa61c08262",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 343,
-  "routes_with_visual_checkpoint": 321,
+  "routes_with_review": 344,
+  "routes_with_visual_checkpoint": 322,
   "routes_with_placeholder_signal": 700,
   "routes": [
     {
@@ -4216,8 +4216,8 @@
       "component": "HotelSearch",
       "source": "client/src/pages/HotelSearch.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
