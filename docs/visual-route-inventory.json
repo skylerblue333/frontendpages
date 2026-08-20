@@ -2499,7 +2499,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/crypto-hub",
@@ -6176,10 +6176,10 @@
       "component": "NotificationsHub",
       "page_file": "NotificationsHub.tsx",
       "source_exists": true,
-      "placeholder_markers": true,
-      "boundary_signals": false,
+      "placeholder_markers": false,
+      "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/number-input-form",
