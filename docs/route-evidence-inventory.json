@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "3992f4e006a859109dd8399cdb016340cc2bf8ee",
+  "generated_at_commit": "8c42e84ec46ffb53e90787ee1bc542e28f3173bc",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 305,
-  "routes_with_visual_checkpoint": 283,
+  "routes_with_review": 306,
+  "routes_with_visual_checkpoint": 284,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3730,8 +3730,8 @@
       "component": "GDPR",
       "source": "client/src/pages/GDPR.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
