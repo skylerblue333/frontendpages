@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "683b49fe36154bd2335031207be92f35c9f67160",
+  "generated_at_commit": "44e8f7db3bdf9040f5022519cfe905e827374ea7",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 246,
-  "routes_with_visual_checkpoint": 246,
+  "routes_with_review": 247,
+  "routes_with_visual_checkpoint": 247,
   "routes_with_placeholder_signal": 709,
   "routes": [
     {
@@ -2677,8 +2677,8 @@
       "component": "DerivativeTrading",
       "source": "client/src/pages/DerivativeTrading.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
