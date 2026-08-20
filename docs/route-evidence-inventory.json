@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "df4807593e4e147e15ff86b482987502a538ee7f",
+  "generated_at_commit": "30243befb32f60f4165dd78c30e8f90765b4d0b6",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 244,
-  "routes_with_visual_checkpoint": 244,
+  "routes_with_review": 245,
+  "routes_with_visual_checkpoint": 245,
   "routes_with_placeholder_signal": 709,
   "routes": [
     {
@@ -2623,8 +2623,8 @@
       "component": "DeleteAccount",
       "source": "client/src/pages/DeleteAccount.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
