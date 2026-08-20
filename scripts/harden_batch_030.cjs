@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/EnterpriseAPI.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst EnterpriseAPI = () => (\n  <FeatureUnavailable\n    title="Enterprise API unavailable"\n    description="The displayed API catalog, endpoint counts, rate limits, pricing, AI engines, behavior analysis, predictions, agent earnings, documentation, and api.skycoin4444.com examples are not verified deployments. Enabling this surface requires an approved provider, contract, authentication issuer, quota service, billing, privacy controls, evaluation, and operational evidence."\n    capability="Enterprise API, SDK, AI engines, quotas, and commercial access"\n    nextStep="Publish a verified API contract only after the provider and controls are live"\n  />\n);\n\nexport default EnterpriseAPI;\n`);
+console.log(JSON.stringify({ changed: ['EnterpriseAPI.tsx'] }, null, 2));
