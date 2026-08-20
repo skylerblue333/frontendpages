@@ -1,0 +1,17 @@
+# SavedSearches review
+
+The `/saved-searches` route already contained a substantial local search-alert governance preview, so the implementation was preserved rather than rewritten. It now has formatting, strict typecheck/build validation, and desktop/mobile evidence documentation. The route is not treated as a live search index, result engine, listing feed, package registry, education catalogue, community service, notification system, or market-outcome source.
+
+| Area | Result |
+|---|---|
+| Local search functionality | Property, developer, education, and community search concepts, search, category filters, selected-search state, frequency and privacy intent, save state, reset, search-gate toggling, and disabled run/create-alert/share/remove controls remain interactive in local component state. |
+| Evidence boundary | The hero and evidence banner explicitly state that this is a local search-alert preview, not evidence that a result, listing, package, course, community post, price, or notification exists. No source, result, user, address, price, availability, package, course, post, ranking, market outcome, or alert delivery is asserted. |
+| Source and freshness safety | Real activation requires authenticated user, source, query, criteria, tenant, jurisdiction, timestamp, freshness, permissions, provenance, result semantics, ranking, deduplication, source review, stale-result handling, event source, retries, suppression, delivery, and audit. No source index or timestamp is connected. |
+| Privacy and notification safety | Privacy, consent, address and sensitive-data redaction, retention, deletion, export, sharing, notification, support, quiet hours, and accountable access are required before alerts or sharing. No identity, address, result, notification, or personal-data record is connected. |
+| Domain claims | Property, package, education, community, financial, crypto, AI, marketplace, price, availability, valuation, revenue, ranking, recommendation, quality, safety, and user-impact claims require domain review. No search result, ranking, market, or user-impact outcome is claimed. |
+| Persistence and actions | Save and reset operate only on local search state. Run search, create alert, share, and remove remain visibly disabled. No query, result, ranking, alert, notification, source, or audit record is created. |
+| Accessibility and UX | Existing semantic controls, visible labels, focusable buttons, native selects, responsive cards, disabled-state treatment, and evidence disclosures were retained. Desktop and mobile visual hierarchy was reviewed. |
+
+Validation completed successfully with Prettier, `pnpm exec tsc --noEmit`, and the production build. The build continues to emit the existing non-blocking large-chunk advisory. Desktop evidence was captured at 1440×1000 and mobile evidence at 390×844. Visual review confirms preserved local search behavior, explicit unavailable/unconfigured/unverified states, disabled consequential actions, and absence of fabricated outcomes.
+
+Production activation would require governed source indexes, query semantics, permissions, privacy and consent controls, freshness, ranking and deduplication review, notification delivery, retention/deletion, support, audit, incident response, accessibility, and accountable domain review for property, package, education, community, financial, crypto, AI, marketplace, price, valuation, or user-impact claims. No result, ranking, alert, market, or user-impact outcome is claimed here.
