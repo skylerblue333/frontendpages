@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/TravelDocuments.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst TravelDocuments = () => (\n  <FeatureUnavailable\n    title="Travel document storage unavailable"\n    description="Passport, visa, identity, and travel-document handling requires encrypted storage, strict access control, data minimization, retention and deletion policy, malware scanning, audit logging, region and compliance review, and verified sharing boundaries. No document, identity record, expiry, eligibility, compliance, or approval result is stored or generated here."\n    capability="Sensitive travel-document storage and organization"\n    nextStep="Connect approved encrypted storage, identity and authorization controls, retention policy, audit logging, and compliance review before enabling travel documents"\n  />\n);\n\nexport default TravelDocuments;\n`);
+console.log(JSON.stringify({ changed: ['TravelDocuments.tsx'] }, null, 2));
