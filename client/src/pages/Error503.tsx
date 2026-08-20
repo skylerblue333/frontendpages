@@ -6,7 +6,7 @@ export default function Error503() {
   const [state, setState] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-black p-4">
+    <div data-ui-polish="batch-188" className="min-h-screen bg-gradient-to-b from-slate-950 to-black p-4">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-white mb-8">Error503</h1>
         <p className="text-slate-400 mb-8">503 service unavailable</p>

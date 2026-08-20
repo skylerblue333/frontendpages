@@ -27,7 +27,7 @@ export default function Engineer() {
       `${action} is unavailable locally. No model request, code generation, source upload, execution, telemetry, persistence, or account operation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-188" className="min-h-screen bg-background">
       <PageHeader
         icon={Cpu}
         title="AI Engineer"

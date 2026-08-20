@@ -47,7 +47,7 @@ export default function EventPlanner() {
   const totalSeats = tables.reduce((s, t) => s + t.seats, 0);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-slate-100">
+    <div data-ui-polish="batch-188" className="min-h-screen bg-[#0a0a0f] text-slate-100">
       <div className="border-b border-slate-800/60 bg-[#0d0d14]/90 backdrop-blur sticky top-0 z-20">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-3">
