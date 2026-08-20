@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/PolicyManagement.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst PolicyManagement = () => (\n  <FeatureUnavailable\n    title="Policy management unavailable"\n    description="Policy management requires an authenticated organization, policy ownership, versioned documents, approval workflow, effective dates, acknowledgement records, enforcement controls, retention, and audit evidence. No policy, approval, compliance, or enforcement outcome is created here."\n    capability="Policies, procedures, approvals, acknowledgements, and governance"\n    nextStep="Connect governed document and approval services with versioning, access control, retention, and audit evidence before enabling policy operations"\n  />\n);\n\nexport default PolicyManagement;\n`);
+console.log(JSON.stringify({ changed: ['PolicyManagement.tsx'] }, null, 2));
