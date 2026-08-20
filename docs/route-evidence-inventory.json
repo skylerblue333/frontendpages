@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "1025c481c6aa90a6731db23efcb6a5cd50766123",
+  "generated_at_commit": "fa366783d76afa703a0df8bc0a30079d220ecc6f",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 619,
-  "routes_with_visual_checkpoint": 597,
-  "routes_with_placeholder_signal": 563,
+  "routes_with_review": 620,
+  "routes_with_visual_checkpoint": 598,
+  "routes_with_placeholder_signal": 562,
   "routes": [
     {
       "route": "/",
@@ -8725,9 +8725,9 @@
       "component": "Trending",
       "source": "client/src/pages/Trending.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/trending-content",

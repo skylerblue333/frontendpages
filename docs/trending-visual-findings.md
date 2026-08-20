@@ -1,0 +1,3 @@
+# Trending visual findings
+
+The 390×844 mobile render keeps the Trending header, unavailable-service disclosure, refresh-unavailable control, trend explanation, 24-hour/7-day/30-day window controls, and first market-activity concept readable without horizontal overflow. The 1440×1000 desktop render shows the complete trend-preview workspace with Finance, Community, and Education concepts, selected rank/score/source/freshness/price-or-activity/audience/recommendation metadata, and explicit provenance, privacy, moderation, and timestamp boundaries. No popularity, momentum, rank, score, price, volume, engagement, audience inference, recommendation, or financial signal is fabricated. Window selection, concept selection, status, and refresh remain local-only.
