@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/CookiePolicy.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst CookiePolicy = () => (\n  <FeatureUnavailable\n    title="Cookie policy controls unavailable"\n    description="A trustworthy cookie policy requires an authoritative policy source, actual cookie and storage inventory, purposes and retention, consent categories, regional behavior, consent recording and withdrawal, vendor ownership, policy versioning, and validated enforcement. No cookie inventory, consent status, compliance, or regulatory claim is shown or asserted."\n    capability="Auditable cookie disclosure and consent management"\n    nextStep="Connect the approved privacy, consent, cookie-inventory, vendor, regional, and policy-publication controls before enabling this feature"\n  />\n);\n\nexport default CookiePolicy;\n`);
+console.log(JSON.stringify({ changed: ['CookiePolicy.tsx'] }, null, 2));
