@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "daae98fbe1d07056e5a36efb01c95c8e9e37572c",
+  "generated_at_commit": "f983d971ed9ed60ff0fdc8fe95f122a3bb56eeab",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 272,
-  "routes_with_visual_checkpoint": 250,
+  "routes_with_review": 273,
+  "routes_with_visual_checkpoint": 251,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -2965,8 +2965,8 @@
       "component": "ENSResolver",
       "source": "client/src/pages/ENSResolver.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
