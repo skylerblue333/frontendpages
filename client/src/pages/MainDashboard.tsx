@@ -28,8 +28,8 @@ export default function MainDashboard() {
           <div className="flex items-start gap-4">
             <ShieldCheck className="mt-1 h-6 w-6 shrink-0 text-cyan-300" aria-hidden="true" />
             <div>
-              <h2 className="font-semibold">Code-green stabilization checkpoint</h2>
-              <p className="mt-1 text-sm leading-6 text-slate-300">The application currently has zero strict TypeScript diagnostics, a passing production build, and passing automated tests. This status does not claim that production infrastructure or external services are live.</p>
+              <h2 className="font-semibold">Latest local validation checkpoint</h2>
+              <p className="mt-1 text-sm leading-6 text-slate-300">The latest local validation recorded zero strict TypeScript diagnostics, a passing production build, and passing automated tests. These are code checks only; they do not prove that production infrastructure, external providers, data, or monitoring are live.</p>
             </div>
           </div>
         </Card>
@@ -40,7 +40,7 @@ export default function MainDashboard() {
               <LockKeyhole className="mb-4 h-5 w-5 text-amber-300" aria-hidden="true" />
               <h2 className="font-semibold">{title}</h2>
               <p className="mt-2 text-sm leading-6 text-slate-400">{description}</p>
-              <Link href="/" className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-cyan-300 hover:text-cyan-200">View launch boundary <ArrowRight className="h-4 w-4" /></Link>
+              <Link href="/" aria-label={`View launch boundary for ${title}`} className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-cyan-300 hover:text-cyan-200">View launch boundary <ArrowRight className="h-4 w-4" /></Link>
             </Card>
           ))}
         </div>
