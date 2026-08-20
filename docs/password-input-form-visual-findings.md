@@ -1,0 +1,3 @@
+# PasswordInputForm visual findings
+
+The 390×844 mobile render shows a responsive single-column hierarchy with the credential-input readiness label, no-credential-data badge, PasswordInputForm readiness heading, concise scope statement, unavailable-password warning, and first no-credential-data summary card visible without horizontal overflow. The 1440×1000 desktop render shows the full-width readiness header, unavailable warning, three summary cards, credential-governance requirements heading and filter, and the first two governance cards in a balanced two-column layout. Both captures use explicit no-data and no-action language and show no fabricated accounts, passwords, hashes, tokens, recovery factors, or authentication records.
