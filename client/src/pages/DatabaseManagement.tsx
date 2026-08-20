@@ -120,7 +120,7 @@ export default function DatabaseManagement() {
     ["Audit", selected.audit],
   ];
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-185" className="min-h-screen bg-background">
       <PageHeader
         icon={Database}
         title="Database management"

@@ -22,7 +22,7 @@ export default function DatingProfile() {
       `${a} is unavailable locally. No identity, photo, matching, discovery, suggestion, notification, profile, or account mutation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-185" className="min-h-screen bg-background">
       <PageHeader
         icon={UserRound}
         title="Dating profile"

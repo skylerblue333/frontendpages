@@ -56,7 +56,7 @@ export default function DatingDiscovery() {
       className="min-h-screen bg-background"
       aria-labelledby="dating-discovery-title"
     >
-      <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+      <div data-ui-polish="batch-185" className="mx-auto max-w-6xl space-y-6 px-4 py-8">
         <header className="space-y-3">
           <Badge variant="outline" className="border-pink-400/30 text-pink-200">
             DISCOVERY READINESS PREVIEW

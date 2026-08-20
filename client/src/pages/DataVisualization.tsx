@@ -105,7 +105,7 @@ export default function DataVisualization() {
     ["Permissions", selected.permission],
   ];
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-185" className="min-h-screen bg-background">
       <PageHeader
         icon={BarChart3}
         title="Data visualization"

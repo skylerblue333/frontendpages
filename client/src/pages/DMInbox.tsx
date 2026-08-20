@@ -152,7 +152,7 @@ export default function DMInbox() {
         uploads, and delivery status are not connected to a verified provider or
         ledger.
       </ScreenPreviewBanner>
-      <div className="flex min-h-[calc(100vh-8rem)] flex-1 overflow-hidden">
+      <div data-ui-polish="batch-185" className="flex min-h-[calc(100vh-8rem)] flex-1 overflow-hidden">
         <section
           className={`${mobileView === "chat" ? "hidden md:flex" : "flex"} w-full flex-col border-r border-border/30 bg-card/30 md:w-80`}
           aria-labelledby="thread-list-title"

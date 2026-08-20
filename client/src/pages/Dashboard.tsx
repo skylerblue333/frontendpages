@@ -54,7 +54,7 @@ export default function Dashboard() {
         className="grid min-h-screen place-items-center bg-[#080b14] text-white"
         aria-busy="true"
       >
-        <div className="rounded-2xl border border-white/10 bg-white/5 px-6 py-5 text-center">
+        <div data-ui-polish="batch-185" className="rounded-2xl border border-white/10 bg-white/5 px-6 py-5 text-center">
           <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-2 border-cyan-300 border-t-transparent" />
           <p className="text-sm text-slate-300">Checking your session…</p>
         </div>
