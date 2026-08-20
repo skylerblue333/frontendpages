@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/CompetitiveRadar.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst CompetitiveRadar = () => (\n  <FeatureUnavailable\n    title="Competitive intelligence unavailable"\n    description="The prior radar displayed unsupported competitor counts, market share, growth rates, user sentiment, rankings, trend charts, capability scores, threats, opportunities, and real-time monitoring. No verified market-data source, methodology, timestamp, licensing, or analyst review is connected, so no competitive conclusion is presented."\n    capability="Competitive intelligence, market sensing, benchmarking, and recommendations"\n    nextStep="Connect licensed market data and a documented analysis pipeline before publishing comparisons"\n  />\n);\n\nexport default CompetitiveRadar;\n`);
+console.log(JSON.stringify({ changed: ['CompetitiveRadar.tsx'] }, null, 2));
