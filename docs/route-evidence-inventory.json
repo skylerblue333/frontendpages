@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "58ba0f407c713139ff87eb1ccd2ddee6c8d78f64",
+  "generated_at_commit": "2bb165162a9d255da63b4214e33ec6939faf55d1",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 536,
-  "routes_with_visual_checkpoint": 514,
+  "routes_with_review": 537,
+  "routes_with_visual_checkpoint": 515,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7249,8 +7249,8 @@
       "component": "SchoolDashboard",
       "source": "client/src/pages/SchoolDashboard.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
