@@ -2939,7 +2939,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/derivatives-trading",
