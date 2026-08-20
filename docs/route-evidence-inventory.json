@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "5281b1a568d373e3fedad0f399685b79933cdc6c",
+  "generated_at_commit": "2a85864f45ded956322da130b84ee102c02d40d3",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 228,
-  "routes_with_visual_checkpoint": 228,
+  "routes_with_review": 229,
+  "routes_with_visual_checkpoint": 229,
   "routes_with_placeholder_signal": 711,
   "routes": [
     {
@@ -2236,8 +2236,8 @@
       "component": "CreatorStudio",
       "source": "client/src/pages/CreatorStudio.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
