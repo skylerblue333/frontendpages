@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "b50163b36faae983c33f5048eebea1030d033ab9",
+  "generated_at_commit": "e8c5010a8fcd7c0b0f73ea41250672f782b77814",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 604,
-  "routes_with_visual_checkpoint": 582,
+  "routes_with_review": 605,
+  "routes_with_visual_checkpoint": 583,
   "routes_with_placeholder_signal": 572,
   "routes": [
     {
@@ -8302,8 +8302,8 @@
       "component": "TextInputForm",
       "source": "client/src/pages/TextInputForm.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
