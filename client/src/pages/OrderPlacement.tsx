@@ -1,12 +1,255 @@
-import { FeatureUnavailable } from "@/components/FeatureUnavailable";
+import { useMemo, useState } from "react";
+import {
+  FileSearch,
+  Info,
+  LockKeyhole,
+  PackageCheck,
+  Search,
+  ShieldCheck,
+  ShoppingCart,
+  XCircle,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
+type Requirement = { title: string; area: string; description: string };
+const requirements: readonly Requirement[] = [
+  {
+    title: "Catalog, inventory, and pricing provenance",
+    area: "Commerce",
+    description:
+      "No product, variant, inventory quantity, currency, price, tax, discount, seller, shipping, or as-of timestamp is connected.",
+  },
+  {
+    title: "Cart, customer, and authorization",
+    area: "Authorization",
+    description:
+      "No cart, customer, address, account permission, payment method, age or region rule, consent, or checkout identity is available.",
+  },
+  {
+    title: "Payment intent and idempotency",
+    area: "Payments",
+    description:
+      "No payment intent, authorization, capture, idempotency key, fraud review, 3DS result, or payment provider response exists.",
+  },
+  {
+    title: "Fulfillment, cancellation, refund, and reconciliation",
+    area: "Operations",
+    description:
+      "No order state, shipment, cancellation, refund, dispute, fulfillment event, reconciliation record, audit trail, or support trace is connected.",
+  },
+  {
+    title: "Actions and persistence",
+    area: "Safety",
+    description:
+      "No add-to-cart, place, pay, cancel, refund, retry, export, or order or payment mutation is connected or persisted.",
+  },
+];
 export default function OrderPlacement() {
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState(
+    "Order placement is unavailable locally. No catalog, inventory, cart, customer, payment, order, fulfillment, refund, or financial record was loaded or saved."
+  );
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return requirements.filter(
+      ({ title, area, description }) =>
+        !q || `${title} ${area} ${description}`.toLowerCase().includes(q)
+    );
+  }, [query]);
+  const unavailable = (action: string) =>
+    setStatus(
+      `${action} is unavailable locally. No product, cart, customer, payment, order, fulfillment, refund, or financial-data mutation was changed.`
+    );
   return (
-    <FeatureUnavailable
-      title="Order placement is not active"
-      description="Order creation is unavailable until catalog, inventory, authorization, payment intent, idempotency, fulfillment, cancellation, refund, and reconciliation contracts are connected and tested. This route does not submit an order or claim payment success."
-      capability="Order placement and checkout"
-      nextStep="Return to the launch hub"
-    />
+    <main
+      className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 lg:px-8"
+      aria-labelledby="order-placement-title"
+    >
+      <div className="mx-auto max-w-6xl space-y-6">
+        <header className="rounded-2xl border border-border/70 bg-card/80 p-6 shadow-sm sm:p-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="outline" className="gap-2">
+                  <ShoppingCart className="size-3.5" aria-hidden="true" />{" "}
+                  Checkout-readiness workspace
+                </Badge>
+                <Badge variant="secondary">No order data</Badge>
+              </div>
+              <h1
+                id="order-placement-title"
+                className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl"
+              >
+                OrderPlacement readiness
+              </h1>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground sm:text-base">
+                Review catalog and inventory provenance, cart and customer
+                authorization, payment intent safety, fulfillment, cancellation,
+                refund, reconciliation, and checkout boundaries without implying
+                that products, carts, payments, orders, or financial records
+                exist.
+              </p>
+            </div>
+            <ShieldCheck className="size-8 text-primary" aria-hidden="true" />
+          </div>
+        </header>
+        <section className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5">
+          <div className="flex items-start gap-3">
+            <Info
+              className="mt-0.5 size-5 shrink-0 text-amber-200"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="font-semibold text-amber-100">
+                Order placement is unavailable
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-amber-100/75">
+                No catalog, inventory service, cart, customer authorization,
+                payment provider, fulfillment system, refund workflow, or
+                persistence layer is connected. This workspace cannot add to
+                cart, place, pay, cancel, retry, refund, export, or claim
+                payment or order success.
+              </p>
+            </div>
+          </div>
+        </section>
+        <section className="grid gap-4 sm:grid-cols-3">
+          <Card>
+            <CardContent className="p-5">
+              <PackageCheck
+                className="mb-3 size-5 text-primary"
+                aria-hidden="true"
+              />
+              <h2 className="font-semibold">No commerce data</h2>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                No product, variant, inventory, price, tax, discount, seller,
+                shipping, cart, or order record is loaded.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-5">
+              <ShoppingCart
+                className="mb-3 size-5 text-primary"
+                aria-hidden="true"
+              />
+              <h2 className="font-semibold">No payment state</h2>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                No customer, address, payment intent, authorization, capture,
+                fraud review, or provider response exists.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-5">
+              <XCircle
+                className="mb-3 size-5 text-primary"
+                aria-hidden="true"
+              />
+              <h2 className="font-semibold">No checkout actions</h2>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                No add-to-cart, place, pay, cancel, refund, retry, export, or
+                order or payment mutation is available.
+              </p>
+            </CardContent>
+          </Card>
+        </section>
+        <Card>
+          <CardHeader>
+            <CardTitle>Checkout-governance requirements</CardTitle>
+            <p className="text-sm leading-6 text-muted-foreground">
+              Search filters immutable local requirement notes only. It never
+              loads a catalog, creates a cart, initiates payment, submits an
+              order, or saves commerce records.
+            </p>
+            <div className="relative max-w-xl pt-2">
+              <Search
+                className="pointer-events-none absolute left-3 top-4 size-4 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <Input
+                aria-label="Search OrderPlacement readiness notes"
+                value={query}
+                onChange={event => setQuery(event.target.value)}
+                placeholder="Filter checkout requirements"
+                className="pl-9"
+              />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-2">
+              {visible.map(item => (
+                <div
+                  key={item.title}
+                  className="rounded-xl border border-border/70 p-5"
+                >
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="font-semibold">{item.title}</h3>
+                    <Badge variant="outline">{item.area}</Badge>
+                  </div>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    {item.description}
+                  </p>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    className="mt-4"
+                    onClick={() => unavailable(`Review ${item.title}`)}
+                  >
+                    <FileSearch className="mr-2 size-4" aria-hidden="true" />
+                    Review unavailable
+                  </Button>
+                </div>
+              ))}
+              {visible.length === 0 && (
+                <div
+                  className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground md:col-span-2"
+                  role="status"
+                >
+                  No checkout requirements match “{query}”.
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+        <section className="rounded-2xl border border-border/70 bg-card/50 p-5">
+          <div className="flex items-start gap-3">
+            <LockKeyhole
+              className="mt-0.5 size-5 shrink-0 text-emerald-500"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="font-semibold">
+                Evidence required before activation
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                Production checkout requires authoritative catalog and inventory
+                data, exact pricing and tax rules, authenticated customer
+                authorization, secure payment intent and idempotency, fraud and
+                regulatory controls, fulfillment state, cancellation and refund
+                handling, reconciliation, audit history, and clear payment and
+                order success evidence. No product, cart, payment, order,
+                fulfillment, refund, or financial record is claimed here.
+              </p>
+            </div>
+          </div>
+        </section>
+        <p
+          className="rounded-xl border border-border/30 bg-card/30 px-4 py-3 text-sm text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
+          <ShieldCheck
+            className="mr-2 inline size-4 text-emerald-400"
+            aria-hidden="true"
+          />
+          {status}
+        </p>
+      </div>
+    </main>
   );
 }

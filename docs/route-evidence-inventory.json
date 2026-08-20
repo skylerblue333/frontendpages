@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "448c3da7c5c077d113f6ddd66d507e6ee8cba2df",
+  "generated_at_commit": "a6769457386531821bba866db2c5dc9115a1eee8",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 445,
-  "routes_with_visual_checkpoint": 423,
-  "routes_with_placeholder_signal": 619,
+  "routes_with_review": 446,
+  "routes_with_visual_checkpoint": 424,
+  "routes_with_placeholder_signal": 618,
   "routes": [
     {
       "route": "/",
@@ -5701,8 +5701,8 @@
       "component": "OrderPlacement",
       "source": "client/src/pages/OrderPlacement.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -5775,7 +5775,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/payment-confirmation",
