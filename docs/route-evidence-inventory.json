@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "d1bccbce0fb17e19f1326c660cc4c47adca6b5ea",
+  "generated_at_commit": "e48e63c754f8d8575f0080c6ba434b80be1ed4d3",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 410,
-  "routes_with_visual_checkpoint": 388,
+  "routes_with_review": 411,
+  "routes_with_visual_checkpoint": 389,
   "routes_with_placeholder_signal": 667,
   "routes": [
     {
@@ -5251,8 +5251,8 @@
       "component": "MobileStreaming",
       "source": "client/src/pages/MobileStreaming.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
