@@ -1,0 +1,3 @@
+# PaymentMethods visual findings
+
+The 390×844 mobile render shows a responsive single-column hierarchy with the payment-method readiness label, no-method-data badge, PaymentMethods readiness heading, concise scope statement, unavailable-method warning, and first no-method-data summary card visible without horizontal overflow. The 1440×1000 desktop render shows the full-width readiness header, unavailable warning, three summary cards, payment-method governance requirements heading and filter, and the first two governance cards in a balanced two-column layout. Both captures use explicit no-data and no-action language and show no fabricated payment credentials, tokens, accounts, authorizations, billing agreements, fees, balances, or financial records.

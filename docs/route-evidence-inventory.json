@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "0b4729b4319608081b0d85fa2d9447d5a8dba3e1",
+  "generated_at_commit": "88b1895c0ea41cd531235f56a50cad83a08ce130",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 453,
-  "routes_with_visual_checkpoint": 431,
-  "routes_with_placeholder_signal": 610,
+  "routes_with_review": 454,
+  "routes_with_visual_checkpoint": 432,
+  "routes_with_placeholder_signal": 609,
   "routes": [
     {
       "route": "/",
@@ -5800,8 +5800,8 @@
       "component": "PaymentMethods",
       "source": "client/src/pages/PaymentMethods.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -6414,7 +6414,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/project-listing",
