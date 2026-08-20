@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "889303e5f15d50a7025ce269e9a40bbd370d9455",
+  "generated_at_commit": "1bf8748addb2b94b9135c3eea98a6f3cbd7d9a29",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 623,
-  "routes_with_visual_checkpoint": 601,
+  "routes_with_review": 624,
+  "routes_with_visual_checkpoint": 602,
   "routes_with_placeholder_signal": 559,
   "routes": [
     {
@@ -8779,8 +8779,8 @@
       "component": "TrumpMining",
       "source": "client/src/pages/TrumpMining.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {

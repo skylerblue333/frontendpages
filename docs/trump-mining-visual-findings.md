@@ -1,0 +1,3 @@
+# TrumpMining visual findings
+
+The 390×844 mobile render keeps the Token Mining header, unavailable-service disclosure, refresh-unavailable control, read-only mining explanation, and first network/telemetry card readable without horizontal overflow. The 1440×1000 desktop render shows the complete mining-readiness workspace with network, hashrate, blocks, rewards, profitability, and payouts withheld, plus telemetry/accounting, wallet/payout, and boosts/leaderboards gates. Start mining and claim rewards remain disabled. No hashrate, block, reward, balance, payout, boost, leaderboard, yield, return, or profitability outcome is fabricated.
