@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/ConversionOptimization.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst ConversionOptimization = () => (\n  <FeatureUnavailable\n    title="Conversion optimization unavailable"\n    description="Conversion optimization requires governed event instrumentation, experiment assignment and exposure tracking, statistical design, guardrail metrics, consent and privacy controls, reproducible analysis, and safe rollout or rollback controls. No experiment, variant, lift, conversion, revenue impact, recommendation, or forecast is presented."\n    capability="Auditable experimentation and conversion optimization"\n    nextStep="Connect approved analytics and experimentation services with assignment, privacy, statistical, guardrail, rollout, rollback, and audit controls before enabling optimization"\n  />\n);\n\nexport default ConversionOptimization;\n`);
+console.log(JSON.stringify({ changed: ['ConversionOptimization.tsx'] }, null, 2));
