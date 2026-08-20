@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "42af8877adafffde27dd7d875c18a0642a05aae7",
+  "generated_at_commit": "4ac52c8ba6fa1c07813c44668b87f8e2a328ff76",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 337,
-  "routes_with_visual_checkpoint": 315,
-  "routes_with_placeholder_signal": 702,
+  "routes_with_review": 338,
+  "routes_with_visual_checkpoint": 316,
+  "routes_with_placeholder_signal": 701,
   "routes": [
     {
       "route": "/",
@@ -4144,9 +4144,9 @@
       "component": "HealthGoals",
       "source": "client/src/pages/HealthGoals.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/help-center",
