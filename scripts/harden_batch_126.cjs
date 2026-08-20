@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/CustomDashboard.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst CustomDashboard = () => (\n  <FeatureUnavailable\n    title="Custom dashboards unavailable"\n    description="Custom dashboards require governed data-source connections, widget definitions, permission-aware queries, saved layouts, refresh behavior, cache correctness, error and empty states, export controls, and privacy protections. No metric, chart, widget, data source, synchronization state, or personalization result is shown or asserted."\n    capability="Permission-aware custom dashboards and saved workspaces"\n    nextStep="Connect approved data sources and dashboard services with schema validation, access controls, refresh, caching, export, audit, and recovery behavior before enabling customization"\n  />\n);\n\nexport default CustomDashboard;\n`);
+console.log(JSON.stringify({ changed: ['CustomDashboard.tsx'] }, null, 2));
