@@ -1,0 +1,3 @@
+# UserStats visual findings
+
+The 390×844 mobile render keeps the User Stats header, unavailable-service disclosure, refresh/export-unavailable controls, metrics explanation, 7/30/90-day time-window controls, and metric preview readable without horizontal overflow. The 1440×1000 desktop render shows the complete statistics-readiness workspace with selected value, definition, source, freshness, baseline, comparison, privacy, ranking, and export states explicitly withheld. No count, activity, engagement, growth, ranking, balance, performance, or personal-analytics value is fabricated. Time-window selection, metric selection, and status remain local-only; refresh and export are unavailable.

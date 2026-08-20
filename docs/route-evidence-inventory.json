@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "d8505f670892490471f8ba8c2e176007674791fa",
+  "generated_at_commit": "ca4a8e53cf059ea11db54732dcd42c99a75908c6",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 635,
-  "routes_with_visual_checkpoint": 613,
-  "routes_with_placeholder_signal": 550,
+  "routes_with_review": 636,
+  "routes_with_visual_checkpoint": 614,
+  "routes_with_placeholder_signal": 549,
   "routes": [
     {
       "route": "/",
@@ -9058,9 +9058,9 @@
       "component": "UserStats",
       "source": "client/src/pages/UserStats.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/user-suggestions",
