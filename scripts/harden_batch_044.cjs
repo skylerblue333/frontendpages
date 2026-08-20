@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/UpdatedLandingPage.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst UpdatedLandingPage = () => (\n  <FeatureUnavailable\n    title="Public platform claims require verification"\n    description="The prior landing page claimed production readiness, exact page and route counts, code volume, backend routers, a real database, multi-crypto and mining integrations, live AI responses, a $2M+ valuation, and verified truthfulness. Those claims are not independently evidenced by this page and are intentionally not presented as facts."\n    capability="Public ecosystem overview and launch messaging"\n    nextStep="Publish launch claims only from a dated evidence ledger covering code, services, integrations, infrastructure, operations, and financial assertions"\n  />\n);\n\nexport default UpdatedLandingPage;\n`);
+console.log(JSON.stringify({ changed: ['UpdatedLandingPage.tsx'] }, null, 2));
