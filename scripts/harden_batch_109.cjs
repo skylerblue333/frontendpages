@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/StockChart.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst StockChart = () => (\n  <FeatureUnavailable\n    title="Stock charts unavailable"\n    description="Production price charts require authorized and licensed market data, validated instrument identity, exchange and currency context, timestamp and timezone semantics, stale or missing-data handling, reproducible aggregation, and clear limits against investment advice. No candle, price, volume, indicator, trend, forecast, portfolio, order, or market conclusion is rendered here."\n    capability="Security price charts, market history, and technical analysis"\n    nextStep="Connect governed market-data providers, licensing, timestamp and staleness controls, chart validation, audit, and reviewed non-advisory disclosures before enabling stock charts"\n  />\n);\n\nexport default StockChart;\n`);
+console.log(JSON.stringify({ changed: ['StockChart.tsx'] }, null, 2));
