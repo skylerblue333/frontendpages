@@ -1093,3 +1093,6 @@ Mobile screenshot: `/home/ubuntu/screenshots/email-notifications-mobile-390x844.
 ## email-templates-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/email-templates-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/email-templates-mobile-390x844.png`
+## email-verification-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/email-verification-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/email-verification-mobile-390x844.png`
