@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/TaskAutomation.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst TaskAutomation = () => (\n  <FeatureUnavailable\n    title="Task automation unavailable"\n    description="Production task automation requires authenticated ownership, validated task definitions, triggers, scheduling, idempotent execution, secret handling, retries, rate limits, observability, approvals, and rollback. No task, schedule, trigger, integration call, execution, completion, or success result is created here."\n    capability="Task scheduling, automation, integration execution, and retry workflows"\n    nextStep="Connect governed task storage, event and schedule services, integration credentials, execution workers, observability, approval, and rollback controls before enabling automation"\n  />\n);\n\nexport default TaskAutomation;\n`);
+console.log(JSON.stringify({ changed: ['TaskAutomation.tsx'] }, null, 2));
