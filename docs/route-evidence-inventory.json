@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "195044b744160a510bdc6e094995c69f3971424e",
+  "generated_at_commit": "cc0dae30f4848473b9dd5da4551d310b9d12c52d",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 553,
-  "routes_with_visual_checkpoint": 531,
+  "routes_with_review": 554,
+  "routes_with_visual_checkpoint": 532,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7420,8 +7420,8 @@
       "component": "SendCrypto",
       "source": "client/src/pages/SendCrypto.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
