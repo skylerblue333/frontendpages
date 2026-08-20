@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "90bf45d62a7901d497fe02f5a7ab6309651d370f",
+  "generated_at_commit": "0c55f46e9217b4f6a08135161afc1a839552fa7b",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 373,
-  "routes_with_visual_checkpoint": 351,
+  "routes_with_review": 374,
+  "routes_with_visual_checkpoint": 352,
   "routes_with_placeholder_signal": 700,
   "routes": [
     {
@@ -4666,8 +4666,8 @@
       "component": "Likes",
       "source": "client/src/pages/Likes.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
