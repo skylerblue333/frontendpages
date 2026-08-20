@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "aef56e34add22270eb8d0118dc57cceafa8f6eb1",
+  "generated_at_commit": "5ff206d65d3260e4e26f1999e16a4e6317b1b299",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 385,
-  "routes_with_visual_checkpoint": 363,
-  "routes_with_placeholder_signal": 698,
+  "routes_with_review": 386,
+  "routes_with_visual_checkpoint": 364,
+  "routes_with_placeholder_signal": 697,
   "routes": [
     {
       "route": "/",
@@ -4828,8 +4828,8 @@
       "component": "MailingLists",
       "source": "client/src/pages/MailingLists.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -5244,7 +5244,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/mobile-streaming",
