@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/AutomationRules.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst AutomationRules = () => (\n  <FeatureUnavailable\n    title="Automation rules unavailable"\n    description="Automation rules require a governed trigger and action engine, durable scheduling, idempotency, authorization, integration health, retries, rate limits, audit logs, secret handling, and an emergency stop. No rule has been created, enabled, scheduled, executed, or completed."\n    capability="Reliable cross-service automation and scheduled workflows"\n    nextStep="Connect approved trigger/action services with authorization, scheduling, idempotency, retry, audit, secret, monitoring, and rollback controls before enabling rules"\n  />\n);\n\nexport default AutomationRules;\n`);
+console.log(JSON.stringify({ changed: ['AutomationRules.tsx'] }, null, 2));
