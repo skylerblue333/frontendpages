@@ -1,8 +1,415 @@
 import { useMemo, useState } from "react";
-import { BadgeDollarSign, Boxes, Check, Filter, LockKeyhole, PackageCheck, RefreshCw, ShieldAlert, Store, UsersRound, X } from "lucide-react";
+import {
+  BadgeDollarSign,
+  Boxes,
+  Check,
+  Filter,
+  LockKeyhole,
+  PackageCheck,
+  RefreshCw,
+  ShieldAlert,
+  Store,
+  UsersRound,
+  X,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const surfaces = [{ id: 1, name: "Catalog and product setup", category: "Catalog", detail: "A local seller surface covering product identity, descriptions, variants, media, accessibility, policy, moderation, and publishing review.", state: "Unconfigured" }, { id: 2, name: "Inventory and fulfillment", category: "Operations", detail: "A local operations concept covering stock semantics, locations, shipping, returns, fulfillment, exceptions, and customer communication.", state: "Needs evidence" }, { id: 3, name: "Orders and customer care", category: "Orders", detail: "A local order concept covering order states, authorization, payment boundaries, refunds, disputes, support, and audit.", state: "High risk" }, { id: 4, name: "Payouts and seller analytics", category: "Finance", detail: "A local finance concept covering settlement, fees, currency, tax, reconciliation, reporting, and financial-review intent without asserting revenue.", state: "Blocked" }];
-export default function SellerDashboard() { const [query, setQuery] = useState(""); const [category, setCategory] = useState("All"); const [selected, setSelected] = useState(1); const [workflow, setWorkflow] = useState("Seller workflow not configured"); const [review, setReview] = useState("Review state not configured"); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false); const categories = ["All", ...Array.from(new Set(surfaces.map((item) => item.category)))]; const filtered = useMemo(() => surfaces.filter((item) => (category === "All" || item.category === category) && `${item.name} ${item.category} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [category, query]); const surface = surfaces.find((item) => item.id === selected) ?? surfaces[0]; const reset = () => { setQuery(""); setCategory("All"); setSelected(1); setWorkflow("Seller workflow not configured"); setReview("Review state not configured"); setSaved(false); setShowGates(false); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Store} eyebrow="Seller dashboard · Marketplace preview" title="Run the seller workflow only after catalog and commerce evidence connect." description="Explore local catalog, operations, orders, and finance concepts with search, category filters, workflow and review intent, inventory/order/payout gates, save/reset, and blocked marketplace actions. No seller, product, customer, order, payment, inventory, payout, rating, revenue, or performance outcome is connected." badge="Seller-operations workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Saved locally" : "Save seller setup"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review seller gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset workspace</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Seller surfaces", value: `${surfaces.length} local`, hint: "No seller source", icon: Store, tone: "cyan" }, { label: "Catalog", value: "Unconfigured", hint: "No product source", icon: Boxes, tone: "violet" }, { label: "Orders", value: "Unavailable", hint: "No commerce source", icon: PackageCheck, tone: "amber" }, { label: "Payouts", value: "Blocked", hint: "No financial source", icon: BadgeDollarSign, tone: "slate" }]} /><ScreenPreviewBanner title="Seller-dashboard evidence boundary"><strong>This is a local seller-operations preview, not evidence that a seller, product, customer, order, payment, inventory, payout, rating, or revenue outcome exists.</strong> Surface cards, filters, workflow/review intent, saved state, commerce gates, and disabled marketplace actions are browser concepts. No seller identity, product listing, inventory, customer, order, payment, refund, payout, rating, revenue, tax, or business-performance claim is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Filter className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local seller surfaces" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-4 flex flex-wrap gap-2">{categories.map((entry) => <Button key={entry} onClick={() => setCategory(entry)} size="sm" variant="outline" className={category === entry ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100" : "border-white/10 text-slate-400"}>{entry}</Button>)}</div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.state}</Badge></div><div className="mt-4"><Badge variant="outline" className="border-white/10 text-slate-500">{item.category}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected seller surface</p><h2 className="mt-2 text-2xl font-black">{surface.name}</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{surface.state}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-400">{surface.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Category", value: surface.category }, { label: "Workflow", value: workflow }, { label: "Review", value: review }, { label: "Seller", value: "Unavailable" }, { label: "Orders", value: "Unavailable" }, { label: "Payouts", value: "Not claimed" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2"><label className="text-sm text-slate-400">Workflow intent<select value={workflow} onChange={(event) => setWorkflow(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Seller workflow not configured</option><option>Catalog-review intent</option><option>Inventory-review intent</option><option>Order-support intent</option><option>Settlement-review intent</option></select></label><label className="text-sm text-slate-400">Review state<select value={review} onChange={(event) => setReview(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Review state not configured</option><option>Seller-owner intent</option><option>Marketplace-review intent</option><option>Finance-review intent</option><option>Compliance-review intent</option></select></label></div><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><Store className="mx-auto size-8 text-slate-600" /><p className="mt-3 font-semibold">No seller evidence loaded</p><p className="mt-2 text-sm text-slate-500">Connect seller identity, catalog, inventory, product moderation, customer support, payment provider, order states, refunds, tax, settlement, privacy, and audit before operating commerce.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Create listing unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Manage order unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Request payout unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Publish storefront unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No seller or financial claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A seller surface does not prove a seller, product, customer, order, payment, inventory, refund, payout, rating, revenue, tax, or performance outcome.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Seller-governance gates</p><h2 className="mt-2 text-2xl font-black">What a real seller dashboard must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Authenticated seller, organization, catalog, product, variant, inventory, order, customer, provider, settlement, timestamp, and provenance", "Product moderation, accessibility, pricing, tax, currency, checkout, payment, refund, dispute, shipping, fulfillment, and support controls", "Payout custody, fees, reconciliation, chargebacks, tax forms, reporting, privacy, retention, deletion, and financial audit", "Marketplace, financial, crypto, property, education, AI, health, legal, security, and customer-impact claims require domain review", "Create, publish, order, refund, payout, notify, export, accessibility, and accountable approval require governed commerce operations", "A seller preview must not be presented as a live storefront, order ledger, payment result, payout balance, or business-performance dashboard without evidence"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Seller surface preserved", description: "Catalog, operations, orders, finance, inventory, payouts, support, filters, workflows, save/reset, and gates remain interactive.", icon: Store, status: "Local commerce" }, { title: "No commerce theater", description: "Sellers, products, customers, orders, payments, inventory, refunds, payouts, ratings, revenue, and outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Commerce evidence before action", description: "Real seller operations require identity, catalog, providers, orders, payments, settlement, privacy, support, and audit.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>; }
+import {
+  ScreenFeatureGrid,
+  ScreenHero,
+  ScreenPreviewBanner,
+  ScreenStatGrid,
+} from "@/components/ScreenExperience";
+const surfaces = [
+  {
+    id: 1,
+    name: "Catalog and product setup",
+    category: "Catalog",
+    detail:
+      "A local seller surface covering product identity, descriptions, variants, media, accessibility, policy, moderation, and publishing review.",
+    state: "Unconfigured",
+  },
+  {
+    id: 2,
+    name: "Inventory and fulfillment",
+    category: "Operations",
+    detail:
+      "A local operations concept covering stock semantics, locations, shipping, returns, fulfillment, exceptions, and customer communication.",
+    state: "Needs evidence",
+  },
+  {
+    id: 3,
+    name: "Orders and customer care",
+    category: "Orders",
+    detail:
+      "A local order concept covering order states, authorization, payment boundaries, refunds, disputes, support, and audit.",
+    state: "High risk",
+  },
+  {
+    id: 4,
+    name: "Payouts and seller analytics",
+    category: "Finance",
+    detail:
+      "A local finance concept covering settlement, fees, currency, tax, reconciliation, reporting, and financial-review intent without asserting revenue.",
+    state: "Blocked",
+  },
+];
+export default function SellerDashboard() {
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("All");
+  const [selected, setSelected] = useState(1);
+  const [workflow, setWorkflow] = useState("Seller workflow not configured");
+  const [review, setReview] = useState("Review state not configured");
+  const [saved, setSaved] = useState(false);
+  const [showGates, setShowGates] = useState(false);
+  const categories = [
+    "All",
+    ...Array.from(new Set(surfaces.map(item => item.category))),
+  ];
+  const filtered = useMemo(
+    () =>
+      surfaces.filter(
+        item =>
+          (category === "All" || item.category === category) &&
+          `${item.name} ${item.category} ${item.detail}`
+            .toLowerCase()
+            .includes(query.toLowerCase())
+      ),
+    [category, query]
+  );
+  const surface = surfaces.find(item => item.id === selected) ?? surfaces[0];
+  const reset = () => {
+    setQuery("");
+    setCategory("All");
+    setSelected(1);
+    setWorkflow("Seller workflow not configured");
+    setReview("Review state not configured");
+    setSaved(false);
+    setShowGates(false);
+  };
+  return (
+    <div className="min-h-screen bg-[#070a16] text-white">
+      <ScreenHero
+        icon={Store}
+        eyebrow="Seller dashboard · Marketplace preview"
+        title="Run the seller workflow only after catalog and commerce evidence connect."
+        description="Explore local catalog, operations, orders, and finance concepts with search, category filters, workflow and review intent, inventory/order/payout gates, save/reset, and blocked marketplace actions. No seller, product, customer, order, payment, inventory, payout, rating, revenue, or performance outcome is connected."
+        badge="Seller-operations workspace"
+      >
+        <div className="flex flex-wrap gap-2">
+          <Button
+            onClick={() => setSaved(true)}
+            className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"
+          >
+            <Check className="mr-2 size-4" />
+            {saved ? "Saved locally" : "Save seller setup"}
+          </Button>
+          <Button
+            onClick={() => setShowGates(value => !value)}
+            variant="outline"
+            className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+          >
+            {showGates ? (
+              <X className="mr-2 size-4" />
+            ) : (
+              <ShieldAlert className="mr-2 size-4" />
+            )}
+            {showGates ? "Close gates" : "Review seller gates"}
+          </Button>
+          <Button
+            onClick={reset}
+            variant="outline"
+            className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+          >
+            <RefreshCw className="mr-2 size-4" />
+            Reset workspace
+          </Button>
+        </div>
+      </ScreenHero>
+      <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+        <ScreenStatGrid
+          items={[
+            {
+              label: "Seller surfaces",
+              value: `${surfaces.length} local`,
+              hint: "No seller source",
+              icon: Store,
+              tone: "cyan",
+            },
+            {
+              label: "Catalog",
+              value: "Unconfigured",
+              hint: "No product source",
+              icon: Boxes,
+              tone: "violet",
+            },
+            {
+              label: "Orders",
+              value: "Unavailable",
+              hint: "No commerce source",
+              icon: PackageCheck,
+              tone: "amber",
+            },
+            {
+              label: "Payouts",
+              value: "Blocked",
+              hint: "No financial source",
+              icon: BadgeDollarSign,
+              tone: "slate",
+            },
+          ]}
+        />
+        <ScreenPreviewBanner title="Seller-dashboard evidence boundary">
+          <strong>
+            This is a local seller-operations preview, not evidence that a
+            seller, product, customer, order, payment, inventory, payout,
+            rating, or revenue outcome exists.
+          </strong>{" "}
+          Surface cards, filters, workflow/review intent, saved state, commerce
+          gates, and disabled marketplace actions are browser concepts. No
+          seller identity, product listing, inventory, customer, order, payment,
+          refund, payout, rating, revenue, tax, or business-performance claim is
+          asserted.
+        </ScreenPreviewBanner>
+        <section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]">
+          <Card className="border-white/10 bg-white/[0.04]">
+            <CardContent className="p-6">
+              <div className="relative">
+                <Filter className="absolute left-3 top-3 size-4 text-slate-500" />
+                <input
+                  value={query}
+                  onChange={event => setQuery(event.target.value)}
+                  placeholder="Search local seller surfaces"
+                  className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none"
+                />
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {categories.map(entry => (
+                  <Button
+                    key={entry}
+                    onClick={() => setCategory(entry)}
+                    size="sm"
+                    variant="outline"
+                    className={
+                      category === entry
+                        ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100"
+                        : "border-white/10 text-slate-400"
+                    }
+                  >
+                    {entry}
+                  </Button>
+                ))}
+              </div>
+              <div className="mt-6 space-y-3">
+                {filtered.map(item => (
+                  <button
+                    key={item.id}
+                    onClick={() => setSelected(item.id)}
+                    className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="font-semibold">{item.name}</p>
+                        <p className="mt-1 text-sm text-slate-500">
+                          {item.detail}
+                        </p>
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className="border-amber-300/20 text-amber-200"
+                      >
+                        {item.state}
+                      </Badge>
+                    </div>
+                    <div className="mt-4">
+                      <Badge
+                        variant="outline"
+                        className="border-white/10 text-slate-500"
+                      >
+                        {item.category}
+                      </Badge>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="border-white/10 bg-white/[0.04]">
+            <CardContent className="p-6">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">
+                    Selected seller surface
+                  </p>
+                  <h2 className="mt-2 text-2xl font-black">{surface.name}</h2>
+                </div>
+                <Badge
+                  variant="outline"
+                  className="border-amber-300/20 text-amber-200"
+                >
+                  {surface.state}
+                </Badge>
+              </div>
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                {surface.detail}
+              </p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                {[
+                  { label: "Category", value: surface.category },
+                  { label: "Workflow", value: workflow },
+                  { label: "Review", value: review },
+                  { label: "Seller", value: "Unavailable" },
+                  { label: "Orders", value: "Unavailable" },
+                  { label: "Payouts", value: "Not claimed" },
+                ].map(item => (
+                  <div
+                    key={item.label}
+                    className="rounded-xl border border-white/10 p-3"
+                  >
+                    <p className="text-xs text-slate-500">{item.label}</p>
+                    <p className="mt-2 text-sm font-semibold text-amber-200">
+                      {item.value}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                <label className="text-sm text-slate-400">
+                  Workflow intent
+                  <select
+                    value={workflow}
+                    onChange={event => setWorkflow(event.target.value)}
+                    className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"
+                  >
+                    <option>Seller workflow not configured</option>
+                    <option>Catalog-review intent</option>
+                    <option>Inventory-review intent</option>
+                    <option>Order-support intent</option>
+                    <option>Settlement-review intent</option>
+                  </select>
+                </label>
+                <label className="text-sm text-slate-400">
+                  Review state
+                  <select
+                    value={review}
+                    onChange={event => setReview(event.target.value)}
+                    className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"
+                  >
+                    <option>Review state not configured</option>
+                    <option>Seller-owner intent</option>
+                    <option>Marketplace-review intent</option>
+                    <option>Finance-review intent</option>
+                    <option>Compliance-review intent</option>
+                  </select>
+                </label>
+              </div>
+              <div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center">
+                <Store className="mx-auto size-8 text-slate-600" />
+                <p className="mt-3 font-semibold">No seller evidence loaded</p>
+                <p className="mt-2 text-sm text-slate-500">
+                  Connect seller identity, catalog, inventory, product
+                  moderation, customer support, payment provider, order states,
+                  refunds, tax, settlement, privacy, and audit before operating
+                  commerce.
+                </p>
+              </div>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <Button disabled className="bg-slate-700 text-slate-400">
+                  Create listing unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Manage order unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Request payout unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Publish storefront unavailable
+                </Button>
+              </div>
+              {showGates && (
+                <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4">
+                  <p className="font-semibold text-amber-100">
+                    No seller or financial claim
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-slate-400">
+                    A seller surface does not prove a seller, product, customer,
+                    order, payment, inventory, refund, payout, rating, revenue,
+                    tax, or performance outcome.
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </section>
+        <Card className="border-white/10 bg-white/[0.04]">
+          <CardContent className="p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">
+              Seller-governance gates
+            </p>
+            <h2 className="mt-2 text-2xl font-black">
+              What a real seller dashboard must prove
+            </h2>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {[
+                "Authenticated seller, organization, catalog, product, variant, inventory, order, customer, provider, settlement, timestamp, and provenance",
+                "Product moderation, accessibility, pricing, tax, currency, checkout, payment, refund, dispute, shipping, fulfillment, and support controls",
+                "Payout custody, fees, reconciliation, chargebacks, tax forms, reporting, privacy, retention, deletion, and financial audit",
+                "Marketplace, financial, crypto, property, education, AI, health, legal, security, and customer-impact claims require domain review",
+                "Create, publish, order, refund, payout, notify, export, accessibility, and accountable approval require governed commerce operations",
+                "A seller preview must not be presented as a live storefront, order ledger, payment result, payout balance, or business-performance dashboard without evidence",
+              ].map(item => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3 rounded-xl border border-white/10 p-3"
+                >
+                  <LockKeyhole className="size-4 text-slate-500" />
+                  <span className="flex-1 text-sm text-slate-300">{item}</span>
+                  <span className="text-xs text-amber-200">Required</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+        <ScreenFeatureGrid
+          features={[
+            {
+              title: "Seller surface preserved",
+              description:
+                "Catalog, operations, orders, finance, inventory, payouts, support, filters, workflows, save/reset, and gates remain interactive.",
+              icon: Store,
+              status: "Local commerce",
+            },
+            {
+              title: "No commerce theater",
+              description:
+                "Sellers, products, customers, orders, payments, inventory, refunds, payouts, ratings, revenue, and outcomes are not fabricated.",
+              icon: ShieldAlert,
+              status: "Guardrail",
+            },
+            {
+              title: "Commerce evidence before action",
+              description:
+                "Real seller operations require identity, catalog, providers, orders, payments, settlement, privacy, support, and audit.",
+              icon: LockKeyhole,
+              status: "Blocked",
+            },
+          ]}
+        />
+      </main>
+    </div>
+  );
+}
