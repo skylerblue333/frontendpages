@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "ca4a8e53cf059ea11db54732dcd42c99a75908c6",
+  "generated_at_commit": "4752edcb929d419d4fd1b2d906b86b82e650261b",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 636,
-  "routes_with_visual_checkpoint": 614,
-  "routes_with_placeholder_signal": 549,
+  "routes_with_review": 637,
+  "routes_with_visual_checkpoint": 615,
+  "routes_with_placeholder_signal": 548,
   "routes": [
     {
       "route": "/",
@@ -9067,9 +9067,9 @@
       "component": "UserSuggestions",
       "source": "client/src/pages/UserSuggestions.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/user-timeline",

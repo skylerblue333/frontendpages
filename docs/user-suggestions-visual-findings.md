@@ -1,0 +1,3 @@
+# UserSuggestions visual findings
+
+The 390×844 mobile render keeps the User Suggestions header, unavailable-service disclosure, refresh-unavailable control, discovery explanation, All/People/Content filters, and first community-connection concept readable without horizontal overflow. The 1440×1000 desktop render shows the complete discovery-readiness workspace with selected suggestion ID, reason, profile/context, source, freshness, personalization, rank, privacy, and moderation states explicitly withheld, plus clear explanation and feedback boundaries. Save and not-interested remain disabled. No recommendation, identity, content, preference, ranking, suitability, privacy, moderation, or discovery outcome is fabricated.
