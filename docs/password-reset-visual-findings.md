@@ -1,0 +1,3 @@
+# PasswordReset visual findings
+
+The 390×844 mobile render shows a responsive single-column hierarchy with the credential-recovery readiness label, no-recovery-data badge, PasswordReset readiness heading, concise scope statement, unavailable-reset warning, and first no-recovery-data summary card visible without horizontal overflow. The 1440×1000 desktop render shows the full-width readiness header, unavailable warning, three summary cards, recovery-governance requirements heading and filter, and the first two governance cards in a balanced two-column layout. Both captures use explicit no-data and no-action language and show no fabricated accounts, reset requests, tokens, credentials, recovery factors, sessions, or authentication records.
