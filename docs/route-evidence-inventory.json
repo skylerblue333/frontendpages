@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "09f692171f3ecd8129fab924e7707e25af504b2e",
+  "generated_at_commit": "0387b4238e47f7a40c22a34160138e447460e9b1",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 598,
-  "routes_with_visual_checkpoint": 576,
-  "routes_with_placeholder_signal": 577,
+  "routes_with_review": 599,
+  "routes_with_visual_checkpoint": 577,
+  "routes_with_placeholder_signal": 576,
   "routes": [
     {
       "route": "/",
@@ -8113,9 +8113,9 @@
       "component": "SystemMonitoring",
       "source": "client/src/pages/SystemMonitoring.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/system-observability",
