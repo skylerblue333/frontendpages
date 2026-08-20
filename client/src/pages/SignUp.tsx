@@ -1,8 +1,325 @@
 import { useMemo, useState } from "react";
-import { Check, KeyRound, LockKeyhole, Mail, RefreshCw, ShieldAlert, UserPlus, X } from "lucide-react";
+import {
+  Check,
+  KeyRound,
+  LockKeyhole,
+  Mail,
+  RefreshCw,
+  ShieldAlert,
+  UserPlus,
+  X,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-export function SignUp() { const [email, setEmail] = useState(""); const [displayName, setDisplayName] = useState(""); const [consent, setConsent] = useState(false); const [recovery, setRecovery] = useState(false); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false); const strength = useMemo(() => email.length > 3 ? "Local format intent" : "Not entered", [email]); const reset = () => { setEmail(""); setDisplayName(""); setConsent(false); setRecovery(false); setSaved(false); setShowGates(false); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={UserPlus} eyebrow="Sign up · Account-readiness preview" title="Plan registration without pretending an account was created." description="Explore a local registration-readiness workspace with identity, email, password, consent, verification, recovery, security, and activation surfaces. No credentials are stored, no email is sent, and no identity, account, session, verification, or onboarding outcome is connected." badge="Evidence-bounded authentication workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Saved locally" : "Save draft locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review auth gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset draft</Button></div></ScreenHero><main className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Identity", value: displayName ? "Local draft" : "Not entered", hint: "No account source", icon: UserPlus, tone: "cyan" }, { label: "Email", value: email ? strength : "Not entered", hint: "No mail provider", icon: Mail, tone: "violet" }, { label: "Security", value: "Unverified", hint: "No auth service", icon: KeyRound, tone: "amber" }, { label: "Activation", value: "Blocked", hint: "Evidence required", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Registration evidence boundary"><strong>This is a local sign-up design preview, not evidence that an account, identity, email, credential, session, verification, consent, or activation exists.</strong> Form fields, password intent, consent checkbox, local saved state, recovery toggle, and disabled registration actions are browser concepts. No password or secret is persisted, no email or SMS is sent, no user is created, and no verification or security result is asserted.</ScreenPreviewBanner><Card className="border-white/10 bg-white/[0.04]"><CardContent className="space-y-6 p-6"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Local registration draft</p><h2 className="mt-2 text-2xl font-black">Identity and access intent</h2><p className="mt-2 text-sm leading-6 text-slate-400">Use these controls to review the information architecture only. Do not enter a real password, seed phrase, recovery code, or sensitive personal data into this preview.</p></div><div className="grid gap-5 md:grid-cols-2"><label className="text-sm font-semibold text-slate-300">Display name<input value={displayName} onChange={(event) => setDisplayName(event.target.value)} placeholder="Local draft only" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm font-normal text-white outline-none" /></label><label className="text-sm font-semibold text-slate-300">Email intent<input value={email} onChange={(event) => setEmail(event.target.value)} placeholder="No real email required" type="email" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm font-normal text-white outline-none" /><span className="mt-2 block text-xs text-amber-200">{strength}; no address validation or delivery is connected.</span></label></div><div className="grid gap-4 md:grid-cols-2"><div className="rounded-xl border border-white/10 p-4"><div className="flex items-center gap-3"><KeyRound className="size-5 text-cyan-300" /><div><p className="font-semibold">Password and credential intent</p><p className="mt-2 text-sm leading-6 text-slate-500">No password input is requested here. A real flow requires server-side hashing, rate limits, breach checks, recovery, session handling, and secret redaction.</p></div></div></div><div className="rounded-xl border border-white/10 p-4"><div className="flex items-center gap-3"><Mail className="size-5 text-violet-300" /><div><p className="font-semibold">Verification and recovery</p><p className="mt-2 text-sm leading-6 text-slate-500">No code is issued, sent, accepted, or linked to an account. Recovery providers, tokens, expiration, and abuse controls are unconfigured.</p></div></div></div></div><label className="flex items-start gap-3 rounded-xl border border-white/10 p-4"><input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} className="mt-1 size-4 accent-cyan-300" /><span><span className="block font-semibold">Consent intent</span><span className="mt-1 block text-sm leading-6 text-slate-500">This local checkbox is not legal consent, terms acceptance, privacy acknowledgment, age verification, marketing opt-in, or a persisted preference.</span></span></label><label className="flex items-start gap-3 rounded-xl border border-white/10 p-4"><input type="checkbox" checked={recovery} onChange={(event) => setRecovery(event.target.checked)} className="mt-1 size-4 accent-cyan-300" /><span><span className="block font-semibold">Recovery and security intent</span><span className="mt-1 block text-sm leading-6 text-slate-500">This local state does not enroll MFA, establish recovery, create a session, verify a device, or improve account protection.</span></span></label><div className="flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Create account unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Send verification unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Continue with provider unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Start recovery unavailable</Button></div>{showGates && <div className="rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No account or security claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A local draft does not prove identity, email ownership, password strength, consent, verification, MFA, session security, recovery, account creation, or activation.</p></div>}</CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Authentication-governance gates</p><h2 className="mt-2 text-2xl font-black">What a real registration flow must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Server-side credential hashing, password policy, breach detection, rate limits, bot defense, CSRF, validation, tenant isolation, and safe errors", "Email or phone ownership, verification token entropy, expiration, replay prevention, delivery provider, opt-out, and audit provenance", "Authenticated identity, roles, consent, privacy notice, terms, age or jurisdiction rules, session cookies, device binding, and recovery", "MFA, OAuth, wallet, crypto, NFT, financial, education, AI, marketplace, and security claims require separate verified providers and contracts", "Create, verify, resend, recover, sign in, accessibility, confirmation, retry, and accountable approval require governed auth operations", "A sign-up preview must not be presented as account creation, identity verification, consent, password protection, MFA, recovery, or activation without evidence"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Registration surface preserved", description: "Identity, email, credential, consent, verification, recovery, security, provider, activation, save/reset, and gates remain visible.", icon: UserPlus, status: "Local auth UX" }, { title: "No credential theater", description: "Passwords, secrets, email delivery, identities, sessions, verification, and account activation are not fabricated or stored.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before identity", description: "Real sign-up requires secure server-side auth contracts, delivery provenance, recovery, authorization, audit, and safe failure handling.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>; }
+import {
+  ScreenFeatureGrid,
+  ScreenHero,
+  ScreenPreviewBanner,
+  ScreenStatGrid,
+} from "@/components/ScreenExperience";
+export function SignUp() {
+  const [email, setEmail] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [recovery, setRecovery] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [showGates, setShowGates] = useState(false);
+  const strength = useMemo(
+    () => (email.length > 3 ? "Local format intent" : "Not entered"),
+    [email]
+  );
+  const reset = () => {
+    setEmail("");
+    setDisplayName("");
+    setConsent(false);
+    setRecovery(false);
+    setSaved(false);
+    setShowGates(false);
+  };
+  return (
+    <div className="min-h-screen bg-[#070a16] text-white">
+      <ScreenHero
+        icon={UserPlus}
+        eyebrow="Sign up · Account-readiness preview"
+        title="Plan registration without pretending an account was created."
+        description="Explore a local registration-readiness workspace with identity, email, password, consent, verification, recovery, security, and activation surfaces. No credentials are stored, no email is sent, and no identity, account, session, verification, or onboarding outcome is connected."
+        badge="Evidence-bounded authentication workspace"
+      >
+        <div className="flex flex-wrap gap-2">
+          <Button
+            onClick={() => setSaved(true)}
+            className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"
+          >
+            <Check className="mr-2 size-4" />
+            {saved ? "Saved locally" : "Save draft locally"}
+          </Button>
+          <Button
+            onClick={() => setShowGates(value => !value)}
+            variant="outline"
+            className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+          >
+            {showGates ? (
+              <X className="mr-2 size-4" />
+            ) : (
+              <ShieldAlert className="mr-2 size-4" />
+            )}
+            {showGates ? "Close gates" : "Review auth gates"}
+          </Button>
+          <Button
+            onClick={reset}
+            variant="outline"
+            className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+          >
+            <RefreshCw className="mr-2 size-4" />
+            Reset draft
+          </Button>
+        </div>
+      </ScreenHero>
+      <main className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+        <ScreenStatGrid
+          items={[
+            {
+              label: "Identity",
+              value: displayName ? "Local draft" : "Not entered",
+              hint: "No account source",
+              icon: UserPlus,
+              tone: "cyan",
+            },
+            {
+              label: "Email",
+              value: email ? strength : "Not entered",
+              hint: "No mail provider",
+              icon: Mail,
+              tone: "violet",
+            },
+            {
+              label: "Security",
+              value: "Unverified",
+              hint: "No auth service",
+              icon: KeyRound,
+              tone: "amber",
+            },
+            {
+              label: "Activation",
+              value: "Blocked",
+              hint: "Evidence required",
+              icon: LockKeyhole,
+              tone: "slate",
+            },
+          ]}
+        />
+        <ScreenPreviewBanner title="Registration evidence boundary">
+          <strong>
+            This is a local sign-up design preview, not evidence that an
+            account, identity, email, credential, session, verification,
+            consent, or activation exists.
+          </strong>{" "}
+          Form fields, password intent, consent checkbox, local saved state,
+          recovery toggle, and disabled registration actions are browser
+          concepts. No password or secret is persisted, no email or SMS is sent,
+          no user is created, and no verification or security result is
+          asserted.
+        </ScreenPreviewBanner>
+        <Card className="border-white/10 bg-white/[0.04]">
+          <CardContent className="space-y-6 p-6">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">
+                Local registration draft
+              </p>
+              <h2 className="mt-2 text-2xl font-black">
+                Identity and access intent
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                Use these controls to review the information architecture only.
+                Do not enter a real password, seed phrase, recovery code, or
+                sensitive personal data into this preview.
+              </p>
+            </div>
+            <div className="grid gap-5 md:grid-cols-2">
+              <label className="text-sm font-semibold text-slate-300">
+                Display name
+                <input
+                  value={displayName}
+                  onChange={event => setDisplayName(event.target.value)}
+                  placeholder="Local draft only"
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm font-normal text-white outline-none"
+                />
+              </label>
+              <label className="text-sm font-semibold text-slate-300">
+                Email intent
+                <input
+                  value={email}
+                  onChange={event => setEmail(event.target.value)}
+                  placeholder="No real email required"
+                  type="email"
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm font-normal text-white outline-none"
+                />
+                <span className="mt-2 block text-xs text-amber-200">
+                  {strength}; no address validation or delivery is connected.
+                </span>
+              </label>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-xl border border-white/10 p-4">
+                <div className="flex items-center gap-3">
+                  <KeyRound className="size-5 text-cyan-300" />
+                  <div>
+                    <p className="font-semibold">
+                      Password and credential intent
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-slate-500">
+                      No password input is requested here. A real flow requires
+                      server-side hashing, rate limits, breach checks, recovery,
+                      session handling, and secret redaction.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-xl border border-white/10 p-4">
+                <div className="flex items-center gap-3">
+                  <Mail className="size-5 text-violet-300" />
+                  <div>
+                    <p className="font-semibold">Verification and recovery</p>
+                    <p className="mt-2 text-sm leading-6 text-slate-500">
+                      No code is issued, sent, accepted, or linked to an
+                      account. Recovery providers, tokens, expiration, and abuse
+                      controls are unconfigured.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <label className="flex items-start gap-3 rounded-xl border border-white/10 p-4">
+              <input
+                type="checkbox"
+                checked={consent}
+                onChange={event => setConsent(event.target.checked)}
+                className="mt-1 size-4 accent-cyan-300"
+              />
+              <span>
+                <span className="block font-semibold">Consent intent</span>
+                <span className="mt-1 block text-sm leading-6 text-slate-500">
+                  This local checkbox is not legal consent, terms acceptance,
+                  privacy acknowledgment, age verification, marketing opt-in, or
+                  a persisted preference.
+                </span>
+              </span>
+            </label>
+            <label className="flex items-start gap-3 rounded-xl border border-white/10 p-4">
+              <input
+                type="checkbox"
+                checked={recovery}
+                onChange={event => setRecovery(event.target.checked)}
+                className="mt-1 size-4 accent-cyan-300"
+              />
+              <span>
+                <span className="block font-semibold">
+                  Recovery and security intent
+                </span>
+                <span className="mt-1 block text-sm leading-6 text-slate-500">
+                  This local state does not enroll MFA, establish recovery,
+                  create a session, verify a device, or improve account
+                  protection.
+                </span>
+              </span>
+            </label>
+            <div className="flex flex-wrap gap-2">
+              <Button disabled className="bg-slate-700 text-slate-400">
+                Create account unavailable
+              </Button>
+              <Button
+                disabled
+                variant="outline"
+                className="border-white/10 text-slate-500"
+              >
+                Send verification unavailable
+              </Button>
+              <Button
+                disabled
+                variant="outline"
+                className="border-white/10 text-slate-500"
+              >
+                Continue with provider unavailable
+              </Button>
+              <Button
+                disabled
+                variant="outline"
+                className="border-white/10 text-slate-500"
+              >
+                Start recovery unavailable
+              </Button>
+            </div>
+            {showGates && (
+              <div className="rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4">
+                <p className="font-semibold text-amber-100">
+                  No account or security claim
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-400">
+                  A local draft does not prove identity, email ownership,
+                  password strength, consent, verification, MFA, session
+                  security, recovery, account creation, or activation.
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+        <Card className="border-white/10 bg-white/[0.04]">
+          <CardContent className="p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">
+              Authentication-governance gates
+            </p>
+            <h2 className="mt-2 text-2xl font-black">
+              What a real registration flow must prove
+            </h2>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {[
+                "Server-side credential hashing, password policy, breach detection, rate limits, bot defense, CSRF, validation, tenant isolation, and safe errors",
+                "Email or phone ownership, verification token entropy, expiration, replay prevention, delivery provider, opt-out, and audit provenance",
+                "Authenticated identity, roles, consent, privacy notice, terms, age or jurisdiction rules, session cookies, device binding, and recovery",
+                "MFA, OAuth, wallet, crypto, NFT, financial, education, AI, marketplace, and security claims require separate verified providers and contracts",
+                "Create, verify, resend, recover, sign in, accessibility, confirmation, retry, and accountable approval require governed auth operations",
+                "A sign-up preview must not be presented as account creation, identity verification, consent, password protection, MFA, recovery, or activation without evidence",
+              ].map(item => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3 rounded-xl border border-white/10 p-3"
+                >
+                  <LockKeyhole className="size-4 text-slate-500" />
+                  <span className="flex-1 text-sm text-slate-300">{item}</span>
+                  <span className="text-xs text-amber-200">Required</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+        <ScreenFeatureGrid
+          features={[
+            {
+              title: "Registration surface preserved",
+              description:
+                "Identity, email, credential, consent, verification, recovery, security, provider, activation, save/reset, and gates remain visible.",
+              icon: UserPlus,
+              status: "Local auth UX",
+            },
+            {
+              title: "No credential theater",
+              description:
+                "Passwords, secrets, email delivery, identities, sessions, verification, and account activation are not fabricated or stored.",
+              icon: ShieldAlert,
+              status: "Guardrail",
+            },
+            {
+              title: "Evidence before identity",
+              description:
+                "Real sign-up requires secure server-side auth contracts, delivery provenance, recovery, authorization, audit, and safe failure handling.",
+              icon: LockKeyhole,
+              status: "Blocked",
+            },
+          ]}
+        />
+      </main>
+    </div>
+  );
+}
 export default SignUp;
