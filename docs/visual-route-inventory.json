@@ -3368,7 +3368,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": true,
+      "auth_signals": false,
       "external_signals": false
     },
     {
@@ -3398,7 +3398,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -3427,9 +3427,9 @@
       "page_file": "EngagementMetrics.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/engagement-stats",
@@ -3507,9 +3507,9 @@
       "page_file": "EnvironmentManagement.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/error403",
@@ -3567,9 +3567,9 @@
       "page_file": "ErrorTracking.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/escrow-shop",
@@ -3597,9 +3597,9 @@
       "page_file": "EventAnalytics.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/event-calendar",
@@ -3607,9 +3607,9 @@
       "page_file": "EventCalendar.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/event-creation",
@@ -3617,9 +3617,9 @@
       "page_file": "EventCreation.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/event-planner",
@@ -3637,9 +3637,9 @@
       "page_file": "EventRegistration.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/events",
@@ -3647,9 +3647,9 @@
       "page_file": "Events.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": false,
-      "external_signals": false
+      "boundary_signals": true,
+      "auth_signals": true,
+      "external_signals": true
     },
     {
       "path": "/execution-history",
@@ -3667,9 +3667,9 @@
       "page_file": "ExerciseLibrary.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/expense-management",
@@ -3677,8 +3677,8 @@
       "page_file": "ExpenseManagement.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
+      "boundary_signals": true,
+      "auth_signals": false,
       "external_signals": true
     },
     {
@@ -3687,9 +3687,9 @@
       "page_file": "ExpenseTracker.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/experiment-factory",
@@ -3707,9 +3707,9 @@
       "page_file": "ExperimentTracker.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/explore",
@@ -3728,7 +3728,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -3737,9 +3737,9 @@
       "page_file": "FAQManagement.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/f-a-q-page",
@@ -3768,7 +3768,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -3777,9 +3777,9 @@
       "page_file": "FeatureRequests.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/feature-tour",
@@ -3827,9 +3827,9 @@
       "page_file": "Feedback.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/feedback-dialog",
@@ -3868,7 +3868,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -3877,9 +3877,9 @@
       "page_file": "FileConverter.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/file-download",
@@ -3888,7 +3888,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -3918,7 +3918,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -3928,7 +3928,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -3938,7 +3938,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -3947,9 +3947,9 @@
       "page_file": "FileVersioning.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/filter-panel",
@@ -3967,8 +3967,8 @@
       "page_file": "FinancialReports.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
+      "boundary_signals": true,
+      "auth_signals": false,
       "external_signals": true
     },
     {
@@ -3987,9 +3987,9 @@
       "page_file": "FlightSearch.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/follow-list",
@@ -3998,7 +3998,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -4008,7 +4008,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -4028,7 +4028,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -4038,7 +4038,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -4048,7 +4048,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -4067,9 +4067,9 @@
       "page_file": "ForumCategories.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/framework-templates",
@@ -4099,7 +4099,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/g-d-p-r",
@@ -4107,9 +4107,9 @@
       "page_file": "GDPR.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/g-t-m-strategy",
@@ -4129,7 +4129,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/game-blackjack",
@@ -4138,7 +4138,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": true
     },
     {
@@ -4148,8 +4148,8 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
-      "external_signals": false
+      "auth_signals": true,
+      "external_signals": true
     },
     {
       "path": "/game-chat",
@@ -4159,7 +4159,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/game-crash",
@@ -4168,7 +4168,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": true
     },
     {
@@ -4199,7 +4199,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/game-room",
@@ -4209,7 +4209,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/game-settings",
@@ -4217,7 +4217,7 @@
       "page_file": "GameSettings.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
       "external_signals": true
     },
@@ -4228,7 +4228,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": true
     },
     {
@@ -4238,8 +4238,8 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
-      "external_signals": false
+      "auth_signals": true,
+      "external_signals": true
     },
     {
       "path": "/gaming",
@@ -4259,7 +4259,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/gantt-chart",
@@ -4267,9 +4267,9 @@
       "page_file": "GanttChart.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/gas-fee-estimator",
@@ -4279,7 +4279,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/gas-price-monitor",
@@ -4297,8 +4297,8 @@
       "page_file": "GasTracker.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
+      "boundary_signals": true,
+      "auth_signals": false,
       "external_signals": true
     },
     {
@@ -4308,7 +4308,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -4338,8 +4338,8 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
-      "external_signals": false
+      "auth_signals": true,
+      "external_signals": true
     },
     {
       "path": "/ghost-mode",
@@ -4368,7 +4368,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -4397,9 +4397,9 @@
       "page_file": "GovernanceWizard.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": false,
-      "external_signals": false
+      "boundary_signals": true,
+      "auth_signals": true,
+      "external_signals": true
     },
     {
       "path": "/grade-book",
@@ -4407,9 +4407,9 @@
       "page_file": "GradeBook.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/group-chat",
@@ -4419,7 +4419,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/group-chats",
@@ -4428,7 +4428,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -4437,9 +4437,9 @@
       "page_file": "GroupDirectory.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/group-events",
@@ -4447,9 +4447,9 @@
       "page_file": "GroupEvents.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/group-management",
@@ -4457,9 +4457,9 @@
       "page_file": "GroupManagement.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/growth",
@@ -4487,9 +4487,9 @@
       "page_file": "HIPAA.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/h-o-p-e-a-i-control",
@@ -4537,7 +4537,7 @@
       "page_file": "Hashtags.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": true,
+      "boundary_signals": false,
       "auth_signals": false,
       "external_signals": false
     },
@@ -4547,9 +4547,9 @@
       "page_file": "HealthArticles.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/health-dashboard",
@@ -4557,9 +4557,9 @@
       "page_file": "HealthDashboard.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/health-goals",
@@ -4568,8 +4568,8 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/help-center",
@@ -4577,9 +4577,9 @@
       "page_file": "HelpCenter.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/home",
@@ -4617,7 +4617,7 @@
       "page_file": "HopeAIMeta.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": true,
+      "boundary_signals": false,
       "auth_signals": false,
       "external_signals": false
     },
@@ -4647,9 +4647,9 @@
       "page_file": "HotelSearch.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/hub-spot-integration",
@@ -4657,8 +4657,8 @@
       "page_file": "HubSpotIntegration.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
+      "boundary_signals": true,
+      "auth_signals": false,
       "external_signals": true
     },
     {
@@ -4677,8 +4677,8 @@
       "page_file": "IFTTT.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
+      "boundary_signals": true,
+      "auth_signals": false,
       "external_signals": true
     },
     {
@@ -4737,9 +4737,9 @@
       "page_file": "ImageTools.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/image-viewer",
@@ -4778,7 +4778,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -4829,7 +4829,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/integrations",
@@ -4839,7 +4839,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/inventory-management",
@@ -4847,9 +4847,9 @@
       "page_file": "InventoryManagement.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/investment-goals",
@@ -4859,7 +4859,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/investor-metrics",
@@ -4937,9 +4937,9 @@
       "page_file": "KnowledgeBase.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/l-d-a-p-integration",
@@ -4947,9 +4947,9 @@
       "page_file": "LDAPIntegration.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/l-t-v-analysis",
@@ -4957,9 +4957,9 @@
       "page_file": "LTVAnalysis.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/landing-page",
@@ -5007,9 +5007,9 @@
       "page_file": "LanguageSettings.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/lead-scoring",
@@ -5017,9 +5017,9 @@
       "page_file": "LeadScoring.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/leaderboard",
@@ -5037,9 +5037,9 @@
       "page_file": "Leaderboards.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/learning",
@@ -5048,7 +5048,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
