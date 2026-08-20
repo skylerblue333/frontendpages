@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/VideoUploader.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst VideoUploader = () => (\n  <FeatureUnavailable\n    title="Video upload unavailable"\n    description="Production video ingestion requires authenticated ownership, secure upload URLs, file-size and type validation, malware scanning, storage lifecycle controls, transcoding workers, moderation, copyright policy, retry handling, and durable processing state. No file is uploaded, stored, transcoded, published, or marked successful here."\n    capability="Video upload, transcoding, moderation, and publishing"\n    nextStep="Connect governed object storage, upload security, media processing, moderation, policy, and observability services before enabling uploads"\n  />\n);\n\nexport default VideoUploader;\n`);
+console.log(JSON.stringify({ changed: ['VideoUploader.tsx'] }, null, 2));
