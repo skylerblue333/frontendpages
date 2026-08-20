@@ -1,0 +1,3 @@
+# TwoFactorAuth visual findings
+
+The 390×844 mobile render keeps the Two-factor authentication header, MFA-unavailable disclosure, reset-preview control, local verification explanation, labeled six-digit code field, and local review/clear actions readable without horizontal overflow. The 1440×1000 desktop render shows the complete MFA-readiness workspace with factor, issuer, secret, verification, recovery-code, backup-method, rate-limit, and session states explicitly withheld. No QR, secret, factor enrollment, verification, recovery code, session change, or account-security outcome is fabricated. The form validates locally only and performs no authentication mutation.
