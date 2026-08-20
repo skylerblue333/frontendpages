@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "88c61deab062297f0238fade297c7e590aa22d36",
+  "generated_at_commit": "d80671b75960823a4a7be4f19b3949a0a85ea24b",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 428,
-  "routes_with_visual_checkpoint": 406,
-  "routes_with_placeholder_signal": 656,
+  "routes_with_review": 429,
+  "routes_with_visual_checkpoint": 407,
+  "routes_with_placeholder_signal": 655,
   "routes": [
     {
       "route": "/",
@@ -5431,8 +5431,8 @@
       "component": "NFTWallet",
       "source": "client/src/pages/NFTWallet.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -8403,7 +8403,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/timeline-view",
