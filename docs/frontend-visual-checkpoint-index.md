@@ -1069,3 +1069,6 @@ Mobile screenshot: `/home/ubuntu/screenshots/domain-management-mobile-390x844.pn
 ## dropdown-menu-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/dropdown-menu-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/dropdown-menu-mobile-390x844.png`
+## ens-resolver-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/ens-resolver-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/ens-resolver-mobile-390x844.png`
