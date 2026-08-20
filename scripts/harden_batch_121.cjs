@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/CommunityGuidelines.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst CommunityGuidelines = () => (\n  <FeatureUnavailable\n    title="Community guidelines unavailable"\n    description="Community guidelines require an approved policy source, versioned publication, acknowledgement tracking, reporting and appeal workflows, moderation ownership, enforcement tooling, privacy controls, and an auditable change history. No rule, enforcement decision, report outcome, acknowledgement, or moderation coverage is shown or asserted."\n    capability="Published community standards with accountable moderation"\n    nextStep="Connect the approved policy, reporting, moderation, appeals, notification, and audit services with ownership and retention controls before enabling this feature"\n  />\n);\n\nexport default CommunityGuidelines;\n`);
+console.log(JSON.stringify({ changed: ['CommunityGuidelines.tsx'] }, null, 2));
