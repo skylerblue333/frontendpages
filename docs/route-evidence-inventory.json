@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "a389a59cd84b5221f1912a20acf8ed3a8657bebb",
+  "generated_at_commit": "8531081f340bbd60e602627a83540d7f3176bfa7",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 487,
-  "routes_with_visual_checkpoint": 465,
+  "routes_with_review": 488,
+  "routes_with_visual_checkpoint": 466,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -6601,8 +6601,8 @@
       "component": "RadioButtonForm",
       "source": "client/src/pages/RadioButtonForm.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
