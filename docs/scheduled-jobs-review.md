@@ -1,0 +1,17 @@
+# ScheduledJobs review
+
+The `/scheduled-jobs` route already contained a substantial local automation-governance preview, so the implementation was preserved rather than rewritten. It now has formatting, strict typecheck/build validation, and desktop/mobile evidence documentation. The route is not treated as a live scheduler, worker, connector, credential store, execution engine, monitoring service, or operational system.
+
+| Area | Result |
+|---|---|
+| Local job functionality | Finance, content, messaging, and governance job concepts, search, category filters, selected-job state, cadence and connector intent, save state, reset, automation-gate toggling, and disabled run/schedule/pause/log controls remain interactive in local component state. |
+| Evidence boundary | The hero and evidence banner explicitly state that this is a local job-governance preview, not evidence that a scheduler, worker, connector, credential, execution, or operational outcome exists. No schedule, trigger, worker, credential, run, output, uptime, notification, financial, messaging, or compliance result is asserted. |
+| Execution and credential safety | Real activation requires authenticated owner, tenant, schedule, trigger, timezone, worker, connector, credential, environment, change history, server-side secret handling, idempotency, duplicate prevention, transaction boundaries, retries, backoff, dead letters, timeouts, cancellation, and recovery. No worker, connector, credential, or operation is connected. |
+| Observability and governance | Logs, metrics, traces, alerts, status callbacks, output provenance, sensitive-data redaction, retention, audit, pause/resume, approvals, dry runs, rollback, rate limits, cost controls, support, and incident response are required before execution. No run, output, uptime, notification, or compliance operation is claimed. |
+| Domain safety | Finance, blockchain, wallet, AI, messaging, education, community, privacy, security, and user-impact claims require domain review. No financial, crypto, messaging, education, privacy, security, or operational outcome is asserted. |
+| Persistence and actions | Save and reset operate only on local job state. Run now, schedule, pause, and view logs remain visibly disabled. No schedule, trigger, worker, credential, run, output, notification, or audit record is created. |
+| Accessibility and UX | Existing semantic controls, visible labels, focusable buttons, native selects, responsive cards, disabled-state treatment, and evidence disclosures were retained. Desktop and mobile visual hierarchy was reviewed. |
+
+Validation completed successfully with Prettier, `pnpm exec tsc --noEmit`, and the production build. The build continues to emit the existing non-blocking large-chunk advisory. Desktop evidence was captured at 1440×1000 and mobile evidence at 390×844. Visual review confirms preserved local job behavior, explicit unavailable/unconfigured/blocked states, disabled consequential actions, and absence of fabricated outcomes.
+
+Production activation would require governed scheduler and worker boundaries, server-side credentials, idempotency, retries, observability, approvals, pause/resume, rollback, rate limits, cost controls, support, incident response, audit, and accountable domain review for finance, blockchain, wallet, AI, messaging, education, community, privacy, security, or user-impact operations. No execution, delivery, uptime, financial, messaging, or compliance outcome is claimed here.
