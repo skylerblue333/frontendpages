@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "54051da2911e70a86cc6725abc35edfbcc0541cc",
+  "generated_at_commit": "08d379b2eadb71298c0600a6afa901494725b001",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 279,
-  "routes_with_visual_checkpoint": 257,
+  "routes_with_review": 280,
+  "routes_with_visual_checkpoint": 258,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3406,8 +3406,8 @@
       "component": "FAQPage",
       "source": "client/src/pages/FAQPage.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
