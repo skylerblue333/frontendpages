@@ -10,10 +10,16 @@ PAGES = ROOT / "client/src/pages"
 
 text = APP.read_text(encoding="utf-8")
 imports = {name: path for name, path in re.findall(r"const\s+(\w+)\s*=\s*lazy\(\(\)\s*=>\s*import\(['\"]\.\/pages\/([^'\"]+)['\"]\)\)", text)}
+# App.tsx keeps Home and NotFound as eager imports, so explicit aliases must
+# resolve to their real sources rather than being counted as missing routes.
+explicit_sources = {
+    "Home": "Home.tsx",
+    "NotFound": "NotFound.tsx",
+}
 routes = []
 for match in re.finditer(r"<Route\s+path=\"([^\"]+)\"\s+component=\{(\w+)\}", text):
     path, component = match.groups()
-    page_file = imports.get(component, "")
+    page_file = imports.get(component, "") or explicit_sources.get(component, "")
     if page_file and not page_file.endswith(".tsx"):
         page_file += ".tsx"
     source = (PAGES / page_file).read_text(encoding="utf-8", errors="ignore") if page_file and (PAGES / page_file).exists() else ""

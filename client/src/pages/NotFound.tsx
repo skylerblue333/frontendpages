@@ -28,9 +28,9 @@ export default function NotFound() {
           </h2>
 
           <p className="text-slate-600 mb-8 leading-relaxed">
-            Sorry, the page you are looking for doesn't exist.
+            The requested route or resource is not available at this address.
             <br />
-            It may have been moved or deleted.
+            No account, wallet, market, AI, education, community, or transaction state is inferred from this path.
           </p>
 
           <div

@@ -4,12 +4,12 @@
     {
       "path": "/",
       "component": "Home",
-      "page_file": "",
-      "source_exists": false,
+      "page_file": "Home.tsx",
+      "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/a-b-testing",
@@ -4584,12 +4584,12 @@
     {
       "path": "/home",
       "component": "Home",
-      "page_file": "",
-      "source_exists": false,
+      "page_file": "Home.tsx",
+      "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/hope-a-i",
@@ -6084,12 +6084,12 @@
     {
       "path": "/not-found",
       "component": "NotFound",
-      "page_file": "",
-      "source_exists": false,
+      "page_file": "NotFound.tsx",
+      "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": false,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/notes-app",
@@ -10574,12 +10574,12 @@
     {
       "path": "/404",
       "component": "NotFound",
-      "page_file": "",
-      "source_exists": false,
+      "page_file": "NotFound.tsx",
+      "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": false,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     }
   ]
 }
