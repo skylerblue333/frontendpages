@@ -1,0 +1,3 @@
+# TradingTerminal visual findings
+
+The 390×844 mobile render keeps the trading-terminal header, unavailable-service disclosure, refresh-unavailable control, read-only explanation, and first asset/network cards readable without horizontal overflow. The 1440×1000 desktop render shows the complete terminal-readiness workspace with asset, network, price, change, volume, order-book, wallet-balance, and fee states withheld, alongside market-freshness, account/custody, and risk/fees gates. Buy and sell actions remain disabled. No price, chart, balance, quote, order, fill, fee, market-depth, profitability, or trading outcome is fabricated.

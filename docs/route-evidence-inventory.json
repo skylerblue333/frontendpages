@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "0bb4d7ee43dba7830906e1021852079da262551a",
+  "generated_at_commit": "1025c481c6aa90a6731db23efcb6a5cd50766123",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 618,
-  "routes_with_visual_checkpoint": 596,
+  "routes_with_review": 619,
+  "routes_with_visual_checkpoint": 597,
   "routes_with_placeholder_signal": 563,
   "routes": [
     {
@@ -8581,8 +8581,8 @@
       "component": "TradingTerminal",
       "source": "client/src/pages/TradingTerminal.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
