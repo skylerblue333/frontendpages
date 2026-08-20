@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/CustomerAnalytics.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst CustomerAnalytics = () => (\n  <FeatureUnavailable\n    title="Customer analytics unavailable"\n    description="Customer analytics requires governed identity and event data, documented metric definitions, consent and privacy controls, aggregation safeguards, access restrictions, reproducible calculations, and validated reporting. No customer count, behavior pattern, segment, lifetime value, churn, revenue, satisfaction, or forecast is shown or asserted."\n    capability="Privacy-aware customer behavior and lifecycle analytics"\n    nextStep="Connect approved customer and event data services with consent, aggregation, metric governance, access, retention, and reporting controls before enabling analytics"\n  />\n);\n\nexport default CustomerAnalytics;\n`);
+console.log(JSON.stringify({ changed: ['CustomerAnalytics.tsx'] }, null, 2));

@@ -2557,9 +2557,9 @@
       "page_file": "CustomerAnalytics.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/customer-disputes",
