@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "5d180cdec3946e02e47b0f551b17811f3276523c",
+  "generated_at_commit": "412ed74e22aed1f3feedb64418cc45939024b77d",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 546,
-  "routes_with_visual_checkpoint": 524,
+  "routes_with_review": 547,
+  "routes_with_visual_checkpoint": 525,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7339,8 +7339,8 @@
       "component": "SecurityAudit",
       "source": "client/src/pages/SecurityAudit.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
