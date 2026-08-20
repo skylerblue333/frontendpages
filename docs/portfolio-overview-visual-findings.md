@@ -1,0 +1,3 @@
+# PortfolioOverview visual findings
+
+The 390×844 mobile render shows a responsive single-column hierarchy with the portfolio-readiness label, no-portfolio-data badge, PortfolioOverview readiness heading, concise scope statement, unavailable-overview warning, and first no-portfolio-data summary card visible without horizontal overflow. The 1440×1000 desktop render shows the full-width readiness header, unavailable warning, three summary cards, portfolio-overview governance requirements heading and filter, and the first two governance cards in a balanced two-column layout. Both captures use explicit no-data and no-action language and show no fabricated accounts, holdings, prices, valuations, balances, performance, reconciliation records, tax data, or financial records.
