@@ -1,0 +1,3 @@
+# ToggleSwitchForm visual findings
+
+The 390×844 mobile render keeps the toggle-form header, unavailable service disclosure, reset control, preview explanation, and first preference switch readable with a sufficiently sized control. The 1440×1000 desktop render shows the complete local preference-toggle workspace with three described switches, checked-state summaries, local save/reset controls, live status messaging, and explicit consent, subscription, delivery, privacy, device, and persistence boundaries. The implementation uses typed toggle keys, `role="switch"`, `aria-checked`, accessible labels, keyboard-safe buttons, and local feedback. No consent, opt-in, subscription, notification, access, privacy, device, or persisted preference outcome is fabricated.
