@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "9121991753231793a7f572346308849db38f1876",
+  "generated_at_commit": "61c19a492faa5d55293512432f2ac854bf9bbf26",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 465,
-  "routes_with_visual_checkpoint": 443,
+  "routes_with_review": 466,
+  "routes_with_visual_checkpoint": 444,
   "routes_with_placeholder_signal": 603,
   "routes": [
     {
@@ -6025,8 +6025,8 @@
       "component": "PortfolioTracker",
       "source": "client/src/pages/PortfolioTracker.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
