@@ -1,0 +1,11 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+const file = path.join(root, 'client/src/pages/EventPlanner.tsx');
+let source = fs.readFileSync(file, 'utf8');
+source = source.replace('const [online, setOnline] = useState(true);', 'const online = false;');
+source = source.replace('Drag-and-drop · Offline-first · Real-time sync', 'Drag-and-drop · Local-only layout editor');
+source = source.replace(/\s*<Button size="sm" variant="outline" onClick=\{\(\) => setOnline\(p => !p\)\}[^>]*>Toggle Offline<\/Button>/, '');
+source = source.replace('{online ? "Live" : "Local"}', '"Local only"');
+fs.writeFileSync(file, source);
+console.log(JSON.stringify({ changed: ['EventPlanner.tsx'] }, null, 2));

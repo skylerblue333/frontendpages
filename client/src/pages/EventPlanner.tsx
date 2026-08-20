@@ -15,7 +15,7 @@ export default function EventPlanner() {
   ]);
   const [dragging, setDragging] = useState<string|null>(null);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
-  const [online, setOnline] = useState(true);
+  const online = false;
   const [saved, setSaved] = useState(false);
   const canvasRef = useRef<HTMLDivElement>(null);
 
@@ -56,7 +56,7 @@ export default function EventPlanner() {
             </div>
             <div>
               <h1 className="font-bold text-white text-lg leading-none">Event Floor Planner</h1>
-              <p className="text-xs text-slate-500 mt-0.5">Drag-and-drop · Offline-first · Real-time sync</p>
+              <p className="text-xs text-slate-500 mt-0.5">Drag-and-drop · Local-only layout editor</p>
             </div>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
@@ -64,7 +64,6 @@ export default function EventPlanner() {
               {online ? <Wifi className="h-3 w-3 mr-1 inline" /> : <WifiOff className="h-3 w-3 mr-1 inline" />}
               {online ? "Online" : "Offline (IndexedDB)"}
             </Badge>
-            <Button size="sm" variant="outline" onClick={() => setOnline(p => !p)} className="border-slate-700 text-slate-400 text-xs">Toggle Offline</Button>
             <Button size="sm" onClick={addTable} className="bg-violet-600 hover:bg-violet-700 text-white text-xs"><Plus className="h-3.5 w-3.5 mr-1" />Add Table</Button>
             <Button size="sm" onClick={saveLayout} className={`text-xs ${saved?"bg-emerald-600":"bg-slate-700 hover:bg-slate-600"} text-white`}>
               <Save className="h-3.5 w-3.5 mr-1" />{saved ? "Saved!" : "Save Layout"}
