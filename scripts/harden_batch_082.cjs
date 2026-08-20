@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/WorkflowBuilder.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst WorkflowBuilder = () => (\n  <FeatureUnavailable\n    title="Workflow builder unavailable"\n    description="Production workflow automation requires durable definitions, authenticated triggers, validated actions, retries, idempotency, secrets handling, rate limits, approvals, observability, audit history, and rollback behavior. No workflow, trigger, action, execution, integration, or success result is created here."\n    capability="Workflow design, automation, and execution"\n    nextStep="Connect governed workflow storage, trigger and action services, secret management, observability, and rollback controls before enabling automation"\n  />\n);\n\nexport default WorkflowBuilder;\n`);
+console.log(JSON.stringify({ changed: ['WorkflowBuilder.tsx'] }, null, 2));
