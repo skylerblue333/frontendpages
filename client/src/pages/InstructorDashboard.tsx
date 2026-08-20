@@ -38,7 +38,7 @@ export default function InstructorDashboard() {
       `${action} is unavailable locally. No course, student, analytics, certification, publication, payment, or account mutation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-192" className="min-h-screen bg-background">
       <PageHeader
         icon={GraduationCap}
         title="Instructor dashboard"
