@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "5f2ad3a6645fe62f7214349a120b938bb18e81d4",
+  "generated_at_commit": "4d6eac5526371f47b69b82bc3ccffe0f0d0bcfbc",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 277,
-  "routes_with_visual_checkpoint": 255,
+  "routes_with_review": 278,
+  "routes_with_visual_checkpoint": 256,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3388,8 +3388,8 @@
       "component": "ExportData",
       "source": "client/src/pages/ExportData.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
