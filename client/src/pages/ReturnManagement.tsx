@@ -1,11 +1,395 @@
 import { useMemo, useState } from "react";
-import { Check, ClipboardCheck, Filter, LockKeyhole, RefreshCw, Search, ShieldAlert, ShoppingBag, X } from "lucide-react";
+import {
+  Check,
+  ClipboardCheck,
+  Filter,
+  LockKeyhole,
+  RefreshCw,
+  Search,
+  ShieldAlert,
+  ShoppingBag,
+  X,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const cases = [{ id: 1, title: "Damaged item review", category: "Quality", detail: "A local case template requiring order provenance, item evidence, policy version, customer communication, and authorization.", state: "Needs evidence" }, { id: 2, title: "Wrong item received", category: "Fulfillment", detail: "A return concept requiring shipment identity, fulfillment records, photos, inventory reconciliation, and a decision owner.", state: "Unconnected" }, { id: 3, title: "Cooling-off request", category: "Policy", detail: "A policy-review concept requiring jurisdiction, purchase date, product exceptions, customer rights, and legal review.", state: "Review needed" }, { id: 4, title: "Refund exception", category: "Finance", detail: "A sensitive workflow concept that must not imply payment, refund, balance, ledger, or settlement activity.", state: "Blocked" }];
+import {
+  ScreenFeatureGrid,
+  ScreenHero,
+  ScreenPreviewBanner,
+  ScreenStatGrid,
+} from "@/components/ScreenExperience";
+const cases = [
+  {
+    id: 1,
+    title: "Damaged item review",
+    category: "Quality",
+    detail:
+      "A local case template requiring order provenance, item evidence, policy version, customer communication, and authorization.",
+    state: "Needs evidence",
+  },
+  {
+    id: 2,
+    title: "Wrong item received",
+    category: "Fulfillment",
+    detail:
+      "A return concept requiring shipment identity, fulfillment records, photos, inventory reconciliation, and a decision owner.",
+    state: "Unconnected",
+  },
+  {
+    id: 3,
+    title: "Cooling-off request",
+    category: "Policy",
+    detail:
+      "A policy-review concept requiring jurisdiction, purchase date, product exceptions, customer rights, and legal review.",
+    state: "Review needed",
+  },
+  {
+    id: 4,
+    title: "Refund exception",
+    category: "Finance",
+    detail:
+      "A sensitive workflow concept that must not imply payment, refund, balance, ledger, or settlement activity.",
+    state: "Blocked",
+  },
+];
 export default function ReturnManagement() {
-  const [query, setQuery] = useState(""); const [category, setCategory] = useState("All"); const [selected, setSelected] = useState(1); const [decision, setDecision] = useState("Decision not configured"); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false); const categories = ["All", ...Array.from(new Set(cases.map((item) => item.category)))]; const filtered = useMemo(() => cases.filter((item) => (category === "All" || item.category === category) && `${item.title} ${item.category} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [category, query]); const selectedCase = cases.find((item) => item.id === selected) ?? cases[0]; const reset = () => { setQuery(""); setCategory("All"); setSelected(1); setDecision("Decision not configured"); setSaved(false); setShowGates(false); };
-  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={ClipboardCheck} eyebrow="Returns · Governance preview" title="Verify the case before approving a return." description="Explore local return/refund case concepts with search, category filters, evidence requirements, decision intent, save/reset, approval boundaries, and audit gates. No live order, shipment, payment, refund, inventory, customer, or legal outcome is connected." badge="Operations workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Saved locally" : "Save case locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review case gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset case</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Case concepts", value: `${cases.length} local`, hint: "No order source", icon: ClipboardCheck, tone: "cyan" }, { label: "Orders", value: "Unavailable", hint: "No commerce source", icon: ShoppingBag, tone: "violet" }, { label: "Refunds", value: "Blocked", hint: "No payment source", icon: ShieldAlert, tone: "amber" }, { label: "Audit", value: "Required", hint: "No decision log", icon: LockKeyhole, tone: "slate" }]} /><ScreenPreviewBanner title="Returns evidence boundary"><strong>This is a local case-management preview, not proof that an order, return, refund, payment, shipment, customer, or legal right exists.</strong> Case cards, filters, decision intent, saved state, approval controls, and audit gates are browser concepts. No order number, date, amount, status, inventory movement, payment, refund, customer record, or legal conclusion is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Search className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local return cases" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-4 flex flex-wrap gap-2">{categories.map((entry) => <Button key={entry} onClick={() => setCategory(entry)} size="sm" variant="outline" className={category === entry ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100" : "border-white/10 text-slate-400"}><Filter className="mr-1 size-3" />{entry}</Button>)}</div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.title}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.state}</Badge></div><div className="mt-4"><Badge variant="outline" className="border-white/10 text-slate-500">{item.category}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected case concept</p><h2 className="mt-2 text-2xl font-black">{selectedCase.title}</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{selectedCase.state}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-400">{selectedCase.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Category", value: selectedCase.category }, { label: "Order", value: "Unavailable" }, { label: "Evidence", value: "Required" }, { label: "Decision", value: decision }, { label: "Payment", value: "Unconnected" }, { label: "Audit", value: "Required" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><label className="mt-5 block text-sm text-slate-400">Decision intent<select value={decision} onChange={(event) => setDecision(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Decision not configured</option><option>Request evidence intent</option><option>Approve return intent</option><option>Deny request intent</option><option>Escalate for review intent</option></select></label><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><ClipboardCheck className="mx-auto size-8 text-slate-600" /><p className="mt-3 font-semibold">No return evidence loaded</p><p className="mt-2 text-sm text-slate-500">Connect governed order, shipment, item, policy, customer, payment, inventory, authorization, communications, and audit sources before taking action.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Approve unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Request evidence unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Issue refund unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Export audit unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No commerce or refund claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A case concept does not prove eligibility, order ownership, product condition, payment settlement, refund authorization, inventory movement, or legal compliance.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Return-management gates</p><h2 className="mt-2 text-2xl font-black">What a real return workflow must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Authenticated order, customer, item, shipment, fulfillment, condition, timestamp, and tenant provenance", "Policy version, jurisdiction, product exceptions, eligibility window, authorization, and communication history", "Payment instrument, settlement, refund amount, currency, fees, fraud controls, idempotency, and reconciliation", "Inventory receipt, inspection, restock, disposal, replacement, shipment, and warehouse audit", "Privacy, redaction, access controls, user requests, retention, incident response, and support ownership", "Approval roles, separation of duties, audit log, rollback, notifications, accessibility, and localization"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Return surface preserved", description: "Case concepts, filters, categories, evidence, decision intent, approvals, refunds, audit, save/reset, and gates remain interactive.", icon: ClipboardCheck, status: "Local concepts" }, { title: "No refund theater", description: "Orders, eligibility, payments, refunds, inventory, customers, shipment, and legal outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before action", description: "Real returns require authoritative commerce records, policy review, authorization, payment reconciliation, inventory handling, and audit.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("All");
+  const [selected, setSelected] = useState(1);
+  const [decision, setDecision] = useState("Decision not configured");
+  const [saved, setSaved] = useState(false);
+  const [showGates, setShowGates] = useState(false);
+  const categories = [
+    "All",
+    ...Array.from(new Set(cases.map(item => item.category))),
+  ];
+  const filtered = useMemo(
+    () =>
+      cases.filter(
+        item =>
+          (category === "All" || item.category === category) &&
+          `${item.title} ${item.category} ${item.detail}`
+            .toLowerCase()
+            .includes(query.toLowerCase())
+      ),
+    [category, query]
+  );
+  const selectedCase = cases.find(item => item.id === selected) ?? cases[0];
+  const reset = () => {
+    setQuery("");
+    setCategory("All");
+    setSelected(1);
+    setDecision("Decision not configured");
+    setSaved(false);
+    setShowGates(false);
+  };
+  return (
+    <div className="min-h-screen bg-[#070a16] text-white">
+      <ScreenHero
+        icon={ClipboardCheck}
+        eyebrow="Returns · Governance preview"
+        title="Verify the case before approving a return."
+        description="Explore local return/refund case concepts with search, category filters, evidence requirements, decision intent, save/reset, approval boundaries, and audit gates. No live order, shipment, payment, refund, inventory, customer, or legal outcome is connected."
+        badge="Operations workspace"
+      >
+        <div className="flex flex-wrap gap-2">
+          <Button
+            onClick={() => setSaved(true)}
+            className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"
+          >
+            <Check className="mr-2 size-4" />
+            {saved ? "Saved locally" : "Save case locally"}
+          </Button>
+          <Button
+            onClick={() => setShowGates(value => !value)}
+            variant="outline"
+            className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+          >
+            {showGates ? (
+              <X className="mr-2 size-4" />
+            ) : (
+              <ShieldAlert className="mr-2 size-4" />
+            )}
+            {showGates ? "Close gates" : "Review case gates"}
+          </Button>
+          <Button
+            onClick={reset}
+            variant="outline"
+            className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+          >
+            <RefreshCw className="mr-2 size-4" />
+            Reset case
+          </Button>
+        </div>
+      </ScreenHero>
+      <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+        <ScreenStatGrid
+          items={[
+            {
+              label: "Case concepts",
+              value: `${cases.length} local`,
+              hint: "No order source",
+              icon: ClipboardCheck,
+              tone: "cyan",
+            },
+            {
+              label: "Orders",
+              value: "Unavailable",
+              hint: "No commerce source",
+              icon: ShoppingBag,
+              tone: "violet",
+            },
+            {
+              label: "Refunds",
+              value: "Blocked",
+              hint: "No payment source",
+              icon: ShieldAlert,
+              tone: "amber",
+            },
+            {
+              label: "Audit",
+              value: "Required",
+              hint: "No decision log",
+              icon: LockKeyhole,
+              tone: "slate",
+            },
+          ]}
+        />
+        <ScreenPreviewBanner title="Returns evidence boundary">
+          <strong>
+            This is a local case-management preview, not proof that an order,
+            return, refund, payment, shipment, customer, or legal right exists.
+          </strong>{" "}
+          Case cards, filters, decision intent, saved state, approval controls,
+          and audit gates are browser concepts. No order number, date, amount,
+          status, inventory movement, payment, refund, customer record, or legal
+          conclusion is asserted.
+        </ScreenPreviewBanner>
+        <section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]">
+          <Card className="border-white/10 bg-white/[0.04]">
+            <CardContent className="p-6">
+              <div className="relative">
+                <Search className="absolute left-3 top-3 size-4 text-slate-500" />
+                <input
+                  value={query}
+                  onChange={event => setQuery(event.target.value)}
+                  placeholder="Search local return cases"
+                  className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none"
+                />
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {categories.map(entry => (
+                  <Button
+                    key={entry}
+                    onClick={() => setCategory(entry)}
+                    size="sm"
+                    variant="outline"
+                    className={
+                      category === entry
+                        ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100"
+                        : "border-white/10 text-slate-400"
+                    }
+                  >
+                    <Filter className="mr-1 size-3" />
+                    {entry}
+                  </Button>
+                ))}
+              </div>
+              <div className="mt-6 space-y-3">
+                {filtered.map(item => (
+                  <button
+                    key={item.id}
+                    onClick={() => setSelected(item.id)}
+                    className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="font-semibold">{item.title}</p>
+                        <p className="mt-1 text-sm text-slate-500">
+                          {item.detail}
+                        </p>
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className="border-amber-300/20 text-amber-200"
+                      >
+                        {item.state}
+                      </Badge>
+                    </div>
+                    <div className="mt-4">
+                      <Badge
+                        variant="outline"
+                        className="border-white/10 text-slate-500"
+                      >
+                        {item.category}
+                      </Badge>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="border-white/10 bg-white/[0.04]">
+            <CardContent className="p-6">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">
+                    Selected case concept
+                  </p>
+                  <h2 className="mt-2 text-2xl font-black">
+                    {selectedCase.title}
+                  </h2>
+                </div>
+                <Badge
+                  variant="outline"
+                  className="border-amber-300/20 text-amber-200"
+                >
+                  {selectedCase.state}
+                </Badge>
+              </div>
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                {selectedCase.detail}
+              </p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                {[
+                  { label: "Category", value: selectedCase.category },
+                  { label: "Order", value: "Unavailable" },
+                  { label: "Evidence", value: "Required" },
+                  { label: "Decision", value: decision },
+                  { label: "Payment", value: "Unconnected" },
+                  { label: "Audit", value: "Required" },
+                ].map(item => (
+                  <div
+                    key={item.label}
+                    className="rounded-xl border border-white/10 p-3"
+                  >
+                    <p className="text-xs text-slate-500">{item.label}</p>
+                    <p className="mt-2 text-sm font-semibold text-amber-200">
+                      {item.value}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <label className="mt-5 block text-sm text-slate-400">
+                Decision intent
+                <select
+                  value={decision}
+                  onChange={event => setDecision(event.target.value)}
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"
+                >
+                  <option>Decision not configured</option>
+                  <option>Request evidence intent</option>
+                  <option>Approve return intent</option>
+                  <option>Deny request intent</option>
+                  <option>Escalate for review intent</option>
+                </select>
+              </label>
+              <div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center">
+                <ClipboardCheck className="mx-auto size-8 text-slate-600" />
+                <p className="mt-3 font-semibold">No return evidence loaded</p>
+                <p className="mt-2 text-sm text-slate-500">
+                  Connect governed order, shipment, item, policy, customer,
+                  payment, inventory, authorization, communications, and audit
+                  sources before taking action.
+                </p>
+              </div>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <Button disabled className="bg-slate-700 text-slate-400">
+                  Approve unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Request evidence unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Issue refund unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Export audit unavailable
+                </Button>
+              </div>
+              {showGates && (
+                <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4">
+                  <p className="font-semibold text-amber-100">
+                    No commerce or refund claim
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-slate-400">
+                    A case concept does not prove eligibility, order ownership,
+                    product condition, payment settlement, refund authorization,
+                    inventory movement, or legal compliance.
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </section>
+        <Card className="border-white/10 bg-white/[0.04]">
+          <CardContent className="p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">
+              Return-management gates
+            </p>
+            <h2 className="mt-2 text-2xl font-black">
+              What a real return workflow must prove
+            </h2>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {[
+                "Authenticated order, customer, item, shipment, fulfillment, condition, timestamp, and tenant provenance",
+                "Policy version, jurisdiction, product exceptions, eligibility window, authorization, and communication history",
+                "Payment instrument, settlement, refund amount, currency, fees, fraud controls, idempotency, and reconciliation",
+                "Inventory receipt, inspection, restock, disposal, replacement, shipment, and warehouse audit",
+                "Privacy, redaction, access controls, user requests, retention, incident response, and support ownership",
+                "Approval roles, separation of duties, audit log, rollback, notifications, accessibility, and localization",
+              ].map(item => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3 rounded-xl border border-white/10 p-3"
+                >
+                  <LockKeyhole className="size-4 text-slate-500" />
+                  <span className="flex-1 text-sm text-slate-300">{item}</span>
+                  <span className="text-xs text-amber-200">Required</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+        <ScreenFeatureGrid
+          features={[
+            {
+              title: "Return surface preserved",
+              description:
+                "Case concepts, filters, categories, evidence, decision intent, approvals, refunds, audit, save/reset, and gates remain interactive.",
+              icon: ClipboardCheck,
+              status: "Local concepts",
+            },
+            {
+              title: "No refund theater",
+              description:
+                "Orders, eligibility, payments, refunds, inventory, customers, shipment, and legal outcomes are not fabricated.",
+              icon: ShieldAlert,
+              status: "Guardrail",
+            },
+            {
+              title: "Evidence before action",
+              description:
+                "Real returns require authoritative commerce records, policy review, authorization, payment reconciliation, inventory handling, and audit.",
+              icon: LockKeyhole,
+              status: "Blocked",
+            },
+          ]}
+        />
+      </main>
+    </div>
+  );
 }
