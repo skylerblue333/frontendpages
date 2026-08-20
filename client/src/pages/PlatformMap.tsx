@@ -84,7 +84,7 @@ export default function PlatformMap() {
     [group, query]
   );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-198" className="min-h-screen bg-background">
       <PageHeader
         icon={Compass}
         title="Platform map"
