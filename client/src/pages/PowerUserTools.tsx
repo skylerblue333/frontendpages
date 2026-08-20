@@ -135,7 +135,7 @@ export default function PowerUserTools() {
       aria-labelledby="power-tools-title"
     >
       <header className="sticky top-0 z-10 border-b border-border/30 bg-background/95 px-4 py-4 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center gap-3">
+        <div data-ui-polish="batch-199" className="mx-auto flex max-w-5xl items-center gap-3">
           <Wrench className="h-5 w-5 text-orange-300" aria-hidden="true" />
           <div className="min-w-0 flex-1">
             <h1 id="power-tools-title" className="text-lg font-bold">
