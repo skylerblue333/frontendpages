@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "924f8d308d961071e554f70031e06e5b0cde259b",
+  "generated_at_commit": "af8c8d1206d9a62c5d93f5cda17330bd579b3dec",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 448,
-  "routes_with_visual_checkpoint": 426,
-  "routes_with_placeholder_signal": 615,
+  "routes_with_review": 449,
+  "routes_with_visual_checkpoint": 427,
+  "routes_with_placeholder_signal": 614,
   "routes": [
     {
       "route": "/",
@@ -5746,8 +5746,8 @@
       "component": "Pagination",
       "source": "client/src/pages/Pagination.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -6189,7 +6189,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/privacy-settings",
