@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "65a6fc890c16c0ae787e2ae83df885b59833a1e4",
+  "generated_at_commit": "04c8d15734b6b0baa0da69e67be37f20a5793def",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 467,
-  "routes_with_visual_checkpoint": 445,
-  "routes_with_placeholder_signal": 602,
+  "routes_with_review": 468,
+  "routes_with_visual_checkpoint": 446,
+  "routes_with_placeholder_signal": 601,
   "routes": [
     {
       "route": "/",
@@ -6079,8 +6079,8 @@
       "component": "PredictiveModels",
       "source": "client/src/pages/PredictiveModels.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -6639,7 +6639,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/rating-system",
