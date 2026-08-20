@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "620b41cb62498cd1d0e86151c878813d8debcc38",
+  "generated_at_commit": "84f8758b91bf9e33b6722699ffff9c654b75fe6c",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 484,
-  "routes_with_visual_checkpoint": 462,
+  "routes_with_review": 485,
+  "routes_with_visual_checkpoint": 463,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -6556,8 +6556,8 @@
       "component": "QuickActions",
       "source": "client/src/pages/QuickActions.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
