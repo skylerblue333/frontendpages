@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/ProductComparison.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst ProductComparison = () => (\n  <FeatureUnavailable\n    title="Product comparison unavailable"\n    description="A trustworthy product comparison requires authoritative product records, consistent feature and specification schemas, current pricing and currency data, availability and regional rules, provenance, ranking methodology, accessibility, and freshness handling. No product, price, feature, ranking, recommendation, availability, savings, or comparison result is shown or asserted."\n    capability="Verified side-by-side product comparison"\n    nextStep="Connect approved catalog, pricing, inventory, specification, ranking, and localization services with provenance and freshness controls before enabling comparisons"\n  />\n);\n\nexport default ProductComparison;\n`);
+console.log(JSON.stringify({ changed: ['ProductComparison.tsx'] }, null, 2));
