@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "bd4966815f0b1c286705a2c489342a57791e5e7c",
+  "generated_at_commit": "290f30049799e4af7d022984cc493e96e43f0a17",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 583,
-  "routes_with_visual_checkpoint": 561,
-  "routes_with_placeholder_signal": 582,
+  "routes_with_review": 584,
+  "routes_with_visual_checkpoint": 562,
+  "routes_with_placeholder_signal": 581,
   "routes": [
     {
       "route": "/",
@@ -7834,9 +7834,9 @@
       "component": "StakingHub",
       "source": "client/src/pages/StakingHub.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/staking-options",
