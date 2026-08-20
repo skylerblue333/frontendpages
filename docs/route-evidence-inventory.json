@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "15bcc2ab21115487f6a0ff609bc41ee8653b0e44",
+  "generated_at_commit": "3a6c0f6b5bce7785885be332198a3a39036fa4b7",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 458,
-  "routes_with_visual_checkpoint": 436,
-  "routes_with_placeholder_signal": 605,
+  "routes_with_review": 459,
+  "routes_with_visual_checkpoint": 437,
+  "routes_with_placeholder_signal": 604,
   "routes": [
     {
       "route": "/",
@@ -5881,8 +5881,8 @@
       "component": "PersonaBuilder",
       "source": "client/src/pages/PersonaBuilder.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -6522,7 +6522,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/q-r-code-generator",

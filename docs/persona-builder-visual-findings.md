@@ -1,0 +1,3 @@
+# PersonaBuilder visual findings
+
+The 390×844 mobile render shows a responsive single-column hierarchy with the persona-readiness label, no-persona-data badge, PersonaBuilder readiness heading, concise scope statement, unavailable-persona warning, and first no-persona-data summary card visible without horizontal overflow. The 1440×1000 desktop render shows the full-width readiness header, unavailable warning, three summary cards, persona-governance requirements heading and filter, and the first two governance cards in a balanced two-column layout. Both captures use explicit no-data and no-action language and show no fabricated people, segments, personas, consent records, model outputs, or personal-data records.
