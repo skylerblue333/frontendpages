@@ -1,0 +1,3 @@
+# Verification visual findings
+
+The 390×844 mobile render keeps the Verification header, unavailable-service disclosure, refresh-unavailable control, read-only evidence-gate explanation, and identity-owner/document-requirements cards readable without horizontal overflow. The 1440×1000 desktop render shows the complete verification-readiness workspace with identity owner, document requirements, submission, reviewer, status, privacy, retention, and appeal states explicitly withheld, alongside document-safety, reviewer-authority, and evidence/appeal boundaries. Start verification, upload, and submit remain disabled. No identity, document, reviewer decision, verification status, compliance result, or verified-account outcome is fabricated.
