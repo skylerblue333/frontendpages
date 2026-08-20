@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/PodcastStudio.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst PodcastStudio = () => (\n  <FeatureUnavailable\n    title="Podcast studio unavailable"\n    description="A trustworthy podcast studio requires authorized media capture, editing and rendering services, durable project storage, file validation, upload and transcoding controls, rights and consent handling, publishing and distribution integrations, and recoverable job state. No recording, audio asset, edit, episode, publication, audience metric, or monetization result is shown or asserted."\n    capability="Auditable podcast production and publishing workflow"\n    nextStep="Connect approved media storage, capture, processing, rights, publishing, distribution, and monitoring services before enabling podcast production"\n  />\n);\n\nexport default PodcastStudio;\n`);
+console.log(JSON.stringify({ changed: ['PodcastStudio.tsx'] }, null, 2));
