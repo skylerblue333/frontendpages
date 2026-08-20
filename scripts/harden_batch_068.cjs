@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/ProductReviews.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst ProductReviews = () => (\n  <FeatureUnavailable\n    title="Product reviews unavailable"\n    description="Product reviews require a verified product catalog, authenticated authorship, purchase or eligibility rules, review storage, anti-fraud controls, moderation, abuse reporting, privacy, and auditable rating aggregation. No product, reviewer, rating, review, moderation, or purchase outcome is created here."\n    capability="Product reviews, ratings, trust signals, and moderation"\n    nextStep="Connect governed catalog, identity, review, and moderation services with anti-abuse and audit controls before enabling reviews"\n  />\n);\n\nexport default ProductReviews;\n`);
+console.log(JSON.stringify({ changed: ['ProductReviews.tsx'] }, null, 2));
