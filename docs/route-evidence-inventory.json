@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "6a545aadab8a4ffce059cb365def3799ac50fa7b",
+  "generated_at_commit": "4542f524cc78c972bce6ed8ad4084cbf4fc0a12a",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 478,
-  "routes_with_visual_checkpoint": 456,
+  "routes_with_review": 479,
+  "routes_with_visual_checkpoint": 457,
   "routes_with_placeholder_signal": 591,
   "routes": [
     {
@@ -6358,8 +6358,8 @@
       "component": "ProfilePreview",
       "source": "client/src/pages/ProfilePreview.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
