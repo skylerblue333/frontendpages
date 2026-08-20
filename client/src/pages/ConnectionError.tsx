@@ -1,25 +1,12 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import FeatureUnavailable from "@/components/FeatureUnavailable";
 
-export default function ConnectionError() {
-  const [state, setState] = useState(false);
+const ConnectionError = () => (
+  <FeatureUnavailable
+    title="Service connection unavailable"
+    description="This route is shown when the application cannot verify a reachable, authorized, and healthy backend or external provider. No user record, market data, wallet state, AI response, transaction, or operational success is displayed while the connection is unverified."
+    capability="Verified service connectivity and recovery"
+    nextStep="Return to the launch hub and retry after the approved service, network path, session, and health checks are restored"
+  />
+);
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-black p-4">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-8">ConnectionError</h1>
-        <p className="text-slate-400 mb-8">connection error page</p>
-
-        <Card className="bg-slate-900 border-slate-800 p-8">
-          <div className="space-y-6">
-            <p className="text-slate-300">Content for ConnectionError page</p>
-            <Button onClick={() => setState(!state)}>
-              {state ? "Deactivate" : "Activate"}
-            </Button>
-          </div>
-        </Card>
-      </div>
-    </div>
-  );
-}
+export default ConnectionError;
