@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "1bfdbd26a6abab52f00d99838193ae4df6c7fb40",
+  "generated_at_commit": "7c37734a109bee2995b875df83f178c241ba64c5",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 512,
-  "routes_with_visual_checkpoint": 490,
+  "routes_with_review": 513,
+  "routes_with_visual_checkpoint": 491,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7033,8 +7033,8 @@
       "component": "RoleBasedAccess",
       "source": "client/src/pages/RoleBasedAccess.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
