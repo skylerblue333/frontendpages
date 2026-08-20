@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/TaxReports.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst TaxReports = () => (\n  <FeatureUnavailable\n    title="Tax reports unavailable"\n    description="Tax reporting requires verified account, transaction, cost-basis, jurisdiction, tax-year, and document data; deterministic rules; reconciliation; privacy and retention controls; review workflows; and clear boundaries against legal or tax advice. No tax record, gain, loss, filing, liability, refund, compliance status, or advice is calculated or issued here."\n    capability="Tax-document organization, reporting, and tax-year calculations"\n    nextStep="Connect governed financial data, jurisdiction rules, document storage, reconciliation, privacy, audit, and reviewed professional disclosures before enabling tax reports"\n  />\n);\n\nexport default TaxReports;\n`);
+console.log(JSON.stringify({ changed: ['TaxReports.tsx'] }, null, 2));

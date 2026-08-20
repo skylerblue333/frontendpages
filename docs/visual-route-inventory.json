@@ -6057,9 +6057,9 @@
       "page_file": "NetworkGraph.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/network-health",
@@ -6097,9 +6097,9 @@
       "page_file": "NotesApp.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/notification-center",
@@ -9077,9 +9077,9 @@
       "page_file": "TaxReports.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
-      "auth_signals": true,
-      "external_signals": true
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/teaching-opportunities",
