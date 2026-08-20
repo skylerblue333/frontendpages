@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "8e3ce2ed760037e755d2bcd00aa262ea3d2aee39",
+  "generated_at_commit": "2f3b989f934f5912e4c1b95f081dd40654c80dae",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 423,
-  "routes_with_visual_checkpoint": 401,
-  "routes_with_placeholder_signal": 660,
+  "routes_with_review": 424,
+  "routes_with_visual_checkpoint": 402,
+  "routes_with_placeholder_signal": 659,
   "routes": [
     {
       "route": "/",
@@ -5386,8 +5386,8 @@
       "component": "MutualFriends",
       "source": "client/src/pages/MutualFriends.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -8664,7 +8664,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/travel-documents",
