@@ -962,3 +962,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/cover-photo-mobile-390x844.png`
 ## create-audio-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/create-audio-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/create-audio-mobile-390x844.png`
+
+## create-drop-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/create-drop-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/create-drop-mobile-390x844.png`

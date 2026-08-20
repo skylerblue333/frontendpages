@@ -1,0 +1,7 @@
+# CreateDrop review
+
+The former route fabricated a multi-step drop creator with default price and supply, revenue calculations, access choices, file upload, and a launch button. It has been replaced with a strictly typed, accessible, local-only digital-drop readiness workspace.
+
+The new screen states that no content, owner, price, supply, currency, entitlement, wallet, payment, claim, delivery, or saved drop is loaded or persisted. Content loading, drop configuration, claim review, and launch controls are disabled. The route documents asset provenance, content safety, currency, price, supply, fees, tax, payout, inventory, settlement, network, wallet, token ownership, subscriptions, whitelist, entitlement, signatures, claim authorization, launch, mint, payment, delivery, duplicate prevention, failure, refund, ownership, and audit. Its search field filters static capability notes only and never inspects content, calculates revenue, verifies a wallet, charges payment, launches a drop, mints, claims, or persists ownership.
+
+`prettier`, `tsc --noEmit`, and the production build completed successfully. Desktop evidence shows balanced drop-state/release cards and a four-item capability map. Mobile evidence stacks the same content cleanly at 390×844 without clipping; provenance, pricing, eligibility, payment, claims, delivery, refunds, ownership, audit, and unavailable-action disclosures remain readable.
