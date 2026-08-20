@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "8c7776998de5419945b0c367eee09619d009f921",
+  "generated_at_commit": "c657dcecfeae94651a669a4403ae597f7e7286ce",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 393,
-  "routes_with_visual_checkpoint": 371,
-  "routes_with_placeholder_signal": 694,
+  "routes_with_review": 394,
+  "routes_with_visual_checkpoint": 372,
+  "routes_with_placeholder_signal": 693,
   "routes": [
     {
       "route": "/",
@@ -4972,8 +4972,8 @@
       "component": "MealPlans",
       "source": "client/src/pages/MealPlans.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -8232,7 +8232,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/team-workspace",
