@@ -1,195 +1,421 @@
-import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useMemo, useState } from "react";
+import {
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  LockKeyhole,
+  ShieldCheck,
+  Vote,
+  XCircle,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Vote, ChevronRight, ChevronLeft, CheckCircle2, FileText, Users, Clock, Zap } from "lucide-react";
-import { PageHeader } from "@/components/PageHeader";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
-const STEPS = ["Type", "Details", "Options", "Review", "Submit"];
-const PROPOSAL_TYPES = [
-  { id: "parameter", label: "Parameter Change", icon: "⚙️", desc: "Modify protocol parameters (fees, limits, thresholds)" },
-  { id: "treasury", label: "Treasury Spend", icon: "💰", desc: "Allocate treasury funds to a project or initiative" },
-  { id: "upgrade", label: "Protocol Upgrade", icon: "🔧", desc: "Propose a smart contract or protocol upgrade" },
-  { id: "community", label: "Community Initiative", icon: "🌍", desc: "Launch a community program or partnership" },
-  { id: "emergency", label: "Emergency Action", icon: "🚨", desc: "Urgent security or critical fix proposal" },
+type ProposalType = { id: string; label: string; description: string };
+const proposalTypes: readonly ProposalType[] = [
+  {
+    id: "parameter",
+    label: "Parameter change",
+    description: "Fees, limits, thresholds, or other protocol parameters.",
+  },
+  {
+    id: "treasury",
+    label: "Treasury spend",
+    description: "A request to allocate governed funds to an initiative.",
+  },
+  {
+    id: "upgrade",
+    label: "Protocol upgrade",
+    description: "A proposed contract, client, or protocol change.",
+  },
+  {
+    id: "community",
+    label: "Community initiative",
+    description: "A program, partnership, or ecosystem proposal.",
+  },
+  {
+    id: "emergency",
+    label: "Emergency action",
+    description: "An urgent security or critical-fix proposal.",
+  },
 ];
+const durations = ["3", "7", "14", "30"] as const;
+const initialOptions = ["Approve", "Reject", "Abstain"];
 
 export default function GovernanceWizard() {
   const [step, setStep] = useState(0);
   const [type, setType] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [options, setOptions] = useState(["Yes — Approve", "No — Reject", "Abstain"]);
-  const [duration, setDuration] = useState("7");
-  const [submitted, setSubmitted] = useState(false);
+  const [options, setOptions] = useState<string[]>(initialOptions);
+  const [duration, setDuration] = useState<(typeof durations)[number]>("7");
+  const [status, setStatus] = useState(
+    "Governance service is unavailable locally. Nothing has been submitted or saved."
+  );
 
-  const handleSubmit = () => {
-    setSubmitted(true);
-    toast.success("Governance proposal submitted for community vote!");
+  const selectedType = useMemo(
+    () => proposalTypes.find(item => item.id === type),
+    [type]
+  );
+  const steps = ["Type", "Details", "Options", "Review"] as const;
+
+  const unavailable = (action: string) => {
+    setStatus(
+      `${action} is unavailable locally. No proposal, stake, vote, wallet state, or governance record was changed.`
+    );
   };
 
-  if (submitted) {
-    return (
-      <div className="max-w-2xl mx-auto px-4 py-6 text-center">
-        <div className="w-20 h-20 rounded-full bg-purple-600/20 flex items-center justify-center mx-auto mb-4">
-          <CheckCircle2 className="w-10 h-10 text-purple-400" />
-        </div>
-        <h2 className="text-2xl font-bold mb-2">Proposal Submitted!</h2>
-        <p className="text-muted-foreground mb-6">Your governance proposal is now live for community voting. Voting period: {duration} days.</p>
-        <div className="bg-card border border-border/50 rounded-xl p-4 text-left mb-6">
-          <p className="font-semibold">{title || "Untitled Proposal"}</p>
-          <p className="text-sm text-muted-foreground mt-1">{description || "No description provided"}</p>
-          <div className="flex gap-2 mt-3">
-            <Badge variant="outline" className="border-primary/30 text-primary">{type}</Badge>
-            <Badge variant="outline" className="border-purple-500/30 text-purple-400">Active</Badge>
-          </div>
-        </div>
-        <Button onClick={() => { setSubmitted(false); setStep(0); setType(""); setTitle(""); setDescription(""); }}>
-          Create Another Proposal
-        </Button>
-      </div>
-    );
-  }
+  const next = () => {
+    if (step === 0 && !type) {
+      setStatus(
+        "Choose a local proposal concept before reviewing the next planning step."
+      );
+      return;
+    }
+    setStep(value => Math.min(value + 1, steps.length - 1));
+  };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6">
-      <PageHeader backHref="/governance" title="Create Governance Proposal" subtitle="Shape the future of SKYCOIN4444" icon={Vote} />
-
-      {/* Step indicator */}
-      <div className="flex items-center gap-2 mb-8">
-        {STEPS.map((s, i) => (
-          <div key={i} className="flex items-center gap-2">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${i < step ? "bg-purple-600 text-white" : i === step ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>
-              {i < step ? "✓" : i + 1}
-            </div>
-            {i < STEPS.length - 1 && <div className={`h-0.5 w-8 transition-all ${i < step ? "bg-purple-600" : "bg-border"}`} />}
-          </div>
-        ))}
-        <span className="ml-2 text-sm text-muted-foreground">{STEPS[step]}</span>
-      </div>
-
-      <Card className="p-6 border-border/50">
-        {step === 0 && (
-          <div>
-            <h3 className="font-bold text-lg mb-4">Select Proposal Type</h3>
-            <div className="space-y-3">
-              {PROPOSAL_TYPES.map(pt => (
-                <button key={pt.id} onClick={() => setType(pt.id)}
-                  className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-all ${type === pt.id ? "border-primary bg-primary/10" : "border-border hover:border-primary/40"}`}>
-                  <span className="text-2xl">{pt.icon}</span>
-                  <div>
-                    <p className="font-semibold">{pt.label}</p>
-                    <p className="text-xs text-muted-foreground">{pt.desc}</p>
-                  </div>
-                  {type === pt.id && <CheckCircle2 className="w-5 h-5 text-primary ml-auto" />}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {step === 1 && (
-          <div className="space-y-4">
-            <h3 className="font-bold text-lg mb-4">Proposal Details</h3>
+    <main
+      className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 lg:px-8"
+      aria-labelledby="governance-wizard-title"
+    >
+      <div className="mx-auto max-w-4xl space-y-6">
+        <header className="rounded-2xl border border-border/70 bg-card/80 p-6 shadow-sm sm:p-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <label className="text-sm font-medium mb-1 block">Title</label>
-              <Input placeholder="Short, clear title for your proposal" value={title} onChange={e => setTitle(e.target.value)} />
-            </div>
-            <div>
-              <label className="text-sm font-medium mb-1 block">Description</label>
-              <textarea
-                className="w-full min-h-[120px] rounded-lg border border-border bg-background/60 p-3 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-primary"
-                placeholder="Detailed description of the proposal, rationale, and expected impact..."
-                value={description}
-                onChange={e => setDescription(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium mb-1 block">Voting Duration</label>
-              <div className="flex gap-2">
-                {["3", "7", "14", "30"].map(d => (
-                  <button key={d} onClick={() => setDuration(d)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${duration === d ? "bg-primary text-primary-foreground" : "border border-border hover:border-primary/40"}`}>
-                    {d} days
-                  </button>
-                ))}
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="outline" className="gap-2">
+                  <Vote className="size-3.5" aria-hidden="true" /> Governance
+                  planning
+                </Badge>
+                <Badge variant="secondary">No governance service</Badge>
               </div>
+              <h1
+                id="governance-wizard-title"
+                className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl"
+              >
+                Proposal readiness planner
+              </h1>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground sm:text-base">
+                Draft a local proposal concept and review the controls required
+                before a governance workflow can safely accept a submission.
+              </p>
+            </div>
+            <ShieldCheck className="size-8 text-primary" aria-hidden="true" />
+          </div>
+        </header>
+
+        <section
+          className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5"
+          aria-label="Governance service status"
+        >
+          <div className="flex items-start gap-3">
+            <LockKeyhole
+              className="mt-0.5 size-5 shrink-0 text-amber-200"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="font-semibold text-amber-100">
+                Submission is unavailable
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-amber-100/75">
+                No authenticated governance identity, stake verification,
+                proposal validation, voting contract, wallet signer, or
+                persistence layer is connected. This planner does not claim that
+                a proposal is live.
+              </p>
             </div>
           </div>
-        )}
+        </section>
 
-        {step === 2 && (
-          <div>
-            <h3 className="font-bold text-lg mb-4">Voting Options</h3>
-            <div className="space-y-3">
-              {options.map((opt, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <Input value={opt} onChange={e => { const o = [...options]; o[i] = e.target.value; setOptions(o); }} />
-                  {options.length > 2 && (
-                    <button onClick={() => setOptions(options.filter((_, j) => j !== i))} className="text-red-400 hover:text-red-300 text-sm px-2">✕</button>
+        <section
+          className="grid gap-4 sm:grid-cols-3"
+          aria-label="Governance readiness status"
+        >
+          <Card>
+            <CardContent className="p-5">
+              <FileText
+                className="mb-3 size-5 text-primary"
+                aria-hidden="true"
+              />
+              <h2 className="font-semibold">Local draft only</h2>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                Fields remain in page memory and are never sent or persisted.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-5">
+              <LockKeyhole
+                className="mb-3 size-5 text-primary"
+                aria-hidden="true"
+              />
+              <h2 className="font-semibold">No stake scope</h2>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                No balance, stake, eligibility, delegation, or voting power is
+                displayed.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-5">
+              <XCircle
+                className="mb-3 size-5 text-primary"
+                aria-hidden="true"
+              />
+              <h2 className="font-semibold">No active vote</h2>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                No proposal ID, vote period, quorum, result, or chain
+                transaction exists.
+              </p>
+            </CardContent>
+          </Card>
+        </section>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Local planning steps</CardTitle>
+            <div
+              className="flex flex-wrap items-center gap-2 pt-2"
+              aria-label="Proposal planning progress"
+            >
+              {steps.map((label, index) => (
+                <div key={label} className="flex items-center gap-2">
+                  <span
+                    className={`flex size-8 items-center justify-center rounded-full text-sm font-semibold ${index < step ? "bg-primary text-primary-foreground" : index === step ? "border border-primary text-primary" : "bg-muted text-muted-foreground"}`}
+                    aria-current={index === step ? "step" : undefined}
+                  >
+                    {index < step ? (
+                      <CheckCircle2 className="size-4" aria-hidden="true" />
+                    ) : (
+                      index + 1
+                    )}
+                  </span>
+                  <span className="text-sm text-muted-foreground">{label}</span>
+                  {index < steps.length - 1 && (
+                    <span
+                      className="mx-1 hidden h-px w-6 bg-border sm:block"
+                      aria-hidden="true"
+                    />
                   )}
                 </div>
               ))}
-              {options.length < 5 && (
-                <Button variant="outline" size="sm" onClick={() => setOptions([...options, `Option ${options.length + 1}`])}>
-                  + Add Option
-                </Button>
-              )}
             </div>
-          </div>
-        )}
-
-        {step === 3 && (
-          <div>
-            <h3 className="font-bold text-lg mb-4">Review Proposal</h3>
-            <div className="space-y-3">
-              <div className="bg-background/60 rounded-lg p-4">
-                <p className="text-xs text-muted-foreground mb-1">Type</p>
-                <p className="font-semibold capitalize">{type}</p>
+          </CardHeader>
+          <CardContent className="space-y-5">
+            {step === 0 && (
+              <div className="space-y-3">
+                <h2 className="text-lg font-semibold">
+                  Choose a proposal concept
+                </h2>
+                {proposalTypes.map(item => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setType(item.id)}
+                    className={`flex w-full items-start gap-4 rounded-xl border p-4 text-left transition-colors ${type === item.id ? "border-primary bg-primary/10" : "border-border hover:border-primary/50"}`}
+                    aria-pressed={type === item.id}
+                  >
+                    <span
+                      className={`mt-0.5 size-4 rounded-full border ${type === item.id ? "border-primary bg-primary" : "border-muted-foreground"}`}
+                      aria-hidden="true"
+                    />
+                    <span>
+                      <span className="font-semibold">{item.label}</span>
+                      <span className="mt-1 block text-sm leading-6 text-muted-foreground">
+                        {item.description}
+                      </span>
+                    </span>
+                  </button>
+                ))}
               </div>
-              <div className="bg-background/60 rounded-lg p-4">
-                <p className="text-xs text-muted-foreground mb-1">Title</p>
-                <p className="font-semibold">{title || "—"}</p>
-              </div>
-              <div className="bg-background/60 rounded-lg p-4">
-                <p className="text-xs text-muted-foreground mb-1">Description</p>
-                <p className="text-sm">{description || "—"}</p>
-              </div>
-              <div className="bg-background/60 rounded-lg p-4">
-                <p className="text-xs text-muted-foreground mb-1">Voting Options</p>
-                <div className="flex flex-wrap gap-2 mt-1">
-                  {options.map((o, i) => <Badge key={i} variant="outline">{o}</Badge>)}
+            )}
+            {step === 1 && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-semibold">
+                  Describe the local concept
+                </h2>
+                <div>
+                  <label
+                    htmlFor="proposal-title"
+                    className="mb-1 block text-sm font-medium"
+                  >
+                    Title
+                  </label>
+                  <Input
+                    id="proposal-title"
+                    value={title}
+                    onChange={event => setTitle(event.target.value)}
+                    placeholder="Short, clear proposal title"
+                  />
                 </div>
+                <div>
+                  <label
+                    htmlFor="proposal-description"
+                    className="mb-1 block text-sm font-medium"
+                  >
+                    Description
+                  </label>
+                  <textarea
+                    id="proposal-description"
+                    value={description}
+                    onChange={event => setDescription(event.target.value)}
+                    placeholder="Rationale, scope, risks, and expected impact"
+                    className="min-h-32 w-full resize-y rounded-lg border border-border bg-background p-3 text-sm outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+                <fieldset>
+                  <legend className="mb-2 text-sm font-medium">
+                    Illustrative voting duration
+                  </legend>
+                  <div className="flex flex-wrap gap-2">
+                    {durations.map(value => (
+                      <button
+                        key={value}
+                        type="button"
+                        onClick={() => setDuration(value)}
+                        className={`rounded-lg border px-4 py-2 text-sm ${duration === value ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-primary/50"}`}
+                        aria-pressed={duration === value}
+                      >
+                        {value} days
+                      </button>
+                    ))}
+                  </div>
+                </fieldset>
               </div>
-              <div className="bg-background/60 rounded-lg p-4">
-                <p className="text-xs text-muted-foreground mb-1">Duration</p>
-                <p className="font-semibold">{duration} days</p>
+            )}
+            {step === 2 && (
+              <div className="space-y-4">
+                <div>
+                  <h2 className="text-lg font-semibold">
+                    Illustrative voting options
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    These labels are local draft content, not a deployed ballot.
+                  </p>
+                </div>
+                {options.map((option, index) => (
+                  <div key={`${index}-${option}`} className="flex gap-2">
+                    <label htmlFor={`option-${index}`} className="sr-only">
+                      Voting option {index + 1}
+                    </label>
+                    <Input
+                      id={`option-${index}`}
+                      value={option}
+                      onChange={event =>
+                        setOptions(current =>
+                          current.map((item, itemIndex) =>
+                            itemIndex === index ? event.target.value : item
+                          )
+                        )
+                      }
+                    />
+                    {options.length > 2 && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        aria-label={`Remove voting option ${index + 1}`}
+                        onClick={() =>
+                          setOptions(current =>
+                            current.filter(
+                              (_, itemIndex) => itemIndex !== index
+                            )
+                          )
+                        }
+                      >
+                        <XCircle className="size-4" aria-hidden="true" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                {options.length < 5 && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() =>
+                      setOptions(current => [
+                        ...current,
+                        `Option ${current.length + 1}`,
+                      ])
+                    }
+                  >
+                    Add local option
+                  </Button>
+                )}
               </div>
-              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 text-sm">
-                <p className="font-semibold text-yellow-400 mb-1">⚠️ Submission Requirement</p>
-                <p className="text-muted-foreground">You need 1,000 SKY444 staked to submit a proposal. Your current stake: 2,500 SKY444 ✓</p>
+            )}
+            {step === 3 && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-semibold">Review local draft</h2>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {[
+                    ["Type", selectedType?.label ?? "Not selected"],
+                    ["Title", title || "Not provided"],
+                    ["Duration", `${duration} days (illustrative)`],
+                    ["Options", options.join(", ")],
+                  ].map(([label, value]) => (
+                    <div
+                      key={label}
+                      className="rounded-xl border border-border/70 p-4"
+                    >
+                      <p className="text-xs text-muted-foreground">{label}</p>
+                      <p className="mt-1 font-semibold">{value}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="rounded-xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm leading-6 text-amber-100">
+                  No submission is available. A real workflow must verify
+                  identity, stake and eligibility, proposal schema, signer
+                  intent, network, quorum, voting period, audit trail, and
+                  transaction status.
+                </div>
+                <Button
+                  type="button"
+                  onClick={() => unavailable("Submit proposal")}
+                  disabled
+                >
+                  <Vote className="mr-2 size-4" aria-hidden="true" />
+                  Submit unavailable
+                </Button>
               </div>
-            </div>
-          </div>
-        )}
-      </Card>
+            )}
+          </CardContent>
+        </Card>
 
-      <div className="flex justify-between mt-6">
-        <Button variant="outline" onClick={() => setStep(s => s - 1)} disabled={step === 0} className="gap-2">
-          <ChevronLeft className="w-4 h-4" /> Back
-        </Button>
-        {step < STEPS.length - 1 ? (
-          <Button onClick={() => setStep(s => s + 1)} disabled={step === 0 && !type} className="gap-2">
-            Next <ChevronRight className="w-4 h-4" />
+        <div className="flex justify-between gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setStep(value => Math.max(value - 1, 0))}
+            disabled={step === 0}
+          >
+            <ChevronLeft className="mr-2 size-4" aria-hidden="true" />
+            Back
           </Button>
-        ) : (
-          <Button onClick={handleSubmit} className="gap-2 bg-purple-600 hover:bg-purple-600">
-            <Vote className="w-4 h-4" /> Submit Proposal
-          </Button>
-        )}
+          {step < steps.length - 1 && (
+            <Button type="button" onClick={next}>
+              Next
+              <ChevronRight className="ml-2 size-4" aria-hidden="true" />
+            </Button>
+          )}
+        </div>
+        <p
+          className="rounded-xl border border-border/30 bg-card/30 px-4 py-3 text-sm text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
+          <CheckCircle2
+            className="mr-2 inline size-4 text-emerald-400"
+            aria-hidden="true"
+          />
+          {status}
+        </p>
       </div>
-    </div>
+    </main>
   );
 }
