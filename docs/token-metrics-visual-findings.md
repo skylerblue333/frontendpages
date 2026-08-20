@@ -1,0 +1,3 @@
+# TokenMetrics visual findings
+
+The 390×844 mobile render keeps the token-metrics header, unavailable-service disclosure, refresh-unavailable control, read-only explanation, and first price metric card readable without horizontal overflow. The 1440×1000 desktop render shows the complete metric workspace with price, market cap, volume, holders, liquidity, staking, supply, and performance cards withheld as unavailable or not calculated, alongside freshness, activity-provenance, liquidity-context, and holder-context evidence gates. No price, market cap, volume, holder count, liquidity, staking yield, supply, return, performance, or financial outcome is fabricated. Refresh remains an explicit unavailable no-op.
