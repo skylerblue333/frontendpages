@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "fa0108b109ac8e82289730e146aee5a3ff68a9eb",
+  "generated_at_commit": "6e55f73860b73402661a3e39d429a10f46447bf6",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 589,
-  "routes_with_visual_checkpoint": 567,
+  "routes_with_review": 590,
+  "routes_with_visual_checkpoint": 568,
   "routes_with_placeholder_signal": 579,
   "routes": [
     {
@@ -7987,8 +7987,8 @@
       "component": "SubscriberManagement",
       "source": "client/src/pages/SubscriberManagement.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
