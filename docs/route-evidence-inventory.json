@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "2c669af547b7643b00ac7139ece740ee23721fb7",
+  "generated_at_commit": "62e2fae799fe139f417a9fcacf3da5fa1190db4c",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 345,
-  "routes_with_visual_checkpoint": 323,
+  "routes_with_review": 346,
+  "routes_with_visual_checkpoint": 324,
   "routes_with_placeholder_signal": 700,
   "routes": [
     {
@@ -4234,8 +4234,8 @@
       "component": "ICOLaunchpad",
       "source": "client/src/pages/ICOLaunchpad.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
