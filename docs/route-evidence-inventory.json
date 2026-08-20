@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "34ff923845d90e98f55d630e9221fd48b995aa5e",
+  "generated_at_commit": "a978ae623985146fd19992e201dfb27a1797ed5d",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 319,
-  "routes_with_visual_checkpoint": 297,
+  "routes_with_review": 320,
+  "routes_with_visual_checkpoint": 298,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3874,8 +3874,8 @@
       "component": "GanttChart",
       "source": "client/src/pages/GanttChart.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
