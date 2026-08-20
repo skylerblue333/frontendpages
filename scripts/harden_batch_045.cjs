@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/Mobile.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst Mobile = () => (\n  <FeatureUnavailable\n    title="Mobile application unavailable"\n    description="The prior page claimed iOS and Android availability, app-store distribution, instant crypto trading, real-time prices, AI trading signals, portfolio alerts, offline transactions, biometric security, screenshots, and device specifications. No signed mobile artifact, store listing, wallet/trading integration, notification service, or native security evidence is connected."\n    capability="Native iOS/Android application, trading, portfolio, notifications, and biometric access"\n    nextStep="Publish mobile availability only after signed artifacts, store approvals, backend integration, security review, and release evidence are verified"\n  />\n);\n\nexport default Mobile;\n`);
+console.log(JSON.stringify({ changed: ['Mobile.tsx'] }, null, 2));
