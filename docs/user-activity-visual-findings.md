@@ -1,0 +1,3 @@
+# UserActivity visual findings
+
+The 390×844 mobile render keeps the User Activity header, unavailable-service disclosure, refresh/export-unavailable controls, activity explanation, All/Security/Account filters, and first sign-in-event concept readable without horizontal overflow. The 1440×1000 desktop render shows the complete activity-readiness workspace with selected event ID, timestamp, actor, session, device, IP/location, audit, and outcome states explicitly withheld, plus clear event-category filtering and privacy/audit boundaries. No activity event, actor, timestamp, session, device, location, audit record, authentication result, or account-activity outcome is fabricated. Filter, selection, status, refresh, and export remain local-only or unavailable no-ops.
