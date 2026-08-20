@@ -1,0 +1,16 @@
+# SSLCertificates review
+
+The `/s-s-l-certificates` route already contained a substantial local TLS-certificate and transport-security preview, so the implementation was preserved rather than rewritten. It now has formatting, strict typecheck/build validation, and desktop/mobile evidence documentation. The route is not treated as a live certificate inventory, private-key store, endpoint inspector, security certification, or uptime monitor.
+
+| Area | Result |
+|---|---|
+| Local certificate functionality | Domain, API, integration, and internal-service certificate concepts, search, category filters, selected-certificate state, issuer and renewal intent, save state, reset, TLS-gate toggling, and disabled inspect/renew/rotate/export controls remain interactive in local component state. |
+| Evidence boundary | The hero and evidence banner explicitly state that this is a local TLS-certificate preview, not evidence that a domain, endpoint, certificate, key, issuer, trust chain, security posture, or uptime exists. No certificate validity, domain ownership, private key, TLS version, cipher, chain, revocation, security certification, or availability outcome is asserted. |
+| Certificate and key safety | Real activation requires authenticated domain and endpoint inventory, ownership, SANs, issuer, chain, key algorithm, deployment, timestamps, private-key protection, HSM/secret boundaries, least privilege, rotation, renewal, revocation, compromise response, and audit. No private key or certificate is entered, stored, exposed, or transmitted. |
+| TLS and endpoint safety | Production inspection requires TLS version/cipher validation, hostname checks, mTLS, client compatibility, browser behavior, monitoring, expiry alerts, automated renewal, rollback, incident response, recovery, and environment separation. No endpoint, chain, TLS, revocation, or availability state is connected. |
+| Persistence and actions | Save and reset operate only on local certificate state. Inspect, renew, rotate, and export remain visibly disabled. No certificate, key, issuer, endpoint, renewal, revocation, security, uptime, or audit record is created. |
+| Accessibility and UX | Existing semantic controls, visible labels, focusable buttons, native selects, responsive cards, disabled-state treatment, and evidence disclosures were retained. Desktop and mobile visual hierarchy was reviewed. |
+
+Validation completed successfully with Prettier, `pnpm exec tsc --noEmit`, and the production build. The build continues to emit the existing non-blocking large-chunk advisory. Desktop evidence was captured at 1440×1000 and mobile evidence at 390×844. Visual review confirms preserved local certificate behavior, explicit unavailable/unconfigured/unverified states, disabled consequential actions, and absence of fabricated outcomes.
+
+Production activation would require authenticated domain and endpoint inventory, protected private keys and HSM/secret boundaries, chain and hostname validation, TLS compatibility testing, automated renewal and expiry alerts, revocation and compromise response, monitoring, incident response, support, audit, environment separation, and accountable domain review for security, compliance, privacy, financial, wallet, AI, education, or user-impact claims. No certificate, key, TLS, security, or uptime outcome is claimed here.
