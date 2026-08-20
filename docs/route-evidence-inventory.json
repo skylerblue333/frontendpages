@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "3499ead33fa89c025d37ff6c23723357e748704c",
+  "generated_at_commit": "2aaec9c7aeceb437701c659d82a0a7fb98b958e0",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 633,
-  "routes_with_visual_checkpoint": 611,
-  "routes_with_placeholder_signal": 551,
+  "routes_with_review": 634,
+  "routes_with_visual_checkpoint": 612,
+  "routes_with_placeholder_signal": 550,
   "routes": [
     {
       "route": "/",
@@ -9040,9 +9040,9 @@
       "component": "UserReputation",
       "source": "client/src/pages/UserReputation.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/user-search",

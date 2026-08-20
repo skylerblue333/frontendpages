@@ -1,0 +1,3 @@
+# UserReputation visual findings
+
+The 390×844 mobile render keeps the User Reputation header, unavailable-service disclosure, refresh-unavailable control, trust explanation, Overview/Reviews/Endorsements filters, and first community-trust concept readable without horizontal overflow. The 1440×1000 desktop render shows the complete trust-signal readiness workspace with selected profile, score, methodology, reviews, endorsements, rank, recency, moderation, and privacy states explicitly withheld, plus clear anti-abuse and identity boundaries. Leave review and endorse remain disabled. No score, review, endorsement, rank, identity, safety, eligibility, or trust outcome is fabricated.
