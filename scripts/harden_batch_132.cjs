@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/DataPrivacy.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst DataPrivacy = () => (\n  <FeatureUnavailable\n    title="Data privacy controls unavailable"\n    description="Privacy controls require an authoritative data inventory, processing purposes and legal basis, regional rules, consent and withdrawal records, access and deletion workflows, retention enforcement, processor governance, incident handling, and independently validated policy publication. No privacy setting, consent state, GDPR status, compliance certification, data inventory, deletion, or access request is shown or asserted."\n    capability="Auditable privacy rights and data-governance controls"\n    nextStep="Connect approved privacy, identity, consent, rights-request, retention, processor, and policy services with ownership and audit controls before enabling privacy operations"\n  />\n);\n\nexport default DataPrivacy;\n`);
+console.log(JSON.stringify({ changed: ['DataPrivacy.tsx'] }, null, 2));
