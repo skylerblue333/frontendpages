@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/CustomReports.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst CustomReports = () => (\n  <FeatureUnavailable\n    title="Custom reports unavailable"\n    description="Custom reports require governed data sources, schema and metric definitions, permission-aware queries, reproducible calculations, saved report versions, refresh and cache behavior, export controls, privacy protections, and validation. No report, metric, chart, financial value, trend, forecast, export, or data freshness claim is shown or asserted."\n    capability="Permission-aware custom report construction and export"\n    nextStep="Connect approved reporting services with metric governance, schema validation, access controls, refresh, caching, export, audit, and recovery behavior before enabling reports"\n  />\n);\n\nexport default CustomReports;\n`);
+console.log(JSON.stringify({ changed: ['CustomReports.tsx'] }, null, 2));
