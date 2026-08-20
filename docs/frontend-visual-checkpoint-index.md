@@ -970,3 +970,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/create-drop-mobile-390x844.png`
 ## creator-network-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/creator-network-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/creator-network-mobile-390x844.png`
+
+## creator-studio-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/creator-studio-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/creator-studio-mobile-390x844.png`
