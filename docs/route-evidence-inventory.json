@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "d63c985290068866e19c3d8ff5188e47ecab66a3",
+  "generated_at_commit": "19dc5f24a8f4b8e3f692c8ad312fb29e524b66b7",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 591,
-  "routes_with_visual_checkpoint": 569,
+  "routes_with_review": 592,
+  "routes_with_visual_checkpoint": 570,
   "routes_with_placeholder_signal": 579,
   "routes": [
     {
@@ -8005,8 +8005,8 @@
       "component": "SubscriptionPlans",
       "source": "client/src/pages/SubscriptionPlans.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
