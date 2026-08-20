@@ -36,7 +36,7 @@ export default function LivestreamDashboard() {
       `${action} is unavailable locally. No stream, replay, share, schedule, viewer, notification, moderation, or account mutation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-194" className="min-h-screen bg-background">
       <PageHeader
         icon={Radio}
         title="Livestream dashboard"

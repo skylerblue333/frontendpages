@@ -7,7 +7,7 @@ export default function Login() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-950 to-black p-4 text-white" aria-labelledby="login-title">
-      <div className="mx-auto max-w-2xl py-12">
+      <div data-ui-polish="batch-194" className="mx-auto max-w-2xl py-12">
         <h1 id="login-title" className="mb-3 text-3xl font-bold">Sign-in interface preview</h1>
         <p className="mb-8 text-slate-400">UI-only authentication preview. No credentials are collected, transmitted, stored, or verified.</p>
         <Card className="border-amber-400/30 bg-slate-900 p-8">

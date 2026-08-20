@@ -71,7 +71,7 @@ export default function Live() {
       `${action} is unavailable locally. No stream, comment, like, share, moderation, notification, or social mutation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-194" className="min-h-screen bg-background">
       <PageHeader
         icon={Radio}
         title="Live streams"

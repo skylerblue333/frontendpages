@@ -11,7 +11,7 @@ const gatedCapabilities = [
 export default function MainDashboard() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-950 to-black p-4 text-white">
-      <div className="mx-auto max-w-6xl py-8">
+      <div data-ui-polish="batch-194" className="mx-auto max-w-6xl py-8">
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300/80">SKYCOIN4444 launch hub</p>
