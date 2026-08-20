@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/DashboardOverview.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst DashboardOverview = () => (\n  <FeatureUnavailable\n    title="Dashboard overview unavailable"\n    description="A trustworthy dashboard overview requires authenticated and permission-aware data sources, defined KPI semantics, freshness and timestamp handling, reliable aggregation, loading and error recovery, and privacy controls. No balance, portfolio, activity, notification, performance, health, user statistic, revenue, or operational metric is shown or asserted."\n    capability="Verified cross-module dashboard overview"\n    nextStep="Connect approved dashboard data sources with metric governance, authorization, freshness, aggregation, privacy, and recovery controls before enabling the overview"\n  />\n);\n\nexport default DashboardOverview;\n`);
+console.log(JSON.stringify({ changed: ['DashboardOverview.tsx'] }, null, 2));
