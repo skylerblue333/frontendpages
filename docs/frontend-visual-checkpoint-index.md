@@ -1054,3 +1054,6 @@ Mobile screenshot: `/home/ubuntu/screenshots/destination-guide-mobile-390x844.pn
 ## developer-marketplace-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/developer-marketplace-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/developer-marketplace-mobile-390x844.png`
+## direct-messages-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/direct-messages-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/direct-messages-mobile-390x844.png`
