@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "2e9b7e5bd3e79eec1dea5614716cbb381397ee7d",
+  "generated_at_commit": "f2eae4401b5b4c66639a09889392fb20d6d01183",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 413,
-  "routes_with_visual_checkpoint": 391,
+  "routes_with_review": 414,
+  "routes_with_visual_checkpoint": 392,
   "routes_with_placeholder_signal": 665,
   "routes": [
     {
@@ -5278,8 +5278,8 @@
       "component": "ModerationDashboard",
       "source": "client/src/pages/ModerationDashboard.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
