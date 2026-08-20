@@ -86,7 +86,7 @@ export default function DependencyGraph() {
       className="min-h-screen bg-background"
       aria-labelledby="dependency-graph-title"
     >
-      <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+      <div data-ui-polish="batch-186" className="mx-auto max-w-6xl space-y-6 px-4 py-8">
         <header className="space-y-3">
           <Badge variant="outline" className="border-sky-400/30 text-sky-200">
             PLANNING READINESS PREVIEW

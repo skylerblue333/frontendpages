@@ -61,7 +61,7 @@ export default function DecentralizedIdentity() {
       className="min-h-screen bg-background"
       aria-labelledby="identity-title"
     >
-      <div className="mx-auto max-w-5xl space-y-6 px-4 py-8">
+      <div data-ui-polish="batch-186" className="mx-auto max-w-5xl space-y-6 px-4 py-8">
         <header className="space-y-3">
           <Badge variant="outline" className="border-cyan-400/30 text-cyan-200">
             IDENTITY READINESS PREVIEW

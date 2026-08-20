@@ -49,7 +49,7 @@ export default function DatingProfileSetup() {
   const prev = () =>
     setStep(current => (current === 1 ? 1 : ((current - 1) as Step)));
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-186" className="min-h-screen bg-background">
       <PageHeader
         icon={Heart}
         title="Dating profile setup"

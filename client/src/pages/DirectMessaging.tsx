@@ -69,7 +69,7 @@ export default function DirectMessaging() {
       className="min-h-screen bg-gradient-to-br from-slate-950 via-cyan-950/40 to-slate-900 p-6 text-white sm:p-10"
       aria-labelledby="direct-messaging-title"
     >
-      <div className="mx-auto max-w-5xl">
+      <div data-ui-polish="batch-186" className="mx-auto max-w-5xl">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-cyan-300/10 text-cyan-200">
             <MessageCircle className="size-6" aria-hidden="true" />

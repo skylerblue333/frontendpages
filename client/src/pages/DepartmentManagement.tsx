@@ -99,7 +99,7 @@ export default function DepartmentManagement() {
     ["Audit", selected.audit],
   ];
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-186" className="min-h-screen bg-background">
       <PageHeader
         icon={Building2}
         title="Department management"
