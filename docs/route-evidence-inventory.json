@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "b09ae4f2f9dffbb0475ec77b9913553897a46636",
+  "generated_at_commit": "21e1a5222f6fa1c3d3370ae3c9b62c4d899231b8",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -33,7 +33,7 @@
   ],
   "routes_with_review": 390,
   "routes_with_visual_checkpoint": 368,
-  "routes_with_placeholder_signal": 696,
+  "routes_with_placeholder_signal": 695,
   "routes": [
     {
       "route": "/",
@@ -1860,7 +1860,7 @@
       "source_exists": true,
       "review_documented": true,
       "visual_checkpoint_documented": true,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/contact-us-form",
