@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "bbb96fbe734b8199eba9d429f3f8d0732b9c1245",
+  "generated_at_commit": "02665729d0f67d81641a7d2168d2eeb1f476c857",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 376,
-  "routes_with_visual_checkpoint": 354,
+  "routes_with_review": 377,
+  "routes_with_visual_checkpoint": 355,
   "routes_with_placeholder_signal": 701,
   "routes": [
     {
@@ -1741,8 +1741,8 @@
       "component": "CompetitiveRadar",
       "source": "client/src/pages/CompetitiveRadar.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
