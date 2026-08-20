@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "42970d9aed3d5a0801194b7fe9d192ce6ead56e1",
+  "generated_at_commit": "0ad7a4c389a7d5261d00ab47f3f78c2f557b1858",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 365,
-  "routes_with_visual_checkpoint": 343,
+  "routes_with_review": 366,
+  "routes_with_visual_checkpoint": 344,
   "routes_with_placeholder_signal": 700,
   "routes": [
     {
@@ -4567,8 +4567,8 @@
       "component": "Leaderboards",
       "source": "client/src/pages/Leaderboards.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
