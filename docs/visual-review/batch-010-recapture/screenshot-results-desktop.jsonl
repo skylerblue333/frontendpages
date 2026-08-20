@@ -1,0 +1,3 @@
+{"index": 1, "path": "/experiment-factory", "component": "ExperimentFactory", "mode": "desktop", "screenshot": "/home/ubuntu/frontendpages/docs/visual-review/batch-002-recapture/desktop/001-experiment-factory.png", "exit_code": 0, "seconds": 1.88, "error": ""}
+{"index": 2, "path": "/phase2to4-dashboard", "component": "Phase2to4Dashboard", "mode": "desktop", "screenshot": "/home/ubuntu/frontendpages/docs/visual-review/batch-002-recapture/desktop/002-phase2to4-dashboard.png", "exit_code": 0, "seconds": 1.62, "error": ""}
+{"index": 3, "path": "/trust-system", "component": "TrustSystem", "mode": "desktop", "screenshot": "/home/ubuntu/frontendpages/docs/visual-review/batch-002-recapture/desktop/003-trust-system.png", "exit_code": 0, "seconds": 1.78, "error": ""}
