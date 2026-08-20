@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/CodeFormatter.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst CodeFormatter = () => (\n  <FeatureUnavailable\n    title="Code formatter unavailable"\n    description="Code formatting requires a defined language/toolchain matrix, deterministic parser versions, safe handling of untrusted source text, validated output, configuration management, and a tested export or download path. No code has been parsed, transformed, validated, saved, or downloaded."\n    capability="Deterministic multi-language code formatting"\n    nextStep="Connect version-pinned formatters with sandboxing, input/output validation, configuration, error recovery, and secure export handling before enabling this feature"\n  />\n);\n\nexport default CodeFormatter;\n`);
+console.log(JSON.stringify({ changed: ['CodeFormatter.tsx'] }, null, 2));
