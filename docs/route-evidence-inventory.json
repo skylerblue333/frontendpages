@@ -2956,9 +2956,9 @@
       "component": "DropdownMenu",
       "source": "client/src/pages/DropdownMenu.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/e-n-s-resolver",
