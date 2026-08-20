@@ -1,74 +1,250 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useMemo, useState } from "react";
+import {
+  Activity,
+  BellRing,
+  CheckCircle2,
+  CircleDollarSign,
+  Search,
+  ShieldCheck,
+  WifiOff,
+  XCircle,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, Search, Settings } from "lucide-react";
+
+type TrackerBoundary = { title: string; area: string; description: string };
+const boundaries: readonly TrackerBoundary[] = [
+  {
+    title: "Networks, assets, and live fee sources",
+    area: "Data",
+    description:
+      "No chain, network, asset, RPC, fee oracle, mempool, block source, base fee, priority fee, timestamp, or source health is loaded.",
+  },
+  {
+    title: "Historical data, freshness, and methodology",
+    area: "History",
+    description:
+      "No historical sample, retention period, update cadence, unit convention, estimation method, confidence range, or stale-data warning exists.",
+  },
+  {
+    title: "Alerts, thresholds, and user preferences",
+    area: "Controls",
+    description:
+      "No alert rule, threshold, notification channel, user preference, consent record, rate limit, or delivery history is connected.",
+  },
+  {
+    title: "Wallet actions, transactions, and reconciliation",
+    area: "Execution",
+    description:
+      "No wallet, transaction, signing, submission, hash, confirmation, fee result, refund, or financial reconciliation is available.",
+  },
+];
 
 export default function GasTracker() {
-  const { isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>GasTracker</CardTitle>
-            <CardDescription>Sign in to access this feature</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState(
+    "Gas tracking is unavailable locally. No network, live fee, history, alert, wallet action, transaction, or financial result was started."
+  );
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return boundaries.filter(({ title, area, description }) =>
+      `${title} ${area} ${description}`.toLowerCase().includes(q)
     );
-  }
-
+  }, [query]);
+  const unavailable = (action: string) =>
+    setStatus(
+      `${action} is unavailable locally. No network, live fee, history, alert, wallet action, transaction, or financial result was started.`
+    );
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">GasTracker</h1>
-            <p className="text-muted-foreground mt-2">Gas price tracker</p>
+    <main
+      className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 lg:px-8"
+      aria-labelledby="tracker-title"
+    >
+      <div className="mx-auto max-w-6xl space-y-6">
+        <header className="rounded-2xl border border-border/70 bg-card/80 p-6 shadow-sm sm:p-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="outline" className="gap-2">
+                  <Activity className="size-3.5" aria-hidden="true" />
+                  Fee tracking readiness
+                </Badge>
+                <Badge variant="secondary">No tracking service</Badge>
+              </div>
+              <h1
+                id="tracker-title"
+                className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl"
+              >
+                Gas tracker readiness
+              </h1>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground sm:text-base">
+                Review live sources, historical data, freshness, alerts,
+                preferences, wallet boundaries, and reconciliation without
+                presenting fabricated gas prices or network activity.
+              </p>
+            </div>
+            <ShieldCheck className="size-8 text-primary" aria-hidden="true" />
           </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
-
+        </header>
+        <section className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5">
+          <div className="flex items-start gap-3">
+            <ShieldCheck
+              className="mt-0.5 size-5 shrink-0 text-amber-200"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="font-semibold text-amber-100">
+                Fee tracking service is unavailable
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-amber-100/75">
+                No network source, historical store, alert delivery, wallet,
+                transaction stream, or audit record is connected. This is a
+                planning boundary, not a live gas dashboard.
+              </p>
+            </div>
+          </div>
+        </section>
+        <section
+          className="grid gap-4 sm:grid-cols-3"
+          aria-label="Gas tracker status"
+        >
+          <Card>
+            <CardContent className="p-5">
+              <WifiOff
+                className="mb-3 size-5 text-primary"
+                aria-hidden="true"
+              />
+              <h2 className="font-semibold">No live network data</h2>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                No chain, asset, RPC, fee oracle, mempool, base fee, priority
+                fee, timestamp, or source health is presented.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-5">
+              <CircleDollarSign
+                className="mb-3 size-5 text-primary"
+                aria-hidden="true"
+              />
+              <h2 className="font-semibold">No fee history</h2>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                No historical sample, units, update cadence, methodology,
+                confidence range, or stale-data warning can run.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-5">
+              <BellRing
+                className="mb-3 size-5 text-primary"
+                aria-hidden="true"
+              />
+              <h2 className="font-semibold">No alerts</h2>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                No threshold, notification, consent, wallet action, transaction,
+                or reconciliation state exists.
+              </p>
+            </CardContent>
+          </Card>
+        </section>
         <Card>
           <CardHeader>
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-sm"
+            <CardTitle>Gas-tracking readiness map</CardTitle>
+            <CardDescription>
+              Search filters local boundary notes only and never loads fee data,
+              creates alerts, signs transactions, or changes wallet state.
+            </CardDescription>
+            <div className="relative max-w-xl pt-2">
+              <Search
+                className="pointer-events-none absolute left-3 top-4 size-4 text-muted-foreground"
+                aria-hidden="true"
               />
-              <Button variant="outline" size="icon">
-                <Settings className="w-4 h-4" />
-              </Button>
+              <Input
+                aria-label="Search gas tracker readiness notes"
+                value={query}
+                onChange={event => setQuery(event.target.value)}
+                placeholder="Search tracking requirements"
+                className="pl-9"
+              />
             </div>
           </CardHeader>
           <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>No data available. Start by creating a new item.</p>
-              </div>
-            )}
+            <div className="grid gap-4 md:grid-cols-2">
+              {visible.map(({ title, area, description }) => (
+                <div
+                  key={title}
+                  className="rounded-xl border border-border/70 p-5"
+                >
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="font-semibold">{title}</h3>
+                    <Badge variant="outline">{area}</Badge>
+                  </div>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    {description}
+                  </p>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    className="mt-4"
+                    onClick={() => unavailable(`Manage ${title}`)}
+                  >
+                    Manage unavailable
+                  </Button>
+                </div>
+              ))}
+              {visible.length === 0 && (
+                <div
+                  className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground md:col-span-2"
+                  role="status"
+                >
+                  No tracking notes match “{query}”.
+                </div>
+              )}
+            </div>
           </CardContent>
         </Card>
+        <section className="rounded-2xl border border-border/70 bg-card/50 p-5">
+          <div className="flex items-start gap-3">
+            <CheckCircle2
+              className="mt-0.5 size-5 shrink-0 text-emerald-500"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="font-semibold">
+                Evidence required before activation
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                A production tracker needs trusted multi-network sources,
+                historical retention and unit semantics, freshness and outage
+                handling, transparent methodology, alert delivery and consent,
+                accessible controls, wallet boundaries, and tested transaction
+                and reconciliation handling.
+              </p>
+            </div>
+          </div>
+        </section>
+        <p
+          className="rounded-xl border border-border/30 bg-card/30 px-4 py-3 text-sm text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
+          <CheckCircle2
+            className="mr-2 inline size-4 text-emerald-400"
+            aria-hidden="true"
+          />
+          {status}
+        </p>
       </div>
-    </div>
+    </main>
   );
 }
