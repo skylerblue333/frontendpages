@@ -1,0 +1,3 @@
+# ProgressBar visual findings
+
+The 390×844 mobile render shows a responsive single-column hierarchy with the progress-readiness label, no-progress-state badge, ProgressBar readiness heading, concise scope statement, unavailable-progress warning, and first no-progress-state summary card visible without horizontal overflow. The 1440×1000 desktop render shows the full-width readiness header, unavailable warning, three summary cards, progress governance requirements heading and filter, and the first two governance cards in a balanced two-column layout. Both captures use explicit no-state and no-action language and show no fabricated projects, tasks, milestones, owners, due dates, percentages, status values, completion calculations, or personal-data records.
