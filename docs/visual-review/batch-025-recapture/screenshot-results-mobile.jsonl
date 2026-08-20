@@ -1,0 +1,2 @@
+{"index": 1, "path": "/phase1-dashboard", "component": "Phase1Dashboard", "mode": "mobile", "screenshot": "/home/ubuntu/frontendpages/docs/visual-review/batch-002-recapture/mobile/001-phase1-dashboard.png", "exit_code": 0, "seconds": 1.31, "error": ""}
+{"index": 2, "path": "/reputation-system", "component": "ReputationSystem", "mode": "mobile", "screenshot": "/home/ubuntu/frontendpages/docs/visual-review/batch-002-recapture/mobile/002-reputation-system.png", "exit_code": 0, "seconds": 1.29, "error": ""}
