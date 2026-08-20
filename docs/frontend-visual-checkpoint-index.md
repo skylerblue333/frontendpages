@@ -1072,3 +1072,6 @@ Mobile screenshot: `/home/ubuntu/screenshots/dropdown-menu-mobile-390x844.png`
 ## ens-resolver-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/ens-resolver-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/ens-resolver-mobile-390x844.png`
+## edit-profile-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/edit-profile-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/edit-profile-mobile-390x844.png`
