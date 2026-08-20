@@ -1,0 +1,5 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+fs.writeFileSync(path.join(root, 'client/src/pages/ProjectBoard.tsx'), `import FeatureUnavailable from "@/components/FeatureUnavailable";\n\nconst ProjectBoard = () => (\n  <FeatureUnavailable\n    title="Project board unavailable"\n    description="A trustworthy project board requires durable project and task records, tenant and role-aware access, ownership, workflow definitions, ordering, deadlines, dependencies, comments, notifications, conflict handling, audit history, and synchronized updates. No project, task, status, progress, deadline, owner, priority, completion, or collaboration result is shown or asserted."\n    capability="Auditable collaborative project and task management"\n    nextStep="Connect approved project, task, identity, notification, collaboration, and audit services with concurrency and recovery controls before enabling the board"\n  />\n);\n\nexport default ProjectBoard;\n`);
+console.log(JSON.stringify({ changed: ['ProjectBoard.tsx'] }, null, 2));
