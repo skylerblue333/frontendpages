@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "def67ff400931684ed32e1b0046c0970e4a0da09",
+  "generated_at_commit": "a9bdc01cf966bd7b6d2afbb22258dd9de3712749",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 341,
-  "routes_with_visual_checkpoint": 319,
+  "routes_with_review": 342,
+  "routes_with_visual_checkpoint": 320,
   "routes_with_placeholder_signal": 700,
   "routes": [
     {
@@ -4198,8 +4198,8 @@
       "component": "HopeAIPage",
       "source": "client/src/pages/HopeAIPage.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
