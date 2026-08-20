@@ -1,0 +1,3 @@
+# VideoTutorials visual findings
+
+The 390×844 mobile render keeps the Video Tutorials header, unavailable-service disclosure, refresh-unavailable control, learning explanation, All/Courses/Guides filters, and first platform-orientation concept readable without horizontal overflow. The 1440×1000 desktop render shows the complete learning-catalog readiness workspace with selected tutorial ID, source, instructor, access, playback, progress, quiz, completion, certificate, and recommendation states explicitly withheld, plus clear curriculum and learning-outcome boundaries. Watch and start-course remain disabled. No tutorial, instructor, playback, progress, quiz, completion, certificate, recommendation, or learner outcome is fabricated.
