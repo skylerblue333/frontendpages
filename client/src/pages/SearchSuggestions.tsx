@@ -90,7 +90,7 @@ export default function SearchSuggestions() {
     setShowGates(false);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-202" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={Lightbulb}
         eyebrow="Search suggestions · Discovery preview"

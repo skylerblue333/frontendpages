@@ -94,7 +94,7 @@ export default function SearchResults() {
     setShowGates(false);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-202" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={Search}
         eyebrow="Search results · Review preview"

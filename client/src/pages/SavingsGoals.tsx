@@ -87,7 +87,7 @@ export default function SavingsGoals() {
     setShowGates(false);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-202" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={Target}
         eyebrow="Savings goals · Planning preview"
