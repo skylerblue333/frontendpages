@@ -229,7 +229,7 @@ export default function ComponentsShowcase() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div data-ui-polish="batch-184" className="min-h-screen bg-background text-foreground">
       <main className="container max-w-6xl mx-auto">
         <Alert className="mb-6 border-amber-500/40 bg-amber-500/10">
           <AlertCircle className="h-4 w-4" />

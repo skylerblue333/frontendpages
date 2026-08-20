@@ -34,7 +34,7 @@ export default function CreateArticle() {
       `${a} is unavailable locally. No author, draft, article, visibility, subscriber, notification, payment, payout, or account mutation was started.`
     );
   return (
-    <div className="min-h-screen bg-background">
+    <div data-ui-polish="batch-184" className="min-h-screen bg-background">
       <PageHeader
         icon={BookOpenText}
         title="Create article"
