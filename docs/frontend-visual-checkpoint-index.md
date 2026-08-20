@@ -1026,3 +1026,7 @@ Mobile screenshot: `/home/ubuntu/screenshots/date-picker-dialog-mobile-390x844.p
 ## dashboard-visual-checkpoint.md
 Desktop screenshot: `/home/ubuntu/screenshots/dashboard-desktop-1440x1000.png`
 Mobile screenshot: `/home/ubuntu/screenshots/dashboard-mobile-390x844.png`
+
+## dating-subscription-visual-checkpoint.md
+Desktop screenshot: `/home/ubuntu/screenshots/dating-subscription-desktop-1440x1000.png`
+Mobile screenshot: `/home/ubuntu/screenshots/dating-subscription-mobile-390x844.png`
