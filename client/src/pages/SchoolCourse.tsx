@@ -1,8 +1,415 @@
 import { useMemo, useState } from "react";
-import { BookOpen, Check, ClipboardCheck, Filter, GraduationCap, LockKeyhole, RefreshCw, ShieldAlert, UserRound, X } from "lucide-react";
+import {
+  BookOpen,
+  Check,
+  ClipboardCheck,
+  Filter,
+  GraduationCap,
+  LockKeyhole,
+  RefreshCw,
+  ShieldAlert,
+  UserRound,
+  X,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const courseDetails = [{ id: 1, name: "Digital foundations", category: "Foundations", detail: "A local course-detail concept requiring lesson provenance, objective alignment, instructor authority, prerequisites, accessibility, and assessment design.", state: "Unconfigured" }, { id: 2, name: "Blockchain literacy", category: "Technology", detail: "A technology course concept requiring accurate sources, wallet-risk boundaries, practical exercises, learner privacy, and no investment promises.", state: "Needs evidence" }, { id: 3, name: "AI product studio", category: "AI", detail: "An AI course concept requiring model disclosure, privacy, safety, evaluation, copyright, accessibility, and responsible-use review.", state: "Preview" }, { id: 4, name: "Community leadership", category: "Community", detail: "A community course concept requiring safeguarding, moderation, inclusion, assessment, appeals, and learner support.", state: "Blocked" }];
-export default function SchoolCourse() { const [query, setQuery] = useState(""); const [category, setCategory] = useState("All"); const [selected, setSelected] = useState(1); const [lesson, setLesson] = useState("Lesson path not configured"); const [assessment, setAssessment] = useState("Assessment not configured"); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false); const categories = ["All", ...Array.from(new Set(courseDetails.map((item) => item.category)))]; const filtered = useMemo(() => courseDetails.filter((item) => (category === "All" || item.category === category) && `${item.name} ${item.category} ${item.detail}`.toLowerCase().includes(query.toLowerCase())), [category, query]); const course = courseDetails.find((item) => item.id === selected) ?? courseDetails[0]; const reset = () => { setQuery(""); setCategory("All"); setSelected(1); setLesson("Lesson path not configured"); setAssessment("Assessment not configured"); setSaved(false); setShowGates(false); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={BookOpen} eyebrow="School course · Detail preview" title="Make the lesson real before opening enrollment." description="Explore local course-detail concepts with search, category filters, lesson and assessment intent, instructor/prerequisite/accessibility gates, save/reset, and blocked start/enroll actions. No course content, instructor, learner, enrollment, progress, grade, rating, price, reward, or certificate is connected." badge="Course-detail workspace"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Saved locally" : "Save course locally"}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review course gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset course</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Course concepts", value: `${courseDetails.length} local`, hint: "No content source", icon: BookOpen, tone: "cyan" }, { label: "Lessons", value: "Unavailable", hint: "No curriculum source", icon: ClipboardCheck, tone: "violet" }, { label: "Instructor", value: "Unconfigured", hint: "No authority source", icon: UserRound, tone: "amber" }, { label: "Enrollment", value: "Blocked", hint: "No learner source", icon: GraduationCap, tone: "slate" }]} /><ScreenPreviewBanner title="Course-detail evidence boundary"><strong>This is a local course-design preview, not evidence that lesson content, an instructor, a learner, enrollment, progress, grade, price, reward, or certificate exists.</strong> Course cards, filters, lesson and assessment intent, saved state, instructor/prerequisite/accessibility gates, and disabled start/enroll actions are browser concepts. No course, lesson, instructor, learner, rating, review, price, reward, completion, credential, or educational outcome is asserted.</ScreenPreviewBanner><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="relative"><Filter className="absolute left-3 top-3 size-4 text-slate-500" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search local course details" className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none" /></div><div className="mt-4 flex flex-wrap gap-2">{categories.map((entry) => <Button key={entry} onClick={() => setCategory(entry)} size="sm" variant="outline" className={category === entry ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100" : "border-white/10 text-slate-400"}>{entry}</Button>)}</div><div className="mt-6 space-y-3">{filtered.map((item) => <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-500">{item.detail}</p></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.state}</Badge></div><div className="mt-4"><Badge variant="outline" className="border-white/10 text-slate-500">{item.category}</Badge></div></button>)}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected course concept</p><h2 className="mt-2 text-2xl font-black">{course.name}</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{course.state}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-400">{course.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Category", value: course.category }, { label: "Lessons", value: lesson }, { label: "Assessment", value: assessment }, { label: "Instructor", value: "Unconfigured" }, { label: "Prerequisites", value: "Unconfigured" }, { label: "Access", value: "Blocked" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2"><label className="text-sm text-slate-400">Lesson path intent<select value={lesson} onChange={(event) => setLesson(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Lesson path not configured</option><option>Self-paced lessons</option><option>Instructor-led lessons</option><option>Project sequence</option><option>Accessible content path</option></select></label><label className="text-sm text-slate-400">Assessment intent<select value={assessment} onChange={(event) => setAssessment(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"><option>Assessment not configured</option><option>Quiz checkpoints</option><option>Project review</option><option>Peer assessment</option><option>Completion gate</option></select></label></div><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><BookOpen className="mx-auto size-8 text-slate-600" /><p className="mt-3 font-semibold">No course evidence loaded</p><p className="mt-2 text-sm text-slate-500">Connect governed curriculum, lessons, instructor authorization, prerequisites, access controls, learner privacy, accessibility, safeguarding, assessment, progress persistence, and support before starting.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Start unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Enroll unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Preview unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Share unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No course or learner claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A course-detail concept does not prove content, instructor, learner, enrollment, progress, grade, rating, price, reward, completion, credential, or educational outcome.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Course-detail gates</p><h2 className="mt-2 text-2xl font-black">What a real course detail system must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Authenticated learner, course, version, instructor, prerequisite, enrollment, organization, locale, timestamp, and provenance", "Lesson quality, objectives, author authorization, accessibility, localization, assessment, feedback, appeals, and support", "Learner privacy, consent, safeguarding, sensitive data, retention, deletion, export, moderation, and incident response", "Completion, score, grading, certificate, price, reward, employment, investment, blockchain, AI, and user-impact claims require domain review", "Start, enroll, preview, submit, pause, resume, share, export, notify, accessibility, and accountable approval require governed controls", "A course preview must not be presented as an available class, paid product, credential, reward program, or learning outcome without evidence"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><LockKeyhole className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Course-detail surface preserved", description: "Course concepts, lessons, instructors, prerequisites, assessments, accessibility, start, enroll, preview, share, save/reset, and gates remain interactive.", icon: BookOpen, status: "Local course detail" }, { title: "No learning theater", description: "Content, instructors, learners, enrollment, progress, grades, ratings, prices, rewards, credentials, and outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before access", description: "Real course detail requires governed curriculum, instructor authority, learner access, privacy, safeguarding, assessment, support, and audit.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>; }
+import {
+  ScreenFeatureGrid,
+  ScreenHero,
+  ScreenPreviewBanner,
+  ScreenStatGrid,
+} from "@/components/ScreenExperience";
+const courseDetails = [
+  {
+    id: 1,
+    name: "Digital foundations",
+    category: "Foundations",
+    detail:
+      "A local course-detail concept requiring lesson provenance, objective alignment, instructor authority, prerequisites, accessibility, and assessment design.",
+    state: "Unconfigured",
+  },
+  {
+    id: 2,
+    name: "Blockchain literacy",
+    category: "Technology",
+    detail:
+      "A technology course concept requiring accurate sources, wallet-risk boundaries, practical exercises, learner privacy, and no investment promises.",
+    state: "Needs evidence",
+  },
+  {
+    id: 3,
+    name: "AI product studio",
+    category: "AI",
+    detail:
+      "An AI course concept requiring model disclosure, privacy, safety, evaluation, copyright, accessibility, and responsible-use review.",
+    state: "Preview",
+  },
+  {
+    id: 4,
+    name: "Community leadership",
+    category: "Community",
+    detail:
+      "A community course concept requiring safeguarding, moderation, inclusion, assessment, appeals, and learner support.",
+    state: "Blocked",
+  },
+];
+export default function SchoolCourse() {
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("All");
+  const [selected, setSelected] = useState(1);
+  const [lesson, setLesson] = useState("Lesson path not configured");
+  const [assessment, setAssessment] = useState("Assessment not configured");
+  const [saved, setSaved] = useState(false);
+  const [showGates, setShowGates] = useState(false);
+  const categories = [
+    "All",
+    ...Array.from(new Set(courseDetails.map(item => item.category))),
+  ];
+  const filtered = useMemo(
+    () =>
+      courseDetails.filter(
+        item =>
+          (category === "All" || item.category === category) &&
+          `${item.name} ${item.category} ${item.detail}`
+            .toLowerCase()
+            .includes(query.toLowerCase())
+      ),
+    [category, query]
+  );
+  const course =
+    courseDetails.find(item => item.id === selected) ?? courseDetails[0];
+  const reset = () => {
+    setQuery("");
+    setCategory("All");
+    setSelected(1);
+    setLesson("Lesson path not configured");
+    setAssessment("Assessment not configured");
+    setSaved(false);
+    setShowGates(false);
+  };
+  return (
+    <div className="min-h-screen bg-[#070a16] text-white">
+      <ScreenHero
+        icon={BookOpen}
+        eyebrow="School course · Detail preview"
+        title="Make the lesson real before opening enrollment."
+        description="Explore local course-detail concepts with search, category filters, lesson and assessment intent, instructor/prerequisite/accessibility gates, save/reset, and blocked start/enroll actions. No course content, instructor, learner, enrollment, progress, grade, rating, price, reward, or certificate is connected."
+        badge="Course-detail workspace"
+      >
+        <div className="flex flex-wrap gap-2">
+          <Button
+            onClick={() => setSaved(true)}
+            className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"
+          >
+            <Check className="mr-2 size-4" />
+            {saved ? "Saved locally" : "Save course locally"}
+          </Button>
+          <Button
+            onClick={() => setShowGates(value => !value)}
+            variant="outline"
+            className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+          >
+            {showGates ? (
+              <X className="mr-2 size-4" />
+            ) : (
+              <ShieldAlert className="mr-2 size-4" />
+            )}
+            {showGates ? "Close gates" : "Review course gates"}
+          </Button>
+          <Button
+            onClick={reset}
+            variant="outline"
+            className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+          >
+            <RefreshCw className="mr-2 size-4" />
+            Reset course
+          </Button>
+        </div>
+      </ScreenHero>
+      <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+        <ScreenStatGrid
+          items={[
+            {
+              label: "Course concepts",
+              value: `${courseDetails.length} local`,
+              hint: "No content source",
+              icon: BookOpen,
+              tone: "cyan",
+            },
+            {
+              label: "Lessons",
+              value: "Unavailable",
+              hint: "No curriculum source",
+              icon: ClipboardCheck,
+              tone: "violet",
+            },
+            {
+              label: "Instructor",
+              value: "Unconfigured",
+              hint: "No authority source",
+              icon: UserRound,
+              tone: "amber",
+            },
+            {
+              label: "Enrollment",
+              value: "Blocked",
+              hint: "No learner source",
+              icon: GraduationCap,
+              tone: "slate",
+            },
+          ]}
+        />
+        <ScreenPreviewBanner title="Course-detail evidence boundary">
+          <strong>
+            This is a local course-design preview, not evidence that lesson
+            content, an instructor, a learner, enrollment, progress, grade,
+            price, reward, or certificate exists.
+          </strong>{" "}
+          Course cards, filters, lesson and assessment intent, saved state,
+          instructor/prerequisite/accessibility gates, and disabled start/enroll
+          actions are browser concepts. No course, lesson, instructor, learner,
+          rating, review, price, reward, completion, credential, or educational
+          outcome is asserted.
+        </ScreenPreviewBanner>
+        <section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]">
+          <Card className="border-white/10 bg-white/[0.04]">
+            <CardContent className="p-6">
+              <div className="relative">
+                <Filter className="absolute left-3 top-3 size-4 text-slate-500" />
+                <input
+                  value={query}
+                  onChange={event => setQuery(event.target.value)}
+                  placeholder="Search local course details"
+                  className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-3 text-sm text-white outline-none"
+                />
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {categories.map(entry => (
+                  <Button
+                    key={entry}
+                    onClick={() => setCategory(entry)}
+                    size="sm"
+                    variant="outline"
+                    className={
+                      category === entry
+                        ? "border-cyan-300/40 bg-cyan-300/[0.08] text-cyan-100"
+                        : "border-white/10 text-slate-400"
+                    }
+                  >
+                    {entry}
+                  </Button>
+                ))}
+              </div>
+              <div className="mt-6 space-y-3">
+                {filtered.map(item => (
+                  <button
+                    key={item.id}
+                    onClick={() => setSelected(item.id)}
+                    className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="font-semibold">{item.name}</p>
+                        <p className="mt-1 text-sm text-slate-500">
+                          {item.detail}
+                        </p>
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className="border-amber-300/20 text-amber-200"
+                      >
+                        {item.state}
+                      </Badge>
+                    </div>
+                    <div className="mt-4">
+                      <Badge
+                        variant="outline"
+                        className="border-white/10 text-slate-500"
+                      >
+                        {item.category}
+                      </Badge>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="border-white/10 bg-white/[0.04]">
+            <CardContent className="p-6">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">
+                    Selected course concept
+                  </p>
+                  <h2 className="mt-2 text-2xl font-black">{course.name}</h2>
+                </div>
+                <Badge
+                  variant="outline"
+                  className="border-amber-300/20 text-amber-200"
+                >
+                  {course.state}
+                </Badge>
+              </div>
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                {course.detail}
+              </p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                {[
+                  { label: "Category", value: course.category },
+                  { label: "Lessons", value: lesson },
+                  { label: "Assessment", value: assessment },
+                  { label: "Instructor", value: "Unconfigured" },
+                  { label: "Prerequisites", value: "Unconfigured" },
+                  { label: "Access", value: "Blocked" },
+                ].map(item => (
+                  <div
+                    key={item.label}
+                    className="rounded-xl border border-white/10 p-3"
+                  >
+                    <p className="text-xs text-slate-500">{item.label}</p>
+                    <p className="mt-2 text-sm font-semibold text-amber-200">
+                      {item.value}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                <label className="text-sm text-slate-400">
+                  Lesson path intent
+                  <select
+                    value={lesson}
+                    onChange={event => setLesson(event.target.value)}
+                    className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"
+                  >
+                    <option>Lesson path not configured</option>
+                    <option>Self-paced lessons</option>
+                    <option>Instructor-led lessons</option>
+                    <option>Project sequence</option>
+                    <option>Accessible content path</option>
+                  </select>
+                </label>
+                <label className="text-sm text-slate-400">
+                  Assessment intent
+                  <select
+                    value={assessment}
+                    onChange={event => setAssessment(event.target.value)}
+                    className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white outline-none"
+                  >
+                    <option>Assessment not configured</option>
+                    <option>Quiz checkpoints</option>
+                    <option>Project review</option>
+                    <option>Peer assessment</option>
+                    <option>Completion gate</option>
+                  </select>
+                </label>
+              </div>
+              <div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center">
+                <BookOpen className="mx-auto size-8 text-slate-600" />
+                <p className="mt-3 font-semibold">No course evidence loaded</p>
+                <p className="mt-2 text-sm text-slate-500">
+                  Connect governed curriculum, lessons, instructor
+                  authorization, prerequisites, access controls, learner
+                  privacy, accessibility, safeguarding, assessment, progress
+                  persistence, and support before starting.
+                </p>
+              </div>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <Button disabled className="bg-slate-700 text-slate-400">
+                  Start unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Enroll unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Preview unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Share unavailable
+                </Button>
+              </div>
+              {showGates && (
+                <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4">
+                  <p className="font-semibold text-amber-100">
+                    No course or learner claim
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-slate-400">
+                    A course-detail concept does not prove content, instructor,
+                    learner, enrollment, progress, grade, rating, price, reward,
+                    completion, credential, or educational outcome.
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </section>
+        <Card className="border-white/10 bg-white/[0.04]">
+          <CardContent className="p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">
+              Course-detail gates
+            </p>
+            <h2 className="mt-2 text-2xl font-black">
+              What a real course detail system must prove
+            </h2>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {[
+                "Authenticated learner, course, version, instructor, prerequisite, enrollment, organization, locale, timestamp, and provenance",
+                "Lesson quality, objectives, author authorization, accessibility, localization, assessment, feedback, appeals, and support",
+                "Learner privacy, consent, safeguarding, sensitive data, retention, deletion, export, moderation, and incident response",
+                "Completion, score, grading, certificate, price, reward, employment, investment, blockchain, AI, and user-impact claims require domain review",
+                "Start, enroll, preview, submit, pause, resume, share, export, notify, accessibility, and accountable approval require governed controls",
+                "A course preview must not be presented as an available class, paid product, credential, reward program, or learning outcome without evidence",
+              ].map(item => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3 rounded-xl border border-white/10 p-3"
+                >
+                  <LockKeyhole className="size-4 text-slate-500" />
+                  <span className="flex-1 text-sm text-slate-300">{item}</span>
+                  <span className="text-xs text-amber-200">Required</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+        <ScreenFeatureGrid
+          features={[
+            {
+              title: "Course-detail surface preserved",
+              description:
+                "Course concepts, lessons, instructors, prerequisites, assessments, accessibility, start, enroll, preview, share, save/reset, and gates remain interactive.",
+              icon: BookOpen,
+              status: "Local course detail",
+            },
+            {
+              title: "No learning theater",
+              description:
+                "Content, instructors, learners, enrollment, progress, grades, ratings, prices, rewards, credentials, and outcomes are not fabricated.",
+              icon: ShieldAlert,
+              status: "Guardrail",
+            },
+            {
+              title: "Evidence before access",
+              description:
+                "Real course detail requires governed curriculum, instructor authority, learner access, privacy, safeguarding, assessment, support, and audit.",
+              icon: LockKeyhole,
+              status: "Blocked",
+            },
+          ]}
+        />
+      </main>
+    </div>
+  );
+}

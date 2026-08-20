@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "e27f3ec4f18cb9987b54f2b58650069eef0ac603",
+  "generated_at_commit": "58ba0f407c713139ff87eb1ccd2ddee6c8d78f64",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 535,
-  "routes_with_visual_checkpoint": 513,
+  "routes_with_review": 536,
+  "routes_with_visual_checkpoint": 514,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7240,8 +7240,8 @@
       "component": "SchoolCourse",
       "source": "client/src/pages/SchoolCourse.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
