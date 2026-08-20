@@ -86,7 +86,7 @@ export default function SSO() {
     setShowGates(false);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-201" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={KeyRound}
         eyebrow="SSO · Federated identity preview"

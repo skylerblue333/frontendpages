@@ -88,7 +88,7 @@ export default function SMSTemplates() {
     setShowGates(false);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-201" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={FileText}
         eyebrow="SMS templates · Content preview"

@@ -88,7 +88,7 @@ export default function SSLCertificates() {
     setShowGates(false);
   };
   return (
-    <div className="min-h-screen bg-[#070a16] text-white">
+    <div data-ui-polish="batch-201" className="min-h-screen bg-[#070a16] text-white">
       <ScreenHero
         icon={FileKey2}
         eyebrow="SSL certificates · TLS posture preview"
