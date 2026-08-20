@@ -1,0 +1,3 @@
+# UpgradeDowngradePlan visual findings
+
+The 390×844 mobile render keeps the Upgrade or Downgrade Plan header, unavailable-service disclosure, refresh-unavailable control, plan explanation, and current-plan concept readable without horizontal overflow. The 1440×1000 desktop render shows the complete plan-readiness workspace with Current, Higher, and Lower plan concepts, selected price/currency/billing/entitlement/proration/tax/payment/effective-date/cancellation states, and explicit catalog, subscription, account, provider, and billing boundaries. Upgrade, downgrade, and cancel remain disabled. No tier, price, entitlement, payment, charge, proration, cancellation, or subscription outcome is fabricated.

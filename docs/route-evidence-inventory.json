@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "087b8214d32aaede35b825a50906e81b180be063",
+  "generated_at_commit": "464bcb69024e53948d1398472c7d8b8848dfbcfe",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 627,
-  "routes_with_visual_checkpoint": 605,
-  "routes_with_placeholder_signal": 557,
+  "routes_with_review": 628,
+  "routes_with_visual_checkpoint": 606,
+  "routes_with_placeholder_signal": 556,
   "routes": [
     {
       "route": "/",
@@ -8923,9 +8923,9 @@
       "component": "UpgradeDowngradePlan",
       "source": "client/src/pages/UpgradeDowngradePlan.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/upscaling",
