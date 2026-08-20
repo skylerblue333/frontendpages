@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "2e48dc734d954a4fab7c120e631667ba83d83f30",
+  "generated_at_commit": "01be499f9402c235648904f3fff5e39be8d9273a",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 404,
-  "routes_with_visual_checkpoint": 382,
+  "routes_with_review": 405,
+  "routes_with_visual_checkpoint": 383,
   "routes_with_placeholder_signal": 671,
   "routes": [
     {
@@ -5179,8 +5179,8 @@
       "component": "MobileHome",
       "source": "client/src/pages/MobileHome.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
