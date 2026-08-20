@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "0af76a916478f3027b606b0881aed803c61f4ff6",
+  "generated_at_commit": "b395ce462033dc811c98b390e19910588d37e22f",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 556,
-  "routes_with_visual_checkpoint": 534,
+  "routes_with_review": 557,
+  "routes_with_visual_checkpoint": 535,
   "routes_with_placeholder_signal": 584,
   "routes": [
     {
@@ -7447,8 +7447,8 @@
       "component": "ServerInstaller",
       "source": "client/src/pages/ServerInstaller.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {

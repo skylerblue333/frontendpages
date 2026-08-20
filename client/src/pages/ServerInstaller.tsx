@@ -1,8 +1,416 @@
 import { useMemo, useState } from "react";
-import { Box, Check, CloudCog, Database, FileKey2, HardDrive, LockKeyhole, Play, RefreshCw, RotateCcw, Save, Server, ShieldAlert, SquareTerminal, X } from "lucide-react";
+import {
+  Box,
+  Check,
+  CloudCog,
+  Database,
+  FileKey2,
+  HardDrive,
+  LockKeyhole,
+  Play,
+  RefreshCw,
+  RotateCcw,
+  Save,
+  Server,
+  ShieldAlert,
+  SquareTerminal,
+  X,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid } from "@/components/ScreenExperience";
-const stages = [{ id: "environment", label: "Environment", icon: CloudCog, detail: "Target, region, runtime, network, permissions, and approved environment evidence.", state: "Not configured" }, { id: "packages", label: "Packages", icon: Box, detail: "Dependency lockfile, image provenance, vulnerabilities, SBOM, and reproducible build evidence.", state: "Not configured" }, { id: "database", label: "Database", icon: Database, detail: "Migration plan, backup, transaction safety, indexes, rollback, and data-integrity evidence.", state: "Not configured" }, { id: "tls", label: "TLS & proxy", icon: FileKey2, detail: "Certificate ownership, secret manager, reverse proxy, headers, routing, and renewal evidence.", state: "Not configured" }, { id: "health", label: "Health checks", icon: Server, detail: "Authenticated probes, alert routing, deployment version, incident owner, and operational evidence.", state: "Not configured" }, { id: "backup", label: "Backup & rollback", icon: HardDrive, detail: "Restore test, retention, recovery target, rollback gate, audit, and accountable approval.", state: "Not configured" }];
-export default function ServerInstaller() { const [query, setQuery] = useState(""); const [selected, setSelected] = useState("environment"); const [target, setTarget] = useState("Target environment not configured"); const [saved, setSaved] = useState(false); const [showGates, setShowGates] = useState(false); const [execution, setExecution] = useState("Execution blocked"); const filtered = useMemo(() => stages.filter((stage) => `${stage.label} ${stage.detail}`.toLowerCase().includes(query.toLowerCase())), [query]); const stage = stages.find((item) => item.id === selected) ?? stages[0]; const reset = () => { setQuery(""); setSelected("environment"); setTarget("Target environment not configured"); setSaved(false); setShowGates(false); setExecution("Execution blocked"); }; return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={CloudCog} eyebrow="Server installer · Deployment readiness" title="Plan a deployment without pretending it has run." description="Explore a local deployment-readiness workspace with environment, package, database, TLS, health-check, backup, and rollback stages. No server, cloud account, secret, credential, database migration, certificate, deployment, or production success is connected or claimed." badge="Infrastructure plan preview"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Save className="mr-2 size-4" />{saved ? "Plan saved locally" : "Save plan locally"}</Button><Button onClick={() => setExecution("Execution blocked") } variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><Play className="mr-2 size-4" />{execution}</Button><Button onClick={() => setShowGates((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showGates ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showGates ? "Close gates" : "Review deploy gates"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className="mr-2 size-4" />Reset plan</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Stages", value: `${stages.length} local`, hint: "No deployment", icon: SquareTerminal, tone: "cyan" }, { label: "Readiness", value: "Unknown", hint: "No approved target", icon: CloudCog, tone: "violet" }, { label: "Secrets", value: "Blocked", hint: "No secret manager", icon: FileKey2, tone: "amber" }, { label: "Rollback", value: "Required", hint: "No restore proof", icon: RotateCcw, tone: "slate" }]} /><ScreenPreviewBanner title="Deployment evidence boundary"><strong>This is a local deployment-plan preview, not evidence that a server, cloud account, package, database, certificate, secret, health check, backup, rollback, or production deployment exists.</strong> Stage cards, target selection, saved state, readiness labels, and disabled execution actions are browser concepts. No server provisioning, credential generation, secret storage, migration, TLS issuance, deployment success, uptime, security, backup, restore, or rollback claim is asserted.</ScreenPreviewBanner><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="grid gap-4 md:grid-cols-[1fr_0.8fr]"><label className="text-sm font-semibold text-slate-300">Search plan stages<input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search environment, migrations, TLS..." className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm font-normal text-white outline-none" /></label><label className="text-sm font-semibold text-slate-300">Target intent<select value={target} onChange={(event) => setTarget(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm font-normal text-white outline-none"><option>Target environment not configured</option><option>Local preview intent</option><option>Staging intent</option><option>Self-hosted intent</option><option>Cloud deployment intent</option></select></label></div></CardContent></Card><section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Deployment stages</p><h2 className="mt-2 text-2xl font-black">{filtered.length} readiness stage{filtered.length === 1 ? "" : "s"}</h2><div className="mt-6 space-y-3">{filtered.map((item) => { const Icon = item.icon; return <button key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}><div className="flex items-start gap-3"><Icon className="mt-1 size-5 text-cyan-300" /><div className="flex-1"><div className="flex items-start justify-between gap-3"><p className="font-semibold">{item.label}</p><Badge variant="outline" className="border-amber-300/20 text-amber-200">{item.state}</Badge></div><p className="mt-2 text-sm leading-6 text-slate-500">{item.detail}</p></div></div></button>; })}</div></CardContent></Card><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">Selected stage</p><h2 className="mt-2 text-2xl font-black">{stage.label}</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Not configured</Badge></div><p className="mt-2 text-sm leading-6 text-slate-400">{stage.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-3">{[{ label: "Target", value: target }, { label: "Owner", value: "Unassigned" }, { label: "Evidence", value: "Unavailable" }, { label: "Credentials", value: "Blocked" }, { label: "Approval", value: "Required" }, { label: "Last run", value: "Not run" }].map((item) => <div key={item.label} className="rounded-xl border border-white/10 p-3"><p className="text-xs text-slate-500">{item.label}</p><p className="mt-2 text-sm font-semibold text-amber-200">{item.value}</p></div>)}</div><div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center"><LockKeyhole className="mx-auto size-8 text-slate-600" /><p className="mt-3 font-semibold">No deployment evidence loaded</p><p className="mt-2 text-sm leading-6 text-slate-500">Connect an approved environment, least-privilege credentials, secret manager, locked artifacts, migration plan, TLS ownership, health checks, backup restore test, rollback policy, and audit before execution.</p></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Generate config unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Provision unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Run migration unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Deploy unavailable</Button></div>{showGates && <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4"><p className="font-semibold text-amber-100">No infrastructure claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A local plan does not prove server access, package integrity, secret safety, migration success, certificate issuance, deployment, health, backup, restore, rollback, or production readiness.</p></div>}</CardContent></Card></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Deployment gates</p><h2 className="mt-2 text-2xl font-black">What a real installer must prove</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Approved target, owner, region, runtime, network, identity, least privilege, secret manager, logging, and change window", "Locked artifacts, dependency provenance, SBOM, vulnerability review, reproducible build, container policy, and runtime compatibility", "Database backup, migration dry run, transaction safety, lock monitoring, integrity checks, rollback, retention, and restore evidence", "TLS certificate ownership, reverse proxy, headers, cookies, CORS, routing, renewal, domain control, and secret redaction", "Health probes, alert routing, incident ownership, deployment version, rollback approval, audit, and accountable production sign-off", "An installer preview must not be presented as executed provisioning, migration, TLS issuance, deployment success, backup, restore, or production readiness without evidence"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><ShieldAlert className="size-4 text-slate-500" /><span className="flex-1 text-sm text-slate-300">{item}</span><span className="text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Installer surface preserved", description: "Environment, packages, database, TLS, health, backup, rollback, target selection, execution, save/reset, and gates remain interactive.", icon: CloudCog, status: "Local plan" }, { title: "No deployment theater", description: "Servers, secrets, migrations, certificates, deployments, health, backups, restores, rollbacks, and production readiness are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before execution", description: "Real installation requires approved infrastructure, least privilege, locked artifacts, safe migrations, TLS, health checks, restore proof, and audit.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>; }
+import {
+  ScreenFeatureGrid,
+  ScreenHero,
+  ScreenPreviewBanner,
+  ScreenStatGrid,
+} from "@/components/ScreenExperience";
+const stages = [
+  {
+    id: "environment",
+    label: "Environment",
+    icon: CloudCog,
+    detail:
+      "Target, region, runtime, network, permissions, and approved environment evidence.",
+    state: "Not configured",
+  },
+  {
+    id: "packages",
+    label: "Packages",
+    icon: Box,
+    detail:
+      "Dependency lockfile, image provenance, vulnerabilities, SBOM, and reproducible build evidence.",
+    state: "Not configured",
+  },
+  {
+    id: "database",
+    label: "Database",
+    icon: Database,
+    detail:
+      "Migration plan, backup, transaction safety, indexes, rollback, and data-integrity evidence.",
+    state: "Not configured",
+  },
+  {
+    id: "tls",
+    label: "TLS & proxy",
+    icon: FileKey2,
+    detail:
+      "Certificate ownership, secret manager, reverse proxy, headers, routing, and renewal evidence.",
+    state: "Not configured",
+  },
+  {
+    id: "health",
+    label: "Health checks",
+    icon: Server,
+    detail:
+      "Authenticated probes, alert routing, deployment version, incident owner, and operational evidence.",
+    state: "Not configured",
+  },
+  {
+    id: "backup",
+    label: "Backup & rollback",
+    icon: HardDrive,
+    detail:
+      "Restore test, retention, recovery target, rollback gate, audit, and accountable approval.",
+    state: "Not configured",
+  },
+];
+export default function ServerInstaller() {
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState("environment");
+  const [target, setTarget] = useState("Target environment not configured");
+  const [saved, setSaved] = useState(false);
+  const [showGates, setShowGates] = useState(false);
+  const [execution, setExecution] = useState("Execution blocked");
+  const filtered = useMemo(
+    () =>
+      stages.filter(stage =>
+        `${stage.label} ${stage.detail}`
+          .toLowerCase()
+          .includes(query.toLowerCase())
+      ),
+    [query]
+  );
+  const stage = stages.find(item => item.id === selected) ?? stages[0];
+  const reset = () => {
+    setQuery("");
+    setSelected("environment");
+    setTarget("Target environment not configured");
+    setSaved(false);
+    setShowGates(false);
+    setExecution("Execution blocked");
+  };
+  return (
+    <div className="min-h-screen bg-[#070a16] text-white">
+      <ScreenHero
+        icon={CloudCog}
+        eyebrow="Server installer · Deployment readiness"
+        title="Plan a deployment without pretending it has run."
+        description="Explore a local deployment-readiness workspace with environment, package, database, TLS, health-check, backup, and rollback stages. No server, cloud account, secret, credential, database migration, certificate, deployment, or production success is connected or claimed."
+        badge="Infrastructure plan preview"
+      >
+        <div className="flex flex-wrap gap-2">
+          <Button
+            onClick={() => setSaved(true)}
+            className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"
+          >
+            <Save className="mr-2 size-4" />
+            {saved ? "Plan saved locally" : "Save plan locally"}
+          </Button>
+          <Button
+            onClick={() => setExecution("Execution blocked")}
+            variant="outline"
+            className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+          >
+            <Play className="mr-2 size-4" />
+            {execution}
+          </Button>
+          <Button
+            onClick={() => setShowGates(value => !value)}
+            variant="outline"
+            className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+          >
+            {showGates ? (
+              <X className="mr-2 size-4" />
+            ) : (
+              <ShieldAlert className="mr-2 size-4" />
+            )}
+            {showGates ? "Close gates" : "Review deploy gates"}
+          </Button>
+          <Button
+            onClick={reset}
+            variant="outline"
+            className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+          >
+            <RefreshCw className="mr-2 size-4" />
+            Reset plan
+          </Button>
+        </div>
+      </ScreenHero>
+      <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+        <ScreenStatGrid
+          items={[
+            {
+              label: "Stages",
+              value: `${stages.length} local`,
+              hint: "No deployment",
+              icon: SquareTerminal,
+              tone: "cyan",
+            },
+            {
+              label: "Readiness",
+              value: "Unknown",
+              hint: "No approved target",
+              icon: CloudCog,
+              tone: "violet",
+            },
+            {
+              label: "Secrets",
+              value: "Blocked",
+              hint: "No secret manager",
+              icon: FileKey2,
+              tone: "amber",
+            },
+            {
+              label: "Rollback",
+              value: "Required",
+              hint: "No restore proof",
+              icon: RotateCcw,
+              tone: "slate",
+            },
+          ]}
+        />
+        <ScreenPreviewBanner title="Deployment evidence boundary">
+          <strong>
+            This is a local deployment-plan preview, not evidence that a server,
+            cloud account, package, database, certificate, secret, health check,
+            backup, rollback, or production deployment exists.
+          </strong>{" "}
+          Stage cards, target selection, saved state, readiness labels, and
+          disabled execution actions are browser concepts. No server
+          provisioning, credential generation, secret storage, migration, TLS
+          issuance, deployment success, uptime, security, backup, restore, or
+          rollback claim is asserted.
+        </ScreenPreviewBanner>
+        <Card className="border-white/10 bg-white/[0.04]">
+          <CardContent className="p-6">
+            <div className="grid gap-4 md:grid-cols-[1fr_0.8fr]">
+              <label className="text-sm font-semibold text-slate-300">
+                Search plan stages
+                <input
+                  value={query}
+                  onChange={event => setQuery(event.target.value)}
+                  placeholder="Search environment, migrations, TLS..."
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm font-normal text-white outline-none"
+                />
+              </label>
+              <label className="text-sm font-semibold text-slate-300">
+                Target intent
+                <select
+                  value={target}
+                  onChange={event => setTarget(event.target.value)}
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm font-normal text-white outline-none"
+                >
+                  <option>Target environment not configured</option>
+                  <option>Local preview intent</option>
+                  <option>Staging intent</option>
+                  <option>Self-hosted intent</option>
+                  <option>Cloud deployment intent</option>
+                </select>
+              </label>
+            </div>
+          </CardContent>
+        </Card>
+        <section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]">
+          <Card className="border-white/10 bg-white/[0.04]">
+            <CardContent className="p-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">
+                Deployment stages
+              </p>
+              <h2 className="mt-2 text-2xl font-black">
+                {filtered.length} readiness stage
+                {filtered.length === 1 ? "" : "s"}
+              </h2>
+              <div className="mt-6 space-y-3">
+                {filtered.map(item => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setSelected(item.id)}
+                      className={`w-full rounded-xl border p-4 text-left ${selected === item.id ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10"}`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <Icon className="mt-1 size-5 text-cyan-300" />
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between gap-3">
+                            <p className="font-semibold">{item.label}</p>
+                            <Badge
+                              variant="outline"
+                              className="border-amber-300/20 text-amber-200"
+                            >
+                              {item.state}
+                            </Badge>
+                          </div>
+                          <p className="mt-2 text-sm leading-6 text-slate-500">
+                            {item.detail}
+                          </p>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="border-white/10 bg-white/[0.04]">
+            <CardContent className="p-6">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">
+                    Selected stage
+                  </p>
+                  <h2 className="mt-2 text-2xl font-black">{stage.label}</h2>
+                </div>
+                <Badge
+                  variant="outline"
+                  className="border-amber-300/20 text-amber-200"
+                >
+                  Not configured
+                </Badge>
+              </div>
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                {stage.detail}
+              </p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                {[
+                  { label: "Target", value: target },
+                  { label: "Owner", value: "Unassigned" },
+                  { label: "Evidence", value: "Unavailable" },
+                  { label: "Credentials", value: "Blocked" },
+                  { label: "Approval", value: "Required" },
+                  { label: "Last run", value: "Not run" },
+                ].map(item => (
+                  <div
+                    key={item.label}
+                    className="rounded-xl border border-white/10 p-3"
+                  >
+                    <p className="text-xs text-slate-500">{item.label}</p>
+                    <p className="mt-2 text-sm font-semibold text-amber-200">
+                      {item.value}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center">
+                <LockKeyhole className="mx-auto size-8 text-slate-600" />
+                <p className="mt-3 font-semibold">
+                  No deployment evidence loaded
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-500">
+                  Connect an approved environment, least-privilege credentials,
+                  secret manager, locked artifacts, migration plan, TLS
+                  ownership, health checks, backup restore test, rollback
+                  policy, and audit before execution.
+                </p>
+              </div>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <Button disabled className="bg-slate-700 text-slate-400">
+                  Generate config unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Provision unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Run migration unavailable
+                </Button>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-white/10 text-slate-500"
+                >
+                  Deploy unavailable
+                </Button>
+              </div>
+              {showGates && (
+                <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-4">
+                  <p className="font-semibold text-amber-100">
+                    No infrastructure claim
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-slate-400">
+                    A local plan does not prove server access, package
+                    integrity, secret safety, migration success, certificate
+                    issuance, deployment, health, backup, restore, rollback, or
+                    production readiness.
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </section>
+        <Card className="border-white/10 bg-white/[0.04]">
+          <CardContent className="p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">
+              Deployment gates
+            </p>
+            <h2 className="mt-2 text-2xl font-black">
+              What a real installer must prove
+            </h2>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {[
+                "Approved target, owner, region, runtime, network, identity, least privilege, secret manager, logging, and change window",
+                "Locked artifacts, dependency provenance, SBOM, vulnerability review, reproducible build, container policy, and runtime compatibility",
+                "Database backup, migration dry run, transaction safety, lock monitoring, integrity checks, rollback, retention, and restore evidence",
+                "TLS certificate ownership, reverse proxy, headers, cookies, CORS, routing, renewal, domain control, and secret redaction",
+                "Health probes, alert routing, incident ownership, deployment version, rollback approval, audit, and accountable production sign-off",
+                "An installer preview must not be presented as executed provisioning, migration, TLS issuance, deployment success, backup, restore, or production readiness without evidence",
+              ].map(item => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3 rounded-xl border border-white/10 p-3"
+                >
+                  <ShieldAlert className="size-4 text-slate-500" />
+                  <span className="flex-1 text-sm text-slate-300">{item}</span>
+                  <span className="text-xs text-amber-200">Required</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+        <ScreenFeatureGrid
+          features={[
+            {
+              title: "Installer surface preserved",
+              description:
+                "Environment, packages, database, TLS, health, backup, rollback, target selection, execution, save/reset, and gates remain interactive.",
+              icon: CloudCog,
+              status: "Local plan",
+            },
+            {
+              title: "No deployment theater",
+              description:
+                "Servers, secrets, migrations, certificates, deployments, health, backups, restores, rollbacks, and production readiness are not fabricated.",
+              icon: ShieldAlert,
+              status: "Guardrail",
+            },
+            {
+              title: "Evidence before execution",
+              description:
+                "Real installation requires approved infrastructure, least privilege, locked artifacts, safe migrations, TLS, health checks, restore proof, and audit.",
+              icon: LockKeyhole,
+              status: "Blocked",
+            },
+          ]}
+        />
+      </main>
+    </div>
+  );
+}
