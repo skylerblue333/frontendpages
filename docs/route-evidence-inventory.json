@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "7960c9bb6393024ed9d348f9f9a437bd0a99c727",
+  "generated_at_commit": "126ab4b79d19ee83c400f584daad174583cdaa11",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 415,
-  "routes_with_visual_checkpoint": 393,
-  "routes_with_placeholder_signal": 664,
+  "routes_with_review": 416,
+  "routes_with_visual_checkpoint": 394,
+  "routes_with_placeholder_signal": 663,
   "routes": [
     {
       "route": "/",
@@ -5296,8 +5296,8 @@
       "component": "MoodTracker",
       "source": "client/src/pages/MoodTracker.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -8700,7 +8700,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/treasury-management",
