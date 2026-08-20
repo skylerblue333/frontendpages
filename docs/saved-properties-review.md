@@ -1,0 +1,16 @@
+# SavedProperties review
+
+The `/saved-properties` route already contained a substantial local property-watchlist preview, so the implementation was preserved rather than rewritten. It now has formatting, strict typecheck/build validation, and desktop/mobile evidence documentation. The route is not treated as a live real-estate listing service, address store, ownership record, valuation system, financing tool, legal review, or transaction workflow.
+
+| Area | Result |
+|---|---|
+| Local watchlist functionality | Residential, commercial, and land watchlist concepts, search, category filters, selected-property state, notes and alert intent, save state, reset, property-gate toggling, and disabled open/create-alert/share/remove controls remain interactive in local component state. |
+| Evidence boundary | The hero and evidence banner explicitly state that this is a local saved-property preview, not evidence that a listing, address, owner, price, availability, valuation, or transaction exists. No address, owner, property, listing, price, availability, valuation, financing, legal title, tax, or purchase outcome is asserted. |
+| Property and privacy safety | Real activation requires authenticated user, governed listing source, address privacy, jurisdiction, owner/agent, timestamps, freshness, change history, privacy, safe sharing, deletion, retention, export, and support. No address, owner, listing, or personal-data source is connected. |
+| Due-diligence and financial safety | Price, availability, valuation, condition, lease/sale terms, fees, taxes, currency, title, boundaries, easements, zoning, environmental, inspection, financing, insurance, legal, and professional review are required before decisions. No property, valuation, mortgage, tax, legal, investment, or purchase outcome is claimed. |
+| Persistence and actions | Save and reset operate only on local watchlist state. Open listing, create alert, share, and remove remain visibly disabled. No listing, alert, share, property, financing, tax, legal, or transaction record is created. |
+| Accessibility and UX | Existing semantic controls, visible labels, focusable buttons, native selects, responsive cards, disabled-state treatment, and evidence disclosures were retained. Desktop and mobile visual hierarchy was reviewed. |
+
+Validation completed successfully with Prettier, `pnpm exec tsc --noEmit`, and the production build. The build continues to emit the existing non-blocking large-chunk advisory. Desktop evidence was captured at 1440×1000 and mobile evidence at 390×844. Visual review confirms preserved local watchlist behavior, explicit unavailable/unverified/blocked states, disabled consequential actions, and absence of fabricated outcomes.
+
+Production activation would require authoritative listing sources, address privacy, ownership/agent verification, freshness, alert deduplication and stale-listing handling, title/zoning/inspection/financing/tax/legal review, secure sharing, audit, support, incident response, and accountable domain review for real-estate, tax, legal, financial, investment, mortgage, crypto, or user-impact decisions. No property, valuation, financing, legal, or purchase outcome is claimed here.
