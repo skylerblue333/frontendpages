@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "0387b4238e47f7a40c22a34160138e447460e9b1",
+  "generated_at_commit": "08fee3c8f213e85c64a56a3eae39b2ba503415e5",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 599,
-  "routes_with_visual_checkpoint": 577,
+  "routes_with_review": 600,
+  "routes_with_visual_checkpoint": 578,
   "routes_with_placeholder_signal": 576,
   "routes": [
     {
@@ -8131,8 +8131,8 @@
       "component": "SystemSettings",
       "source": "client/src/pages/SystemSettings.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
