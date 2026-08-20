@@ -447,7 +447,7 @@
       "page_file": "AdaptiveRoadmap.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -1967,7 +1967,7 @@
       "page_file": "ComprehensiveEcosystemLanding.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": true
     },
@@ -5297,7 +5297,7 @@
       "page_file": "LogisticsOptimizer.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
