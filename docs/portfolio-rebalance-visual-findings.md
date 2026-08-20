@@ -1,0 +1,3 @@
+# PortfolioRebalance visual findings
+
+The 390×844 mobile render shows a responsive single-column hierarchy with the rebalance-readiness label, no-rebalance-data badge, PortfolioRebalance readiness heading, concise scope statement, unavailable-rebalance warning, and first no-rebalance-data summary card visible without horizontal overflow. The 1440×1000 desktop render shows the full-width readiness header, unavailable warning, three summary cards, portfolio-rebalance governance requirements heading and filter, and the first two governance cards in a balanced two-column layout. Both captures use explicit no-data and no-action language and show no fabricated holdings, targets, drift, orders, fills, settlement, rollback, balances, trades, or financial records.
