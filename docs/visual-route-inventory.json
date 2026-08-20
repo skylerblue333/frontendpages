@@ -1737,7 +1737,7 @@
       "page_file": "CodeQuality.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -2528,8 +2528,8 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": true,
-      "external_signals": true
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/custom-dashboard",
@@ -5617,7 +5617,7 @@
       "page_file": "MetaversePortal.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -6547,9 +6547,9 @@
       "page_file": "PlatformStatus.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/playlist-management",
@@ -7227,7 +7227,7 @@
       "page_file": "QuantumComputing.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -7237,7 +7237,7 @@
       "page_file": "QuantumSafe.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
       "external_signals": false
     },
@@ -8947,9 +8947,9 @@
       "page_file": "SystemArchitecture.tsx",
       "source_exists": true,
       "placeholder_markers": false,
-      "boundary_signals": false,
+      "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": true
+      "external_signals": false
     },
     {
       "path": "/system-logs",
