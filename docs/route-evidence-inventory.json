@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "3802023fb66320c1703e0f74d105622c1b9a3ac9",
+  "generated_at_commit": "d700030ba1b0866463aac75a8808d3559604f83f",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 432,
-  "routes_with_visual_checkpoint": 410,
-  "routes_with_placeholder_signal": 653,
+  "routes_with_review": 433,
+  "routes_with_visual_checkpoint": 411,
+  "routes_with_placeholder_signal": 652,
   "routes": [
     {
       "route": "/",
@@ -5521,8 +5521,8 @@
       "component": "NotesApp",
       "source": "client/src/pages/NotesApp.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -8322,7 +8322,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/theme-settings",
