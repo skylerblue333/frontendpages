@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "f5067401fc51e1c5600295ea6bb06bf0b3685db3",
+  "generated_at_commit": "d96ccbd0a1602659987c05723f3776702a06afac",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 295,
-  "routes_with_visual_checkpoint": 273,
+  "routes_with_review": 296,
+  "routes_with_visual_checkpoint": 274,
   "routes_with_placeholder_signal": 703,
   "routes": [
     {
@@ -3604,8 +3604,8 @@
       "component": "FinancialReports",
       "source": "client/src/pages/FinancialReports.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
