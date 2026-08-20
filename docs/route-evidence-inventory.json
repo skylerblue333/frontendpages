@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "c2f4165f82c87b3428fd99334ff51895725cbaa1",
+  "generated_at_commit": "11414699d882b48128676d7040383946e2b7ddee",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 470,
-  "routes_with_visual_checkpoint": 448,
-  "routes_with_placeholder_signal": 598,
+  "routes_with_review": 471,
+  "routes_with_visual_checkpoint": 449,
+  "routes_with_placeholder_signal": 596,
   "routes": [
     {
       "route": "/",
@@ -6124,8 +6124,8 @@
       "component": "PriceAlerts",
       "source": "client/src/pages/PriceAlerts.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
@@ -6864,7 +6864,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/response-time",
@@ -6873,7 +6873,7 @@
       "source_exists": true,
       "review_documented": false,
       "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "placeholder_signal": false
     },
     {
       "route": "/retention",
