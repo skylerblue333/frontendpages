@@ -1,140 +1,20 @@
 import { useState } from "react";
-import {
-  CircleSlash2,
-  Clock3,
-  Download,
-  EyeOff,
-  LockKeyhole,
-  PlayCircle,
-  Scissors,
-  Share2,
-  ShieldAlert,
-} from "lucide-react";
+import { Check, Clock3, Download, Eye, FileCheck2, Heart, Info, LockKeyhole, Play, RefreshCw, Scissors, Share2, ShieldAlert, Upload, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { PageHeader } from "@/components/PageHeader";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatePanel, ScreenStatGrid } from "@/components/ScreenExperience";
+const clipIdeas = [{ title: "Gameplay highlight concept", category: "Gaming", status: "Not sourced", detail: "Requires an authorized stream recording, creator rights, media storage, moderation, captions, and delivery evidence." }, { title: "Build demo concept", category: "Education", status: "Preview", detail: "Requires source recording, participant consent, accessibility review, retention, and audience-delivery evidence." }, { title: "Market commentary concept", category: "Finance", status: "Blocked", detail: "Requires licensed source media, financial-content review, timestamps, disclosures, and suitability controls." }];
 export default function StreamClip() {
   const [title, setTitle] = useState("");
-  const [status, setStatus] = useState(
-    "Clip service unavailable. Showing local media structure only."
-  );
-  const blocked = (action: string) =>
-    setStatus(
-      `${action} is unavailable locally. No source stream, clip, playback, share, download, notification, media, or account mutation was started.`
-    );
-  return (
-    <div data-ui-polish="batch-204" className="min-h-screen bg-background">
-      <PageHeader
-        icon={Scissors}
-        title="Stream clips"
-        subtitle="Review local clip structure without fabricated streams, creators, views, likes, durations, playback, shares, downloads, or clip outcomes."
-        badge="Local preview"
-        badgeVariant="outline"
-      />
-      <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
-        <div className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4 text-sm text-amber-100">
-          <strong>Clip service unavailable.</strong> No source stream, media
-          storage, creator authorization, copyright policy, moderation,
-          playback, or analytics service is connected.
-        </div>
-        <Card className="border-slate-800 bg-slate-900/75 p-6">
-          <Badge variant="outline">Local clip draft</Badge>
-          <h2 className="mt-3 text-2xl font-semibold">
-            Create clip unavailable
-          </h2>
-          <p className="mt-2 text-sm text-slate-400">
-            The title remains in component memory only. No stream is loaded and
-            no time range, media, or clip is persisted.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Input
-              aria-label="Clip title"
-              onChange={event => setTitle(event.target.value)}
-              placeholder="Clip title draft"
-              value={title}
-            />
-            <Button onClick={() => blocked("Create clip")} variant="outline">
-              <Scissors className="mr-2 h-4 w-4" />
-              Create unavailable
-            </Button>
-          </div>
-        </Card>
-        <Card className="border-slate-800 bg-slate-900/75 p-6">
-          <div className="rounded-xl border border-dashed border-slate-700 p-12 text-center">
-            <PlayCircle className="mx-auto h-9 w-9 text-slate-500" />
-            <h2 className="mt-4 text-xl font-semibold">
-              Trending clips unavailable
-            </h2>
-            <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-slate-400">
-              No source media, creator, title, game, views, likes, duration,
-              playback, share link, download, or moderation outcome is
-              available.
-            </p>
-            <div className="mt-5 flex justify-center gap-2">
-              <Button onClick={() => blocked("Play clip")} variant="outline">
-                <PlayCircle className="mr-2 h-4 w-4" />
-                Play unavailable
-              </Button>
-              <Button onClick={() => blocked("Share clip")} variant="outline">
-                <Share2 className="mr-2 h-4 w-4" />
-                Share unavailable
-              </Button>
-              <Button
-                onClick={() => blocked("Download clip")}
-                variant="outline"
-              >
-                <Download className="mr-2 h-4 w-4" />
-                Download unavailable
-              </Button>
-            </div>
-          </div>
-        </Card>
-        <div className="grid gap-4 md:grid-cols-3">
-          {[
-            [EyeOff, "No audience metrics"],
-            [Clock3, "No time range"],
-            [ShieldAlert, "No media claim"],
-          ].map(([Icon, label]) => (
-            <Card
-              className="border-slate-800 bg-slate-900/75 p-5"
-              key={String(label)}
-            >
-              <Icon className="h-5 w-5 text-cyan-200" />
-              <h2 className="mt-3 font-semibold">{String(label)}</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-400">
-                No clip, view, like, creator, duration, source, or media
-                operation is available locally.
-              </p>
-            </Card>
-          ))}
-        </div>
-        <Card className="border-slate-800 bg-slate-900/75 p-5">
-          <div className="flex gap-3">
-            <LockKeyhole className="h-5 w-5 text-cyan-200" />
-            <p className="text-sm leading-6 text-slate-400">
-              Production clips require media ownership, source-stream access,
-              storage, copyright controls, moderation, retention, and auditable
-              sharing.
-            </p>
-          </div>
-          <div className="mt-4 flex gap-3">
-            <CircleSlash2 className="h-5 w-5 text-slate-500" />
-            <p className="text-sm leading-6 text-slate-400">
-              No clip, playback, share, download, notification, media, or
-              account operation is available locally.
-            </p>
-          </div>
-        </Card>
-        <p
-          aria-live="polite"
-          className="rounded-lg border border-slate-800 p-4 text-sm text-slate-400"
-        >
-          {status}
-        </p>
-      </div>
-    </div>
-  );
+  const [start, setStart] = useState(30);
+  const [end, setEnd] = useState(90);
+  const [selected, setSelected] = useState(0);
+  const [saved, setSaved] = useState(false);
+  const [showBoundary, setShowBoundary] = useState(false);
+  const [retrying, setRetrying] = useState(false);
+  const reset = () => { setTitle(""); setStart(30); setEnd(90); setSelected(0); setSaved(false); setShowBoundary(false); setRetrying(false); };
+  const retry = () => { setRetrying(true); window.setTimeout(() => setRetrying(false), 500); };
+  const duration = Math.max(0, end - start);
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={Scissors} eyebrow="Stream clip · Media preview" title="Shape a clip without pretending it was recorded or shared." description="Explore a local clip workspace with title, time range, preview, source media, rights, moderation, captions, audience, play, share, download, save/reset, retry, and evidence boundaries. No recording, clip, creator, viewer, view, like, share, or download exists." badge="Evidence-bounded media"><div className="flex flex-wrap gap-2"><Button onClick={() => setSaved(true)} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Saved locally" : "Save clip draft"}</Button><Button onClick={() => setShowBoundary((value) => !value)} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">{showBoundary ? <X className="mr-2 size-4" /> : <ShieldAlert className="mr-2 size-4" />}{showBoundary ? "Close evidence gates" : "Review clip gates"}</Button><Button onClick={retry} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className={`mr-2 size-4 ${retrying ? "animate-spin" : ""}`} />{retrying ? "Retrying local state" : "Retry media source"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><X className="mr-2 size-4" />Reset clip</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Source", value: "Unavailable", hint: "No recording source", icon: Upload, tone: "cyan" }, { label: "Clip", value: "Draft-only", hint: "No media output", icon: Scissors, tone: "violet" }, { label: "Audience", value: "Unmeasured", hint: "No delivery source", icon: Eye, tone: "amber" }, { label: "Engagement", value: "Unverified", hint: "No social source", icon: Heart, tone: "slate" }]} /><ScreenPreviewBanner title="Clip evidence boundary"><strong>This is a local editing preview, not evidence that a stream recording, clip, creator, viewer, view, like, share, download, or social outcome exists.</strong> Title input, time range controls, visual media placeholder, local save state, retry feedback, rights and moderation gates, and disabled play/share/download/publish actions are browser concepts. No media, identity, audience, engagement, or business result is asserted.</ScreenPreviewBanner><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="grid gap-5 md:grid-cols-2"><label className="text-sm font-semibold text-slate-300">Clip title<input value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Name a local clip concept..." className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm font-normal text-white outline-none" /></label><div><p className="text-sm font-semibold text-slate-300">Time range intent</p><div className="mt-2 grid grid-cols-2 gap-3"><label className="text-xs text-slate-500">Start seconds<input type="number" min={0} max={300} value={start} onChange={(event) => setStart(Number(event.target.value))} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white" /></label><label className="text-xs text-slate-500">End seconds<input type="number" min={0} max={300} value={end} onChange={(event) => setEnd(Number(event.target.value))} className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm text-white" /></label></div><p className="mt-2 text-xs text-slate-500">Local duration intent: {duration}s · not a media duration.</p></div></div></CardContent></Card><section className="grid gap-4 lg:grid-cols-3">{clipIdeas.map((clip, index) => <button key={clip.title} onClick={() => setSelected(index)} className={`rounded-2xl border p-5 text-left ${selected === index ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10 bg-white/[0.04]"}`}><div className="flex items-start justify-between"><div className="flex size-11 items-center justify-center rounded-2xl bg-cyan-300/10 text-cyan-200"><Scissors className="size-5" /></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">{clip.status}</Badge></div><h2 className="mt-4 font-bold">{clip.title}</h2><Badge variant="outline" className="mt-3 border-white/10 text-slate-500">{clip.category}</Badge><p className="mt-4 text-sm leading-6 text-slate-400">{clip.detail}</p></button>)}</section><section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex h-48 items-center justify-center rounded-2xl border border-dashed border-white/15 bg-black/20"><div className="text-center"><Play className="mx-auto size-10 text-cyan-300/70" /><p className="mt-4 font-semibold">{title || clipIdeas[selected].title}</p><p className="mt-2 text-sm text-slate-500">Media preview unavailable · {start}s–{end}s intent</p></div></div><div className="mt-5 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400"><Play className="mr-2 size-4" />Play unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500"><Share2 className="mr-2 size-4" />Share unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500"><Download className="mr-2 size-4" />Download unavailable</Button></div></CardContent></Card><ScreenStatePanel type="unavailable" title="Source recording unavailable" description="Connect authorized media storage, stream identity, rights, timestamps, transcoding, captions, moderation, retention, delivery, and audit evidence before generating or serving a clip." /></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="grid gap-3 sm:grid-cols-2">{[{ label: "Source recording", value: "Required", icon: Upload }, { label: "Creator rights", value: "Required", icon: FileCheck2 }, { label: "Moderation", value: "Required", icon: ShieldAlert }, { label: "Captions / accessibility", value: "Required", icon: Info }, { label: "Audience delivery", value: "Blocked", icon: Eye }, { label: "Views / likes / shares", value: "Unmeasured", icon: Heart }, { label: "Creator identity", value: "Unverified", icon: LockKeyhole }, { label: "Download / export", value: "Blocked", icon: Download }].map(({ label, value, icon: Icon }) => <div key={label} className="flex items-center gap-3 rounded-xl border border-white/10 p-3"><Icon className="size-4 text-cyan-300" /><span className="flex-1 text-sm text-slate-300">{label}</span><span className="text-xs text-amber-200">{value}</span></div>)}</div></CardContent></Card><div className="flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Create clip unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Publish unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Open moderation unavailable</Button></div>{showBoundary && <Card className="border-amber-300/20 bg-amber-300/[0.06]"><CardContent className="p-6"><p className="font-semibold text-amber-100">No media or engagement claim</p><p className="mt-2 text-sm leading-6 text-slate-400">A local clip draft does not prove a recording, title, timestamp, creator, viewer, play, view, like, share, download, or business outcome.</p></CardContent></Card>}<ScreenFeatureGrid features={[{ title: "Clip surface preserved", description: "Title, time range, preview, source, rights, moderation, captions, audience, play, share, download, save/reset, and action gates remain visible.", icon: Scissors, status: "Local media" }, { title: "No metric theater", description: "Recordings, views, likes, shares, downloads, creator identity, and delivery outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before publishing", description: "Real clips require storage, rights, timestamps, transcoding, accessibility, moderation, retention, delivery, and audit.", icon: LockKeyhole, status: "Blocked" }]} /></main></div>;
 }
