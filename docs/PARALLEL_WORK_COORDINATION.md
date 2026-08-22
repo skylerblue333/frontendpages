@@ -14,12 +14,12 @@ The local `master` branch has been synchronized with `origin/master`, including 
 
 | Measure | Observed result |
 |---|---:|
-| Registered routes | 1,058 |
-| Source-present routes | 1,058 |
+| Registered routes | 1,065 |
+| Source-present routes | 1,065 |
 | Explicit placeholder markers | 0 |
-| Truthful boundary signals | 1,058 |
-| Auth-signaled routes | 349 |
-| External-integration-signaled routes | 208 |
+| Truthful boundary signals | 1,065 |
+| Auth-signaled routes | 388 |
+| External-integration-signaled routes | 224 |
 | Automated test files | 3 |
 | Latest synchronized branch | `master` = `origin/master` |
 
