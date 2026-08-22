@@ -1,0 +1,3 @@
+# Webhooks visual findings
+
+The 390×844 mobile render keeps the Webhooks header, unavailable catalog disclosure, refresh-unavailable control, integration-readiness explanation, Inbound/Outbound filter, and account-lifecycle concept readable without horizontal overflow. The 1440×1000 desktop render shows the complete event-catalog workspace with endpoint, schema, secret, signature, payload, delivery, and audit states explicitly withheld, alongside clear no-trust/no-traffic boundaries. Register event, replay event, and inspect delivery remain disabled. No inbound request, outbound event, payload, signature, delivery, replay, retry, or audit result is fabricated.

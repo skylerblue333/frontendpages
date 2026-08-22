@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "b2427460c3b4055ac82ac2bf69fd25dbd2dc8e3d",
+  "generated_at_commit": "163468ad5ba559df98c39d32da82968ad1dec2da",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 653,
-  "routes_with_visual_checkpoint": 631,
+  "routes_with_review": 654,
+  "routes_with_visual_checkpoint": 632,
   "routes_with_placeholder_signal": 537,
   "routes": [
     {
@@ -9454,8 +9454,8 @@
       "component": "Webhooks",
       "source": "client/src/pages/Webhooks.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
