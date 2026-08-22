@@ -1,0 +1,3 @@
+# WalletIntegration visual findings
+
+The 390×844 mobile render keeps the Wallet Integration header, unavailable-service disclosure, refresh-unavailable control, integration explanation, and provider-contract capability card readable without horizontal overflow. The 1440×1000 desktop render shows the complete integration-readiness workspace with provider, credentials, account, owner, network, permissions, balances, history, reconciliation, and custody states explicitly withheld, alongside clear synchronization and custody boundaries. Configure, connect-account, and sync remain disabled. No provider, account mapping, network, permission, balance, transaction, synchronization, custody, reconciliation, or integration outcome is fabricated.
