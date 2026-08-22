@@ -1,0 +1,3 @@
+# WalletConnect visual findings
+
+The 390×844 mobile render keeps the Wallet Connect header, unavailable-service disclosure, refresh-unavailable control, connection explanation, and provider-identity capability card readable without horizontal overflow. The 1440×1000 desktop render shows the complete wallet-connection readiness workspace with provider, owner, address, network, permissions, signature, custody, balance, transactions, and session states explicitly withheld, alongside clear external-wallet and privacy boundaries. Connect, switch-network, and disconnect remain disabled. No provider, wallet address, network, permission, signature, custody, balance, transaction, or connection outcome is fabricated.
