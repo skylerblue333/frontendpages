@@ -8708,7 +8708,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -8778,7 +8778,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -8809,7 +8809,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/style-selector",
@@ -8828,7 +8828,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -8868,7 +8868,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -8879,7 +8879,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/success-screen",
@@ -8889,7 +8889,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/support-metrics",
@@ -8908,8 +8908,8 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
-      "external_signals": false
+      "auth_signals": true,
+      "external_signals": true
     },
     {
       "path": "/swap-interface",
