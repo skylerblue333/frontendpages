@@ -29,6 +29,10 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 }
 
 async function startServer() {
+  if (process.env.NODE_ENV === "production" && !process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL is required before starting the production server");
+  }
+
   const app = express();
   const server = createServer(app);
 
