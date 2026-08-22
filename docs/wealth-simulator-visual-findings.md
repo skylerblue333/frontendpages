@@ -1,0 +1,3 @@
+# WealthSimulator visual findings
+
+The 390×844 mobile render keeps the Wealth Simulator header, unavailable planning-model disclosure, refresh-unavailable control, scenario-readiness explanation, and starting-assets boundary readable without horizontal overflow. The 1440×1000 desktop render shows the full scenario-readiness workspace with data, assumptions, formula, fees/tax, uncertainty, suitability, recommendation, and no-output states explicitly withheld, alongside disabled simulation, save, and export actions. No projected wealth, return, balance, allocation, probability, tax result, or investment recommendation is fabricated.
