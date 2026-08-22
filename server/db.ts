@@ -161,7 +161,7 @@ export async function getOrders(userId: string) {
   }
 }
 
-export async function createOrder(data: any) {
+export async function createOrder(data: typeof schema.orders.$inferInsert) {
   try {
     await db.insert(schema.orders).values(data);
     return data;
@@ -179,12 +179,12 @@ export async function getTransactions(userId: string) {
   }
 }
 
-export async function createTransaction(data: any) {
+export async function createTransaction(data: typeof schema.transactions.$inferInsert) {
   try {
     await db.insert(schema.transactions).values(data);
     return data;
   } catch (error) {
-    return data;
+    return null;
   }
 }
 
@@ -197,7 +197,7 @@ export async function getWallet(userId: string) {
   }
 }
 
-export async function createWallet(data: any) {
+export async function createWallet(data: typeof schema.wallets.$inferInsert) {
   try {
     await db.insert(schema.wallets).values(data);
     return data;
