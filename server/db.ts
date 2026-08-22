@@ -28,15 +28,26 @@ export async function getUserByEmail(email: string) {
   }
 }
 
-export async function upsertUser(data: any) {
+type UserUpsert = Omit<schema.InsertUser, "id"> & {
+  id?: string;
+  openId: string;
+};
+
+export async function upsertUser(data: UserUpsert) {
   try {
-    if (data.id) {
-      await db.update(schema.users).set(data).where(eq(schema.users.id, data.id));
-      return db.query.users.findFirst({ where: eq(schema.users.id, data.id) });
-    } else {
-      await db.insert(schema.users).values(data);
-      return data;
+    const existing = data.id
+      ? await getUserById(data.id)
+      : await getUserByOpenId(data.openId);
+
+    if (existing) {
+      const { id: _id, ...changes } = data;
+      await db.update(schema.users).set(changes).where(eq(schema.users.id, existing.id));
+      return getUserById(existing.id);
     }
+
+    const id = data.id ?? `user-${crypto.randomUUID()}`;
+    await db.insert(schema.users).values({ ...data, id });
+    return getUserById(id);
   } catch (error) {
     return null;
   }
@@ -67,7 +78,7 @@ export async function ensureAllTokenBalances(userId: string) {
   }
 }
 
-export async function createUser(data: any) {
+export async function createUser(data: schema.InsertUser) {
   try {
     await db.insert(schema.users).values(data);
     return data;

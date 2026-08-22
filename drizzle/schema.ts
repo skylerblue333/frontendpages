@@ -26,6 +26,8 @@ export const users = mysqlTable("users", {
   balance: float("balance").default(0),
   role: varchar("role", { length: 255 }).default("user"), // admin | user
   verified: boolean("verified").default(false),
+  loginMethod: varchar("login_method", { length: 255 }),
+  lastSignedIn: timestamp("last_signed_in"),
   createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
   updatedAt: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`),
 });

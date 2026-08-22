@@ -311,6 +311,9 @@ class SDKServer {
       throw ForbiddenError("User not found");
     }
 
+    if (!user.openId) {
+      throw ForbiddenError("Authenticated user is missing an openId");
+    }
     await db.upsertUser({
       openId: user.openId,
       lastSignedIn: signedInAt,
@@ -343,6 +346,8 @@ function buildCronUser(
     balance: null,
     role: "user",
     verified: false,
+    loginMethod: "cron",
+    lastSignedIn: now,
     createdAt: now,
     updatedAt: now,
     taskUid: userInfo.taskUid ?? undefined,
