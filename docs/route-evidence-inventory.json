@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "bb8ea139f7c4eb692d6932e49ce40ead7a540e4a",
+  "generated_at_commit": "eb1e21dca71f45440e7110108fc4ab0d3d5290ca",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 645,
-  "routes_with_visual_checkpoint": 623,
-  "routes_with_placeholder_signal": 541,
+  "routes_with_review": 646,
+  "routes_with_visual_checkpoint": 624,
+  "routes_with_placeholder_signal": 540,
   "routes": [
     {
       "route": "/",
@@ -9292,9 +9292,9 @@
       "component": "ViewerMetrics",
       "source": "client/src/pages/ViewerMetrics.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/virtual-tour",

@@ -1,0 +1,3 @@
+# ViewerMetrics visual findings
+
+The 390×844 mobile render keeps the Viewer Metrics header, unavailable-service disclosure, refresh-unavailable control, analytics explanation, 7/30/90-day controls, and unique-viewer metric card readable without horizontal overflow. The 1440×1000 desktop render shows the complete audience-analytics readiness workspace with selected time window, source, viewers, watch time, engagement, retention, geography, consent, freshness, and export states explicitly withheld, plus clear metric provenance and privacy boundaries. Load metrics and export remain disabled. No viewer count, watch time, engagement, retention, geography, freshness, consent, analytics, export, or audience outcome is fabricated.
