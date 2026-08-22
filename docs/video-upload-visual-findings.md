@@ -1,0 +1,3 @@
+# VideoUpload visual findings
+
+The 390×844 mobile render keeps the Video Upload header, unavailable-service disclosure, refresh-unavailable control, upload explanation, and file-selection gate readable without horizontal overflow. The 1440×1000 desktop render shows the complete upload-readiness workspace with file, type/size, ownership, consent, storage, scan, processing, progress, asset ID, and media URL states explicitly withheld, plus clear intake and privacy boundaries. Choose file, validate, and upload remain disabled. No file, validation, authorization, storage, processing, progress, playable asset, media URL, or upload outcome is fabricated.
