@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "3a545388ab4c3e0a360e8bdda14f400a3b77a09c",
+  "generated_at_commit": "4dff54d6f5e8013ed1a12c09108dd8bae5227da0",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,9 +31,9 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 649,
-  "routes_with_visual_checkpoint": 627,
-  "routes_with_placeholder_signal": 538,
+  "routes_with_review": 650,
+  "routes_with_visual_checkpoint": 628,
+  "routes_with_placeholder_signal": 537,
   "routes": [
     {
       "route": "/",
@@ -9391,9 +9391,9 @@
       "component": "WarningDialog",
       "source": "client/src/pages/WarningDialog.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
-      "placeholder_signal": true
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
+      "placeholder_signal": false
     },
     {
       "route": "/watch-earn",

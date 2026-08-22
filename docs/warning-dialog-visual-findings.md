@@ -1,0 +1,3 @@
+# WarningDialog visual findings
+
+The 390×844 mobile render keeps the Warning Dialog header, unavailable-service disclosure, refresh-unavailable control, dialog-preview explanation, and high/medium warning concepts readable without horizontal overflow. The 1440×1000 desktop render shows the complete accessible warning-preview workspace with selected message, source, affected scope, authorization, consent, focus, dismissal, confirmation, audit, and outcome states explicitly withheld, alongside clear destructive-action boundaries. Confirm, dismiss, and view-details remain disabled. No warning event, severity decision, affected scope, confirmation, dismissal, audit, or destructive outcome is fabricated.
