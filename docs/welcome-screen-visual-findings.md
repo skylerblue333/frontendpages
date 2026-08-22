@@ -1,0 +1,3 @@
+# WelcomeScreen visual findings
+
+The 390×844 mobile render keeps the Welcome header, unavailable onboarding disclosure, refresh-unavailable control, first-step explanation, and account-identity step readable without horizontal overflow. The 1440×1000 desktop render shows the complete onboarding-readiness workspace with identity, profile, consent, preferences, access, and completion states explicitly withheld, alongside clear data-minimization and accessibility guidance. Create account, continue, and choose preferences remain disabled. No account, session, profile, consent, preference, module access, or onboarding completion is fabricated.
