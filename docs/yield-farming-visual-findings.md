@@ -1,0 +1,3 @@
+# YieldFarming visual findings
+
+The 390×844 mobile render keeps the Yield Farming header, unavailable-service disclosure, refresh-unavailable control, DeFi integration explanation, and pool-registry boundary readable without horizontal overflow. The 1440×1000 desktop render shows the complete pool-readiness workspace with protocol/chain, pool, liquidity, APY/APR, wallet, position, rewards, transaction, and risk-review states explicitly withheld, alongside clear smart-contract and market-risk guidance. Connect wallet, select pool, stake, and harvest remain disabled. No APY, APR, liquidity, wallet balance, stake, harvest, withdrawal, reward, transaction, or yield outcome is fabricated.

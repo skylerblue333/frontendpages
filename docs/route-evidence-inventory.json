@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "571c60d54af765ce3ca98e618c977ac2619545ae",
+  "generated_at_commit": "3b7a6efc7426c1e5e9eccda2d03cb1b40d8c6727",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 655,
-  "routes_with_visual_checkpoint": 633,
+  "routes_with_review": 656,
+  "routes_with_visual_checkpoint": 634,
   "routes_with_placeholder_signal": 537,
   "routes": [
     {
@@ -9535,8 +9535,8 @@
       "component": "YieldFarming",
       "source": "client/src/pages/YieldFarming.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
