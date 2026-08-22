@@ -1,115 +1,20 @@
 import { useState } from "react";
-import {
-  BookOpen,
-  CircleSlash2,
-  DollarSign,
-  LockKeyhole,
-  MessageSquareOff,
-  ShieldAlert,
-  VideoOff,
-} from "lucide-react";
+import { BookOpen, CalendarDays, Check, CircleSlash2, DollarSign, Filter, GraduationCap, LockKeyhole, MessageSquareOff, RefreshCw, Search, ShieldAlert, Users, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { ScreenFeatureGrid, ScreenHero, ScreenPreviewBanner, ScreenStatGrid, ScreenStatePanel } from "@/components/ScreenExperience";
 
 type Tab = "Find teachers" | "My sessions" | "Teach";
+const opportunities = [
+  { title: "Web3 foundations mentor", mode: "1:1 · Schedule unavailable", level: "Introductory", detail: "A local teaching concept pending verified instructor identity, curriculum, availability, pricing, reviews, and safeguarding." },
+  { title: "Creative coding studio", mode: "Workshop · Dates unavailable", level: "Project-based", detail: "A local cohort concept pending content ownership, roster, moderation, accessibility, and accountable learning outcomes." },
+  { title: "Portfolio literacy lab", mode: "Office hours · Booking unavailable", level: "Guided review", detail: "A local education concept pending qualified facilitator, student consent, materials, and no-financial-advice boundaries." },
+];
 export default function TeachingOpportunities() {
-  const [tab, setTab] = useState<Tab>("Find teachers");
-  const [status, setStatus] = useState(
-    "Teaching service unavailable. Showing local education structure only."
-  );
-  const blocked = (a: string) =>
-    setStatus(
-      `${a} is unavailable locally. No teacher, booking, message, onboarding, payment, payout, notification, or account mutation was started.`
-    );
-  return (
-    <div data-ui-polish="batch-204" className="min-h-screen bg-background">
-      <PageHeader
-        icon={BookOpen}
-        title="Teaching opportunities"
-        subtitle="Review local teaching structure without fabricated teachers, ratings, rates, students, bookings, earnings, payments, or education outcomes."
-        badge="Local preview"
-        badgeVariant="outline"
-      />
-      <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
-        <div className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4 text-sm text-amber-100">
-          <strong>Teaching service unavailable.</strong> No instructor identity,
-          scheduling, education content, moderation, payment, tax, payout, or
-          notification service is connected.
-        </div>
-        <Card className="border-slate-800 bg-slate-900/75 p-6">
-          <div className="flex flex-wrap gap-2">
-            {(["Find teachers", "My sessions", "Teach"] as Tab[]).map(item => (
-              <Button
-                aria-pressed={tab === item}
-                key={item}
-                onClick={() => setTab(item)}
-                size="sm"
-                variant={tab === item ? "default" : "outline"}
-              >
-                {item}
-              </Button>
-            ))}
-          </div>
-          <div className="mt-6 rounded-xl border border-dashed border-slate-700 p-12 text-center">
-            {tab === "Teach" ? (
-              <DollarSign className="mx-auto h-9 w-9 text-slate-500" />
-            ) : tab === "My sessions" ? (
-              <VideoOff className="mx-auto h-9 w-9 text-slate-500" />
-            ) : (
-              <BookOpen className="mx-auto h-9 w-9 text-slate-500" />
-            )}
-            <h2 className="mt-4 text-xl font-semibold">{tab} unavailable</h2>
-            <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-slate-400">
-              No verified teachers, ratings, languages, rates, students,
-              sessions, messages, earnings, or education outcomes are connected.
-            </p>
-            <Button
-              className="mt-5"
-              onClick={() => blocked(`Load ${tab.toLowerCase()}`)}
-              variant="outline"
-            >
-              Load unavailable
-            </Button>
-          </div>
-        </Card>
-        <div className="grid gap-4 md:grid-cols-3">
-          {[
-            [ShieldAlert, "No teacher data"],
-            [MessageSquareOff, "No booking"],
-            [CircleSlash2, "No payment"],
-          ].map(([Icon, label]) => (
-            <Card
-              className="border-slate-800 bg-slate-900/75 p-5"
-              key={String(label)}
-            >
-              <Icon className="h-5 w-5 text-cyan-200" />
-              <h2 className="mt-3 font-semibold">{String(label)}</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-400">
-                No teacher, booking, message, onboarding, payment, payout,
-                notification, or account operation is available locally.
-              </p>
-            </Card>
-          ))}
-        </div>
-        <Card className="border-slate-800 bg-slate-900/75 p-5">
-          <div className="flex gap-3">
-            <LockKeyhole className="h-5 w-5 text-cyan-200" />
-            <p className="text-sm leading-6 text-slate-400">
-              Production teaching marketplaces require verified instructor
-              identity, scheduling, curriculum quality, moderation, payment,
-              tax, payout, and dispute controls.
-            </p>
-          </div>
-        </Card>
-        <p
-          aria-live="polite"
-          className="rounded-lg border border-slate-800 p-4 text-sm text-slate-400"
-        >
-          {status}
-        </p>
-      </div>
-    </div>
-  );
+  const [tab, setTab] = useState<Tab>("Find teachers"); const [selected, setSelected] = useState(0); const [filter, setFilter] = useState("All levels"); const [saved, setSaved] = useState(false); const [status, setStatus] = useState("Teaching service unavailable. Showing local education structure only."); const [refreshing, setRefreshing] = useState(false);
+  const retry = () => { setRefreshing(true); setStatus("Retrying the local teaching source…"); window.setTimeout(() => { setRefreshing(false); setStatus("Teaching service unavailable. No verified marketplace source was connected."); }, 500); };
+  const reset = () => { setTab("Find teachers"); setSelected(0); setFilter("All levels"); setSaved(false); setStatus("Teaching service unavailable. Showing local education structure only."); };
+  const visible = opportunities.filter((item) => filter === "All levels" || item.level === filter); const opportunity = opportunities[selected] ?? opportunities[0];
+  return <div className="min-h-screen bg-[#070a16] text-white"><ScreenHero icon={GraduationCap} eyebrow="Teaching opportunities · Marketplace preview" title="Explore learning paths without inventing teachers, ratings, rates, or outcomes." description="Review a local teaching-opportunities workspace with discovery concepts, levels, formats, session planning, instructor safeguards, student consent, messages, payments, retries, save/reset feedback, and explicit evidence boundaries. No teacher, booking, payment, payout, or learning outcome is connected." badge="Evidence-bounded education"><div className="flex flex-wrap gap-2"><Button onClick={() => { setSaved(true); setStatus("Teaching view saved locally. No account or booking was changed."); }} className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"><Check className="mr-2 size-4" />{saved ? "Saved locally" : "Save learning view"}</Button><Button onClick={retry} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><RefreshCw className={`mr-2 size-4 ${refreshing ? "animate-spin" : ""}`} />{refreshing ? "Retrying source" : "Retry teacher source"}</Button><Button onClick={reset} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10"><X className="mr-2 size-4" />Reset view</Button></div></ScreenHero><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"><ScreenStatGrid items={[{ label: "Teachers", value: "Unavailable", hint: "No identity source", icon: Users, tone: "cyan" }, { label: "Sessions", value: "Unscheduled", hint: "No calendar source", icon: CalendarDays, tone: "violet" }, { label: "Payments", value: "Blocked", hint: "No payment source", icon: DollarSign, tone: "amber" }, { label: "Outcomes", value: "Unverified", hint: "No assessment source", icon: GraduationCap, tone: "slate" }]} /><ScreenPreviewBanner title="Teaching evidence boundary"><strong>This is a local education-marketplace preview, not evidence that teachers, credentials, ratings, prices, availability, students, bookings, payments, payouts, messages, certifications, or learning outcomes exist.</strong> Tabs, filters, cards, local saved state, retry feedback, and disabled booking/contact actions are browser concepts. No education, financial, employment, or professional conclusion is asserted.</ScreenPreviewBanner><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex flex-wrap items-center justify-between gap-4"><div className="flex flex-wrap gap-2">{(["Find teachers", "My sessions", "Teach"] as Tab[]).map((item) => <Button key={item} aria-pressed={tab === item} onClick={() => { setTab(item); setStatus(`${item} view selected locally. No account or booking data was loaded.`); }} variant={tab === item ? "default" : "outline"} className={tab === item ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "border-white/10 bg-white/5 text-white hover:bg-white/10"}>{item}</Button>)}</div><div className="flex items-center gap-2 text-xs text-slate-400"><Filter className="size-4" />Level filter</div></div><div className="mt-4 flex flex-wrap gap-2">{["All levels", "Introductory", "Project-based", "Guided review"].map((item) => <Button key={item} onClick={() => setFilter(item)} size="sm" variant={filter === item ? "default" : "outline"} className={filter === item ? "bg-violet-300 text-slate-950 hover:bg-violet-200" : "border-white/10 bg-white/5 text-white hover:bg-white/10"}>{item}</Button>)}</div></CardContent></Card><section className="grid gap-4 md:grid-cols-3">{visible.map((item) => <button key={item.title} onClick={() => setSelected(opportunities.indexOf(item))} className={`rounded-2xl border p-5 text-left transition ${selected === opportunities.indexOf(item) ? "border-cyan-300/40 bg-cyan-300/[0.06]" : "border-white/10 bg-white/[0.04]"}`}><div className="flex items-start justify-between"><div className="flex size-11 items-center justify-center rounded-2xl bg-cyan-300/10 text-cyan-200"><BookOpen className="size-5" /></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Unavailable</Badge></div><h2 className="mt-4 font-bold">{item.title}</h2><p className="mt-1 text-xs text-cyan-200">{item.mode} · {item.level}</p><p className="mt-3 text-sm leading-6 text-slate-400">{item.detail}</p></button>)}</section><section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-start justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200">Selected opportunity concept</p><h2 className="mt-2 text-2xl font-black">{opportunity.title}</h2></div><Badge variant="outline" className="border-amber-300/20 text-amber-200">Unavailable</Badge></div><p className="mt-3 text-sm leading-6 text-slate-400">{opportunity.detail}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{[{ label: "Instructor identity", value: "Unavailable", icon: Users }, { label: "Format / schedule", value: opportunity.mode, icon: CalendarDays }, { label: "Curriculum / materials", value: "Unverified", icon: BookOpen }, { label: "Student consent", value: "Required", icon: ShieldAlert }, { label: "Messages / booking", value: "Blocked", icon: MessageSquareOff }, { label: "Payment / payout", value: "Unavailable", icon: DollarSign }].map(({ label, value, icon: Icon }) => <div key={label} className="flex items-center gap-3 rounded-xl border border-white/10 p-4"><Icon className="size-4 text-cyan-300" /><span className="flex-1 text-sm text-slate-300">{label}</span><span className="text-xs text-amber-200">{value}</span></div>)}</div><div className="mt-6 flex flex-wrap gap-2"><Button disabled className="bg-slate-700 text-slate-400">Book unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Contact unavailable</Button><Button disabled variant="outline" className="border-white/10 text-slate-500">Apply to teach unavailable</Button></div></CardContent></Card><ScreenStatePanel type="unavailable" title={`${tab} unavailable`} description="No verified teacher profiles, scheduling, curriculum, moderation, messaging, payment, payout, notification, or account source is connected. The local structure remains available for review." /></section><Card className="border-white/10 bg-white/[0.04]"><CardContent className="p-6"><div className="flex items-center gap-3"><Search className="size-5 text-cyan-300" /><div><p className="font-bold">Marketplace evidence contract</p><p className="mt-1 text-sm text-slate-400">A trustworthy teaching workflow requires identity and credentials, curriculum review, accessibility, safeguarding, scheduling, consent, moderation, payments, tax, payouts, disputes, privacy, and outcome measurement.</p></div></div><div className="mt-5 grid gap-3 md:grid-cols-2">{["Instructor identity, credentials, subject scope, and background controls", "Curriculum ownership, quality review, accessibility, and learning objectives", "Student identity, consent, safeguarding, privacy, and communication boundaries", "Availability, timezone, calendar, booking, cancellation, and attendance records", "Pricing, payment, tax, payout, refund, dispute, and fraud controls", "Assessment, certification, moderation, outcomes, correction, and audit history"].map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-white/10 p-3 text-sm text-slate-300"><LockKeyhole className="size-4 text-amber-300" />{item}<span className="ml-auto text-xs text-amber-200">Required</span></div>)}</div></CardContent></Card><ScreenFeatureGrid features={[{ title: "Learning marketplace surface preserved", description: "Discovery, sessions, teaching, levels, formats, schedules, consent, messaging, payments, retry, save/reset, and safeguards remain visible.", icon: GraduationCap, status: "Local preview" }, { title: "No teacher theater", description: "Credentials, ratings, rates, bookings, earnings, payments, payouts, certifications, and learning outcomes are not fabricated.", icon: ShieldAlert, status: "Guardrail" }, { title: "Evidence before enrollment", description: "Real teaching services require identity, curriculum, consent, moderation, accessibility, payment, and accountable outcome controls.", icon: LockKeyhole, status: "Blocked" }]} /><p aria-live="polite" className="rounded-xl border border-white/10 bg-white/[0.03] p-4 text-sm text-slate-400">{status}</p></main></div>;
 }
