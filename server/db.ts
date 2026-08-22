@@ -90,8 +90,8 @@ export async function createUser(data: schema.InsertUser) {
 
 export async function updateUserBalance(userId: string, amount: number) {
   try {
-    await db.update(schema.users).set({ balance: amount }).where(eq(schema.users.id, userId));
-    return { success: true };
+    const result = await db.update(schema.users).set({ balance: amount }).where(eq(schema.users.id, userId));
+    return { success: result[0].affectedRows > 0 };
   } catch (error) {
     return { success: false };
   }
