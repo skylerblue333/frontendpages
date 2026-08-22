@@ -1,5 +1,5 @@
 {
-  "route_count": 1058,
+  "route_count": 1065,
   "routes": [
     {
       "path": "/",
@@ -10,6 +10,76 @@
       "boundary_signals": true,
       "auth_signals": false,
       "external_signals": true
+    },
+    {
+      "path": "/order-summary",
+      "component": "OrderSummary",
+      "page_file": "OrderSummary.tsx",
+      "source_exists": true,
+      "placeholder_markers": false,
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
+    },
+    {
+      "path": "/real-time-analytics",
+      "component": "RealTimeAnalytics",
+      "page_file": "RealTimeAnalytics.tsx",
+      "source_exists": true,
+      "placeholder_markers": false,
+      "boundary_signals": true,
+      "auth_signals": true,
+      "external_signals": false
+    },
+    {
+      "path": "/receive-crypto-error",
+      "component": "ReceiveCryptoError",
+      "page_file": "ReceiveCryptoError.tsx",
+      "source_exists": true,
+      "placeholder_markers": false,
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": true
+    },
+    {
+      "path": "/recently-viewed",
+      "component": "RecentlyViewed",
+      "page_file": "RecentlyViewed.tsx",
+      "source_exists": true,
+      "placeholder_markers": false,
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
+    },
+    {
+      "path": "/remote-access",
+      "component": "RemoteAccess",
+      "page_file": "RemoteAccess.tsx",
+      "source_exists": true,
+      "placeholder_markers": false,
+      "boundary_signals": true,
+      "auth_signals": true,
+      "external_signals": false
+    },
+    {
+      "path": "/request-quote",
+      "component": "RequestQuote",
+      "page_file": "RequestQuote.tsx",
+      "source_exists": true,
+      "placeholder_markers": false,
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
+    },
+    {
+      "path": "/response-time-error",
+      "component": "ResponseTimeError",
+      "page_file": "ResponseTimeError.tsx",
+      "source_exists": true,
+      "placeholder_markers": false,
+      "boundary_signals": true,
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/a-b-testing",
@@ -8679,7 +8749,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/statistics-panel",
@@ -8688,7 +8758,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": true
     },
     {
@@ -8698,7 +8768,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -8708,7 +8778,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": true,
+      "auth_signals": false,
       "external_signals": false
     },
     {
@@ -8738,7 +8808,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -8768,7 +8838,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": true
     },
     {
@@ -8798,7 +8868,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": true
     },
     {
@@ -8808,8 +8878,8 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": true,
-      "external_signals": true
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/style-selector",
@@ -8818,7 +8888,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -8919,7 +8989,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/swipe-interface",
@@ -8939,7 +9009,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/system-architecture",
@@ -8948,7 +9018,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -8958,7 +9028,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -8968,7 +9038,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -8988,8 +9058,8 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
-      "external_signals": false
+      "auth_signals": true,
+      "external_signals": true
     },
     {
       "path": "/system-status",
@@ -8998,7 +9068,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -9008,7 +9078,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -9048,8 +9118,8 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
-      "external_signals": false
+      "auth_signals": true,
+      "external_signals": true
     },
     {
       "path": "/tax-planning",
@@ -9079,7 +9149,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/teaching-opportunities",
@@ -9148,7 +9218,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -9178,7 +9248,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -9239,7 +9309,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/ticket-queue",
@@ -9268,7 +9338,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -9278,7 +9348,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -9348,7 +9418,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -9368,8 +9438,8 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
-      "external_signals": false
+      "auth_signals": true,
+      "external_signals": true
     },
     {
       "path": "/token-information",
@@ -9388,8 +9458,8 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
-      "external_signals": false
+      "auth_signals": true,
+      "external_signals": true
     },
     {
       "path": "/tokenomics-calculator",
@@ -9398,8 +9468,8 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": true,
-      "external_signals": true
+      "auth_signals": false,
+      "external_signals": false
     },
     {
       "path": "/tor-bridge",
@@ -9469,7 +9539,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/trading-history",
@@ -9478,8 +9548,8 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
-      "external_signals": false
+      "auth_signals": true,
+      "external_signals": true
     },
     {
       "path": "/trading-terminal",
@@ -9708,8 +9778,8 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
-      "external_signals": false
+      "auth_signals": true,
+      "external_signals": true
     },
     {
       "path": "/trust-safety-dashboard",
@@ -9738,7 +9808,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -9819,7 +9889,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/unified-platform-dashboard",
@@ -9868,7 +9938,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -9888,7 +9958,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -9908,7 +9978,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -9938,7 +10008,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -9948,7 +10018,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -9988,7 +10058,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -9998,7 +10068,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -10008,7 +10078,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -10018,7 +10088,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -10028,7 +10098,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -10038,7 +10108,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -10138,7 +10208,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -10148,7 +10218,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -10278,7 +10348,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -10399,7 +10469,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": true,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/watch-list",
@@ -10419,7 +10489,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/web3-auth",
@@ -10438,7 +10508,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -10458,8 +10528,8 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
-      "external_signals": false
+      "auth_signals": true,
+      "external_signals": true
     },
     {
       "path": "/welcome-screen",
@@ -10468,7 +10538,7 @@
       "source_exists": true,
       "placeholder_markers": false,
       "boundary_signals": true,
-      "auth_signals": false,
+      "auth_signals": true,
       "external_signals": false
     },
     {
@@ -10549,7 +10619,7 @@
       "placeholder_markers": false,
       "boundary_signals": true,
       "auth_signals": false,
-      "external_signals": false
+      "external_signals": true
     },
     {
       "path": "/zapier-integration",
