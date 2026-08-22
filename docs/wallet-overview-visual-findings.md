@@ -1,0 +1,3 @@
+# WalletOverview visual findings
+
+The 390×844 and 1440×1000 captures both render the unauthenticated state because the evidence browser has no logged-in account session. The sign-in card remains contained and readable at both viewports, clearly explains that wallet records are requested only for an authenticated account, and does not expose balance, address, or transaction data. The authenticated wallet-record, loading, error, empty-response, no-wallet, balance/address, and ledger branches remain implemented in the route but require a real authenticated session for visual capture; no financial value or transaction outcome is fabricated.

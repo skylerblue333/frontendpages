@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "70a7bc5e1e0b02c30e33bcde111a7a3aaee48299",
+  "generated_at_commit": "3a545388ab4c3e0a360e8bdda14f400a3b77a09c",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 648,
-  "routes_with_visual_checkpoint": 626,
+  "routes_with_review": 649,
+  "routes_with_visual_checkpoint": 627,
   "routes_with_placeholder_signal": 538,
   "routes": [
     {
@@ -9382,8 +9382,8 @@
       "component": "WalletOverview",
       "source": "client/src/pages/WalletOverview.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
