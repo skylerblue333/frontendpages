@@ -143,7 +143,7 @@ export async function getProductById(id: string) {
   }
 }
 
-export async function createProduct(data: any) {
+export async function createProduct(data: typeof schema.products.$inferInsert) {
   try {
     await db.insert(schema.products).values(data);
     return data;
