@@ -223,8 +223,8 @@ export async function getAllRecords(table: keyof typeof db.query) {
 
 export async function deleteRecord(table: AnyMySqlTable & { id: MySqlColumn }, id: string) {
   try {
-    await db.delete(table).where(eq(table.id, id));
-    return { success: true };
+    const result = await db.delete(table).where(eq(table.id, id));
+    return { success: result[0].affectedRows > 0 };
   } catch (error) {
     return { success: false };
   }
