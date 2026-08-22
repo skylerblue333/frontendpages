@@ -1065,12 +1065,26 @@ const WorldSimulationControl = lazy(() => import('./pages/WorldSimulationControl
 const YieldFarming = lazy(() => import('./pages/YieldFarming'));
 const ZapierIntegration = lazy(() => import('./pages/ZapierIntegration'));
 const ZeroKnowledgeProof = lazy(() => import('./pages/ZeroKnowledgeProof'));
+const OrderSummary = lazy(() => import('./pages/OrderSummary'));
+const RealTimeAnalytics = lazy(() => import('./pages/RealTimeAnalytics'));
+const ReceiveCryptoError = lazy(() => import('./pages/ReceiveCryptoError'));
+const RecentlyViewed = lazy(() => import('./pages/RecentlyViewed'));
+const RemoteAccess = lazy(() => import('./pages/RemoteAccess'));
+const RequestQuote = lazy(() => import('./pages/RequestQuote'));
+const ResponseTimeError = lazy(() => import('./pages/ResponseTimeError'));
 
 function Router() {
   return (
     <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading...</div></div>}>
       <Switch>
         <Route path="/" component={Home} />
+        <Route path="/order-summary" component={OrderSummary} />
+        <Route path="/real-time-analytics" component={RealTimeAnalytics} />
+        <Route path="/receive-crypto-error" component={ReceiveCryptoError} />
+        <Route path="/recently-viewed" component={RecentlyViewed} />
+        <Route path="/remote-access" component={RemoteAccess} />
+        <Route path="/request-quote" component={RequestQuote} />
+        <Route path="/response-time-error" component={ResponseTimeError} />
         <Route path="/a-b-testing" component={ABTesting} />
         <Route path="/a-b-testing-advanced" component={ABTestingAdvanced} />
         <Route path="/a-i-agent-economy" component={AIAgentEconomy} />
