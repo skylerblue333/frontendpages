@@ -1,5 +1,5 @@
 {
-  "generated_at_commit": "380dfe9835f2c65d6f52f840e10de066eb297f9c",
+  "generated_at_commit": "b2427460c3b4055ac82ac2bf69fd25dbd2dc8e3d",
   "registered_route_count": 1059,
   "source_page_count": 1064,
   "routed_component_count": 1057,
@@ -31,8 +31,8 @@
       "placeholder_signal": false
     }
   ],
-  "routes_with_review": 652,
-  "routes_with_visual_checkpoint": 630,
+  "routes_with_review": 653,
+  "routes_with_visual_checkpoint": 631,
   "routes_with_placeholder_signal": 537,
   "routes": [
     {
@@ -9436,8 +9436,8 @@
       "component": "WebhookManagement",
       "source": "client/src/pages/WebhookManagement.tsx",
       "source_exists": true,
-      "review_documented": false,
-      "visual_checkpoint_documented": false,
+      "review_documented": true,
+      "visual_checkpoint_documented": true,
       "placeholder_signal": true
     },
     {
