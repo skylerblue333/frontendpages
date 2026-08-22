@@ -1,5 +1,6 @@
 import { drizzle } from 'drizzle-orm/mysql2';
 import mysql from 'mysql2/promise';
+import type { AnyMySqlTable, MySqlColumn } from 'drizzle-orm/mysql-core';
 import * as schema from '../drizzle/schema';
 import { eq, and, desc } from 'drizzle-orm';
 
@@ -220,7 +221,7 @@ export async function getAllRecords(table: keyof typeof db.query) {
   }
 }
 
-export async function deleteRecord(table: any, id: string) {
+export async function deleteRecord(table: AnyMySqlTable & { id: MySqlColumn }, id: string) {
   try {
     await db.delete(table).where(eq(table.id, id));
     return { success: true };
