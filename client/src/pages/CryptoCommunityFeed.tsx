@@ -1,0 +1,12 @@
+import { BadgeCheck, MessageSquare, ShieldCheck, TrendingUp } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
+
+const sections = [
+  ["Community posts", "Requires persisted post, author, moderation, and engagement data."],
+  ["Market context", "Requires authoritative market-data providers and timestamped provenance."],
+  ["Reputation", "Requires verified identity and a documented reputation calculation."],
+];
+
+export default function CryptoCommunityFeed() {
+  return <div className="container max-w-6xl animate-page-in py-8"><PageHeader icon={TrendingUp} title="Crypto Community Feed" subtitle="A unified social-market surface for the SkyCoin ecosystem" /><div className="mb-8 rounded-3xl border border-violet-300/20 bg-violet-300/[0.06] p-6"><div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-violet-200"><ShieldCheck className="size-4" />Evidence-bounded feed</div><h2 className="mt-3 text-3xl font-black">Community + market context without fabricated activity.</h2><p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">This screen closes a frontend capability gap identified in ShadowChat-Core while keeping live posts, rankings, and market numbers unavailable until their authoritative services are connected.</p></div><div className="grid gap-4 md:grid-cols-3">{sections.map(([title, description], i) => <div key={title} className="card p-5"><div className="flex items-center gap-3">{i === 0 ? <MessageSquare className="size-5 text-cyan-200" /> : i === 1 ? <TrendingUp className="size-5 text-cyan-200" /> : <BadgeCheck className="size-5 text-cyan-200" />}<h3 className="font-bold">{title}</h3></div><p className="mt-3 text-sm leading-6 text-muted-foreground">{description}</p><div className="mt-5 rounded-xl border border-dashed border-border/60 p-4 text-xs text-amber-200">Awaiting verified source</div></div>)}</div><div className="mt-8 card p-6"><h3 className="font-bold">Feed timeline</h3><div className="mt-4 flex min-h-56 items-center justify-center rounded-2xl border border-dashed border-border/60 text-center"><div><MessageSquare className="mx-auto size-9 text-muted-foreground/50" /><p className="mt-3 font-semibold">No live community events loaded</p><p className="mt-2 max-w-md text-sm text-muted-foreground">The UI is ready for a real event stream; it does not invent posts, prices, engagement, or user reputation.</p></div></div></div></div>;
+}
